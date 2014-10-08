@@ -1,0 +1,21 @@
+{
+  "name": "strong-mesh-models",
+  "version": "0.0.0",
+  "description": "Loopback models for communicating over REST with strong-pm and strong-scheduler",
+  "keywords": [
+    "StrongLoop",
+    "dependencies"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/strongloop/strong-mesh-models.git"
+  },
+  "author": "engineering@strongloop.com",
+  "license": {
+    "name": "StrongLoop",
+    "url": "https://github.com/strongloop/strong-scheduler/blob/master/LICENSE.md"
+  },
+  "dependencies": {
+    "loopback": "^2.4.0"
+  }
+}

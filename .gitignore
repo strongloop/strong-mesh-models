@@ -26,3 +26,19 @@ node_modules
 
 # Users Environment Variables
 .lock-wscript
+
+#Editors
+.idea
+.project
+*.sublime-*
+*.swp
+*.swo
+
+#Misc
+.DS_Store
+*.csv
+*.dat
+*.out
+*.tgz
+*.xml
+*._*
