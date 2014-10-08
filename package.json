@@ -1,6 +1,6 @@
 {
   "name": "strong-mesh-models",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Loopback models for communicating over REST with strong-pm and strong-scheduler",
   "keywords": [
     "StrongLoop",
@@ -13,9 +13,22 @@
   "author": "engineering@strongloop.com",
   "license": {
     "name": "StrongLoop",
-    "url": "https://github.com/strongloop/strong-scheduler/blob/master/LICENSE.md"
+    "url": "https://github.com/strongloop/strong-mesh-models/blob/master/LICENSE.md"
   },
-  "dependencies": {
-    "loopback": "^2.4.0"
+  "scripts": {
+    "pretest": "jshint . && eslint --ignore-path .jshintignore **/*.js",
+    "test": "tap --tap --stdout --stderr --timeout=300 test/cover.js",
+    "cover": "istanbul cover --print tap --tap --stdout --stderr --timeout=300 test/cover.js"
+  },
+  "devDependencies": {
+    "compression": "^1.1.0",
+    "errorhandler": "^1.2.0",
+    "eslint": "^0.8.2",
+    "istanbul": "^0.3.2",
+    "jshint": "^2.5.6",
+    "loopback": "^2.4.0",
+    "loopback-boot": "^2.0.0",
+    "serve-favicon": "^2.1.5",
+    "tap": "^0.4.13"
   }
 }
