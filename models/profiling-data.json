@@ -1,0 +1,45 @@
+{
+  "name": "ProfilingData",
+  "base": "PersistedModel",
+  "properties": {
+    "machineId": {
+      "type": "string",
+      "index": 1
+    },
+    "serverServiceId": {
+      "type": "number",
+      "index": 1
+    },
+    "instanceId": {
+      "type": "number",
+      "index": 1
+    },
+    "type": {
+      "type": "string",
+      "required": true
+    },
+    "processId": {
+      "type": "number",
+      "required": true
+    },
+    "time": {
+      "type": "date",
+      "required": true
+    }
+  },
+  "options": {
+    "hidden": ["machineId"]
+  },
+  "relations": {
+    "machine": {
+      "type": "belongsTo",
+      "model": "Machine"
+    },
+    "serverService": {
+      "type": "belongsTo",
+      "model": "ServerService"
+    }
+  },
+  "acls": []
+}
+

@@ -1,0 +1,17 @@
+{
+  "name": "Replica",
+  "base": "PersistedModel",
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "scale": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "relations": {},
+  "acls": []
+}
+

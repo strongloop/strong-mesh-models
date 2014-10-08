@@ -1,0 +1,56 @@
+{
+  "name": "Service",
+  "plural": "Services",
+  "base": "PersistedModel",
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "index": 1
+    },
+    "startTime": {
+      "type": "date"
+    },
+    "deploymentInfo": {
+      "type": "object"
+    }
+  },
+  "options": {
+    "hidden": ["startTime", "_replica"]
+  },
+  "relations": {
+    "actions": {
+      "type": "hasMany",
+      "model": "ServerAction"
+    },
+    "machines": {
+      "type": "hasMany",
+      "through": "ServiceInstance",
+      "model": "Machine"
+    },
+    "instances": {
+      "type": "hasMany",
+      "model": "ServiceInstance"
+    },
+    "profileDatas": {
+      "type": "hasMany",
+      "model": "ProfilingData"
+    },
+    "replicas": {
+      "type": "embedsMany",
+      "model": "Replica"
+    }
+  },
+  "indexes": {
+    "name": {
+      "keys": {
+        "name": 1
+      },
+      "options": {
+        "unique": true
+      }
+    }
+  },
+  "acls": []
+}
+

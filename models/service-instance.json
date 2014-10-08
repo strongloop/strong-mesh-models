@@ -1,0 +1,48 @@
+{
+  "name": "ServiceInstance",
+  "base": "PersistedModel",
+  "properties": {
+    "machineId": {
+      "type": "number",
+      "index": 1
+    },
+    "serverServiceId": {
+      "type": "number",
+      "index": 1
+    },
+    "replicaId": {
+      "type": "number",
+      "index": 1
+    },
+    "currentDeploymentId": {
+      "type": "string"
+    },
+    "deploymentStartTime": {
+      "type": "date"
+    },
+    "processes": {
+      "type": ["ServiceProcess"]
+    },
+    "port": {
+      "type": "number"
+    },
+    "PMPort": {
+      "type": "string"
+    }
+  },
+  "options": {
+    "hidden": ["machineId"]
+  },
+  "relations": {
+    "machine": {
+      "type": "belongsTo",
+      "model": "Machine"
+    },
+    "serverService": {
+      "type": "belongsTo",
+      "model": "ServerService"
+    }
+  },
+  "acls": []
+}
+

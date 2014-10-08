@@ -1,0 +1,32 @@
+{
+  "name": "Machine",
+  "base": "PersistedModel",
+  "properties": {
+    "id": {
+      "type": "string",
+      "required": true,
+      "id": true,
+      "generated": false
+    },
+    "address": {
+      "type": "string",
+      "required": true
+    },
+    "APIPort": {
+      "type": "string"
+    }
+  },
+  "relations": {
+    "instances": {
+      "type": "hasMany",
+      "model": "ServiceInstance"
+    },
+    "services": {
+      "type": "hasMany",
+      "through": "ServiceInstance",
+      "model": "ServerService"
+    }
+  },
+  "acls": []
+}
+

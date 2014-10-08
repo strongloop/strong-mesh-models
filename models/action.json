@@ -1,0 +1,22 @@
+{
+  "name": "Action",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+    "action": {
+      "type": "string",
+      "required": true
+    },
+    "args": {
+      "type": "object"
+    },
+    "timestamp": {
+      "type": "date"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}
+

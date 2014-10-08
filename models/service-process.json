@@ -1,0 +1,17 @@
+{
+  "name": "ServiceProcess",
+  "base": "PersistedModel",
+  "properties": {
+    "processId": {
+      "type": "number",
+      "required": true
+    },
+    "workerId": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "relations": {},
+  "acls": []
+}
+
