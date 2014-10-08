@@ -1,7 +1,7 @@
 module.exports = function(Service) {
   Service.beforeCreate = function(next) {
-    delete this.deploymentInfo;
-    delete this.startTime;
+    this.deploymentInfo = undefined;
+    this.startTime = undefined;
     next();
   };
 
