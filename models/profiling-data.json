@@ -3,7 +3,7 @@
   "base": "PersistedModel",
   "properties": {
     "machineId": {
-      "type": "string",
+      "type": "number",
       "index": 1
     },
     "serverServiceId": {

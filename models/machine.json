@@ -2,12 +2,6 @@
   "name": "Machine",
   "base": "PersistedModel",
   "properties": {
-    "id": {
-      "type": "string",
-      "required": true,
-      "id": true,
-      "generated": false
-    },
     "address": {
       "type": "string",
       "required": true
