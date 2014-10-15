@@ -27,7 +27,7 @@
       "type": "number"
     },
     "PMPort": {
-      "type": "string"
+      "type": "number"
     }
   },
   "options": {
@@ -45,4 +45,3 @@
   },
   "acls": []
 }
-
