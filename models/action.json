@@ -12,6 +12,9 @@
     },
     "timestamp": {
       "type": "date"
+    },
+    "result": {
+      "type": "object"
     }
   },
   "validations": [],
