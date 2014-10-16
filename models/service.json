@@ -34,7 +34,7 @@
     },
     "profileDatas": {
       "type": "hasMany",
-      "model": "ProfilingData"
+      "model": "ProfileData"
     },
     "replicas": {
       "type": "embedsMany",

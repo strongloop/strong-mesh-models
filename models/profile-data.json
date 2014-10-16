@@ -1,5 +1,6 @@
 {
-  "name": "ProfilingData",
+  "name": "ProfileData",
+  "plural": "ProfileDatas",
   "base": "PersistedModel",
   "properties": {
     "machineId": {

@@ -27,11 +27,10 @@ module.exports = function(Service) {
       accepts: {arg: 'ctx', http: {source: 'context'}}
     });
 
-    this.remoteMethod('downloadProfileData', {
+    this.remoteMethod('downloadProfile', {
       isStatic: false,
       http: {path: '/profileDatas/:profileId/download', verb: 'get'},
       accepts: [
-        {arg: 'profileId', type: 'number', http: {source: 'path'}},
         {arg: 'ctx', http: {source: 'context'}}
       ],
       description: 'Download service profiling information'
