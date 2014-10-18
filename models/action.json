@@ -3,12 +3,12 @@
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {
-    "action": {
-      "type": "string",
-      "required": true
+    "replicaId": {
+      "type": "number"
     },
-    "args": {
-      "type": "object"
+    "request": {
+      "type": "object",
+      "required": true
     },
     "timestamp": {
       "type": "date"
@@ -22,4 +22,3 @@
   "acls": [],
   "methods": []
 }
-
