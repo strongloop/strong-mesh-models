@@ -1,5 +1,5 @@
 {
-  "name": "Replica",
+  "name": "Group",
   "base": "PersistedModel",
   "properties": {
     "name": {

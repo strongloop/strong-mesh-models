@@ -45,22 +45,22 @@ module.exports = function(Service) {
     this.disableRemoteMethod('__destroyById__instances');
     this.disableRemoteMethod('__updateById__instances');
 
-    this.disableRemoteMethod('__delete__machines');
-    this.disableRemoteMethod('__create__machines');
-    this.disableRemoteMethod('__destroyById__machines');
-    this.disableRemoteMethod('__updateById__machines');
-    this.disableRemoteMethod('__unlink__machines');
-    this.disableRemoteMethod('__link__machines');
-    this.disableRemoteMethod('__exists__machines');
+    this.disableRemoteMethod('__delete__executors');
+    this.disableRemoteMethod('__create__executors');
+    this.disableRemoteMethod('__destroyById__executors');
+    this.disableRemoteMethod('__updateById__executors');
+    this.disableRemoteMethod('__unlink__executors');
+    this.disableRemoteMethod('__link__executors');
+    this.disableRemoteMethod('__exists__executors');
 
     this.disableRemoteMethod('__delete__profileDatas');
     this.disableRemoteMethod('__create__profileDatas');
     this.disableRemoteMethod('__destroyById__profileDatas');
     this.disableRemoteMethod('__updateById__profileDatas');
 
-    this.disableRemoteMethod('__delete__replicas');
-    this.disableRemoteMethod('__create__replicas');
-    this.disableRemoteMethod('__destroyById__replicas');
-    this.disableRemoteMethod('__updateById__replicas');
+    this.disableRemoteMethod('__delete__groups');
+    this.disableRemoteMethod('__create__groups');
+    this.disableRemoteMethod('__destroyById__groups');
+    this.disableRemoteMethod('__updateById__groups');
   };
 };

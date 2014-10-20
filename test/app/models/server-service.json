@@ -7,6 +7,6 @@
   "relations": {},
   "indexes": {},
   "acls": [],
-  "models": ["Replica", "Service"]
+  "models": ["Group", "Service"]
 }
 

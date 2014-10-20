@@ -2,7 +2,7 @@
   "name": "ServiceInstance",
   "base": "PersistedModel",
   "properties": {
-    "machineId": {
+    "executorId": {
       "type": "number",
       "index": 1
     },
@@ -10,7 +10,7 @@
       "type": "number",
       "index": 1
     },
-    "replicaId": {
+    "groupId": {
       "type": "number",
       "index": 1
     },
@@ -31,12 +31,12 @@
     }
   },
   "options": {
-    "hidden": ["machineId"]
+    "hidden": ["executorId"]
   },
   "relations": {
-    "machine": {
+    "executor": {
       "type": "belongsTo",
-      "model": "Machine"
+      "model": "Executor"
     },
     "serverService": {
       "type": "belongsTo",

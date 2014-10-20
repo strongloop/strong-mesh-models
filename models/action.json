@@ -3,7 +3,7 @@
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {
-    "replicaId": {
+    "groupId": {
       "type": "number"
     },
     "request": {

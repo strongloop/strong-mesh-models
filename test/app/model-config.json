@@ -28,11 +28,11 @@
     "dataSource": "db",
     "public": true
   },
-  "Replica": {
+  "Group": {
     "dataSource": "db",
     "public": false
   },
-  "Machine": {
+  "Executor": {
     "dataSource": "db",
     "public": false
   },

@@ -16,17 +16,17 @@
     }
   },
   "options": {
-    "hidden": ["startTime", "_replica"]
+    "hidden": ["startTime", "_group"]
   },
   "relations": {
     "actions": {
       "type": "hasMany",
       "model": "ServerAction"
     },
-    "machines": {
+    "executors": {
       "type": "hasMany",
       "through": "ServiceInstance",
-      "model": "Machine"
+      "model": "Executor"
     },
     "instances": {
       "type": "hasMany",
@@ -36,9 +36,9 @@
       "type": "hasMany",
       "model": "ProfileData"
     },
-    "replicas": {
+    "groups": {
       "type": "embedsMany",
-      "model": "Replica"
+      "model": "Group"
     }
   },
   "indexes": {
