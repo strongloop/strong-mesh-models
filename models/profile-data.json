@@ -19,13 +19,23 @@
       "type": "string",
       "required": true
     },
-    "processId": {
+    "targetId": {
       "type": "number",
       "required": true
     },
-    "time": {
+    "startTime": {
       "type": "date",
       "required": true
+    },
+    "completed": {
+      "type": "boolean",
+      "default": false
+    },
+    "fileName": {
+      "type": "string"
+    },
+    "errored": {
+      "type": "string"
     }
   },
   "options": {
