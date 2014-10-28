@@ -11,7 +11,12 @@
       "required": true
     }
   },
-  "relations": {},
+  "relations": {
+    "serviceInstance": {
+      "type": "belongsTo",
+      "model": "ServiceInstance"
+    }
+  },
   "acls": []
 }
 
