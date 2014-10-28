@@ -1,0 +1,27 @@
+{
+  "name": "ServiceMetric",
+  "base": "PersistedModel",
+  "properties": {
+    "processId": {
+      "type": "number",
+      "required": true
+    },
+    "timeStamp": {
+      "type": "date",
+      "required": true
+    },
+    "counters": {
+      "type": "object"
+    },
+    "timers": {
+      "type": "object"
+    },
+    "gauges": {
+      "type": "object"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}
