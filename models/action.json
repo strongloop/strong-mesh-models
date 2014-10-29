@@ -1,7 +1,6 @@
 {
   "name": "Action",
   "base": "PersistedModel",
-  "idInjection": true,
   "properties": {
     "groupId": {
       "type": "number"
