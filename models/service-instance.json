@@ -20,9 +20,6 @@
     "deploymentStartTime": {
       "type": "date"
     },
-    "processes": {
-      "type": ["ServiceProcess"]
-    },
     "port": {
       "type": "number"
     },
@@ -34,6 +31,10 @@
     "hidden": ["executorId"]
   },
   "relations": {
+    "processes": {
+      "type": "hasMany",
+      "model": "ServiceProcess"
+    },
     "executor": {
       "type": "belongsTo",
       "model": "Executor"
