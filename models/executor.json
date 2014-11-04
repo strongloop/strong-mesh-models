@@ -8,6 +8,13 @@
     },
     "APIPort": {
       "type": "string"
+    },
+    "totalCapacity": {
+      "type": "number"
+    },
+    "remainingCapacity": {
+      "type": "number",
+      "default": -1
     }
   },
   "relations": {

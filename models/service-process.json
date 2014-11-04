@@ -9,10 +9,12 @@
     },
     "pid": {
       "type": "number",
-      "required": true
+      "required": true,
+      "index": true
     },
     "workerId": {
       "type": "number",
+      "required": true,
       "required": true
     },
     "listeningSockets": {
