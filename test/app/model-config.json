@@ -48,7 +48,7 @@
     "dataSource": "db",
     "public": false
   },
-  "ServerAction": {
+  "InstanceAction": {
     "dataSource": "db",
     "public": false
   }
