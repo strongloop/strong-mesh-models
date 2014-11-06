@@ -2,6 +2,11 @@
   "name": "ServiceProcess",
   "base": "PersistedModel",
   "properties": {
+    "parentPid": {
+      "type": "number",
+      "required": true,
+      "index": true
+    },
     "pid": {
       "type": "number",
       "required": true
@@ -9,6 +14,34 @@
     "workerId": {
       "type": "number",
       "required": true
+    },
+    "listeningSockets": {
+      "type": ["object"],
+      "default": []
+    },
+    "isTrackingObjects": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "isProfiling": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "isSnapshotting": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "startTime": {
+      "type": "date"
+    },
+    "stopTime": {
+      "type": "date"
+    },
+    "stopReason": {
+      "type": "string"
     }
   },
   "relations": {

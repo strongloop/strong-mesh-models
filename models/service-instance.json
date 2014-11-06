@@ -17,20 +17,47 @@
     "currentDeploymentId": {
       "type": "string"
     },
-    "deploymentStartTime": {
+    "startTime": {
       "type": "date"
     },
-    "port": {
+    "restartCount": {
       "type": "number"
+    },
+    "stats": {
+      "type": "object"
     },
     "PMPort": {
       "type": "number"
+    },
+    "containerVersionInfo":{
+      "type": "object"
+    },
+    "started": {
+      "type": "boolean",
+      "default": false
+    },
+    "setSize": {
+      "type": "number",
+      "default": 0
+    },
+    "applicationName": {
+      "type": "string"
+    },
+    "npmModules": {
+      "type": "object"
+    },
+    "agentVersion": {
+      "type": "string"
     }
   },
   "options": {
     "hidden": ["executorId"]
   },
   "relations": {
+    "actions": {
+      "type": "hasMany",
+      "model": "InstanceAction"
+    },
     "processes": {
       "type": "hasMany",
       "model": "ServiceProcess"
