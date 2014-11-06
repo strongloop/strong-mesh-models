@@ -11,7 +11,13 @@
     "startTime": {
       "type": "date"
     },
+    "started": {
+      "type": "boolean"
+    },
     "deploymentInfo": {
+      "type": "object"
+    },
+    "env": {
       "type": "object"
     }
   },
@@ -19,10 +25,6 @@
     "hidden": ["startTime", "_group"]
   },
   "relations": {
-    "actions": {
-      "type": "hasMany",
-      "model": "ServerAction"
-    },
     "executors": {
       "type": "hasMany",
       "through": "ServiceInstance",
