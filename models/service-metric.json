@@ -4,6 +4,11 @@
   "properties": {
     "processId": {
       "type": "number",
+      "description": "id of ServiceProcess, not the pid",
+      "required": true
+    },
+    "workerId": {
+      "type": "number",
       "required": true
     },
     "timeStamp": {
