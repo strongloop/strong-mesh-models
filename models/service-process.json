@@ -2,7 +2,7 @@
   "name": "ServiceProcess",
   "base": "PersistedModel",
   "properties": {
-    "ppid": {
+    "parentPid": {
       "type": "number",
       "required": true,
       "index": true
