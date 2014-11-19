@@ -1,16 +1,20 @@
 {
   "name": "Action",
   "base": "PersistedModel",
+  "description": "Represents an action to perform on an instance",
   "properties": {
     "request": {
       "type": "object",
-      "required": true
+      "required": true,
+      "description": "Command, optional subcommand and target to perform an action on"
     },
     "timestamp": {
-      "type": "date"
+      "type": "date",
+      "description": "Timestamp when the action was submitted to the API"
     },
     "result": {
-      "type": "object"
+      "type": "object",
+      "description": "The result or output of the action"
     }
   },
   "validations": [],
