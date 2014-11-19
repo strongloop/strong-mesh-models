@@ -1,49 +1,59 @@
 {
   "name": "ServiceProcess",
   "base": "PersistedModel",
+  "description": "Represents a since OS process running on the Instance",
   "properties": {
     "parentPid": {
       "type": "number",
       "required": true,
-      "index": true
+      "index": true,
+      "description": "The OS process ID of the parent of this process (eg: *NIX PPID)"
     },
     "pid": {
       "type": "number",
       "required": true,
-      "index": true
+      "index": true,
+      "description": "The OS process ID of this process (eg: *NIX PID)"
     },
     "workerId": {
       "type": "number",
       "required": true,
-      "required": true
+      "description": "The cluster worker ID"
     },
     "listeningSockets": {
       "type": ["object"],
-      "default": []
+      "default": [],
+      "description": "List of addresses/ports this process is listening on"
     },
     "isTrackingObjects": {
       "type": "boolean",
       "required": true,
-      "default": false
+      "default": false,
+      "description": "Indicates if this object-tracking is turned on for this process"
     },
     "isProfiling": {
       "type": "boolean",
       "required": true,
-      "default": false
+      "default": false,
+      "description": "Indicates if this cpu-profiling is turned on for this process"
     },
     "isSnapshotting": {
       "type": "boolean",
       "required": true,
-      "default": false
+      "default": false,
+      "description": "Indicates if a heap-dump is being performed on this process"
     },
     "startTime": {
-      "type": "date"
+      "type": "date",
+      "description": "Timestamp when this process was started"
     },
     "stopTime": {
-      "type": "date"
+      "type": "date",
+      "description": "Timestamp when this process was stopped or killed"
     },
     "stopReason": {
-      "type": "string"
+      "type": "string",
+      "description": "The signal or reason this process exited"
     }
   },
   "relations": {

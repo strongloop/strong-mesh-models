@@ -1,53 +1,67 @@
 {
   "name": "ServiceInstance",
   "base": "PersistedModel",
+  "description": "Represents an instance of a service running on an executor",
   "properties": {
     "executorId": {
       "type": "number",
-      "index": 1
+      "index": 1,
+      "description": "The ID of the executor on which this instance is running"
     },
     "serverServiceId": {
       "type": "number",
-      "index": 1
+      "index": 1,
+      "description": "The ID of the service this executor belongs to"
     },
     "groupId": {
       "type": "number",
-      "index": 1
+      "index": 1,
+      "description": "The ID of the service group this executor belongs to"
     },
     "currentDeploymentId": {
-      "type": "string"
+      "type": "string",
+      "description": "The SHA1 hash of the package deployed to this instance. This ties back to the value of Service.deploymentInfo.hash"
     },
     "startTime": {
-      "type": "date"
+      "type": "date",
+      "description": "The ID of the service group this executor belongs to"
     },
     "restartCount": {
-      "type": "number"
+      "type": "number",
+      "description": "The number of time the supervisor process for this instance was killed or has crashed and had to be restarted"
     },
     "stats": {
       "type": "object"
     },
     "PMPort": {
-      "type": "number"
+      "type": "number",
+      "description": "The API port the process manager is available on"
     },
     "containerVersionInfo":{
-      "type": "object"
+      "type": "object",
+      "description": "Information about the host, operating system, node version and container technology hosting this instance"
     },
     "started": {
       "type": "boolean",
-      "default": false
+      "default": false,
+      "description": "Indicates if this instance should be running or stopped"
     },
     "setSize": {
       "type": "number",
-      "default": 0
+      "default": 0,
+      "description": "The currently configured number of node processes that the instance should be running"
     },
     "applicationName": {
-      "type": "string"
+      "type": "string",
+      "description": "The application name that strong-agent uses to report its metrics"
     },
     "npmModules": {
-      "type": "object"
+      "type": "object",
+      "description": "NPM package and sub-module information"
     },
     "agentVersion": {
-      "type": "string"
+      "type": "string",
+      "description": "The version of strong-agent running on this instance"
     }
   },
   "options": {

@@ -1,20 +1,25 @@
 {
   "name": "Executor",
   "base": "PersistedModel",
+  "description": "Represents an Executor VM or bare-metal machine, which can host multiple service instances",
   "properties": {
     "address": {
       "type": "string",
-      "required": true
+      "required": true,
+      "description": "The IP address or hostname on which the API server and gateway can access this executor"
     },
     "APIPort": {
-      "type": "string"
+      "type": "string",
+      "description": "The port this executor is listening on for API commands"
     },
     "totalCapacity": {
-      "type": "number"
+      "type": "number",
+      "description": "The number of containers/service instances that this executor can support"
     },
     "remainingCapacity": {
       "type": "number",
-      "default": -1
+      "default": -1,
+      "description": "Currently allocated number of instances"
     }
   },
   "relations": {
