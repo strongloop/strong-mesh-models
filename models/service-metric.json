@@ -3,7 +3,7 @@
   "base": "PersistedModel",
   "properties": {
     "processId": {
-      "type": "number",
+      "type": "string",
       "description": "id of ServiceProcess, not the pid",
       "required": true
     },
@@ -26,7 +26,12 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "serviceInstance": {
+      "type": "belongsTo",
+      "model": "ServiceInstance"
+    }
+  },
   "acls": [],
   "methods": []
 }

@@ -42,11 +42,6 @@
       "model": "ServiceInstance",
       "description": "List of instances that run this service"
     },
-    "profileDatas": {
-      "type": "hasMany",
-      "model": "ProfileData",
-      "description": "List of cpuprofile or heapdumps gathered for this service"
-    },
     "groups": {
       "type": "embedsMany",
       "model": "Group",

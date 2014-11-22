@@ -69,9 +69,6 @@
       "description": "The version of strong-agent running on this instance"
     }
   },
-  "options": {
-    "hidden": ["executorId"]
-  },
   "relations": {
     "actions": {
       "type": "hasMany",
@@ -81,6 +78,10 @@
       "type": "hasMany",
       "model": "ServiceProcess"
     },
+    "metrics": {
+      "type": "hasMany",
+      "model": "ServiceMetric"
+    },
     "executor": {
       "type": "belongsTo",
       "model": "Executor"
@@ -88,6 +89,11 @@
     "serverService": {
       "type": "belongsTo",
       "model": "ServerService"
+    },
+    "profileDatas": {
+      "type": "hasMany",
+      "model": "ProfileData",
+      "description": "List of cpuprofile or heapdumps gathered for this service"
     }
   },
   "acls": []

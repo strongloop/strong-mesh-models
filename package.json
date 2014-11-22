@@ -30,5 +30,8 @@
     "loopback-boot": "^2.0.0",
     "serve-favicon": "^2.1.5",
     "tap": "^0.4.13"
+  },
+  "dependencies": {
+    "uuid": "^2.0.1"
   }
 }

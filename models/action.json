@@ -3,6 +3,10 @@
   "base": "PersistedModel",
   "description": "Represents an action to perform on an instance",
   "properties": {
+    "id": {
+      "type": "string",
+      "id": true
+    },
     "request": {
       "type": "object",
       "required": true,
@@ -15,11 +19,16 @@
     "result": {
       "type": "object",
       "description": "The result or output of the action"
+    },
+    "serviceInstanceId": {
+      "type": "number",
+      "description": "Foreign key for associated ServiceInstance",      
+      "required": true
     }
   },
   "validations": [],
   "relations": {
-    "instance": {
+    "serviceInstance": {
       "type": "belongsTo",
       "model": "ServiceInstance"
     }
