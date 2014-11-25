@@ -51,6 +51,11 @@
       "default": 0,
       "description": "The currently configured number of node processes that the instance should be running"
     },
+    "cpus": {
+      "type": "string",
+      "default": "cpus",
+      "description": "The number of cpus to use when starting the service on this instance"
+    },
     "applicationName": {
       "type": "string",
       "description": "The application name that strong-agent uses to report its metrics"
