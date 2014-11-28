@@ -2,40 +2,50 @@
   "name": "ProfileData",
   "plural": "ProfileDatas",
   "base": "PersistedModel",
+  "description": "Represents a cpu profile or heap dump gathered from a node process",
   "properties": {
     "executorId": {
       "type": "number",
-      "index": 1
+      "index": 1,
+      "description": "The ID if the Executor instance the process was running on"
     },
     "serverServiceId": {
       "type": "number",
-      "index": 1
+      "index": 1,
+      "description": "The ID if the Service the process was running"
     },
     "instanceId": {
       "type": "number",
-      "index": 1
+      "index": 1,
+      "description": "The ID if the Service instance the process was part of"
     },
     "type": {
       "type": "string",
-      "required": true
+      "required": true,
+      "description": "The type of captured data: 'cpuprofile' or 'heapsnapshot'"
     },
     "targetId": {
       "type": "number",
-      "required": true
+      "required": true,
+      "description": "The OS Process ID or cluster worker ID of the process."
     },
     "startTime": {
       "type": "date",
-      "required": true
+      "required": true,
+      "description": "Timestamp the cpu profile or heap dump was started"
     },
     "completed": {
       "type": "boolean",
-      "default": false
+      "default": false,
+      "description": "Indicates if the profile generation is still in progress"
     },
     "fileName": {
-      "type": "string"
+      "type": "string",
+      "description": "The name of the file on the Executor"
     },
     "errored": {
-      "type": "string"
+      "type": "string",
+      "description": "If an error occurred, this contains the error message"
     }
   },
   "options": {

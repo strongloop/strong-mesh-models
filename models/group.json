@@ -1,14 +1,17 @@
 {
   "name": "Group",
   "base": "PersistedModel",
+  "description": "Represents an abstract set of service instances that may be used for routing and partitioning",
   "properties": {
     "name": {
       "type": "string",
-      "required": true
+      "required": true,
+      "description": "Name of the group"
     },
     "scale": {
       "type": "number",
-      "required": true
+      "required": true,
+      "description": "Number of service instance that should be in the group"
     }
   },
   "relations": {},

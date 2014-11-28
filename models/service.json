@@ -2,43 +2,55 @@
   "name": "Service",
   "plural": "Services",
   "base": "PersistedModel",
+  "description": "Represents a Service",
   "properties": {
     "name": {
       "type": "string",
       "required": true,
-      "index": 1
+      "index": 1,
+      "description": "The name of the service. This may be different from the name in the package.json"
     },
     "startTime": {
-      "type": "date"
+      "type": "date",
+      "description": "The timestamp for the last time this service was started"
+    },
+    "started": {
+      "type": "boolean",
+      "description": "Indicates if the service should be running or stopped"
     },
     "deploymentInfo": {
-      "type": "object"
+      "type": "object",
+      "description": "Information about the node application deployed for this service"
+    },
+    "env": {
+      "type": "object",
+      "description": "List of environment variables set for the node application"
     }
   },
   "options": {
     "hidden": ["startTime", "_group"]
   },
   "relations": {
-    "actions": {
-      "type": "hasMany",
-      "model": "ServerAction"
-    },
     "executors": {
       "type": "hasMany",
       "through": "ServiceInstance",
-      "model": "Executor"
+      "model": "Executor",
+      "description": "List of executors the service is running on"
     },
     "instances": {
       "type": "hasMany",
-      "model": "ServiceInstance"
+      "model": "ServiceInstance",
+      "description": "List of instances that run this service"
     },
     "profileDatas": {
       "type": "hasMany",
-      "model": "ProfileData"
+      "model": "ProfileData",
+      "description": "List of cpuprofile or heapdumps gathered for this service"
     },
     "groups": {
       "type": "embedsMany",
-      "model": "Group"
+      "model": "Group",
+      "description": "List of groups used for routing or partitioning"
     }
   },
   "indexes": {
