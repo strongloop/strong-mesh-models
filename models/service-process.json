@@ -37,6 +37,11 @@
       "default": false,
       "description": "Indicates if this cpu-profiling is turned on for this process"
     },
+    "watchdogTimeout": {
+      "type": "number",
+      "default": 0,
+      "description": "Watchdog timeout, in milliseconds. (0 = watchdog disabled)"
+    },
     "isSnapshotting": {
       "type": "boolean",
       "required": true,
