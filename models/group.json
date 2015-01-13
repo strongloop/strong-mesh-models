@@ -11,7 +11,12 @@
     "scale": {
       "type": "number",
       "required": true,
-      "description": "Number of service instance that should be in the group"
+      "description": "Number of instances that should be in the group"
+    },
+    "processesPerInstance": {
+      "type": "number",
+      "required": true,
+      "description": "Number of processes to run on each instance"
     }
   },
   "relations": {},
