@@ -1,6 +1,6 @@
 {
   "name": "strong-mesh-models",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "description": "Loopback models for communicating over REST with strong-pm and strong-scheduler",
   "keywords": [
     "StrongLoop",
@@ -30,5 +30,8 @@
     "loopback-boot": "^2.0.0",
     "serve-favicon": "^2.1.5",
     "tap": "^0.4.13"
+  },
+  "dependencies": {
+    "uuid": "^2.0.1"
   }
 }

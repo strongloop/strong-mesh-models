@@ -27,15 +27,6 @@ module.exports = function(Service) {
       accepts: {arg: 'ctx', http: {source: 'context'}}
     });
 
-    this.remoteMethod('downloadProfile', {
-      isStatic: false,
-      http: {path: '/profileDatas/:profileId/download', verb: 'get'},
-      accepts: [
-        {arg: 'ctx', http: {source: 'context'}}
-      ],
-      description: 'Download service profiling information'
-    });
-
     this.disableRemoteMethod('__delete__actions');
     this.disableRemoteMethod('__destroyById__actions');
     this.disableRemoteMethod('__updateById__actions');

@@ -3,6 +3,11 @@
   "base": "PersistedModel",
   "description": "Represents a since OS process running on the Instance",
   "properties": {
+    "id": {
+      "type": "string",
+      "index": true,
+      "id": true
+    },
     "parentPid": {
       "type": "number",
       "required": true,
