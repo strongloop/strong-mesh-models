@@ -1,3 +1,9 @@
+2015-01-13, Version 3.0.1
+=========================
+
+ * Add watchdog timeout value to process model (Krishna Raman)
+
+
 2014-11-28, Version 3.0.0
 =========================
 
