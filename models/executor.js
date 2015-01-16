@@ -1,8 +1,14 @@
+var uuid = require('uuid');
+
 module.exports = function(Executor) {
-  Executor.beforeCreate = function(next) {
-    if (this.remainingCapacity === -1) {
+  Executor.definition.properties.id.default = function() {
+    return uuid.v4();
+  };
+
+  Executor.beforeSave = function(callback) {
+    if (this.remainingCapacity === null && this.totalCapacity !== null) {
       this.remainingCapacity = this.totalCapacity;
     }
-    next();
+    process.nextTick(callback);
   };
 };

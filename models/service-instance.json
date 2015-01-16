@@ -3,8 +3,13 @@
   "base": "PersistedModel",
   "description": "Represents an instance of a service running on an executor",
   "properties": {
+    "id": {
+      "type": "string",
+      "index": true,
+      "id": true
+    },
     "executorId": {
-      "type": "number",
+      "type": "string",
       "index": 1,
       "description": "The ID of the executor on which this instance is running"
     },

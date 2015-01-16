@@ -21,7 +21,7 @@
       "description": "The result or output of the action"
     },
     "serviceInstanceId": {
-      "type": "number",
+      "type": "string",
       "description": "Foreign key for associated ServiceInstance",      
       "required": true
     }
