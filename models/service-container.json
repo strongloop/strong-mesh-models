@@ -1,0 +1,37 @@
+{
+  "name": "ServiceContainer",
+  "base": "PersistedModel",
+  "description": "Represents an container running on an executor",
+  "properties": {
+    "executorId": {
+      "type": "number",
+      "index": 1,
+      "description": "The ID of the executor on which this instance is running"
+    },
+    "serviceId": {
+      "type": "number",
+      "index": 1,
+      "description": "The ID of the service this container belongs to"
+    },
+    "groupId": {
+      "type": "number",
+      "index": 1,
+      "description": "The ID of the service group this container belongs to"
+    }
+  },
+  "relations": {
+    "executor": {
+      "type": "belongsTo",
+      "model": "Executor"
+    },
+    "serverService": {
+      "type": "belongsTo",
+      "model": "ServerService"
+    },
+    "serviceInstance": {
+      "type": "hasOne",
+      "model": "ServiceInstance"
+    }
+  },
+  "acls": []
+}

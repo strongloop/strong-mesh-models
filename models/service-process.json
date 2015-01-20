@@ -5,8 +5,9 @@
   "properties": {
     "id": {
       "type": "string",
-      "index": true,
-      "id": true
+      "required": true,
+      "id": true,
+      "index": true
     },
     "parentPid": {
       "type": "number",

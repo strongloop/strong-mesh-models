@@ -23,14 +23,19 @@
     }
   },
   "relations": {
+    "containers": {
+      "type": "hasMany",
+      "model": "ServiceContainer"
+    },
     "instances": {
       "type": "hasMany",
+      "through": "ServiceContainer",
       "model": "ServiceInstance"
     },
     "services": {
       "type": "hasMany",
       "through": "ServiceInstance",
-      "model": "ServerService"
+      "model": "Service"
     }
   },
   "acls": []

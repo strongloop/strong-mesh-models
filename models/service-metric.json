@@ -2,6 +2,12 @@
   "name": "ServiceMetric",
   "base": "PersistedModel",
   "properties": {
+    "id": {
+      "type": "string",
+      "required": true,
+      "id": true,
+      "index": true
+    },
     "processId": {
       "type": "string",
       "description": "id of ServiceProcess, not the pid",
