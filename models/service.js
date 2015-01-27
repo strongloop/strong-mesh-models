@@ -5,53 +5,50 @@ module.exports = function(Service) {
     next();
   };
 
-  Service.setup = function() {
-    Service.base.setup.call(this);
 
-    this.remoteMethod('deploy', {
-      isStatic: false,
-      http: [
-        {path: '/deploy/*', verb: 'get'},
-        {path: '/deploy/*', verb: 'post'},
-        {path: '/deploy/*', verb: 'put'}
-      ],
-      accepts: {arg: 'ctx', http: {source: 'context'}},
-      description: 'Deploy service'
-    });
+  Service.remoteMethod('deploy', {
+    isStatic: false,
+    http: [
+      {path: '/deploy/*', verb: 'get'},
+      {path: '/deploy/*', verb: 'post'},
+      {path: '/deploy/*', verb: 'put'}
+    ],
+    accepts: {arg: 'ctx', http: {source: 'context'}},
+    description: 'Deploy service'
+  });
 
-    this.remoteMethod('getPack', {
-      isStatic: false,
-      http: [
-        {path: '/pack', verb: 'get'}
-      ],
-      accepts: {arg: 'ctx', http: {source: 'context'}}
-    });
+  Service.remoteMethod('getPack', {
+    isStatic: false,
+    http: [
+      {path: '/pack', verb: 'get'}
+    ],
+    accepts: {arg: 'ctx', http: {source: 'context'}}
+  });
 
-    this.disableRemoteMethod('__delete__actions');
-    this.disableRemoteMethod('__destroyById__actions');
-    this.disableRemoteMethod('__updateById__actions');
+  Service.disableRemoteMethod('__delete__actions');
+  Service.disableRemoteMethod('__destroyById__actions');
+  Service.disableRemoteMethod('__updateById__actions');
 
-    this.disableRemoteMethod('__delete__instances');
-    this.disableRemoteMethod('__create__instances');
-    this.disableRemoteMethod('__destroyById__instances');
-    this.disableRemoteMethod('__updateById__instances');
+  Service.disableRemoteMethod('__delete__instances');
+  Service.disableRemoteMethod('__create__instances');
+  Service.disableRemoteMethod('__destroyById__instances');
+  Service.disableRemoteMethod('__updateById__instances');
 
-    this.disableRemoteMethod('__delete__executors');
-    this.disableRemoteMethod('__create__executors');
-    this.disableRemoteMethod('__destroyById__executors');
-    this.disableRemoteMethod('__updateById__executors');
-    this.disableRemoteMethod('__unlink__executors');
-    this.disableRemoteMethod('__link__executors');
-    this.disableRemoteMethod('__exists__executors');
+  Service.disableRemoteMethod('__delete__executors');
+  Service.disableRemoteMethod('__create__executors');
+  Service.disableRemoteMethod('__destroyById__executors');
+  Service.disableRemoteMethod('__updateById__executors');
+  Service.disableRemoteMethod('__unlink__executors');
+  Service.disableRemoteMethod('__link__executors');
+  Service.disableRemoteMethod('__exists__executors');
 
-    this.disableRemoteMethod('__delete__profileDatas');
-    this.disableRemoteMethod('__create__profileDatas');
-    this.disableRemoteMethod('__destroyById__profileDatas');
-    this.disableRemoteMethod('__updateById__profileDatas');
+  Service.disableRemoteMethod('__delete__profileDatas');
+  Service.disableRemoteMethod('__create__profileDatas');
+  Service.disableRemoteMethod('__destroyById__profileDatas');
+  Service.disableRemoteMethod('__updateById__profileDatas');
 
-    this.disableRemoteMethod('__delete__groups');
-    this.disableRemoteMethod('__create__groups');
-    this.disableRemoteMethod('__destroyById__groups');
-    this.disableRemoteMethod('__updateById__groups');
-  };
+  Service.disableRemoteMethod('__delete__groups');
+  Service.disableRemoteMethod('__create__groups');
+  Service.disableRemoteMethod('__destroyById__groups');
+  Service.disableRemoteMethod('__updateById__groups');
 };

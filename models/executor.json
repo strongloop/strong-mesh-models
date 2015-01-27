@@ -49,7 +49,7 @@
     "services": {
       "type": "hasMany",
       "through": "ServiceInstance",
-      "model": "ServerService"
+      "model": "Service"
     }
   },
   "acls": []

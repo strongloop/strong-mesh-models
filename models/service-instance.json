@@ -13,7 +13,7 @@
       "index": 1,
       "description": "The ID of the executor on which this instance is running"
     },
-    "serverServiceId": {
+    "serviceId": {
       "type": "number",
       "index": 1,
       "description": "The ID of the service this executor belongs to"
@@ -91,9 +91,9 @@
       "type": "belongsTo",
       "model": "Executor"
     },
-    "serverService": {
+    "service": {
       "type": "belongsTo",
-      "model": "ServerService"
+      "model": "Service"
     },
     "profileDatas": {
       "type": "hasMany",
