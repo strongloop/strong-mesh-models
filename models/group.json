@@ -12,6 +12,11 @@
       "type": "number",
       "required": true,
       "description": "Number of service instance that should be in the group"
+    },
+    "cpus": {
+      "type": "string",
+      "default": "cpus",
+      "description": "The number of processes to start for the instance"
     }
   },
   "relations": {},

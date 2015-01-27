@@ -26,11 +26,6 @@
     "currentDeploymentId": {
       "type": "string",
       "description": "SHA1 hash representing the deployment and environment. Used to calculate if container is running the expected deployment of code and environment variables"
-    },
-    "cpus": {
-      "type": "string",
-      "default": "cpus",
-      "description": "The number of processes to start when the instance is first started"
     }
   },
   "relations": {
