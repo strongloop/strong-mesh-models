@@ -14,7 +14,7 @@
       "type": "date",
       "description": "The timestamp for the last time this service was started"
     },
-    "started": {
+    "enabled": {
       "type": "boolean",
       "description": "Indicates if the service should be running or stopped"
     },
@@ -37,8 +37,14 @@
       "model": "Executor",
       "description": "List of executors the service is running on"
     },
+    "containers": {
+      "type": "hasMany",
+      "model": "ServiceContainer",
+      "description": "List of containers that run this service"
+    },
     "instances": {
       "type": "hasMany",
+      "through": "ServiceInstance",
       "model": "ServiceInstance",
       "description": "List of instances that run this service"
     },
