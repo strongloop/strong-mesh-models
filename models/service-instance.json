@@ -77,7 +77,7 @@
   "relations": {
     "actions": {
       "type": "hasMany",
-      "model": "InstanceAction"
+      "model": "Action"
     },
     "processes": {
       "type": "hasMany",
