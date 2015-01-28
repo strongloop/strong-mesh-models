@@ -3,6 +3,11 @@
   "base": "PersistedModel",
   "description": "Represents an abstract set of service instances that may be used for routing and partitioning",
   "properties": {
+    "id": {
+      "type": "string",
+      "index": true,
+      "id": true
+    },
     "name": {
       "type": "string",
       "required": true,
