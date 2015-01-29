@@ -1,4 +1,10 @@
+var uuid = require('uuid');
+
 module.exports = function(ServiceInstance) {
+  ServiceInstance.definition.properties.id.default = function() {
+    return uuid.v4();
+  };
+
   ServiceInstance.remoteMethod('downloadProfile',
     {
       isStatic: false,
@@ -8,4 +14,4 @@ module.exports = function(ServiceInstance) {
       ],
       description: 'Download service profiling information'
     });
-}
+};

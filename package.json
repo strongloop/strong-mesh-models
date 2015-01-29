@@ -26,7 +26,7 @@
     "eslint": "^0.8.2",
     "istanbul": "^0.3.2",
     "jshint": "^2.5.6",
-    "loopback": "^2.4.0",
+    "loopback": "^2.10.0",
     "loopback-boot": "^2.0.0",
     "serve-favicon": "^2.1.5",
     "tap": "^0.4.13"

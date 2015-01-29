@@ -10,7 +10,7 @@
       "id": true
     },
     "executorId": {
-      "type": "number",
+      "type": "string",
       "index": 1,
       "description": "The ID if the Executor instance the process was running on"
     },
@@ -20,7 +20,7 @@
       "description": "The ID if the Service the process was running"
     },
     "serviceInstanceId": {
-      "type": "number",
+      "type": "string",
       "index": 1,
       "description": "The ID if the Service instance the process was part of"
     },
