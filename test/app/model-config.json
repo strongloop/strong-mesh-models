@@ -24,7 +24,7 @@
     "dataSource": "db",
     "public": false
   },
-  "ServerService": {
+  "Service": {
     "dataSource": "db",
     "public": true
   },
@@ -40,6 +40,10 @@
     "dataSource": "db",
     "public": false
   },
+  "ServiceContainer": {
+    "dataSource": "db",
+    "public": false
+  },
   "ServiceProcess": {
     "dataSource": "db",
     "public": false
@@ -48,7 +52,7 @@
     "dataSource": "db",
     "public": false
   },
-  "InstanceAction": {
+  "Action": {
     "dataSource": "db",
     "public": false
   }
