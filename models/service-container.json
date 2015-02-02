@@ -26,6 +26,10 @@
     "currentDeploymentId": {
       "type": "string",
       "description": "SHA1 hash representing the deployment and environment. Used to calculate if container is running the expected deployment of code and environment variables"
+    },
+    "applicationPort": {
+      "type": "number",
+      "description": "Routable Port to application is listening on"
     }
   },
   "relations": {
