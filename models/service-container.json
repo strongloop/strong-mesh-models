@@ -1,0 +1,50 @@
+{
+  "name": "ServiceContainer",
+  "base": "PersistedModel",
+  "description": "Represents a container inside which the service instance is run.",
+  "properties": {
+    "id": {
+      "type": "string",
+      "index": true,
+      "id": true
+    },
+    "executorId": {
+      "type": "string",
+      "index": 1,
+      "description": "The ID of the executor on which this container is running"
+    },
+    "serviceId": {
+      "type": "number",
+      "index": 1,
+      "description": "The ID of the service this container belongs to"
+    },
+    "groupId": {
+      "type": "string",
+      "index": 1,
+      "description": "The ID of the service group this container belongs to"
+    },
+    "currentDeploymentId": {
+      "type": "string",
+      "description": "SHA1 hash representing the deployment and environment. Used to calculate if container is running the expected deployment of code and environment variables"
+    },
+    "applicationPort": {
+      "type": "number",
+      "description": "Routable Port to application is listening on"
+    }
+  },
+  "relations": {
+    "executor": {
+      "type": "belongsTo",
+      "model": "Executor"
+    },
+    "service": {
+      "type": "belongsTo",
+      "model": "Service"
+    },
+    "instance": {
+      "type": "hasOne",
+      "model": "ServiceInstance"
+    }
+  },
+  "acls": []
+}
