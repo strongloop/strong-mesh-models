@@ -25,6 +25,10 @@
     "env": {
       "type": "object",
       "description": "List of environment variables set for the node application"
+    },
+    "policies": {
+      "type": "object",
+      "description": "Gateway policies"
     }
   },
   "options": {
