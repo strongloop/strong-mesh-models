@@ -1,0 +1,35 @@
+{
+  "name": "ExpressUsageRecord",
+  "base": "PersistedModel",
+  "properties": {
+    "processId": {
+      "type": "number",
+      "description": "id of ServiceProcess, not the pid",
+      "required": true
+    },
+    "workerId": {
+      "type": "number",
+      "required": true
+    },
+    "timestamp": {
+      "type": "date",
+      "required": true
+    },
+    "client": {
+      "type": "object"
+    },
+    "request": {
+      "type": "object"
+    },
+    "response": {
+      "type": "object"
+    },
+    "data": {
+      "type": "object"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}
