@@ -4,18 +4,23 @@
   "base": "PersistedModel",
   "description": "Represents a cpu profile or heap dump gathered from a node process",
   "properties": {
+    "id": {
+      "type": "string",
+      "index": true,
+      "id": true
+    },
     "executorId": {
-      "type": "number",
+      "type": "string",
       "index": 1,
       "description": "The ID if the Executor instance the process was running on"
     },
-    "serverServiceId": {
+    "serviceId": {
       "type": "number",
       "index": 1,
       "description": "The ID if the Service the process was running"
     },
-    "instanceId": {
-      "type": "number",
+    "serviceInstanceId": {
+      "type": "string",
       "index": 1,
       "description": "The ID if the Service instance the process was part of"
     },
@@ -52,13 +57,21 @@
     "hidden": ["executorId"]
   },
   "relations": {
+    "serviceProcess": {
+      "type": "belongsTo",
+      "model": "ServiceProcess"
+    },
     "executor": {
       "type": "belongsTo",
       "model": "Executor"
     },
-    "serverService": {
+    "service": {
       "type": "belongsTo",
-      "model": "ServerService"
+      "model": "Service"
+    },
+    "serviceInstance": {
+      "type": "belongsTo",
+      "model": "ServiceInstance"
     }
   },
   "acls": []

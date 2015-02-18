@@ -1,60 +1,25 @@
 {
   "name": "ServiceInstance",
   "base": "PersistedModel",
-  "description": "Represents an instance of a service running on an executor",
+  "description": "Represents an instance of a service running inside a container",
   "properties": {
-    "executorId": {
-      "type": "number",
-      "index": 1,
-      "description": "The ID of the executor on which this instance is running"
-    },
-    "serverServiceId": {
-      "type": "number",
-      "index": 1,
-      "description": "The ID of the service this executor belongs to"
-    },
-    "groupId": {
-      "type": "number",
-      "index": 1,
-      "description": "The ID of the service group this executor belongs to"
-    },
-    "currentDeploymentId": {
+    "id": {
       "type": "string",
-      "description": "The SHA1 hash of the package deployed to this instance. This ties back to the value of Service.deploymentInfo.hash"
-    },
-    "startTime": {
-      "type": "date",
-      "description": "The ID of the service group this executor belongs to"
+      "index": true,
+      "id": true
     },
     "restartCount": {
       "type": "number",
       "description": "The number of time the supervisor process for this instance was killed or has crashed and had to be restarted"
     },
-    "stats": {
-      "type": "object"
-    },
-    "PMPort": {
-      "type": "number",
-      "description": "The API port the process manager is available on"
-    },
     "containerVersionInfo":{
       "type": "object",
       "description": "Information about the host, operating system, node version and container technology hosting this instance"
-    },
-    "started": {
-      "type": "boolean",
-      "default": false,
-      "description": "Indicates if this instance should be running or stopped"
     },
     "setSize": {
       "type": "number",
       "default": 0,
       "description": "The currently configured number of node processes that the instance should be running"
-    },
-    "cpus": {
-      "type": "string",
-      "default": "cpus",
-      "description": "The number of cpus to use when starting the service on this instance"
     },
     "applicationName": {
       "type": "string",
@@ -69,25 +34,28 @@
       "description": "The version of strong-agent running on this instance"
     }
   },
-  "options": {
-    "hidden": ["executorId"]
-  },
   "relations": {
     "actions": {
       "type": "hasMany",
-      "model": "InstanceAction"
+      "model": "Action"
     },
     "processes": {
       "type": "hasMany",
       "model": "ServiceProcess"
     },
-    "executor": {
-      "type": "belongsTo",
-      "model": "Executor"
+    "metrics": {
+      "type": "hasMany",
+      "model": "ServiceMetric"
     },
-    "serverService": {
+    "profileDatas": {
+      "type": "hasMany",
+      "model": "ProfileData",
+      "description": "List of cpuprofile or heapdumps gathered for this service"
+    },
+    "serviceContainer": {
       "type": "belongsTo",
-      "model": "ServerService"
+      "model": "ServiceContainer",
+      "description": "The container this instance is running within"
     }
   },
   "acls": []

@@ -2,8 +2,13 @@
   "name": "ServiceMetric",
   "base": "PersistedModel",
   "properties": {
+    "id": {
+      "type": "string",
+      "index": true,
+      "id": true
+    },
     "processId": {
-      "type": "number",
+      "type": "string",
       "description": "id of ServiceProcess, not the pid",
       "required": true
     },
@@ -26,7 +31,12 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "serviceInstance": {
+      "type": "belongsTo",
+      "model": "ServiceInstance"
+    }
+  },
   "acls": [],
   "methods": []
 }

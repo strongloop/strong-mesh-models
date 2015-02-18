@@ -14,7 +14,7 @@
       "type": "date",
       "description": "The timestamp for the last time this service was started"
     },
-    "started": {
+    "enabled": {
       "type": "boolean",
       "description": "Indicates if the service should be running or stopped"
     },
@@ -25,6 +25,10 @@
     "env": {
       "type": "object",
       "description": "List of environment variables set for the node application"
+    },
+    "policies": {
+      "type": "object",
+      "description": "Gateway policies"
     }
   },
   "options": {
@@ -37,15 +41,16 @@
       "model": "Executor",
       "description": "List of executors the service is running on"
     },
+    "containers": {
+      "type": "hasMany",
+      "model": "ServiceContainer",
+      "description": "List of containers that run this service"
+    },
     "instances": {
       "type": "hasMany",
+      "through": "ServiceInstance",
       "model": "ServiceInstance",
       "description": "List of instances that run this service"
-    },
-    "profileDatas": {
-      "type": "hasMany",
-      "model": "ProfileData",
-      "description": "List of cpuprofile or heapdumps gathered for this service"
     },
     "groups": {
       "type": "embedsMany",

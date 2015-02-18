@@ -17,7 +17,7 @@ test('load models', function(t) {
   app.once('started', function() {
     t.assert(true, 'Models should be loaded without errors');
 
-    var Service = app.models.ServerService;
+    var Service = app.models.Service;
     var s = new Service({
       name: 'some service',
       deploymentInfo: {
