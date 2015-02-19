@@ -15,16 +15,7 @@
       "type": "date",
       "required": true
     },
-    "client": {
-      "type": "object"
-    },
-    "request": {
-      "type": "object"
-    },
-    "response": {
-      "type": "object"
-    },
-    "data": {
+    "usage": {
       "type": "object"
     }
   },
