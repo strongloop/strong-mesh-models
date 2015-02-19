@@ -1,0 +1,26 @@
+{
+  "name": "AgentTrace",
+  "base": "PersistedModel",
+  "properties": {
+    "processId": {
+      "type": "number",
+      "description": "id of ServiceProcess, not the pid",
+      "required": true
+    },
+    "workerId": {
+      "type": "number",
+      "required": true
+    },
+    "timeStamp": {
+      "type": "date",
+      "required": true
+    },
+    "trace": {
+      "type": "object"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}
