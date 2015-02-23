@@ -14,7 +14,8 @@
       "description": "Number of service instance that should be in the group"
     }
   },
+  "validations": [],
   "relations": {},
-  "acls": []
+  "acls": [],
+  "methods": []
 }
-

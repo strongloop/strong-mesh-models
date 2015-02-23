@@ -1,6 +1,11 @@
 {
   "name": "ServiceInstance",
   "base": "PersistedModel",
+  "options": {
+    "hidden": [
+      "executorId"
+    ]
+  },
   "description": "Represents an instance of a service running on an executor",
   "properties": {
     "executorId": {
@@ -37,7 +42,7 @@
       "type": "number",
       "description": "The API port the process manager is available on"
     },
-    "containerVersionInfo":{
+    "containerVersionInfo": {
       "type": "object",
       "description": "Information about the host, operating system, node version and container technology hosting this instance"
     },
@@ -69,9 +74,7 @@
       "description": "The version of strong-agent running on this instance"
     }
   },
-  "options": {
-    "hidden": ["executorId"]
-  },
+  "validations": [],
   "relations": {
     "actions": {
       "type": "hasMany",
@@ -90,5 +93,6 @@
       "model": "ServerService"
     }
   },
-  "acls": []
+  "acls": [],
+  "methods": []
 }

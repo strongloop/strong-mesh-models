@@ -4,8 +4,8 @@
   "properties": {
     "processId": {
       "type": "number",
-      "description": "id of ServiceProcess, not the pid",
-      "required": true
+      "required": true,
+      "description": "id of ServiceProcess, not the pid"
     },
     "workerId": {
       "type": "number",
