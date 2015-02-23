@@ -1,6 +1,8 @@
 {
   "_meta": {
     "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
       "../common/models",
       "./models"
     ]
@@ -24,7 +26,7 @@
     "dataSource": "memory",
     "public": false
   },
-  "Service": {
+  "ServerService": {
     "dataSource": "db",
     "public": true
   },
@@ -60,7 +62,7 @@
     "dataSource": "db",
     "public": false
   },
-  "Action": {
+  "InstanceAction": {
     "dataSource": "db",
     "public": false
   }
