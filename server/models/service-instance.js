@@ -15,20 +15,23 @@ module.exports = function(ServiceInstance) {
     }
   );
 
-  ServiceInstance.beforeUpdate = function beforeUpdate(next) {
-    if (isNaN(parseInt(this.cpus))) {
-      this.cpus = 'CPU';
+  ServiceInstance.observe('before save', function beforeUpdate(ctx, next) {
+    if (ctx.instance) {
+      // create or full update of instance model
+      if (isNaN(parseInt(ctx.instance.cpus))) {
+        ctx.instance.cpus = 'CPU';
+      }
+    } else {
+      // update of multiple models
+      if (ctx.data && ctx.data.cpus && isNaN(parseInt(ctx.data.cpus))) {
+        ctx.data.cpus = 'CPU';
+      }
     }
-    debug('Updating starting cluster size to %d', this.cpus);
-    debug('  start was: %j', runConfig.configDefaults['start']);
-    runConfig.configDefaults['start'] =
-      [util.format('sl-run --cluster=%s', this.cpus)];
-    debug('  start now: %j', runConfig.configDefaults['start']);
     next();
-  };
+  });
 
   // Only allow updating ServiceInstance
-  ServiceInstance.disableRemoteMethod('create', true);
+  //ServiceInstance.disableRemoteMethod('create', true);
   ServiceInstance.disableRemoteMethod('upsert', true);
   ServiceInstance.disableRemoteMethod('deleteById', true);
   ServiceInstance.disableRemoteMethod('deleteAll', true);

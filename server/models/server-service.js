@@ -1,21 +1,66 @@
+var async = require('async');
 var debug = require('debug')('strong-pm:server-service');
 var fs = require('fs');
 var util = require('util');
 
 module.exports = function(ServerService) {
-  ServerService.disableRemoteMethod('create', true);
   ServerService.disableRemoteMethod('upsert', true);
-  ServerService.disableRemoteMethod('updateAttributes');
-  ServerService.disableRemoteMethod('deleteById', true);
   ServerService.disableRemoteMethod('updateAll', true);
 
-  ServerService.disableRemoteMethod('getPack');
+  ServerService.observe('before save', function(ctx, next) {
+    var Group = ServerService.app.models.Group;
 
-  ServerService.prototype.deploy = function deploy(ctx) {
-    ServerService.app._deploymentReceiver(ctx.req, ctx.res);
-  };
+    if (ctx.instance) {
+      // Full save of Service
+      var service = ctx.instance;
+      if (service._groups.length === 0) {
+        service._groups.push(new Group({id: 1, name: 'default', scale: 1}));
+      }
+      if (service._groups.length === 1 && service._groups[0].scale <= 0) {
+        service._groups[0].scale = 1;
+      }
+      process.nextTick(next);
+    }
+  });
 
-  ServerService.prototype.downloadProfile = function downloadProfile(ctx) {
+  ServerService.observe('after save', function(ctx, next) {
+    if (ctx.instance) {
+      // Full save of Service
+      ServerService.app.serviceManager.onServiceUpdate(ctx.instance, next);
+    } else {
+      // Save of multiple Services
+      ServerService.find(ctx.where, function(err, services) {
+        if (err) return next(err);
+        async.each(
+          services,
+          function(service, callback) {
+            ServerService.app.serviceManager.onServiceUpdate(service, callback);
+          },
+          next
+        );
+      });
+    }
+  });
+
+  ServerService.observe('before delete', function(ctx, next) {
+    ctx.Model.find(ctx.where, function(err, instances){
+      if (err) next(err);
+      async.each(
+        instances,
+        function(instance, callback) {
+          ServerService.app.serviceManager.onServiceDestroy(instance, callback);
+        },
+        next
+      );
+    });
+  });
+
+  function deploy(ctx) {
+    ServerService.app.serviceManager.onDeployment(this, ctx.req, ctx.res);
+  }
+  ServerService.prototype.deploy = deploy;
+
+  function downloadProfile(ctx) {
     var ProfileData = ServerService.app.models.ProfileData;
     var profileId = ctx.req.param('profileId');
     var res = ctx.res;
@@ -58,5 +103,11 @@ module.exports = function(ServerService) {
       res.setHeader('Content-Disposition', 'attachment; filename=' + fileName);
       readStream.pipe(res);
     }
-  };
+  }
+  ServerService.prototype.downloadProfile = downloadProfile;
+
+  function getPack(ctx) {
+    ServerService.app.serviceManager.getDeployment(this, ctx.req, ctx.res);
+  }
+  ServerService.prototype.getPack = getPack;
 };
