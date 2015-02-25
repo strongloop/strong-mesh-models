@@ -1,3 +1,4 @@
+var async = require('async');
 var debug = require('debug')('strong-pm:service-instance');
 var runConfig = require('../config');
 var util = require('util');
@@ -30,9 +31,45 @@ module.exports = function(ServiceInstance) {
     next();
   });
 
+  ServiceInstance.observe('after save', function(ctx, next) {
+    var serviceManager = ServiceInstance.app.serviceManager;
+    if (ctx.instance) {
+      // Full save of Instance (create)
+      serviceManager.onInstanceUpdate(ctx.instance, next);
+    } else {
+      // Save of multiple Services
+      ServiceInstance.find(ctx.where, function(err, services) {
+        if (err) return next(err);
+        async.each(
+          services,
+          function(instance, callback) {
+            serviceManager.onInstanceUpdate(instance, callback);
+          },
+          next
+        );
+      });
+    }
+  });
+
+  ServiceInstance.observe('before delete', function(ctx, next) {
+    var serviceManager = ServiceInstance.app.serviceManager;
+
+    ctx.Model.find(ctx.where, function(err, instances){
+      if (err) next(err);
+      async.each(
+        instances,
+        function(instance, callback) {
+          serviceManager.onInstanceDestroy(instance, callback);
+        },
+        next
+      );
+    });
+  });
+
   // Only allow updating ServiceInstance
   //ServiceInstance.disableRemoteMethod('create', true);
   ServiceInstance.disableRemoteMethod('upsert', true);
   ServiceInstance.disableRemoteMethod('deleteById', true);
   ServiceInstance.disableRemoteMethod('deleteAll', true);
 };
+

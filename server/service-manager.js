@@ -16,6 +16,18 @@ function onServiceDestroy(service, callback) {
 }
 ServiceManager.prototype.onServiceDestroy = onServiceDestroy;
 
+function onInstanceUpdate(instance, callback) {
+  debug('onInstanceUpdate(%j)', instance);
+  setImmediate(callback);
+}
+ServiceManager.prototype.onInstanceUpdate = onInstanceUpdate;
+
+function onInstanceDestroy(instance, callback) {
+  debug('onInstanceDestroy(%j)', instance);
+  setImmediate(callback);
+}
+ServiceManager.prototype.onInstanceDestroy = onInstanceDestroy;
+
 function onDeployment(service, req, res) {
   debug('onDeployment(%j)', service);
   res.end('hi');
