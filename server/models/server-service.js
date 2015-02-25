@@ -1,5 +1,5 @@
 var async = require('async');
-var debug = require('debug')('strong-pm:server-service');
+var debug = require('debug')('MeshModels.server.ServerService');
 var fs = require('fs');
 var util = require('util');
 
@@ -43,7 +43,7 @@ module.exports = function(ServerService) {
   });
 
   ServerService.observe('before delete', function(ctx, next) {
-    ctx.Model.find(ctx.where, function(err, instances){
+    ctx.Model.find(ctx.where, function(err, instances) {
       if (err) next(err);
       async.each(
         instances,

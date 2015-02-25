@@ -11,13 +11,24 @@ function server(serviceManager) {
   // Sub-apps like REST API are mounted via boot scripts.
   boot(app, __dirname);
 
-  app.start = function() {
+  app.start = function(callback) {
     // start the web server
-    return app.listen(function() {
-      app.emit('started');
-      console.log('Web server listening at: %s', app.get('url'));
+    app._server = app.listen(function() {
+      var addr = this.address();
+      app.emit('started', addr.port);
+      console.log('Web server listening at port: %s', addr.port);
+      if (callback) return callback(null, addr.port);
+    });
+    return;
+  };
+
+  app.stop = function(callback) {
+    this._server.close(function() {
+      app.emit('stopped');
+      if (callback) callback();
     });
   };
+
   return app;
 }
 

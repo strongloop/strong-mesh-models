@@ -1,7 +1,5 @@
 var async = require('async');
-var debug = require('debug')('strong-pm:service-instance');
-var runConfig = require('../config');
-var util = require('util');
+var debug = require('debug')('MeshModels.server.ServiceInstance');
 
 module.exports = function(ServiceInstance) {
   ServiceInstance.beforeRemote(
@@ -10,7 +8,7 @@ module.exports = function(ServiceInstance) {
       debug('updateAttributes with %j', ctx.args.data);
       // When updating the instance via REST, only allow changes to cpus
       ctx.args.data = {
-        cpus: ctx.args.data['cpus']
+        cpus: ctx.args.data.cpus
       };
       next();
     }
@@ -19,14 +17,12 @@ module.exports = function(ServiceInstance) {
   ServiceInstance.observe('before save', function beforeUpdate(ctx, next) {
     if (ctx.instance) {
       // create or full update of instance model
-      if (isNaN(parseInt(ctx.instance.cpus))) {
+      if (isNaN(parseInt(ctx.instance.cpus, 10))) {
         ctx.instance.cpus = 'CPU';
       }
-    } else {
-      // update of multiple models
-      if (ctx.data && ctx.data.cpus && isNaN(parseInt(ctx.data.cpus))) {
-        ctx.data.cpus = 'CPU';
-      }
+    } else if (ctx.data && ctx.data.cpus &&
+      isNaN(parseInt(ctx.data.cpus, 10))) {
+      ctx.data.cpus = 'CPU';
     }
     next();
   });
@@ -54,7 +50,7 @@ module.exports = function(ServiceInstance) {
   ServiceInstance.observe('before delete', function(ctx, next) {
     var serviceManager = ServiceInstance.app.serviceManager;
 
-    ctx.Model.find(ctx.where, function(err, instances){
+    ctx.Model.find(ctx.where, function(err, instances) {
       if (err) next(err);
       async.each(
         instances,
@@ -67,9 +63,8 @@ module.exports = function(ServiceInstance) {
   });
 
   // Only allow updating ServiceInstance
-  //ServiceInstance.disableRemoteMethod('create', true);
+  ServiceInstance.disableRemoteMethod('create', true);
   ServiceInstance.disableRemoteMethod('upsert', true);
   ServiceInstance.disableRemoteMethod('deleteById', true);
   ServiceInstance.disableRemoteMethod('deleteAll', true);
 };
-

@@ -1,4 +1,4 @@
-var debug = require('debug')('ServiceManager');
+var debug = require('debug')('MeshModels.server.ServiceManager');
 
 function ServiceManager() {
   debug('ServiceManager created');

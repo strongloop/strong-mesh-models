@@ -1,4 +1,4 @@
-var debug = require('debug')('api-server:datasource');
+var debug = require('debug')('MeshModels.server.datasource');
 var url = require('url');
 
 var dbUrl = url.parse(process.env.STRONGLOOP_MESH_DB || 'memory://');

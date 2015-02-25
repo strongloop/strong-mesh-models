@@ -1,4 +1,4 @@
-var debug = require('debug')('strong-pm:instance-action');
+var debug = require('debug')('MeshModels.server.InstanceAction');
 var path = require('path');
 var util = require('util');
 
@@ -14,68 +14,58 @@ module.exports = function(InstanceAction) {
       action.timestamp = now;
       action.result = {};
 
-      app.models.ServiceInstance.findById(
-        action.serviceInstanceId,
-        function(err, instance) {
+      action.serviceInstance(function(err, instance) {
+        if (err) return next(err);
+        instance.serverService(function(err, service) {
           if (err) return next(err);
-          instance.serverService(function(err, service) {
+
+          function doProfile(err, profile, cmd) {
             if (err) return next(err);
+            util._extend(action.result, profile);
 
-            function doProfile(err, profile, cmd) {
-              if (err) return next(err);
-              util._extend(action.result, profile);
+            var fileName = path.resolve(
+              util.format('profile.%s.%s', profile.profileId, cmd)
+            );
+            var req = {
+              cmd: 'current',
+              sub: action.request.sub,
+              target: action.request.target,
+              filePath: fileName
+            };
 
-              var fileName = path.resolve(
-                'profile.' + profile.profileId + '.' + cmd
+            function complete(res) {
+              endProfile(app, profile.profileId, fileName, res);
+            }
+
+            InstanceAction.app.serviceManager.ctlRequest(
+              service, instance, req, complete
+            );
+            setImmediate(next);
+          }
+
+          switch (req.sub) {
+            case 'stop-cpu-profiling':
+              return beginProfile(
+                app, now, req.target, 'cpuprofile', doProfile
               );
-              var req = {
-                cmd: 'current',
-                sub: action.request.sub,
-                target: action.request.target,
-                filePath: fileName
-              };
-
-              function complete(res) {
-                endProfile(app, profile.profileId, fileName, res);
-              }
-
+            case 'heap-snapshot':
+              return beginProfile(
+                app, now, req.target, 'heapsnapshot', doProfile);
+            default: {
               InstanceAction.app.serviceManager.ctlRequest(
-                service,
-                instance,
-                req,
-                complete
+                service, instance, action.request,
+                function(err, res) {
+                  if (err) return next(err);
+                  action.result = res;
+                  next();
+                }
               );
-              setImmediate(next);
+              return this;
             }
-
-            switch (req.sub) {
-              case 'stop-cpu-profiling':
-                return beginProfile(
-                  app, now, req.target, 'cpuprofile', doProfile
-                );
-              case 'heap-snapshot':
-                return beginProfile(
-                  app, now, req.target, 'heapsnapshot', doProfile
-                );
-              default:
-              {
-                InstanceAction.app.serviceManager.ctlRequest(
-                  service,
-                  instance,
-                  action.request,
-                  function(res) {
-                    action.result = res;
-                    next();
-                  }
-                );
-                return;
-              }
-            }
-          });
-        }
-      );
-    }
-  );
+          }
+        });
+      });
+    });
 };
 
 function endProfile(app, profileId, fileName, res) {
@@ -132,8 +122,7 @@ function beginProfile(app, now, target, type, callback) {
     debug('begin profile: %j', profile, pathname);
 
     callback(null, {
-      profileId: profile.id,
-      url: pathname,
+      profileId: profile.id, url: pathname,
     }, type);
   });
 }
