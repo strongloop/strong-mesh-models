@@ -20,9 +20,20 @@ test('Check that heap-snapshot and cpu-profileing populates Profile models',
 
       var app = service.constructor.app;
       var ServiceInstance = app.models.ServiceInstance;
-      ServiceInstance.create({
-        serverServiceId: service.id, groupId: service._groups[0].id,
-      }, callback);
+      var Executor = app.models.Executor;
+      Executor.create({
+        address: '127.0.0.1',
+        APIPort: 5000,
+        totalCapacity: 2,
+      }, function(err, executor) {
+        t.ok(!err, 'Executor should be created');
+
+        ServiceInstance.create({
+          serverServiceId: service.id,
+          groupId: service._groups[0].id,
+          executorId: executor.id,
+        }, callback);
+      });
     }
     TestServiceManager.prototype.onServiceUpdate = onServiceUpdate;
 
@@ -33,7 +44,7 @@ test('Check that heap-snapshot and cpu-profileing populates Profile models',
     }
     TestServiceManager.prototype.ctlRequest = ctlRequest;
 
-    t.plan(22);
+    t.plan(23);
     var server = new Server(new TestServiceManager());
     server.start(function(err, port) {
       t.ok(!err, 'Server should start');
