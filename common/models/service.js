@@ -13,7 +13,10 @@ module.exports = function(Service) {
       http: [
         {path: '/deploy/*', verb: 'get'},
         {path: '/deploy/*', verb: 'post'},
-        {path: '/deploy/*', verb: 'put'}
+        {path: '/deploy/*', verb: 'put'},
+        {path: '/deploy', verb: 'get'},
+        {path: '/deploy', verb: 'post'},
+        {path: '/deploy', verb: 'put'},
       ],
       accepts: {arg: 'ctx', http: {source: 'context'}},
       description: 'Deploy service'

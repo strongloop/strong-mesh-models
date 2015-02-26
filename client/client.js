@@ -142,6 +142,23 @@ function downloadProfile(service, profileId, callback) {
 }
 Client.prototype.downloadProfile = downloadProfile;
 
+function getDeployEndpoint(service) {
+  return util.format('%s/services/%s/deploy', this.apiUrl, service.id);
+}
+Client.prototype.getDeployEndpoint = getDeployEndpoint;
+
+function serviceDeploy(service, contentType, callback) {
+  var url = this.getDeployEndpoint(service);
+  return request.put(url, {headers: {'content-type': contentType}}, callback);
+}
+Client.prototype.serviceDeploy = serviceDeploy;
+
+function serviceGetArtifact(service, callback) {
+  var url = util.format('%s/services/%s/pack', this.apiUrl, service.id);
+  request.get(url, callback);
+}
+Client.prototype.serviceGetArtifact = serviceGetArtifact;
+
 function sortById(callback, err, result) {
   if (err || !result) return callback(err);
 
