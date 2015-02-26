@@ -3,7 +3,9 @@ var _ = require('lodash');
 var boot = require('loopback-boot');
 var debug = require('debug')('MeshModels.client');
 var loopback = require('loopback');
+var request = require('request');
 var url = require('url');
+var util = require('util');
 
 function Client(apiUrl) {
   // Normalize the URI
@@ -12,12 +14,12 @@ function Client(apiUrl) {
   endpoint.pathname = '/api'; // Loopback is mounted here
   endpoint.hostname = endpoint.hostname || 'localhost'; // Allow `http://:8888`
   delete endpoint.host; // So .hostname and .port are used to construct URL
-  apiUrl = url.format(endpoint);
+  this.apiUrl = url.format(endpoint);
 
-  debug('connecting to %s', apiUrl);
+  debug('connecting to %s', this.apiUrl);
 
   var client = loopback();
-  client.dataSource('remote', {'connector': 'remote', 'url': apiUrl});
+  client.dataSource('remote', {'connector': 'remote', 'url': this.apiUrl});
   boot(client, __dirname);
 
   this.loopback = client;
@@ -124,6 +126,21 @@ function runCommand(instance, req, callback) {
   });
 }
 Client.prototype.runCommand = runCommand;
+
+function downloadProfile(service, profileId, callback) {
+  var self = this;
+  service.profileDatas.findById(profileId, function(err, profile) {
+    if (err) return callback(err);
+    if (!profile) return callback(Error('Profile ' + profileId + ' not found'));
+
+    var url = util.format(
+      '%s/services/%s/profileDatas/%s/download',
+      self.apiUrl, service.id, profile.id
+    );
+    request.get(url, callback);
+  });
+}
+Client.prototype.downloadProfile = downloadProfile;
 
 function sortById(callback, err, result) {
   if (err || !result) return callback(err);

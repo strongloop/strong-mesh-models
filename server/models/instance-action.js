@@ -33,7 +33,8 @@ module.exports = function(InstanceAction) {
               filePath: fileName
             };
 
-            function complete(res) {
+            function complete(err, res) {
+              res.error = err;
               endProfile(app, profile.profileId, fileName, res);
             }
 
