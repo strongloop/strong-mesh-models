@@ -32,7 +32,8 @@ function Client(apiUrl) {
   this.loopback = client;
   this.models = client.models;
 
-  // Resolve the models
+  // Populates the cache of models so you can access them with
+  // client.models.ModelName.
   client.models();
 }
 module.exports = Client;

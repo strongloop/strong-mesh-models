@@ -27,6 +27,10 @@ module.exports = function(ServiceInstance) {
     next();
   });
 
+  // For save, the manager is notified after the model has  been persisted in
+  // DB so that queries on the DB will return correct information. Similarly
+  // for delete, the manager is notified before the model has been deleted from
+  // the DB, so that queries will return information.
   ServiceInstance.observe('after save', function(ctx, next) {
     var serviceManager = ServiceInstance.app.serviceManager;
     if (ctx.instance) {

@@ -11,7 +11,9 @@ module.exports = function(ServerService) {
     var Group = ServerService.app.models.Group;
 
     if (ctx.instance) {
-      // Full save of Service
+      // This is only setting default groups for a new service that is created
+      // without groups. The multi service case is only hit when updating
+      // multiple models, not creating new ones so is not needed.
       var service = ctx.instance;
       if (service._groups.length === 0) {
         service._groups.push(new Group({id: 1, name: 'default', scale: 1}));
