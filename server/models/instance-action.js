@@ -95,7 +95,10 @@ module.exports = function(InstanceAction) {
       };
 
       function complete(err, res) {
-        if (err) res.error = err;
+        if (err) {
+          res = res || {};
+          res.error = err;
+        }
 
         if (res.error) {
           profile.errored = res.error;

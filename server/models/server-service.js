@@ -66,6 +66,7 @@ module.exports = function(ServerService) {
     var res = ctx.res;
     var fileName;
 
+    debug('Download profile %s, profileId');
     ProfileData.findById(profileId, sendProfile);
 
     function sendProfile(err, profile) {
@@ -88,6 +89,7 @@ module.exports = function(ServerService) {
 
       // Else, not complete
       res.statusCode = 204;
+      debug('profile %d not yet complete', profileId);
       return res.end('not yet completed');
     }
 
@@ -97,6 +99,7 @@ module.exports = function(ServerService) {
         return res.end('Profile data not found.');
       }
 
+      debug('profile %d complete. sending', profileId);
       var readStream = fs.createReadStream(fileName);
       res.setHeader('Content-Type', 'application/octet-stream');
       res.setHeader('Content-Length', stat.size);
