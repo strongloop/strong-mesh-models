@@ -15,7 +15,7 @@
     "name": "StrongLoop",
     "url": "https://github.com/strongloop/strong-mesh-models/blob/master/LICENSE.md"
   },
-  "main": "server/server.js",
+  "main": "index.js",
   "scripts": {
     "eslint": "eslint client common server test",
     "jscs": "jscs client common server test",

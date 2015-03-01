@@ -42,7 +42,7 @@ ServiceManager.prototype.getDeployment = getDeployment;
 
 function ctlRequest(service, instance, req, callback) {
   debug('ctlRequest(%j, %j, %j)', service, instance, req);
-  callback({error: 'Not implemented'});
+  callback(null, {error: 'Not implemented'});
 }
 ServiceManager.prototype.ctlRequest = ctlRequest;
 
