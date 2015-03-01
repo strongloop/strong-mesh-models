@@ -1,8 +1,12 @@
 module.exports = function(Executor) {
-  Executor.beforeCreate = function(next) {
-    if (this.remainingCapacity === -1) {
-      this.remainingCapacity = this.totalCapacity;
+  Executor.observe('before save', function(ctx, next) {
+    if (ctx.instance) {
+      // Only required to run during the initial save when the whole model
+      // is available.
+      if (ctx.instance.remainingCapacity === -1) {
+        ctx.instance.remainingCapacity = ctx.instance.totalCapacity;
+      }
+      next();
     }
-    next();
-  };
+  });
 };
