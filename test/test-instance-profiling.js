@@ -2,7 +2,7 @@ var test = require('tap').test;
 var util = require('util');
 var async = require('async');
 var fs = require('fs');
-var Server = require('../index').Server;
+var meshServer = require('../index').meshServer;
 var ServiceManager = require('../index').ServiceManager;
 var Client = require('../index').Client;
 
@@ -45,7 +45,7 @@ test('Check that heap-snapshot and cpu-profileing populates Profile models',
     TestServiceManager.prototype.ctlRequest = ctlRequest;
 
     t.plan(23);
-    var server = new Server(new TestServiceManager());
+    var server = meshServer(new TestServiceManager());
     server.start(function(err, port) {
       t.ok(!err, 'Server should start');
 

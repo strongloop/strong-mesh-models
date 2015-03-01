@@ -1,6 +1,6 @@
 var test = require('tap').test;
 var util = require('util');
-var Server = require('../index').Server;
+var meshServer = require('../index').meshServer;
 var ServiceManager = require('../index').ServiceManager;
 var Client = require('../index').Client;
 
@@ -33,7 +33,7 @@ test('Create and destroy instances', function(t) {
   TestServiceManager.prototype.ctlRequest = ctlRequest;
 
   t.plan(15);
-  var server = new Server(new TestServiceManager());
+  var server = meshServer(new TestServiceManager());
   server.start(function(err, port) {
     t.ok(!err, 'Server should start');
 
