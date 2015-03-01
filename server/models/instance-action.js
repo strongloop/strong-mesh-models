@@ -1,4 +1,4 @@
-var debug = require('debug')('MeshModels.server.InstanceAction');
+var debug = require('debug')('strong-mesh-models:server:instance-action');
 var path = require('path');
 var util = require('util');
 

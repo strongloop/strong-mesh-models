@@ -1,5 +1,5 @@
 var async = require('async');
-var debug = require('debug')('MeshModels.server.ServerService');
+var debug = require('debug')('strong-mesh-models:server:server-service');
 var fs = require('fs');
 var util = require('util');
 

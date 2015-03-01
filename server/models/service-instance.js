@@ -1,5 +1,5 @@
 var async = require('async');
-var debug = require('debug')('MeshModels.server.ServiceInstance');
+var debug = require('debug')('strong-mesh-models:server:service-instance');
 
 module.exports = function(ServiceInstance) {
   ServiceInstance.beforeRemote(
