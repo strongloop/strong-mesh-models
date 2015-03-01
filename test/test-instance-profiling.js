@@ -83,10 +83,13 @@ function runHeapSnapshot(t, client, service, instance, baseUrl, callback) {
       t.ok(!err, 'Profile lookup should not return error');
       t.ok(p, 'Profile object should exist');
       fs.writeFileSync(p.fileName, 'test heapsnapshot');
-      client.downloadProfile(service, p.id, function(err, res) {
+      client.downloadProfile(instance, p.id, function(err, res) {
         t.ok(!err, 'Profile download should not error');
-        t.equal(res.body, 'test heapsnapshot', 'Snapshot should match');
-        callback();
+        res.setEncoding('utf8');
+        res.on('data', function(s) {
+          t.equal(s, 'test heapsnapshot', 'Snapshot should match');
+          callback();
+        });
       });
     });
   });

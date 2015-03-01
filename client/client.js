@@ -11,11 +11,18 @@ function Client(apiUrl) {
   // Normalize the URI
   var endpoint = url.parse(apiUrl);
   debug('normalize endpoint %j', endpoint);
-  endpoint.pathname = '/api'; // Loopback is mounted here
-  endpoint.hostname = endpoint.hostname || 'localhost'; // Allow `http://:8888`
-  delete endpoint.host; // So .hostname and .port are used to construct URL
-  this.apiUrl = url.format(endpoint);
 
+  if (endpoint.protocol === 'http+unix:') {
+    // Convert from our CLI format to the format request wants.
+    this.apiUrl = util.format('http://unix:%s:/api', endpoint.pathname);
+  } else if (endpoint.protocol === 'http:') {
+    endpoint.pathname = '/api'; // Loopback is mounted here
+    endpoint.hostname = endpoint.hostname || 'localhost'; // Allow http://:8888
+    delete endpoint.host; // So .hostname and .port are used to construct URL
+    this.apiUrl = url.format(endpoint);
+  } else {
+    throw Error('Unknown protocol: ' + endpoint.protocol + '//');
+  }
   debug('connecting to %s', this.apiUrl);
 
   var client = loopback();
@@ -31,7 +38,7 @@ function Client(apiUrl) {
 module.exports = Client;
 
 function serviceCreate(name, scale, callback) {
-  var Service = this.models.Service;
+  var Service = this.models.ServerService;
 
   if (scale == null) scale = 1;
   var service = {name: name, _groups: [{id: 1, name: 'default', scale: scale}]};
@@ -42,13 +49,13 @@ function serviceCreate(name, scale, callback) {
 Client.prototype.serviceCreate = serviceCreate;
 
 function serviceList(callback) {
-  var Service = this.models.Service;
-  return Service.find({}, sortById.bind(null, callback));
+  var Service = this.models.ServerService;
+  return Service.find({order: ['id ASC']}, callback);
 }
 Client.prototype.serviceList = serviceList;
 
 function serviceDestroy(name, callback) {
-  var Service = this.models.Service;
+  var Service = this.models.ServerService;
 
   var q = {where: {name: name}};
   Service.findOne(q, function(err, service) {
@@ -61,12 +68,15 @@ function serviceDestroy(name, callback) {
 }
 Client.prototype.serviceDestroy = serviceDestroy;
 
-function groupCreate(serviceName, groupName, scale, callback) {
-  var Service = this.models.Service;
+function groupCreate(serviceNameOrId, groupName, scale, callback) {
+  var Service = this.models.ServerService;
   var filter = {
     where: {
-      name: serviceName,
-    },
+      or: [
+        {name: serviceNameOrId},
+        {id: serviceNameOrId}
+      ]
+    }
   };
   Service.findOne(filter, function(err, service) {
     if (!service) {
@@ -97,19 +107,22 @@ function groupCreate(serviceName, groupName, scale, callback) {
 }
 Client.prototype.groupCreate = groupCreate;
 
-function instanceList(serviceName, callback) {
-  var Service = this.models.Service;
+function instanceList(serviceNameOrId, callback) {
+  var Service = this.models.ServerService;
   var ServiceInstance = this.models.ServiceInstance;
   var filter = {
     where: {
-      name: serviceName,
-    },
+      or: [
+        {name: serviceNameOrId},
+        {id: serviceNameOrId}
+      ]
+    }
   };
   Service.findOne(filter, function(err, service) {
     if (err || !service) return callback(err, service);
 
-    var q = {where: {serverServiceId: service.id}};
-    ServiceInstance.find(q, sortById.bind(null, callback));
+    var q = {where: {serverServiceId: service.id}, order: ['id ASC']};
+    ServiceInstance.find(q, callback);
   });
 }
 Client.prototype.instanceList = instanceList;
@@ -127,17 +140,37 @@ function runCommand(instance, req, callback) {
 }
 Client.prototype.runCommand = runCommand;
 
-function downloadProfile(service, profileId, callback) {
+function downloadProfile(instance, profileId, callback) {
   var self = this;
-  service.profileDatas.findById(profileId, function(err, profile) {
-    if (err) return callback(err);
-    if (!profile) return callback(Error('Profile ' + profileId + ' not found'));
+  var Service = this.models.ServerService;
 
-    var url = util.format(
-      '%s/services/%s/profileDatas/%s/download',
-      self.apiUrl, service.id, profile.id
-    );
-    request.get(url, callback);
+  Service.findById(instance.serverServiceId, function(err, service) {
+    if (err) return callback(err);
+
+    service.profileDatas.findById(profileId, function(err, profile) {
+      if (err) return callback(err);
+      if (!profile) return callback(Error('Profile ' +
+      profileId +
+      ' not found'));
+
+      var url = util.format('%s/services/%s/profileDatas/%s/download',
+        self.apiUrl,
+        service.id,
+        profile.id);
+      var req = request.get(url);
+
+      // using events instead of callback interface to work around an issue
+      // where GETing the file over unix domain sockets would return an empty
+      // stream
+      req.on('response', function(rsp) {
+        if (callback) callback(null, rsp);
+        callback = null;
+      });
+      req.on('error', function(err) {
+        if (callback) callback(err);
+        callback = null;
+      });
+    });
   });
 }
 Client.prototype.downloadProfile = downloadProfile;
@@ -158,12 +191,3 @@ function serviceGetArtifact(service, callback) {
   request.get(url, callback);
 }
 Client.prototype.serviceGetArtifact = serviceGetArtifact;
-
-function sortById(callback, err, result) {
-  if (err || !result) return callback(err);
-
-  if (result.length) {
-    result = _.sortBy(result, 'id');
-  }
-  callback(err, result);
-}
