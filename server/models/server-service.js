@@ -115,4 +115,20 @@ module.exports = function(ServerService) {
     ServerService.app.serviceManager.getDeployment(this, ctx.req, ctx.res);
   }
   ServerService.prototype.getPack = getPack;
+
+  function setEnv(name, value, callback) {
+    this.env = this.env || {};
+    this.env[name] = value;
+    debug('setEnv(%j, %j)', name, value);
+    this.save(callback);
+  }
+  ServerService.prototype.setEnv = setEnv;
+
+  function unsetEnv(name, callback) {
+    this.env = this.env || {};
+    debug('unsetEnv(%s) [%j]', name, this.env[name]);
+    delete this.env[name];
+    this.save(callback);
+  }
+  ServerService.prototype.unsetEnv = unsetEnv;
 };
