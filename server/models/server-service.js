@@ -73,7 +73,7 @@ module.exports = function extendServerService(ServerService) {
 
   function downloadProfile(ctx) {
     var ProfileData = ServerService.app.models.ProfileData;
-    var profileId = ctx.req.param('profileId');
+    var profileId = ctx.req.params.profileId;
     var res = ctx.res;
     var fileName;
 
