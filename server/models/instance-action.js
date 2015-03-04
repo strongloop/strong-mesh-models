@@ -2,7 +2,7 @@ var debug = require('debug')('strong-mesh-models:server:instance-action');
 var path = require('path');
 var util = require('util');
 
-module.exports = function(InstanceAction) {
+module.exports = function extendInstanceAction(InstanceAction) {
   InstanceAction.observe('before save', function(ctx, next) {
     if (!ctx.instance) return next();
     var now = Date.now();

@@ -3,7 +3,7 @@ var debug = require('debug')('strong-mesh-models:server:server-service');
 var fs = require('fs');
 var util = require('util');
 
-module.exports = function(ServerService) {
+module.exports = function extendServerService(ServerService) {
   ServerService.disableRemoteMethod('upsert', true);
   ServerService.disableRemoteMethod('updateAll', true);
 
@@ -33,7 +33,7 @@ module.exports = function(ServerService) {
       // Save of multiple Services
       ServerService.find(ctx.where, function(err, services) {
         if (err) return next(err);
-        async.each(
+        return async.each(
           services,
           function(service, callback) {
             ServerService.app.serviceManager.onServiceUpdate(service, callback);
@@ -47,7 +47,7 @@ module.exports = function(ServerService) {
   ServerService.observe('before delete', function(ctx, next) {
     ctx.Model.find(ctx.where, function(err, instances) {
       if (err) next(err);
-      async.each(
+      return async.each(
         instances,
         function(instance, callback) {
           ServerService.app.serviceManager.onServiceDestroy(instance, callback);
@@ -56,6 +56,15 @@ module.exports = function(ServerService) {
       );
     });
   });
+
+  function setServiceCommit(serviceId, commit, callback) {
+    ServerService.findById(serviceId, function(err, service) {
+      if (err) return callback(err);
+      service.deploymentInfo = commit;
+      service.save(callback);
+    });
+  }
+  ServerService.setServiceCommit = setServiceCommit;
 
   function deploy(ctx) {
     ServerService.app.serviceManager.onDeployment(this, ctx.req, ctx.res);

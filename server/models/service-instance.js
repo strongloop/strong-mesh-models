@@ -1,7 +1,7 @@
 var async = require('async');
 var debug = require('debug')('strong-mesh-models:server:service-instance');
 
-module.exports = function(ServiceInstance) {
+module.exports = function extendServiceInstance(ServiceInstance) {
   ServiceInstance.beforeRemote(
     'prototype.updateAttributes',
     function(ctx, _, next) {
@@ -40,7 +40,7 @@ module.exports = function(ServiceInstance) {
       // Save of multiple Services
       ServiceInstance.find(ctx.where, function(err, services) {
         if (err) return next(err);
-        async.each(
+        return async.each(
           services,
           function(instance, callback) {
             serviceManager.onInstanceUpdate(instance, callback);
@@ -56,7 +56,7 @@ module.exports = function(ServiceInstance) {
 
     ctx.Model.find(ctx.where, function(err, instances) {
       if (err) next(err);
-      async.each(
+      return async.each(
         instances,
         function(instance, callback) {
           serviceManager.onInstanceDestroy(instance, callback);
@@ -65,6 +65,24 @@ module.exports = function(ServiceInstance) {
       );
     });
   });
+
+  function recordInstanceInfo(instanceId, instInfo, callback) {
+    ServiceInstance.findById(instanceId, function(err, instance) {
+      if (err) return callback(err);
+      instance.currentDeploymentId = instInfo.commitHash;
+      instance.startTime = new Date();
+      instance.started = true;
+      instance.applicationName = instInfo.appName;
+      instance.npmModules = instInfo.npmModules;
+      instance.PMPort = instInfo.PMPort;
+      instance.containerVersionInfo = instInfo.containerVersionInfo;
+      instance.setSize = instInfo.setSize;
+      instance.agentVersion = instInfo.agentVersion;
+      instance.restartCount = instInfo.restartCount;
+      instance.save(callback);
+    });
+  }
+  ServiceInstance.recordInstanceInfo = recordInstanceInfo;
 
   // Only allow updating ServiceInstance
   ServiceInstance.disableRemoteMethod('create', true);
