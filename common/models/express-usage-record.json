@@ -11,7 +11,7 @@
       "type": "number",
       "required": true
     },
-    "timestamp": {
+    "timeStamp": {
       "type": "date",
       "required": true
     },
