@@ -1,0 +1,69 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ]
+  },
+  "User": {
+    "dataSource": "remote"
+  },
+  "AccessToken": {
+    "dataSource": "memory",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "memory",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "memory",
+    "public": false
+  },
+  "Role": {
+    "dataSource": "memory",
+    "public": false
+  },
+  "ServerService": {
+    "dataSource": "remote",
+    "public": true
+  },
+  "Group": {
+    "dataSource": "remote",
+    "public": false
+  },
+  "Executor": {
+    "dataSource": "remote",
+    "public": true
+  },
+  "ServiceInstance": {
+    "dataSource": "remote",
+    "public": true
+  },
+  "ServiceProcess": {
+    "dataSource": "remote",
+    "public": true
+  },
+  "ServiceMetric": {
+    "dataSource": "remote",
+    "public": true
+  },
+  "AgentTrace": {
+    "dataSource": "remote",
+    "public": true
+  },
+  "ExpressUsageRecord": {
+    "dataSource": "remote",
+    "public": true
+  },
+  "ProfileData": {
+    "dataSource": "remote",
+    "public": false
+  },
+  "InstanceAction": {
+    "dataSource": "remote",
+    "public": false
+  }
+}

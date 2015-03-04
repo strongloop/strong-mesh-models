@@ -1,9 +1,17 @@
+var debug = require('debug')('strong-mesh-models:common:service');
+
 module.exports = function(Service) {
-  Service.beforeCreate = function(next) {
-    this.deploymentInfo = undefined;
-    this.startTime = undefined;
-    next();
-  };
+  Service.beforeRemote(
+    'create',
+    function(ctx, _, next) {
+      debug('create with %j', ctx.args.data);
+      // When updating the instance via REST, dont allow changes to startTime
+      // or deploymentInfo
+      delete ctx.args.data.deploymentInfo;
+      delete ctx.args.data.startTime;
+      next();
+    }
+  );
 
   Service.setup = function() {
     Service.base.setup.call(this);
@@ -13,7 +21,10 @@ module.exports = function(Service) {
       http: [
         {path: '/deploy/*', verb: 'get'},
         {path: '/deploy/*', verb: 'post'},
-        {path: '/deploy/*', verb: 'put'}
+        {path: '/deploy/*', verb: 'put'},
+        {path: '/deploy', verb: 'get'},
+        {path: '/deploy', verb: 'post'},
+        {path: '/deploy', verb: 'put'},
       ],
       accepts: {arg: 'ctx', http: {source: 'context'}},
       description: 'Deploy service'

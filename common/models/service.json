@@ -2,6 +2,22 @@
   "name": "Service",
   "plural": "Services",
   "base": "PersistedModel",
+  "indexes": {
+    "name": {
+      "keys": {
+        "name": 1
+      },
+      "options": {
+        "unique": true
+      }
+    }
+  },
+  "options": {
+    "hidden": [
+      "startTime",
+      "_group"
+    ]
+  },
   "description": "Represents a Service",
   "properties": {
     "name": {
@@ -27,14 +43,12 @@
       "description": "List of environment variables set for the node application"
     }
   },
-  "options": {
-    "hidden": ["startTime", "_group"]
-  },
+  "validations": [],
   "relations": {
     "executors": {
       "type": "hasMany",
-      "through": "ServiceInstance",
       "model": "Executor",
+      "through": "ServiceInstance",
       "description": "List of executors the service is running on"
     },
     "instances": {
@@ -53,16 +67,6 @@
       "description": "List of groups used for routing or partitioning"
     }
   },
-  "indexes": {
-    "name": {
-      "keys": {
-        "name": 1
-      },
-      "options": {
-        "unique": true
-      }
-    }
-  },
-  "acls": []
+  "acls": [],
+  "methods": []
 }
-

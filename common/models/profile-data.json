@@ -2,6 +2,11 @@
   "name": "ProfileData",
   "plural": "ProfileDatas",
   "base": "PersistedModel",
+  "options": {
+    "hidden": [
+      "executorId"
+    ]
+  },
   "description": "Represents a cpu profile or heap dump gathered from a node process",
   "properties": {
     "executorId": {
@@ -48,9 +53,7 @@
       "description": "If an error occurred, this contains the error message"
     }
   },
-  "options": {
-    "hidden": ["executorId"]
-  },
+  "validations": [],
   "relations": {
     "executor": {
       "type": "belongsTo",
@@ -61,6 +64,6 @@
       "model": "ServerService"
     }
   },
-  "acls": []
+  "acls": [],
+  "methods": []
 }
-

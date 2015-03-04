@@ -1,7 +1,9 @@
 {
   "_meta": {
     "sources": [
-      "../../common/models",
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
       "./models"
     ]
   },
@@ -13,15 +15,15 @@
     "public": false
   },
   "ACL": {
-    "dataSource": "db",
+    "dataSource": "memory",
     "public": false
   },
   "RoleMapping": {
-    "dataSource": "db",
+    "dataSource": "memory",
     "public": false
   },
   "Role": {
-    "dataSource": "db",
+    "dataSource": "memory",
     "public": false
   },
   "ServerService": {
@@ -34,33 +36,33 @@
   },
   "Executor": {
     "dataSource": "db",
-    "public": false
+    "public": true
   },
   "ServiceInstance": {
     "dataSource": "db",
-    "public": false
+    "public": true
   },
   "ServiceProcess": {
     "dataSource": "db",
-    "public": false
+    "public": true
+  },
+  "ServiceMetric": {
+    "dataSource": "db",
+    "public": true
+  },
+  "AgentTrace": {
+    "dataSource": "db",
+    "public": true
+  },
+  "ExpressUsageRecord": {
+    "dataSource": "db",
+    "public": true
   },
   "ProfileData": {
     "dataSource": "db",
     "public": false
   },
   "InstanceAction": {
-    "dataSource": "db",
-    "public": false
-  },
-  "ExpressUsageRecord": {
-    "dataSource": "db",
-    "public": false
-  },
-  "ServiceMetric": {
-    "dataSource": "db",
-    "public": false
-  },
-  "AgentTrace": {
     "dataSource": "db",
     "public": false
   }

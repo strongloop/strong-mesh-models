@@ -21,7 +21,9 @@
       "description": "The cluster worker ID"
     },
     "listeningSockets": {
-      "type": ["object"],
+      "type": [
+        "object"
+      ],
       "default": [],
       "description": "List of addresses/ports this process is listening on"
     },
@@ -61,12 +63,13 @@
       "description": "The signal or reason this process exited"
     }
   },
+  "validations": [],
   "relations": {
     "serviceInstance": {
       "type": "belongsTo",
       "model": "ServiceInstance"
     }
   },
-  "acls": []
+  "acls": [],
+  "methods": []
 }
-
