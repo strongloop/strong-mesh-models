@@ -15,7 +15,7 @@
       "type": "date",
       "required": true
     },
-    "usage": {
+    "detail": {
       "type": "object"
     }
   },
