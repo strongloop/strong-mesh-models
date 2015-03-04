@@ -30,6 +30,27 @@ module.exports = function(Service) {
       description: 'Deploy service'
     });
 
+    this.remoteMethod('setEnv', {
+      isStatic: false,
+      http: {path: '/env/:name', verb: 'put'},
+      accepts: [
+        {arg: 'name', type: 'string', http: {source: 'path'}},
+        {arg: 'value', required: true, type: 'string', http: {source: 'body'}}
+      ],
+      returns: {arg: 'value', type: 'string'},
+      description: 'Get/Set/Delete Environment Variables'
+    });
+
+    this.remoteMethod('unsetEnv', {
+      isStatic: false,
+      http: {path: '/env/:name', verb: 'delete'},
+      accepts: [
+        {arg: 'name', required: true, type: 'string', http: {source: 'path'}},
+      ],
+      returns: {arg: 'value', type: 'string'},
+      description: 'Unset Environment Variables'
+    });
+
     this.remoteMethod('getPack', {
       isStatic: false,
       http: [

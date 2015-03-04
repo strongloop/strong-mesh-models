@@ -37,6 +37,7 @@ test('Create and destroy a service', function(t) {
       t.equal(service.name, 'My Service', 'Service name should match');
       t.equal(service._groups.length, 1, 'Service should have 1 group');
       t.equal(service._groups[0].scale, 2, 'Group scale should be 2');
+      t.deepEqual(service.env, {}, 'Environment is empty by default');
       client.serviceDestroy('My Service', function(err) {
         t.ok(!err, 'Service should be destroyed');
         server.stop();
