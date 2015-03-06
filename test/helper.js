@@ -25,7 +25,7 @@ app.use(loopback.errorHandler());
 
 app.start = function start() {
   // start the web server
-  var server = app.listen(function() {
+  var server = app.listen(0, function() {
     var listenAddr = this.address();
     app.emit('started', listenAddr);
     console.log('listening at: %s:%d', listenAddr.address, listenAddr.port);

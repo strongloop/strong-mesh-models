@@ -46,6 +46,7 @@ test('Check that heap-snapshot and cpu-profileing populates Profile models',
 
     t.plan(23);
     var server = meshServer(new TestServiceManager());
+    server.set('port', 0);
     server.start(function(err, port) {
       t.ok(!err, 'Server should start');
 

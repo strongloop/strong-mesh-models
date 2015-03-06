@@ -57,6 +57,7 @@ test('Create and destroy instances', function(t) {
 
   t.plan(13);
   var server = meshServer(new TestServiceManager());
+  server.set('port', 0);
   server.start(function(err, port) {
     t.ok(!err, 'Server should start');
 
