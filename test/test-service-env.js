@@ -6,6 +6,7 @@ var test = require('tap').test;
 test('Service environment variable manipulation', function(t) {
   var manager = new ServiceManager();
   var server = meshServer(manager);
+  server.set('port', 0);
 
   var client = null;
   var service = null;

@@ -6,6 +6,7 @@ var test = require('tap').test;
 
 test('Test notifications', function(t) {
   var app = meshServer(new ServiceManager());
+  app.set('port', 0);
 
   t.test('Initialize models', function(tt) {
     var s = {

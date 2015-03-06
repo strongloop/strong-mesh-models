@@ -28,6 +28,7 @@ test('Create and destroy a service', function(t) {
 
   t.plan(12);
   var server = meshServer(new TestServiceManager());
+  server.set('port', 0);
   server.start(function(err, port) {
     t.ok(!err, 'Server should start');
 
