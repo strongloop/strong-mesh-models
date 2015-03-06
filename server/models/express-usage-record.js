@@ -24,7 +24,7 @@ module.exports = function extendExpressUsageRecord(ExpressUsageRecord) {
       var usageRecord = {
         processId: proc.id,
         workerId: proc.workerId,
-        timeStamp: record.timeStamp,
+        timeStamp: record.timestamp,
         detail: record
       };
 

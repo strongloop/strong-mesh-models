@@ -320,7 +320,7 @@ test('Test notifications', function(t) {
 
   function notifyExpressRecord(dateBy, tt) {
     var rec = {
-      timeStamp: Date.now() - dateBy,
+      timestamp: Date.now() - dateBy,
       client: {address: '::1'},
       request: {method: 'GET', url: '/'},
       response: {status: 404, duration: 6},
