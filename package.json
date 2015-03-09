@@ -35,8 +35,7 @@
     "request": "^2.53.0",
     "serve-favicon": "^2.2.0"
   },
-  "optionalDependencies": {
-  },
+  "optionalDependencies": {},
   "devDependencies": {
     "eslint": "^0.15.0",
     "istanbul": "^0.3.0",
