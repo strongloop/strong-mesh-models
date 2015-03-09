@@ -1,4 +1,14 @@
-2015-01-13, Version 3.0.1
+2015-03-09, Version 3.1.0
+=========================
+
+ * Add HTTP trace data model (Krishna Raman)
+
+ * Dont break apart express usage record (Krishna Raman)
+
+ * Add support for Express Usage records (Krishna Raman)
+
+
+2015-01-12, Version 3.0.1
 =========================
 
  * Add watchdog timeout value to process model (Krishna Raman)
@@ -33,11 +43,6 @@
 
 
 2014-10-22, Version 2.0.0
-=========================
-
-
-
-2014-10-22, Version 1.0.0
 =========================
 
  * First release!
