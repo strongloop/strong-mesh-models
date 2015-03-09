@@ -127,9 +127,11 @@ module.exports = function extendServerService(ServerService) {
 
   function setEnv(name, value, callback) {
     this.env = this.env || {};
-    this.env[name] = value;
     debug('setEnv(%j, %j)', name, value);
-    this.save(callback);
+    this.env[name] = value;
+    this.save(function(err, res) {
+      callback(err, res && res.env);
+    });
   }
   ServerService.prototype.setEnv = setEnv;
 
@@ -137,7 +139,9 @@ module.exports = function extendServerService(ServerService) {
     this.env = this.env || {};
     debug('unsetEnv(%s) [%j]', name, this.env[name]);
     delete this.env[name];
-    this.save(callback);
+    this.save(function(err, res) {
+      callback(err, res && res.env);
+    });
   }
   ServerService.prototype.unsetEnv = unsetEnv;
 };

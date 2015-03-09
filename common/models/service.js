@@ -37,8 +37,8 @@ module.exports = function(Service) {
         {arg: 'name', type: 'string', http: {source: 'path'}},
         {arg: 'value', required: true, type: 'string', http: {source: 'body'}}
       ],
-      returns: {arg: 'value', type: 'string'},
-      description: 'Get/Set/Delete Environment Variables'
+      returns: {arg: 'env', type: 'object'},
+      description: 'Set environment variables'
     });
 
     this.remoteMethod('unsetEnv', {
@@ -47,8 +47,8 @@ module.exports = function(Service) {
       accepts: [
         {arg: 'name', required: true, type: 'string', http: {source: 'path'}},
       ],
-      returns: {arg: 'value', type: 'string'},
-      description: 'Unset Environment Variables'
+      returns: {arg: 'env', type: 'object'},
+      description: 'Unset environment variables'
     });
 
     this.remoteMethod('getPack', {
