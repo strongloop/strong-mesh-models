@@ -34,10 +34,10 @@ test('Service environment variable manipulation', function(t) {
     tt.deepEqual(service.env, {}, 'precondition');
     service.setEnv('FOO', 'BAR', function(err, res) {
       tt.ifError(err, 'setEnv (1) succeeded');
-      tt.deepEqual(res.env, {FOO: 'BAR'}, 'setEnv tells us the new state');
+      tt.deepEqual(res, {FOO: 'BAR'}, 'setEnv tells us the new state');
       service.setEnv('ALSO', 'and then', function(err, res) {
         tt.ifError(err, 'setEnv (2) succeeded');
-        tt.deepEqual(res.env, {ALSO: 'and then', FOO: 'BAR'}, 'multiple calls');
+        tt.deepEqual(res, {ALSO: 'and then', FOO: 'BAR'}, 'multiple calls');
         tt.end();
       });
     });
@@ -56,7 +56,7 @@ test('Service environment variable manipulation', function(t) {
     tt.deepEqual(service.env, {ALSO: 'and then', FOO: 'BAR'}, 'precondition');
     service.unsetEnv('FOO', function(err, res) {
       tt.ifError(err, 'unsetEnv succeeded');
-      tt.deepEqual(res.env, {ALSO: 'and then'}, 'Environment is updated');
+      tt.deepEqual(res, {ALSO: 'and then'}, 'Environment is updated');
       tt.end();
     });
   });
