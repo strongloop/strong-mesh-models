@@ -15,6 +15,11 @@ module.exports = function(ServiceInstance) {
   }
   ServiceInstance.prototype.runCommand = runCommand;
 
+  function _simpleCommand(cmd, callback) {
+    this.runCommand({cmd: cmd}, callback);
+  }
+  ServiceInstance.prototype._simpleCommand = _simpleCommand;
+
   /**
    * Retrieve a summary status of the instance.
    * @param {function} callback Callback function.
@@ -23,6 +28,16 @@ module.exports = function(ServiceInstance) {
     this.runCommand({cmd: 'status'}, callback);
   }
   ServiceInstance.prototype.statusSummary = statusSummary;
+
+  /**
+   * Start the application on the instance.
+   *
+   * @param {function} callback Callback function.
+   */
+  function appStart(callback) {
+    this._simpleCommand('start', callback);
+  }
+  ServiceInstance.prototype.appStart = appStart;
 
   function downloadProfile(profileId, callback) {
     var Service = ServiceInstance.app.models.ServerService;

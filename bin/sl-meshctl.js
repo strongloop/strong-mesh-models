@@ -85,6 +85,7 @@ client.instanceFind(instanceId, function(err, instance) {
   dieIf(err);
   ({
     'status': cmdStatus,
+    'start': cmdStart,
   }[command] || unknown)(instance);
 });
 
@@ -157,6 +158,13 @@ function cmdStatus(instance) {
         fmt(3, dst, '(from) %s', srcFull);
       });
     }
+  });
+}
+
+function cmdStart(instance) {
+  instance.appStart(function(err, response) {
+    dieIf(err);
+    console.log(response.toString());
   });
 }
 
