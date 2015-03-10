@@ -88,6 +88,9 @@ client.instanceFind(instanceId, function(err, instance) {
     'start': cmdStart,
     'stop': cmdStop,
     'soft-stop': cmdSoftStop,
+    'restart': cmdRestart,
+    'soft-restart': cmdSoftRestart,
+    'cluster-restart': cmdRollingRestart,
   }[command] || unknown)(instance);
 });
 
@@ -181,6 +184,26 @@ function cmdSoftStop(instance) {
   instance.appStop({soft: true}, function(err, response) {
     dieIf(err);
     console.log(response.toString());
+  });
+}
+
+function cmdRestart(instance) {
+  instance.appRestart({}, function(err, response) {
+    dieIf(err);
+    console.log(response.toString());
+  });
+}
+
+function cmdSoftRestart(instance) {
+  instance.appRestart({soft: true}, function(err, response) {
+    dieIf(err);
+    console.log(response.toString());
+  });
+}
+
+function cmdRollingRestart(instance) {
+  instance.appRestart({rolling: true}, function(err, response) {
+    dieIf(err);
   });
 }
 

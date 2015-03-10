@@ -15,6 +15,13 @@ module.exports = function(ServiceInstance) {
   }
   ServiceInstance.prototype.runCommand = runCommand;
 
+  function _appCommand(obj, callback) {
+    obj.sub = obj.cmd;
+    obj.cmd = 'current';
+    this.runCommand(obj, callback);
+  }
+  ServiceInstance.prototype._appCommand = _appCommand;
+
   function _simpleCommand(cmd, callback) {
     this.runCommand({cmd: cmd}, callback);
   }
@@ -56,6 +63,32 @@ module.exports = function(ServiceInstance) {
     return this._simpleCommand('stop', callback);
   }
   ServiceInstance.prototype.appStop = appStop;
+
+  /**
+   * Restart the application on the instance.
+   *
+   * "Soft" restart notifies all workers they are being disconnected, and give
+   * them a grace period for any existing connections to finish. It then stops
+   * all workers before starting them. "Hard" restart kill the supervisor and
+   * its workers with `SIGTERM` and then starts them.
+   *
+   * "Rolling" restart is a zero-downtime restart, the workers are soft
+   * restarted one-by-one, so that some workers will always be available to
+   * service requests.
+   *
+   * @param {object} options Options object.
+   * @param {boolean} options.soft Soft stop the application.
+   * @param {boolean} options.rolling Soft stop the application.
+   * @param {function} callback Callback function.
+   */
+  function appRestart(options, callback) {
+    if (options.rolling)
+      return this._appCommand({cmd: 'restart'}, callback);
+    if (options.soft)
+      return this._simpleCommand('soft-restart', callback);
+    return this._simpleCommand('restart', callback);
+  }
+  ServiceInstance.prototype.appRestart = appRestart;
 
   function downloadProfile(profileId, callback) {
     var Service = ServiceInstance.app.models.ServerService;
