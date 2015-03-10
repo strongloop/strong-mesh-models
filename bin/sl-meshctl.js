@@ -86,6 +86,8 @@ client.instanceFind(instanceId, function(err, instance) {
   ({
     'status': cmdStatus,
     'start': cmdStart,
+    'stop': cmdStop,
+    'soft-stop': cmdSoftStop,
   }[command] || unknown)(instance);
 });
 
@@ -163,6 +165,20 @@ function cmdStatus(instance) {
 
 function cmdStart(instance) {
   instance.appStart(function(err, response) {
+    dieIf(err);
+    console.log(response.toString());
+  });
+}
+
+function cmdStop(instance) {
+  instance.appStop({}, function(err, response) {
+    dieIf(err);
+    console.log(response.toString());
+  });
+}
+
+function cmdSoftStop(instance) {
+  instance.appStop({soft: true}, function(err, response) {
     dieIf(err);
     console.log(response.toString());
   });

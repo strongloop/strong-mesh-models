@@ -39,6 +39,24 @@ module.exports = function(ServiceInstance) {
   }
   ServiceInstance.prototype.appStart = appStart;
 
+  /**
+   * Stop the application on the instance.
+   *
+   * "Soft" stop notify workers they are being disconnected, and give them a
+   * grace period for any existing connections to finish. "Hard" stops kill the
+   * supervisor and its workers with `SIGTERM`.
+   *
+   * @param {object} options Options object.
+   * @param {boolean} options.soft Soft stop the application.
+   * @param {function} callback Callback function.
+   */
+  function appStop(options, callback) {
+    if (options.soft)
+      return this._simpleCommand('soft-stop', callback);
+    return this._simpleCommand('stop', callback);
+  }
+  ServiceInstance.prototype.appStop = appStop;
+
   function downloadProfile(profileId, callback) {
     var Service = ServiceInstance.app.models.ServerService;
 
