@@ -3,8 +3,8 @@ var assert = require('assert');
 var boot = require('loopback-boot');
 var debug = require('debug')('strong-mesh-models:client');
 var loopback = require('loopback');
-var request = require('request');
 var serverService = require('./models/server-service');
+var serviceInstance = require('./models/service-instance');
 var url = require('url');
 var util = require('util');
 
@@ -41,6 +41,7 @@ function Client(apiUrl) {
   // Override and implement the remote methods that use HTTP context because
   // LB will not provide the correct client implementation.
   serverService(client.models.ServerService);
+  serviceInstance(client.models.ServiceInstance);
 }
 module.exports = Client;
 
@@ -133,51 +134,3 @@ function instanceList(serviceNameOrId, callback) {
   });
 }
 Client.prototype.instanceList = instanceList;
-
-function runCommand(instance, req, callback) {
-  instance.actions.create({
-    request: req
-  }, function(err, action) {
-    if (err) return callback(err);
-    if (action.result && action.result.error)
-      return callback(Error(action.result.error));
-
-    callback(null, action.result);
-  });
-}
-Client.prototype.runCommand = runCommand;
-
-function downloadProfile(instance, profileId, callback) {
-  var self = this;
-  var Service = this.models.ServerService;
-
-  Service.findById(instance.serverServiceId, function(err, service) {
-    if (err) return callback(err);
-
-    service.profileDatas.findById(profileId, function(err, profile) {
-      if (err) return callback(err);
-      if (!profile) return callback(Error('Profile ' +
-      profileId +
-      ' not found'));
-
-      var url = util.format('%s/services/%s/profileDatas/%s/download',
-        self.apiUrl,
-        service.id,
-        profile.id);
-      var req = request.get(url);
-
-      // using events instead of callback interface to work around an issue
-      // where GETing the file over unix domain sockets would return an empty
-      // stream
-      req.on('response', function(rsp) {
-        if (callback) callback(null, rsp);
-        callback = null;
-      });
-      req.on('error', function(err) {
-        if (callback) callback(err);
-        callback = null;
-      });
-    });
-  });
-}
-Client.prototype.downloadProfile = downloadProfile;
