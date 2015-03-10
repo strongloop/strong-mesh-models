@@ -32,14 +32,20 @@
     "loopback-boot": "^2.6.0",
     "loopback-datasource-juggler": "^2.18.0",
     "loopback-explorer": "^1.7.0",
+    "osenv": "^0.1.0",
+    "posix-getopt": "^1.1.0",
     "request": "^2.53.0",
-    "serve-favicon": "^2.2.0"
+    "serve-favicon": "^2.2.0",
+    "sprintf": "^0.1.5",
+    "strong-url-defaults": "^1.0.1",
+    "user-home": "^1.1.1"
   },
   "optionalDependencies": {},
   "devDependencies": {
     "eslint": "^0.15.0",
     "istanbul": "^0.3.0",
     "jscs": "^1.11.3",
-    "tap": "^0.7.0"
+    "tap": "^0.7.0",
+    "temporary": "0.0.8"
   }
 }

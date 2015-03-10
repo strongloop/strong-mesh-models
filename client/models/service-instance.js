@@ -15,6 +15,15 @@ module.exports = function(ServiceInstance) {
   }
   ServiceInstance.prototype.runCommand = runCommand;
 
+  /**
+   * Retrieve a summary status of the instance.
+   * @param {function} callback Callback function.
+   */
+  function statusSummary(callback) {
+    this.runCommand({cmd: 'status'}, callback);
+  }
+  ServiceInstance.prototype.statusSummary = statusSummary;
+
   function downloadProfile(profileId, callback) {
     var Service = ServiceInstance.app.models.ServerService;
 

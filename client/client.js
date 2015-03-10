@@ -76,6 +76,26 @@ function serviceDestroy(name, callback) {
 }
 Client.prototype.serviceDestroy = serviceDestroy;
 
+/**
+ * Find a service.
+ *
+ * @param {string|number} serviceNameOrId Service ID or Name.
+ * @param {function} callback Callback function.
+ */
+function serviceFind(serviceNameOrId, callback) {
+  var Service = this.models.ServerService;
+  var filter = {
+    where: {
+      or: [
+        {name: serviceNameOrId},
+        {id: serviceNameOrId}
+      ]
+    }
+  };
+  Service.findOne(filter, callback);
+}
+Client.prototype.serviceFind = serviceFind;
+
 function groupCreate(serviceNameOrId, groupName, scale, callback) {
   var Service = this.models.ServerService;
   var filter = {
@@ -134,3 +154,13 @@ function instanceList(serviceNameOrId, callback) {
   });
 }
 Client.prototype.instanceList = instanceList;
+
+function instanceFind(instanceId, callback) {
+  var ServiceInstance = this.models.ServiceInstance;
+
+  ServiceInstance.findById(instanceId, function(err, instance) {
+    if (err || !instance) return callback(err);
+    callback(null, instance);
+  });
+}
+Client.prototype.instanceFind = instanceFind;
