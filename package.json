@@ -17,14 +17,14 @@
   },
   "main": "index.js",
   "scripts": {
-    "eslint": "eslint client common server test",
-    "jscs": "jscs client common server test",
+    "lint": "eslint . && jscs .",
     "test": "tap --tap --stdout --stderr --timeout=300 test/test-*.js",
     "cover": "test/cover.sh"
   },
   "dependencies": {
     "async": "^0.9.0",
     "compression": "^1.4.0",
+    "concat-stream": "^1.4.7",
     "debug": "^2.1.1",
     "errorhandler": "^1.3.0",
     "lodash": "^3.3.1",

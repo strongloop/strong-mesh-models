@@ -4,6 +4,7 @@ var boot = require('loopback-boot');
 var debug = require('debug')('strong-mesh-models:client');
 var loopback = require('loopback');
 var request = require('request');
+var serverService = require('./models/server-service');
 var url = require('url');
 var util = require('util');
 
@@ -28,6 +29,7 @@ function Client(apiUrl) {
   var client = loopback();
   client.dataSource('remote', {'connector': 'remote', 'url': this.apiUrl});
   boot(client, __dirname);
+  client.set('apiUrl', this.apiUrl);
 
   this.loopback = client;
   this.models = client.models;
@@ -35,6 +37,10 @@ function Client(apiUrl) {
   // Populates the cache of models so you can access them with
   // client.models.ModelName.
   client.models();
+
+  // Override and implement the remote methods that use HTTP context because
+  // LB will not provide the correct client implementation.
+  serverService(client.models.ServerService);
 }
 module.exports = Client;
 
@@ -175,20 +181,3 @@ function downloadProfile(instance, profileId, callback) {
   });
 }
 Client.prototype.downloadProfile = downloadProfile;
-
-function getDeployEndpoint(service) {
-  return util.format('%s/services/%s/deploy', this.apiUrl, service.id);
-}
-Client.prototype.getDeployEndpoint = getDeployEndpoint;
-
-function serviceDeploy(service, contentType, callback) {
-  var url = this.getDeployEndpoint(service);
-  return request.put(url, {headers: {'content-type': contentType}}, callback);
-}
-Client.prototype.serviceDeploy = serviceDeploy;
-
-function serviceGetArtifact(service, callback) {
-  var url = util.format('%s/services/%s/pack', this.apiUrl, service.id);
-  request.get(url, callback);
-}
-Client.prototype.serviceGetArtifact = serviceGetArtifact;
