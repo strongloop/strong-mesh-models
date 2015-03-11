@@ -5,6 +5,7 @@ var Client = require('../client/client');
 var Parser = require('posix-getopt').BasicParser;
 var _ = require('lodash');
 var assert = require('assert');
+var concat = require('concat-stream');
 var home = require('osenv').home();
 var debug = require('debug')('strong-mesh-client:meshctl');
 var fs = require('fs');
@@ -94,6 +95,8 @@ client.instanceFind(instanceId, function(err, instance) {
     'set-size': cmdSetClusterSize,
     'objects-start': cmdObjectTrackingStart,
     'objects-stop': cmdObjectTrackingStop,
+    'cpu-start': cmdCpuProfilingStart,
+    'cpu-stop': cmdCpuProfilingStop,
   }[command] || unknown)(instance);
 });
 
@@ -231,6 +234,71 @@ function cmdObjectTrackingStop(instance) {
 
   instance.objectTrackingStop(target, function(err  /*, response*/) {
     dieIf(err);
+  });
+}
+
+function cmdCpuProfilingStart(instance) {
+  var target = mandatory('target');
+  var timeout = optional(0);
+
+  instance.cpuProfilingStart(target, {watchdogTimeout: timeout},
+    function(err /*, response*/) {
+      dieIf(err);
+      console.log('Profiler started, use cpu-stop to get profile');
+    }
+  );
+}
+
+function cmdCpuProfilingStop(instance) {
+  var target = mandatory('target');
+  var prefix = optional(util.format('node.%s', target));
+  var fileName = prefix + '.cpuprofile';
+
+  instance.cpuProfilingStop(target, function(err, response) {
+    dieIf(err);
+    var profileId = response.profileId;
+    download(instance, profileId, fileName, function(err) {
+      dieIf(err);
+      console.log('CPU profile written to `%s`, load into Chrome Dev Tools',
+        fileName);
+    });
+  });
+}
+
+function download(instance, profileId, file, callback) {
+  instance.downloadProfile(profileId, function(err, res) {
+    if (err) return callback(err);
+
+    debug('http.get: %d', res.statusCode);
+    var out;
+
+    switch (res.statusCode) {
+      case 200: {
+        out = fs.createWriteStream(file);
+        res.once('error', callback);
+        out.once('error', callback);
+        out.once('finish', callback);
+        res.pipe(out);
+        break;
+      }
+      case 204: {
+        // No content, keep polling until completed or errored
+        setTimeout(function() {
+          download(instance, profileId, file, callback);
+        }, 200);
+        break;
+      }
+      default: {
+        // Collect response stream to use as error message.
+        out = concat(function(data) {
+          callback(Error(util.format('code %d/%s',
+            res.statusCode, data)));
+        });
+        res.once('error', callback);
+        out.once('error', callback);
+        res.pipe(out);
+      }
+    }
   });
 }
 

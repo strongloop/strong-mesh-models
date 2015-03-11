@@ -140,6 +140,40 @@ module.exports = function(ServiceInstance) {
   }
   ServiceInstance.prototype.objectTrackingStop = objectTrackingStop;
 
+  /**
+   * Start CPU profiling on a worker.
+   *
+   * @param {number} target Worker PID or Worker Id.
+   * @param {object} options Options object.
+   * @param {number} options.watchdogTimeout  Watchdog timeout, in milliseconds.
+   * In watchdog mode, the profiler is suspended until an event loop stall is
+   * detected.
+   * @param {function} callback Callback function.
+   */
+  function cpuProfilingStart(target, options, callback) {
+    var timeout = options.watchdogTimeout || 0;
+    return this._appCommand({
+        cmd: 'start-cpu-profiling',
+        target: target,
+        timeout: timeout
+      },
+      callback
+    );
+  }
+  ServiceInstance.prototype.cpuProfilingStart = cpuProfilingStart;
+
+  /**
+   * Stop CPU profiling on a worker.
+   *
+   * @param {number} target Worker PID or Worker Id.
+   * @param {function} callback Callback function.
+   */
+  function cpuProfilingStop(target, callback) {
+    return this._appCommand({cmd: 'stop-cpu-profiling', target: target},
+      callback);
+  }
+  ServiceInstance.prototype.cpuProfilingStop = cpuProfilingStop;
+
   function downloadProfile(profileId, callback) {
     var Service = ServiceInstance.app.models.ServerService;
 
