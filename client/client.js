@@ -6,21 +6,52 @@ var loopback = require('loopback');
 var serverService = require('./models/server-service');
 var serviceInstance = require('./models/service-instance');
 var url = require('url');
+var urlDefaults = require('strong-url-defaults');
 var util = require('util');
+var path = require('path');
 
-function Client(apiUrl) {
+/**
+ * Mesh API Client
+ *
+ * @param {string} apiUrl URL for Mesh server. Formats supported include:
+ *   * /full/path/to.socket
+ *   * ./relative/path/to/socket
+ *   * http+unix:///full/path/to/socket
+ *   * http://host:port
+ *      - Uses 127.0.0.1 if host is omitted
+ *      - Uses 8701 if port is omitted
+ * @param {object} [options] Options object
+ * @param {string} [options.overridePath] Path to where API is mounted on remote
+ * server. This is normally `/api` however can be overridden if proxies or
+ * mounted at a different location.
+ * @constructor
+ */
+function Client(apiUrl, options) {
+  options = options || {};
+
+  // Useful in cases where the API requests are being proxies. This is used in
+  // Arc for the internal PM.
+  var apiBasePath = options.overridePath || '/api';
+
   // Normalize the URI
   var endpoint = url.parse(apiUrl);
-  debug('normalize endpoint %j', endpoint);
-
-  if (endpoint.protocol === 'http+unix:') {
+  if (!endpoint.protocol) {
+    this.apiUrl = util.format(
+      'http://unix:%s:%s',
+      path.resolve(apiUrl), apiBasePath
+    );
+  } else if (endpoint.protocol === 'http+unix:') {
     // Convert from our CLI format to the format request wants.
-    this.apiUrl = util.format('http://unix:%s:/api', endpoint.pathname);
+    this.apiUrl = util.format(
+      'http://unix:%s:/%s',
+      endpoint.pathname, apiBasePath
+    );
   } else if (endpoint.protocol === 'http:') {
-    endpoint.pathname = '/api'; // Loopback is mounted here
-    endpoint.hostname = endpoint.hostname || 'localhost'; // Allow http://:8888
-    delete endpoint.host; // So .hostname and .port are used to construct URL
-    this.apiUrl = url.format(endpoint);
+    this.apiUrl = urlDefaults(
+      apiUrl,
+      {host: '127.0.0.1', port: 8701},
+      {path: apiBasePath}
+    );
   } else {
     throw Error('Unknown protocol: ' + endpoint.protocol + '//');
   }

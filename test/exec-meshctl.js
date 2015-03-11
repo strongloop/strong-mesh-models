@@ -5,10 +5,11 @@ var debug = require('debug')('strong-scheduler:test');
 
 module.exports = exec;
 module.exports.resetHome = resetHome;
+module.exports.withSSH = execWithSSH;
 
-function exec(port, cmd, callback) {
+function _exec(apiUrl, cmd, callback) {
   var args = cmd.split(' ');
-  args.unshift('-C', 'http://127.0.0.1:' + port);
+  args.unshift('-C', apiUrl);
   args.unshift(require.resolve('../bin/sl-meshctl.js'));
 
   debug('exec %s %j', process.execPath, args);
@@ -21,6 +22,14 @@ function exec(port, cmd, callback) {
   child.on('error', function(err) {
     assert.ifError(err, 'exec error');
   });
+}
+
+function exec(port, cmd, callback) {
+  _exec('http://127.0.0.1:' + port, cmd, callback);
+}
+
+function execWithSSH(port, cmd, callback) {
+  _exec('http+ssh://127.0.0.1:' + port, cmd, callback);
 }
 
 function resetHome() {

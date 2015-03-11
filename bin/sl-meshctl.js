@@ -12,10 +12,9 @@ var home = require('osenv').home();
 var npmls = require('strong-npm-ls');
 var path = require('path');
 var sprintf = require('sprintf');
-var url = require('url');
-var urlDefaults = require('strong-url-defaults');
 var userHome = require('user-home');
 var util = require('util');
+var maybeTunnel = require('strong-tunnel');
 
 assert(userHome, 'User home directory cannot be determined!');
 
@@ -39,7 +38,8 @@ var apiUrl = process.env.STRONGLOOP_MESH_API ||
   process.env.STRONGLOOP_PM ||
   exists('pmctl') ||
   exists(path.join(home, '.strong-pm', 'pmctl')) ||
-  '/var/lib/strong-pm/pmctl';
+  exists('/var/lib/strong-pm/pmctl') ||
+  'http://127.0.0.1:8701';
 
 var command = 'status';
 var option;
@@ -73,41 +73,48 @@ if (optind < argv.length) {
 
 debug('API Url: %s', apiUrl);
 
-if (!url.parse(apiUrl).protocol) {
-  apiUrl = 'http+unix://' + path.resolve(apiUrl);
-} else {
-  apiUrl = urlDefaults(apiUrl, {host: '127.0.0.1', port: 8701});
+var sshOpts = {};
+
+if (process.env.SSH_USER) {
+  sshOpts.username = process.env.SSH_USER;
 }
-var client = new Client(apiUrl);
 
-var serviceId = process.env.STRONG_MESH_SERVICE_ID || '1';
-var instanceId = process.env.STRONG_MESH_INSTANCE_ID || '1';
+if (process.env.SSH_KEY) {
+  sshOpts.privateKey = fs.readFileSync(process.env.SSH_KEY);
+}
 
-client.instanceFind(instanceId, function(err, instance) {
-  dieIf(err);
-  ({
-    'status': cmdStatus,
-    'start': cmdStart,
-    'stop': cmdStop,
-    'soft-stop': cmdSoftStop,
-    'restart': cmdRestart,
-    'soft-restart': cmdSoftRestart,
-    'cluster-restart': cmdRollingRestart,
-    'set-size': cmdSetClusterSize,
-    'objects-start': cmdObjectTrackingStart,
-    'objects-stop': cmdObjectTrackingStop,
-    'cpu-start': cmdCpuProfilingStart,
-    'cpu-stop': cmdCpuProfilingStop,
-    'heap-snapshot': cmdHeapSnapshot,
-    'ls': cmdLs,
-    'env-set': cmdEnvSet,
-    'env-unset': cmdEnvUnset,
-    'env-get': cmdEnvGet,
-    'log-dump': cmdLogDump,
-    'shutdown': cmdShutdown,
-  }[command] || unknown)(instance);
+maybeTunnel(apiUrl, sshOpts, function(err, apiUrl) {
+  runCommand(apiUrl, command);
 });
 
+function runCommand(apiUrl, command) {
+  var client = new Client(apiUrl);
+  var instanceId = process.env.STRONG_MESH_INSTANCE_ID || '1';
+  client.instanceFind(instanceId, function(err, instance) {
+    dieIf(err);
+    ({
+      'status': cmdStatus,
+      'start': cmdStart,
+      'stop': cmdStop,
+      'soft-stop': cmdSoftStop,
+      'restart': cmdRestart,
+      'soft-restart': cmdSoftRestart,
+      'cluster-restart': cmdRollingRestart,
+      'set-size': cmdSetClusterSize,
+      'objects-start': cmdObjectTrackingStart,
+      'objects-stop': cmdObjectTrackingStop,
+      'cpu-start': cmdCpuProfilingStart,
+      'cpu-stop': cmdCpuProfilingStop,
+      'heap-snapshot': cmdHeapSnapshot,
+      'ls': cmdLs,
+      'env-set': cmdEnvSet,
+      'env-unset': cmdEnvUnset,
+      'env-get': cmdEnvGet,
+      'log-dump': cmdLogDump,
+      'shutdown': cmdShutdown,
+    }[command] || unknown)(instance);
+  });
+}
 
 function unknown() {
   console.error('Unknown command: %s, try `%s --help`.', command, $0);
@@ -135,7 +142,6 @@ function cmdStatus(instance) {
     fmt(1, 'pid', '%s', rsp.pid);
     fmt(1, 'port', '%s', rsp.port);
     fmt(1, 'base', '%s', rsp.base);
-    fmt(1, 'config', '%s', rsp.config);
 
     var current = rsp.current;
 
@@ -216,7 +222,7 @@ function cmdSoftRestart(instance) {
 }
 
 function cmdRollingRestart(instance) {
-  instance.appRestart({rolling: true}, function(err, response) {
+  instance.appRestart({rolling: true}, function(err /*, response*/) {
     dieIf(err);
   });
 }

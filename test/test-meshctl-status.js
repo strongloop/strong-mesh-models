@@ -40,7 +40,6 @@ test('Test status command', function(t) {
     '  pid:                90422',
     '  port:               8701',
     '  base:               /strongloop/strong-pm/.strong-pm',
-    '  config:             undefined',
     'current:',
     '  status:             started',
     '  pid:                90423',
