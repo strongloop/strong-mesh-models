@@ -104,6 +104,7 @@ client.instanceFind(instanceId, function(err, instance) {
     'env-unset': cmdEnvUnset,
     'env-get': cmdEnvGet,
     'log-dump': cmdLogDump,
+    'shutdown': cmdShutdown,
   }[command] || unknown)(instance);
 });
 
@@ -366,6 +367,13 @@ function cmdLogDump(instance) {
       return repeat;
     });
   }
+}
+
+function cmdShutdown(instance) {
+  instance.shutdown(function(err, response) {
+    dieIf(err);
+    console.log(response.message);
+  });
 }
 
 function download(instance, profileId, file, callback) {

@@ -223,6 +223,19 @@ module.exports = function(ServiceInstance) {
   }
   ServiceInstance.prototype.logDump = logDump;
 
+  /**
+   * Shutdown the instance.
+   *
+   * WARN: This method shuts down the instance, not just the application. There
+   * is no way to remotely start the instance after shutting it down.
+   *
+   * @param {function} callback Callback function.
+   */
+  function shutdown(callback) {
+    this._simpleCommand('pm-stop', callback);
+  }
+  ServiceInstance.prototype.shutdown = shutdown;
+
   function downloadProfile(profileId, callback) {
     var Service = ServiceInstance.app.models.ServerService;
 
