@@ -90,6 +90,32 @@ module.exports = function(ServiceInstance) {
   }
   ServiceInstance.prototype.appRestart = appRestart;
 
+  /**
+   * Set cluster size to N workers.
+   *
+   * @param {int|string} size The number of workers. Set to 'CPU' to start one
+   * worker per CPU core available to the instance.
+   * @param {boolean} persist Persist the cluster size across restarts.
+   * @param {function} callback Callback function.
+   */
+  function clusterSizeSet(size, persist, callback) {
+    var self = this;
+    return this._appCommand({cmd: 'set-size', size: size},
+      function(err, response) {
+        if (err && !(persist && err.message === 'application not running')) {
+          return callback(err);
+        }
+        if (persist) {
+          return self.updateAttributes({cpus: size}, function(err) {
+            callback(err, response);
+          });
+        }
+        callback(null, response);
+      }
+    );
+  }
+  ServiceInstance.prototype.clusterSizeSet = clusterSizeSet;
+
   function downloadProfile(profileId, callback) {
     var Service = ServiceInstance.app.models.ServerService;
 

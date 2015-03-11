@@ -91,6 +91,7 @@ client.instanceFind(instanceId, function(err, instance) {
     'restart': cmdRestart,
     'soft-restart': cmdSoftRestart,
     'cluster-restart': cmdRollingRestart,
+    'set-size': cmdSetClusterSize,
   }[command] || unknown)(instance);
 });
 
@@ -203,6 +204,14 @@ function cmdSoftRestart(instance) {
 
 function cmdRollingRestart(instance) {
   instance.appRestart({rolling: true}, function(err, response) {
+    dieIf(err);
+  });
+}
+
+function cmdSetClusterSize(instance) {
+  var size = mandatory('size');
+
+  instance.clusterSizeSet(size, false, function(err, response) {
     dieIf(err);
   });
 }
