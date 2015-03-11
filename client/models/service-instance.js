@@ -218,6 +218,11 @@ module.exports = function(ServiceInstance) {
   }
   ServiceInstance.prototype.envGet = envGet;
 
+  function logDump(callback) {
+    this._simpleCommand('log-dump', callback);
+  }
+  ServiceInstance.prototype.logDump = logDump;
+
   function downloadProfile(profileId, callback) {
     var Service = ServiceInstance.app.models.ServerService;
 

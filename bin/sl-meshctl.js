@@ -103,6 +103,7 @@ client.instanceFind(instanceId, function(err, instance) {
     'env-set': cmdEnvSet,
     'env-unset': cmdEnvUnset,
     'env-get': cmdEnvGet,
+    'log-dump': cmdLogDump,
   }[command] || unknown)(instance);
 });
 
@@ -342,6 +343,29 @@ function cmdEnvGet(instance) {
       });
     }
   });
+}
+
+function cmdLogDump(instance) {
+  var repeat = (optional('NOFOLLOW') === '--follow');
+
+  return logDump();
+
+  function logDump() {
+    instance.logDump(function(err, rsp) {
+      dieIf(err);
+
+      if (rsp.message) {
+        console.error(rsp.message);
+      } else {
+        process.stdout.write(rsp.log);
+      }
+
+      if (repeat) {
+        setTimeout(logDump, 1000);
+      }
+      return repeat;
+    });
+  }
 }
 
 function download(instance, profileId, file, callback) {
