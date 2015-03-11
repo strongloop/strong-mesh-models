@@ -174,6 +174,17 @@ module.exports = function(ServiceInstance) {
   }
   ServiceInstance.prototype.cpuProfilingStop = cpuProfilingStop;
 
+  /**
+   * Take a snapshot of the HEAP for a worker.
+   *
+   * @param {number} target Worker PID or Worker Id.
+   * @param {function} callback Callback function.
+   */
+  function heapSnapshot(target, callback) {
+    return this._appCommand({cmd: 'heap-snapshot', target: target}, callback);
+  }
+  ServiceInstance.prototype.heapSnapshot = heapSnapshot;
+
   function downloadProfile(profileId, callback) {
     var Service = ServiceInstance.app.models.ServerService;
 

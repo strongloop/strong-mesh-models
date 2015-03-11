@@ -97,6 +97,7 @@ client.instanceFind(instanceId, function(err, instance) {
     'objects-stop': cmdObjectTrackingStop,
     'cpu-start': cmdCpuProfilingStart,
     'cpu-stop': cmdCpuProfilingStop,
+    'heap-snapshot': cmdHeapSnapshot,
   }[command] || unknown)(instance);
 });
 
@@ -260,6 +261,22 @@ function cmdCpuProfilingStop(instance) {
     download(instance, profileId, fileName, function(err) {
       dieIf(err);
       console.log('CPU profile written to `%s`, load into Chrome Dev Tools',
+        fileName);
+    });
+  });
+}
+
+function cmdHeapSnapshot(instance) {
+  var target = mandatory('target');
+  var prefix = optional(util.format('node.%s', target));
+  var fileName = prefix + '.heapsnapshot';
+
+  instance.heapSnapshot(target, function(err, response) {
+    dieIf(err);
+    var profileId = response.profileId;
+    download(instance, profileId, fileName, function(err) {
+      dieIf(err);
+      console.log('Heap snapshot written to `%s`, load into Chrome Dev Tools',
         fileName);
     });
   });
