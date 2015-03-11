@@ -195,6 +195,29 @@ module.exports = function(ServiceInstance) {
   }
   ServiceInstance.prototype.npmModuleList = npmModuleList;
 
+  /**
+   * Set or unset environment of the current application.
+   * This command will cause the application to restart.
+   *
+   * @param {object} env Object containing key and value of environment to set.
+   * Using a value of null will cause the environment to be unset.
+   * @param {function} callback Callback function.
+   */
+  function envSet(env, callback) {
+    return this.runCommand({cmd: 'env-set', env: env}, callback);
+  }
+  ServiceInstance.prototype.envSet = envSet;
+
+  /**
+   * Get environment of the current application.
+   *
+   * @param {function} callback Callback function.
+   */
+  function envGet(callback) {
+    return this._simpleCommand('env-get', callback);
+  }
+  ServiceInstance.prototype.envGet = envGet;
+
   function downloadProfile(profileId, callback) {
     var Service = ServiceInstance.app.models.ServerService;
 

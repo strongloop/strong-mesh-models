@@ -100,6 +100,9 @@ client.instanceFind(instanceId, function(err, instance) {
     'cpu-stop': cmdCpuProfilingStop,
     'heap-snapshot': cmdHeapSnapshot,
     'ls': cmdLs,
+    'env-set': cmdEnvSet,
+    'env-unset': cmdEnvUnset,
+    'env-get': cmdEnvGet,
   }[command] || unknown)(instance);
 });
 
@@ -293,6 +296,54 @@ function cmdLs(instance) {
   });
 }
 
+function cmdEnvSet(instance) {
+  var vars = mandatorySome('K=V');
+  var env = _.reduce(vars, extractKeyValue, {});
+  instance.envSet(env, function(err, response) {
+    dieIf(err);
+    console.log('Environment updated: %j', response.message);
+  });
+
+  function extractKeyValue(store, pair) {
+    var kv = pair.split('=');
+    if (!kv[0] || !kv[1]) {
+      console.error('Invalid usage (not K=V format: `%s`), try `%s --help`.',
+        pair, $0);
+      process.exit(1);
+    }
+    store[kv[0]] = kv[1];
+    return store;
+  }
+}
+
+function cmdEnvUnset(instance) {
+  var keys = mandatorySome('KEYS');
+  var nulls = _.map(keys, _.constant(null));
+  var nulledKeys = _.zipObject(keys, nulls);
+
+  instance.envSet(nulledKeys, function(err, response) {
+    dieIf(err);
+    console.log('Environment updated: %j', response.message);
+  });
+}
+
+function cmdEnvGet(instance) {
+  var vars = optionalSome();
+
+  instance.envGet(function(err, response) {
+    dieIf(err);
+    var filtered = vars.length > 0 ? _.pick(response.env, vars) : response.env;
+    console.log('Environment variables:');
+    if (_.keys(filtered).length === 0) {
+      console.log('  No matching environment variables defined');
+    } else {
+      _.keys(filtered).sort().forEach(function(k) {
+        console.log(' %s=%s', k, filtered[k]);
+      });
+    }
+  });
+}
+
 function download(instance, profileId, file, callback) {
   instance.downloadProfile(profileId, function(err, res) {
     if (err) return callback(err);
@@ -345,12 +396,28 @@ function mandatory(name) {
   return argv[optind++];
 }
 
+function mandatorySome(name) {
+  if (optind >= argv.length) {
+    console.error('Missing %s argument for %s, try `%s --help`.',
+      name, command, $0);
+    process.exit(1);
+  }
+  return argv.slice(optind);
+}
+
 function optional(def) {
   if (optind >= argv.length) {
     return def;
   }
 
   return argv[optind++];
+}
+
+function optionalSome() {
+  if (optind < argv.length) {
+    return argv.slice(optind);
+  }
+  return [];
 }
 
 function dieIf(err) {

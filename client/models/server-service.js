@@ -37,4 +37,9 @@ module.exports = function extServerService(ServerService) {
     });
   }
   ServerService.prototype.getPack = getPack;
+
+  function refresh(callback) {
+    ServerService.findById(this.id, callback);
+  }
+  ServerService.prototype.refresh = refresh;
 };
