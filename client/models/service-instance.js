@@ -185,6 +185,16 @@ module.exports = function(ServiceInstance) {
   }
   ServiceInstance.prototype.heapSnapshot = heapSnapshot;
 
+  /**
+   * List dependencies of the current application
+   *
+   * @param {function} callback Callback function.
+   */
+  function npmModuleList(callback) {
+    return this._appCommand({cmd: 'npm-ls'}, callback);
+  }
+  ServiceInstance.prototype.npmModuleList = npmModuleList;
+
   function downloadProfile(profileId, callback) {
     var Service = ServiceInstance.app.models.ServerService;
 

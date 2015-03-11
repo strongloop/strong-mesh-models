@@ -37,6 +37,7 @@
     "request": "^2.53.0",
     "serve-favicon": "^2.2.0",
     "sprintf": "^0.1.5",
+    "strong-npm-ls": "^1.0.5",
     "strong-url-defaults": "^1.0.1",
     "user-home": "^1.1.1"
   },

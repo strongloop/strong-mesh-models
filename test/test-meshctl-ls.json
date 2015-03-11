@@ -1,0 +1,1388 @@
+{
+  "name": "test",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {"test": "echo \"Error: no test specified\" && exit 1"},
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "tap": {
+      "name": "tap",
+      "version": "0.5.0",
+      "author": {
+        "name": "Isaac Z. Schlueter",
+        "email": "i@izs.me",
+        "url": "http://blog.izs.me"
+      },
+      "description": "A Test-Anything-Protocol library",
+      "bin": {"tap": "bin/tap.js"},
+      "main": "lib/main.js",
+      "engines": {"node": ">=0.8"},
+      "dependencies": {
+        "buffer-equal": {
+          "name": "buffer-equal",
+          "description": "return whether two buffers are equal",
+          "version": "0.0.1",
+          "repository": {
+            "type": "git",
+            "url": "git://github.com/substack/node-buffer-equal.git"
+          },
+          "main": "index.js",
+          "keywords": [
+            "buffer",
+            "equal"
+          ],
+          "directories": {
+            "example": "example",
+            "test": "test"
+          },
+          "scripts": {"test": "tap test/*.js"},
+          "devDependencies": {"tap": "0.2.4"},
+          "engines": {"node": ">=0.4.0"},
+          "license": "MIT",
+          "author": {
+            "name": "James Halliday",
+            "email": "mail@substack.net",
+            "url": "http://substack.net"
+          },
+          "bugs": {"url": "https://github.com/substack/node-buffer-equal/issues"},
+          "homepage": "https://github.com/substack/node-buffer-equal",
+          "_id": "buffer-equal@0.0.1",
+          "dist": {
+            "shasum": "91bc74b11ea405bc916bc6aa908faafa5b4aac4b",
+            "tarball": "http://ci.strongloop.com:4873/buffer-equal/-/buffer-equal-0.0.1.tgz"
+          },
+          "_from": "buffer-equal@~0.0.0",
+          "_npmVersion": "1.4.3",
+          "_npmUser": {
+            "name": "substack",
+            "email": "mail@substack.net"
+          },
+          "maintainers": [
+            {
+              "name": "substack",
+              "email": "mail@substack.net"
+            }
+          ],
+          "_shasum": "91bc74b11ea405bc916bc6aa908faafa5b4aac4b",
+          "_resolved": "http://ci.strongloop.com:4873/buffer-equal/-/buffer-equal-0.0.1.tgz",
+          "readme": "ERROR: No README data found!",
+          "realName": "buffer-equal",
+          "dependencies": {},
+          "_dependencies": {},
+          "extraneous": false,
+          "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/buffer-equal",
+          "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/buffer-equal",
+          "depth": 2,
+          "peerDependencies": {}
+        },
+        "deep-equal": {
+          "name": "deep-equal",
+          "version": "0.0.0",
+          "description": "node's assert.deepEqual algorithm",
+          "main": "index.js",
+          "directories": {
+            "lib": ".",
+            "example": "example",
+            "test": "test"
+          },
+          "scripts": {"test": "tap test/*.js"},
+          "devDependencies": {"tap": "0.0.x"},
+          "repository": {
+            "type": "git",
+            "url": "git://github.com/substack/node-deep-equal.git"
+          },
+          "keywords": [
+            "equality",
+            "equal",
+            "compare"
+          ],
+          "author": {
+            "name": "James Halliday",
+            "email": "mail@substack.net",
+            "url": "http://substack.net"
+          },
+          "license": "MIT/X11",
+          "engine": {"node": ">=0.4"},
+          "_npmUser": {
+            "name": "substack",
+            "email": "mail@substack.net"
+          },
+          "_id": "deep-equal@0.0.0",
+          "dependencies": {},
+          "engines": {"node": "*"},
+          "_engineSupported": true,
+          "_npmVersion": "1.0.106",
+          "_nodeVersion": "v0.4.12",
+          "_defaultsLoaded": true,
+          "dist": {
+            "shasum": "99679d3bbd047156fcd450d3d01eeb9068691e83",
+            "tarball": "http://ci.strongloop.com:4873/deep-equal/-/deep-equal-0.0.0.tgz"
+          },
+          "maintainers": [
+            {
+              "name": "substack",
+              "email": "mail@substack.net"
+            }
+          ],
+          "_shasum": "99679d3bbd047156fcd450d3d01eeb9068691e83",
+          "_from": "deep-equal@~0.0.0",
+          "_resolved": "http://ci.strongloop.com:4873/deep-equal/-/deep-equal-0.0.0.tgz",
+          "bugs": {"url": "https://github.com/substack/node-deep-equal/issues"},
+          "readme": "ERROR: No README data found!",
+          "homepage": "https://github.com/substack/node-deep-equal",
+          "realName": "deep-equal",
+          "_dependencies": {},
+          "extraneous": false,
+          "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/deep-equal",
+          "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/deep-equal",
+          "depth": 2,
+          "peerDependencies": {}
+        },
+        "difflet": {
+          "name": "difflet",
+          "description": "colorful diffs for javascript objects",
+          "version": "0.2.6",
+          "repository": {
+            "type": "git",
+            "url": "git://github.com/substack/difflet.git"
+          },
+          "main": "index.js",
+          "keywords": [
+            "diff",
+            "object",
+            "compare"
+          ],
+          "directories": {
+            "lib": ".",
+            "example": "example",
+            "test": "test"
+          },
+          "scripts": {"test": "tap test/*.js"},
+          "dependencies": {
+            "traverse": {
+              "name": "traverse",
+              "version": "0.6.6",
+              "description": "traverse and transform objects by visiting every node on a recursive walk",
+              "main": "index.js",
+              "directories": {
+                "example": "example",
+                "test": "test"
+              },
+              "devDependencies": {"tape": "~1.0.4"},
+              "scripts": {},
+              "testling": {
+                "files": "test/*.js",
+                "browsers": {
+                  "iexplore": [
+                    "6.0",
+                    "7.0",
+                    "8.0",
+                    "9.0"
+                  ],
+                  "chrome": [
+                    "10.0",
+                    "20.0"
+                  ],
+                  "firefox": [
+                    "10.0",
+                    "15.0"
+                  ],
+                  "safari": ["5.1"],
+                  "opera": ["12.0"]
+                }
+              },
+              "repository": {
+                "type": "git",
+                "url": "git://github.com/substack/js-traverse.git"
+              },
+              "homepage": "https://github.com/substack/js-traverse",
+              "keywords": [
+                "traverse",
+                "walk",
+                "recursive",
+                "map",
+                "forEach",
+                "deep",
+                "clone"
+              ],
+              "author": {
+                "name": "James Halliday",
+                "email": "mail@substack.net",
+                "url": "http://substack.net"
+              },
+              "license": "MIT",
+              "readme": "# traverse\n\nTraverse and transform objects by visiting every node on a recursive walk.\n\n[![browser support](http://ci.testling.com/substack/js-traverse.png)](http://ci.testling.com/substack/js-traverse)\n\n[![build status](https://secure.travis-ci.org/substack/js-traverse.png)](http://travis-ci.org/substack/js-traverse)\n\n# examples\n\n## transform negative numbers in-place\n\nnegative.js\n\n````javascript\nvar traverse = require('traverse');\nvar obj = [ 5, 6, -3, [ 7, 8, -2, 1 ], { f : 10, g : -13 } ];\n\ntraverse(obj).forEach(function (x) {\n    if (x < 0) this.update(x + 128);\n});\n\nconsole.dir(obj);\n````\n\nOutput:\n\n    [ 5, 6, 125, [ 7, 8, 126, 1 ], { f: 10, g: 115 } ]\n\n## collect leaf nodes\n\nleaves.js\n\n````javascript\nvar traverse = require('traverse');\n\nvar obj = {\n    a : [1,2,3],\n    b : 4,\n    c : [5,6],\n    d : { e : [7,8], f : 9 },\n};\n\nvar leaves = traverse(obj).reduce(function (acc, x) {\n    if (this.isLeaf) acc.push(x);\n    return acc;\n}, []);\n\nconsole.dir(leaves);\n````\n\nOutput:\n\n    [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]\n\n## scrub circular references\n\nscrub.js:\n\n````javascript\nvar traverse = require('traverse');\n\nvar obj = { a : 1, b : 2, c : [ 3, 4 ] };\nobj.c.push(obj);\n\nvar scrubbed = traverse(obj).map(function (x) {\n    if (this.circular) this.remove()\n});\nconsole.dir(scrubbed);\n````\n\noutput:\n\n    { a: 1, b: 2, c: [ 3, 4 ] }\n\n# methods\n\nEach method that takes an `fn` uses the context documented below in the context\nsection.\n\n## .map(fn)\n\nExecute `fn` for each node in the object and return a new object with the\nresults of the walk. To update nodes in the result use `this.update(value)`.\n\n## .forEach(fn)\n\nExecute `fn` for each node in the object but unlike `.map()`, when\n`this.update()` is called it updates the object in-place.\n\n## .reduce(fn, acc)\n\nFor each node in the object, perform a\n[left-fold](http://en.wikipedia.org/wiki/Fold_(higher-order_function))\nwith the return value of `fn(acc, node)`.\n\nIf `acc` isn't specified, `acc` is set to the root object for the first step\nand the root element is skipped.\n\n## .paths()\n\nReturn an `Array` of every possible non-cyclic path in the object.\nPaths are `Array`s of string keys.\n\n## .nodes()\n\nReturn an `Array` of every node in the object.\n\n## .clone()\n\nCreate a deep clone of the object.\n\n## .get(path)\n\nGet the element at the array `path`.\n\n## .set(path, value)\n\nSet the element at the array `path` to `value`.\n\n## .has(path)\n\nReturn whether the element at the array `path` exists.\n\n# context\n\nEach method that takes a callback has a context (its `this` object) with these\nattributes:\n\n## this.node\n\nThe present node on the recursive walk\n\n## this.path\n\nAn array of string keys from the root to the present node\n\n## this.parent\n\nThe context of the node's parent.\nThis is `undefined` for the root node.\n\n## this.key\n\nThe name of the key of the present node in its parent.\nThis is `undefined` for the root node.\n\n## this.isRoot, this.notRoot\n\nWhether the present node is the root node\n\n## this.isLeaf, this.notLeaf\n\nWhether or not the present node is a leaf node (has no children)\n\n## this.level\n\nDepth of the node within the traversal\n\n## this.circular\n\nIf the node equals one of its parents, the `circular` attribute is set to the\ncontext of that parent and the traversal progresses no deeper.\n\n## this.update(value, stopHere=false)\n\nSet a new value for the present node.\n\nAll the elements in `value` will be recursively traversed unless `stopHere` is\ntrue.\n\n## this.remove(stopHere=false)\n\nRemove the current element from the output. If the node is in an Array it will\nbe spliced off. Otherwise it will be deleted from its parent.\n\n## this.delete(stopHere=false)\n\nDelete the current element from its parent in the output. Calls `delete` even on\nArrays.\n\n## this.before(fn)\n\nCall this function before any of the children are traversed.\n\nYou can assign into `this.keys` here to traverse in a custom order.\n\n## this.after(fn)\n\nCall this function after any of the children are traversed.\n\n## this.pre(fn)\n\nCall this function before each of the children are traversed.\n\n## this.post(fn)\n\nCall this function after each of the children are traversed.\n\n\n# install\n\nUsing [npm](http://npmjs.org) do:\n\n    $ npm install traverse\n\n# license\n\nMIT\n",
+              "readmeFilename": "readme.markdown",
+              "bugs": {"url": "https://github.com/substack/js-traverse/issues"},
+              "_id": "traverse@0.6.6",
+              "_shasum": "cbdf560fd7b9af632502fed40f918c157ea97137",
+              "_from": "traverse@0.6.x",
+              "_resolved": "https://registry.npmjs.org/traverse/-/traverse-0.6.6.tgz",
+              "realName": "traverse",
+              "dependencies": {},
+              "_dependencies": {},
+              "extraneous": false,
+              "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/difflet/node_modules/traverse",
+              "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/difflet/node_modules/traverse",
+              "depth": 3,
+              "peerDependencies": {}
+            },
+            "charm": {
+              "name": "charm",
+              "version": "0.1.2",
+              "description": "ansi control sequences for terminal cursor hopping and colors",
+              "main": "index.js",
+              "directories": {
+                "lib": ".",
+                "example": "example",
+                "test": "test"
+              },
+              "repository": {
+                "type": "git",
+                "url": "http://github.com/substack/node-charm.git"
+              },
+              "keywords": [
+                "terminal",
+                "ansi",
+                "cursor",
+                "color",
+                "console",
+                "control",
+                "escape",
+                "sequence"
+              ],
+              "author": {
+                "name": "James Halliday",
+                "email": "mail@substack.net",
+                "url": "http://substack.net"
+              },
+              "license": "MIT/X11",
+              "engine": {"node": ">=0.4"},
+              "_id": "charm@0.1.2",
+              "dist": {
+                "shasum": "06c21eed1a1b06aeb67553cdc53e23274bac2296",
+                "tarball": "http://ci.strongloop.com:4873/charm/-/charm-0.1.2.tgz"
+              },
+              "_from": "charm@0.1.x",
+              "_npmVersion": "1.2.2",
+              "_npmUser": {
+                "name": "substack",
+                "email": "mail@substack.net"
+              },
+              "maintainers": [
+                {
+                  "name": "substack",
+                  "email": "mail@substack.net"
+                }
+              ],
+              "_shasum": "06c21eed1a1b06aeb67553cdc53e23274bac2296",
+              "_resolved": "http://ci.strongloop.com:4873/charm/-/charm-0.1.2.tgz",
+              "bugs": {"url": "https://github.com/substack/node-charm/issues"},
+              "readme": "ERROR: No README data found!",
+              "homepage": "https://github.com/substack/node-charm",
+              "scripts": {},
+              "realName": "charm",
+              "dependencies": {},
+              "_dependencies": {},
+              "extraneous": false,
+              "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/difflet/node_modules/charm",
+              "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/difflet/node_modules/charm",
+              "depth": 3,
+              "peerDependencies": {}
+            },
+            "deep-is": {
+              "name": "deep-is",
+              "version": "0.1.3",
+              "description": "node's assert.deepEqual algorithm except for NaN being equal to NaN",
+              "main": "index.js",
+              "directories": {
+                "lib": ".",
+                "example": "example",
+                "test": "test"
+              },
+              "scripts": {"test": "tape test/*.js"},
+              "devDependencies": {"tape": "~1.0.2"},
+              "repository": {
+                "type": "git",
+                "url": "http://github.com/thlorenz/deep-is.git"
+              },
+              "keywords": [
+                "equality",
+                "equal",
+                "compare"
+              ],
+              "author": {
+                "name": "Thorsten Lorenz",
+                "email": "thlorenz@gmx.de",
+                "url": "http://thlorenz.com"
+              },
+              "license": {
+                "type": "MIT",
+                "url": "https://github.com/thlorenz/deep-is/blob/master/LICENSE"
+              },
+              "testling": {
+                "files": "test/*.js",
+                "browsers": {
+                  "ie": [
+                    6,
+                    7,
+                    8,
+                    9
+                  ],
+                  "ff": [
+                    3.5,
+                    10,
+                    15
+                  ],
+                  "chrome": [
+                    10,
+                    22
+                  ],
+                  "safari": [5.1],
+                  "opera": [12]
+                }
+              },
+              "gitHead": "f126057628423458636dec9df3d621843b9ac55e",
+              "bugs": {"url": "https://github.com/thlorenz/deep-is/issues"},
+              "homepage": "https://github.com/thlorenz/deep-is",
+              "_id": "deep-is@0.1.3",
+              "_shasum": "b369d6fb5dbc13eecf524f91b070feedc357cf34",
+              "_from": "deep-is@0.1.x",
+              "_npmVersion": "1.4.14",
+              "_npmUser": {
+                "name": "thlorenz",
+                "email": "thlorenz@gmx.de"
+              },
+              "maintainers": [
+                {
+                  "name": "thlorenz",
+                  "email": "thlorenz@gmx.de"
+                }
+              ],
+              "dist": {
+                "shasum": "b369d6fb5dbc13eecf524f91b070feedc357cf34",
+                "tarball": "http://ci.strongloop.com:4873/deep-is/-/deep-is-0.1.3.tgz"
+              },
+              "_resolved": "http://ci.strongloop.com:4873/deep-is/-/deep-is-0.1.3.tgz",
+              "readme": "ERROR: No README data found!",
+              "realName": "deep-is",
+              "dependencies": {},
+              "_dependencies": {},
+              "extraneous": false,
+              "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/difflet/node_modules/deep-is",
+              "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/difflet/node_modules/deep-is",
+              "depth": 3,
+              "peerDependencies": {}
+            }
+          },
+          "devDependencies": {
+            "tap": "0.1.x",
+            "ent": "0.0.x"
+          },
+          "engines": {"node": ">=0.4.0"},
+          "license": "MIT",
+          "author": {
+            "name": "James Halliday",
+            "email": "mail@substack.net",
+            "url": "http://substack.net"
+          },
+          "readmeFilename": "README.markdown",
+          "bugs": {"url": "https://github.com/substack/difflet/issues"},
+          "_id": "difflet@0.2.6",
+          "dist": {
+            "shasum": "ab23b31f5649b6faa8e3d2acbd334467365ca6fa",
+            "tarball": "http://ci.strongloop.com:4873/difflet/-/difflet-0.2.6.tgz"
+          },
+          "_from": "difflet@~0.2.0",
+          "_npmVersion": "1.3.0",
+          "_npmUser": {
+            "name": "substack",
+            "email": "mail@substack.net"
+          },
+          "maintainers": [
+            {
+              "name": "substack",
+              "email": "mail@substack.net"
+            }
+          ],
+          "_shasum": "ab23b31f5649b6faa8e3d2acbd334467365ca6fa",
+          "_resolved": "http://ci.strongloop.com:4873/difflet/-/difflet-0.2.6.tgz",
+          "readme": "ERROR: No README data found!",
+          "homepage": "https://github.com/substack/difflet",
+          "realName": "difflet",
+          "_dependencies": {
+            "traverse": "0.6.x",
+            "charm": "0.1.x",
+            "deep-is": "0.1.x"
+          },
+          "extraneous": false,
+          "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/difflet",
+          "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/difflet",
+          "depth": 2,
+          "peerDependencies": {}
+        },
+        "glob": {
+          "author": {
+            "name": "Isaac Z. Schlueter",
+            "email": "i@izs.me",
+            "url": "http://blog.izs.me/"
+          },
+          "name": "glob",
+          "description": "a little globber",
+          "version": "3.2.11",
+          "repository": {
+            "type": "git",
+            "url": "git://github.com/isaacs/node-glob.git"
+          },
+          "main": "glob.js",
+          "engines": {"node": "*"},
+          "dependencies": {
+            "inherits": {
+              "name": "inherits",
+              "description": "Browser-friendly inheritance fully compatible with standard node.js inherits()",
+              "version": "2.0.1",
+              "keywords": [
+                "inheritance",
+                "class",
+                "klass",
+                "oop",
+                "object-oriented",
+                "inherits",
+                "browser",
+                "browserify"
+              ],
+              "main": "./inherits.js",
+              "browser": "./inherits_browser.js",
+              "repository": {
+                "type": "git",
+                "url": "git://github.com/isaacs/inherits"
+              },
+              "license": "ISC",
+              "scripts": {},
+              "readme": "Browser-friendly inheritance fully compatible with standard node.js\n[inherits](http://nodejs.org/api/util.html#util_util_inherits_constructor_superconstructor).\n\nThis package exports standard `inherits` from node.js `util` module in\nnode environment, but also provides alternative browser-friendly\nimplementation through [browser\nfield](https://gist.github.com/shtylman/4339901). Alternative\nimplementation is a literal copy of standard one located in standalone\nmodule to avoid requiring of `util`. It also has a shim for old\nbrowsers with no `Object.create` support.\n\nWhile keeping you sure you are using standard `inherits`\nimplementation in node.js environment, it allows bundlers such as\n[browserify](https://github.com/substack/node-browserify) to not\ninclude full `util` package to your client code if all you need is\njust `inherits` function. It worth, because browser shim for `util`\npackage is large and `inherits` is often the single function you need\nfrom it.\n\nIt's recommended to use this package instead of\n`require('util').inherits` for any code that has chances to be used\nnot only in node.js but in browser too.\n\n## usage\n\n```js\nvar inherits = require('inherits');\n// then use exactly as the standard one\n```\n\n## note on version ~1.0\n\nVersion ~1.0 had completely different motivation and is not compatible\nneither with 2.0 nor with standard node.js `inherits`.\n\nIf you are using version ~1.0 and planning to switch to ~2.0, be\ncareful:\n\n* new version uses `super_` instead of `super` for referencing\n  superclass\n* new version overwrites current prototype while old one preserves any\n  existing fields on it\n",
+              "readmeFilename": "README.md",
+              "bugs": {"url": "https://github.com/isaacs/inherits/issues"},
+              "homepage": "https://github.com/isaacs/inherits",
+              "_id": "inherits@2.0.1",
+              "_shasum": "b17d08d326b4423e568eff719f91b0b1cbdf69f1",
+              "_from": "inherits@*",
+              "_resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz",
+              "realName": "inherits",
+              "dependencies": {},
+              "_dependencies": {},
+              "extraneous": false,
+              "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/inherits",
+              "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/inherits",
+              "depth": 2,
+              "peerDependencies": {}
+            },
+            "minimatch": {
+              "author": {
+                "name": "Isaac Z. Schlueter",
+                "email": "i@izs.me",
+                "url": "http://blog.izs.me"
+              },
+              "name": "minimatch",
+              "description": "a glob matcher in javascript",
+              "version": "0.3.0",
+              "repository": {
+                "type": "git",
+                "url": "git://github.com/isaacs/minimatch.git"
+              },
+              "main": "minimatch.js",
+              "scripts": {"test": "tap test/*.js"},
+              "engines": {"node": "*"},
+              "dependencies": {
+                "lru-cache": {
+                  "name": "lru-cache",
+                  "description": "A cache object that deletes the least-recently-used items.",
+                  "version": "2.5.0",
+                  "author": {
+                    "name": "Isaac Z. Schlueter",
+                    "email": "i@izs.me"
+                  },
+                  "scripts": {},
+                  "main": "lib/lru-cache.js",
+                  "repository": {
+                    "type": "git",
+                    "url": "git://github.com/isaacs/node-lru-cache.git"
+                  },
+                  "devDependencies": {
+                    "tap": "",
+                    "weak": ""
+                  },
+                  "license": {
+                    "type": "MIT",
+                    "url": "http://github.com/isaacs/node-lru-cache/raw/master/LICENSE"
+                  },
+                  "readme": "# lru cache\n\nA cache object that deletes the least-recently-used items.\n\n## Usage:\n\n```javascript\nvar LRU = require(\"lru-cache\")\n  , options = { max: 500\n              , length: function (n) { return n * 2 }\n              , dispose: function (key, n) { n.close() }\n              , maxAge: 1000 * 60 * 60 }\n  , cache = LRU(options)\n  , otherCache = LRU(50) // sets just the max size\n\ncache.set(\"key\", \"value\")\ncache.get(\"key\") // \"value\"\n\ncache.reset()    // empty the cache\n```\n\nIf you put more stuff in it, then items will fall out.\n\nIf you try to put an oversized thing in it, then it'll fall out right\naway.\n\n## Options\n\n* `max` The maximum size of the cache, checked by applying the length\n  function to all values in the cache.  Not setting this is kind of\n  silly, since that's the whole purpose of this lib, but it defaults\n  to `Infinity`.\n* `maxAge` Maximum age in ms.  Items are not pro-actively pruned out\n  as they age, but if you try to get an item that is too old, it'll\n  drop it and return undefined instead of giving it to you.\n* `length` Function that is used to calculate the length of stored\n  items.  If you're storing strings or buffers, then you probably want\n  to do something like `function(n){return n.length}`.  The default is\n  `function(n){return 1}`, which is fine if you want to store `n`\n  like-sized things.\n* `dispose` Function that is called on items when they are dropped\n  from the cache.  This can be handy if you want to close file\n  descriptors or do other cleanup tasks when items are no longer\n  accessible.  Called with `key, value`.  It's called *before*\n  actually removing the item from the internal cache, so if you want\n  to immediately put it back in, you'll have to do that in a\n  `nextTick` or `setTimeout` callback or it won't do anything.\n* `stale` By default, if you set a `maxAge`, it'll only actually pull\n  stale items out of the cache when you `get(key)`.  (That is, it's\n  not pre-emptively doing a `setTimeout` or anything.)  If you set\n  `stale:true`, it'll return the stale value before deleting it.  If\n  you don't set this, then it'll return `undefined` when you try to\n  get a stale entry, as if it had already been deleted.\n\n## API\n\n* `set(key, value)`\n* `get(key) => value`\n\n    Both of these will update the \"recently used\"-ness of the key.\n    They do what you think.\n\n* `peek(key)`\n\n    Returns the key value (or `undefined` if not found) without\n    updating the \"recently used\"-ness of the key.\n\n    (If you find yourself using this a lot, you *might* be using the\n    wrong sort of data structure, but there are some use cases where\n    it's handy.)\n\n* `del(key)`\n\n    Deletes a key out of the cache.\n\n* `reset()`\n\n    Clear the cache entirely, throwing away all values.\n\n* `has(key)`\n\n    Check if a key is in the cache, without updating the recent-ness\n    or deleting it for being stale.\n\n* `forEach(function(value,key,cache), [thisp])`\n\n    Just like `Array.prototype.forEach`.  Iterates over all the keys\n    in the cache, in order of recent-ness.  (Ie, more recently used\n    items are iterated over first.)\n\n* `keys()`\n\n    Return an array of the keys in the cache.\n\n* `values()`\n\n    Return an array of the values in the cache.\n",
+                  "readmeFilename": "README.md",
+                  "bugs": {"url": "https://github.com/isaacs/node-lru-cache/issues"},
+                  "homepage": "https://github.com/isaacs/node-lru-cache",
+                  "_id": "lru-cache@2.5.0",
+                  "_shasum": "d82388ae9c960becbea0c73bb9eb79b6c6ce9aeb",
+                  "_from": "lru-cache@2",
+                  "_resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-2.5.0.tgz",
+                  "realName": "lru-cache",
+                  "dependencies": {},
+                  "_dependencies": {},
+                  "extraneous": false,
+                  "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/glob/node_modules/minimatch/node_modules/lru-cache",
+                  "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/glob/node_modules/minimatch/node_modules/lru-cache",
+                  "depth": 4,
+                  "peerDependencies": {}
+                },
+                "sigmund": {
+                  "name": "sigmund",
+                  "version": "1.0.0",
+                  "description": "Quick and dirty signatures for Objects.",
+                  "main": "sigmund.js",
+                  "directories": {"test": "test"},
+                  "dependencies": {},
+                  "devDependencies": {"tap": "~0.3.0"},
+                  "scripts": {},
+                  "repository": {
+                    "type": "git",
+                    "url": "git://github.com/isaacs/sigmund"
+                  },
+                  "keywords": [
+                    "object",
+                    "signature",
+                    "key",
+                    "data",
+                    "psychoanalysis"
+                  ],
+                  "author": {
+                    "name": "Isaac Z. Schlueter",
+                    "email": "i@izs.me",
+                    "url": "http://blog.izs.me/"
+                  },
+                  "license": "BSD",
+                  "readme": "# sigmund\n\nQuick and dirty signatures for Objects.\n\nThis is like a much faster `deepEquals` comparison, which returns a\nstring key suitable for caches and the like.\n\n## Usage\n\n```javascript\nfunction doSomething (someObj) {\n  var key = sigmund(someObj, maxDepth) // max depth defaults to 10\n  var cached = cache.get(key)\n  if (cached) return cached)\n\n  var result = expensiveCalculation(someObj)\n  cache.set(key, result)\n  return result\n}\n```\n\nThe resulting key will be as unique and reproducible as calling\n`JSON.stringify` or `util.inspect` on the object, but is much faster.\nIn order to achieve this speed, some differences are glossed over.\nFor example, the object `{0:'foo'}` will be treated identically to the\narray `['foo']`.\n\nAlso, just as there is no way to summon the soul from the scribblings\nof a cocain-addled psychoanalyst, there is no way to revive the object\nfrom the signature string that sigmund gives you.  In fact, it's\nbarely even readable.\n\nAs with `sys.inspect` and `JSON.stringify`, larger objects will\nproduce larger signature strings.\n\nBecause sigmund is a bit less strict than the more thorough\nalternatives, the strings will be shorter, and also there is a\nslightly higher chance for collisions.  For example, these objects\nhave the same signature:\n\n    var obj1 = {a:'b',c:/def/,g:['h','i',{j:'',k:'l'}]}\n    var obj2 = {a:'b',c:'/def/',g:['h','i','{jkl']}\n\nLike a good Freudian, sigmund is most effective when you already have\nsome understanding of what you're looking for.  It can help you help\nyourself, but you must be willing to do some work as well.\n\nCycles are handled, and cyclical objects are silently omitted (though\nthe key is included in the signature output.)\n\nThe second argument is the maximum depth, which defaults to 10,\nbecause that is the maximum object traversal depth covered by most\ninsurance carriers.\n",
+                  "readmeFilename": "README.md",
+                  "bugs": {"url": "https://github.com/isaacs/sigmund/issues"},
+                  "homepage": "https://github.com/isaacs/sigmund",
+                  "_id": "sigmund@1.0.0",
+                  "_shasum": "66a2b3a749ae8b5fb89efd4fcc01dc94fbe02296",
+                  "_from": "sigmund@~1.0.0",
+                  "_resolved": "https://registry.npmjs.org/sigmund/-/sigmund-1.0.0.tgz",
+                  "realName": "sigmund",
+                  "_dependencies": {},
+                  "extraneous": false,
+                  "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/glob/node_modules/minimatch/node_modules/sigmund",
+                  "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/glob/node_modules/minimatch/node_modules/sigmund",
+                  "depth": 4,
+                  "peerDependencies": {}
+                }
+              },
+              "devDependencies": {"tap": ""},
+              "license": {
+                "type": "MIT",
+                "url": "http://github.com/isaacs/minimatch/raw/master/LICENSE"
+              },
+              "readme": "# minimatch\n\nA minimal matching utility.\n\n[![Build Status](https://secure.travis-ci.org/isaacs/minimatch.png)](http://travis-ci.org/isaacs/minimatch)\n\n\nThis is the matching library used internally by npm.\n\nEventually, it will replace the C binding in node-glob.\n\nIt works by converting glob expressions into JavaScript `RegExp`\nobjects.\n\n## Usage\n\n```javascript\nvar minimatch = require(\"minimatch\")\n\nminimatch(\"bar.foo\", \"*.foo\") // true!\nminimatch(\"bar.foo\", \"*.bar\") // false!\nminimatch(\"bar.foo\", \"*.+(bar|foo)\", { debug: true }) // true, and noisy!\n```\n\n## Features\n\nSupports these glob features:\n\n* Brace Expansion\n* Extended glob matching\n* \"Globstar\" `**` matching\n\nSee:\n\n* `man sh`\n* `man bash`\n* `man 3 fnmatch`\n* `man 5 gitignore`\n\n## Minimatch Class\n\nCreate a minimatch object by instanting the `minimatch.Minimatch` class.\n\n```javascript\nvar Minimatch = require(\"minimatch\").Minimatch\nvar mm = new Minimatch(pattern, options)\n```\n\n### Properties\n\n* `pattern` The original pattern the minimatch object represents.\n* `options` The options supplied to the constructor.\n* `set` A 2-dimensional array of regexp or string expressions.\n  Each row in the\n  array corresponds to a brace-expanded pattern.  Each item in the row\n  corresponds to a single path-part.  For example, the pattern\n  `{a,b/c}/d` would expand to a set of patterns like:\n\n        [ [ a, d ]\n        , [ b, c, d ] ]\n\n    If a portion of the pattern doesn't have any \"magic\" in it\n    (that is, it's something like `\"foo\"` rather than `fo*o?`), then it\n    will be left as a string rather than converted to a regular\n    expression.\n\n* `regexp` Created by the `makeRe` method.  A single regular expression\n  expressing the entire pattern.  This is useful in cases where you wish\n  to use the pattern somewhat like `fnmatch(3)` with `FNM_PATH` enabled.\n* `negate` True if the pattern is negated.\n* `comment` True if the pattern is a comment.\n* `empty` True if the pattern is `\"\"`.\n\n### Methods\n\n* `makeRe` Generate the `regexp` member if necessary, and return it.\n  Will return `false` if the pattern is invalid.\n* `match(fname)` Return true if the filename matches the pattern, or\n  false otherwise.\n* `matchOne(fileArray, patternArray, partial)` Take a `/`-split\n  filename, and match it against a single row in the `regExpSet`.  This\n  method is mainly for internal use, but is exposed so that it can be\n  used by a glob-walker that needs to avoid excessive filesystem calls.\n\nAll other methods are internal, and will be called as necessary.\n\n## Functions\n\nThe top-level exported function has a `cache` property, which is an LRU\ncache set to store 100 items.  So, calling these methods repeatedly\nwith the same pattern and options will use the same Minimatch object,\nsaving the cost of parsing it multiple times.\n\n### minimatch(path, pattern, options)\n\nMain export.  Tests a path against the pattern using the options.\n\n```javascript\nvar isJS = minimatch(file, \"*.js\", { matchBase: true })\n```\n\n### minimatch.filter(pattern, options)\n\nReturns a function that tests its\nsupplied argument, suitable for use with `Array.filter`.  Example:\n\n```javascript\nvar javascripts = fileList.filter(minimatch.filter(\"*.js\", {matchBase: true}))\n```\n\n### minimatch.match(list, pattern, options)\n\nMatch against the list of\nfiles, in the style of fnmatch or glob.  If nothing is matched, and\noptions.nonull is set, then return a list containing the pattern itself.\n\n```javascript\nvar javascripts = minimatch.match(fileList, \"*.js\", {matchBase: true}))\n```\n\n### minimatch.makeRe(pattern, options)\n\nMake a regular expression object from the pattern.\n\n## Options\n\nAll options are `false` by default.\n\n### debug\n\nDump a ton of stuff to stderr.\n\n### nobrace\n\nDo not expand `{a,b}` and `{1..3}` brace sets.\n\n### noglobstar\n\nDisable `**` matching against multiple folder names.\n\n### dot\n\nAllow patterns to match filenames starting with a period, even if\nthe pattern does not explicitly have a period in that spot.\n\nNote that by default, `a/**/b` will **not** match `a/.d/b`, unless `dot`\nis set.\n\n### noext\n\nDisable \"extglob\" style patterns like `+(a|b)`.\n\n### nocase\n\nPerform a case-insensitive match.\n\n### nonull\n\nWhen a match is not found by `minimatch.match`, return a list containing\nthe pattern itself if this option is set.  When not set, an empty list\nis returned if there are no matches.\n\n### matchBase\n\nIf set, then patterns without slashes will be matched\nagainst the basename of the path if it contains slashes.  For example,\n`a?b` would match the path `/xyz/123/acb`, but not `/xyz/acb/123`.\n\n### nocomment\n\nSuppress the behavior of treating `#` at the start of a pattern as a\ncomment.\n\n### nonegate\n\nSuppress the behavior of treating a leading `!` character as negation.\n\n### flipNegate\n\nReturns from negate expressions the same as if they were not negated.\n(Ie, true on a hit, false on a miss.)\n\n\n## Comparisons to other fnmatch/glob implementations\n\nWhile strict compliance with the existing standards is a worthwhile\ngoal, some discrepancies exist between minimatch and other\nimplementations, and are intentional.\n\nIf the pattern starts with a `!` character, then it is negated.  Set the\n`nonegate` flag to suppress this behavior, and treat leading `!`\ncharacters normally.  This is perhaps relevant if you wish to start the\npattern with a negative extglob pattern like `!(a|B)`.  Multiple `!`\ncharacters at the start of a pattern will negate the pattern multiple\ntimes.\n\nIf a pattern starts with `#`, then it is treated as a comment, and\nwill not match anything.  Use `\\#` to match a literal `#` at the\nstart of a line, or set the `nocomment` flag to suppress this behavior.\n\nThe double-star character `**` is supported by default, unless the\n`noglobstar` flag is set.  This is supported in the manner of bsdglob\nand bash 4.1, where `**` only has special significance if it is the only\nthing in a path part.  That is, `a/**/b` will match `a/x/y/b`, but\n`a/**b` will not.\n\nIf an escaped pattern has no matches, and the `nonull` flag is set,\nthen minimatch.match returns the pattern as-provided, rather than\ninterpreting the character escapes.  For example,\n`minimatch.match([], \"\\\\*a\\\\?\")` will return `\"\\\\*a\\\\?\"` rather than\n`\"*a?\"`.  This is akin to setting the `nullglob` option in bash, except\nthat it does not resolve escaped pattern characters.\n\nIf brace expansion is not disabled, then it is performed before any\nother interpretation of the glob pattern.  Thus, a pattern like\n`+(a|{b),c)}`, which would not be valid in bash or zsh, is expanded\n**first** into the set of `+(a|b)` and `+(a|c)`, and those patterns are\nchecked for validity.  Since those two are valid, matching proceeds.\n",
+              "readmeFilename": "README.md",
+              "bugs": {"url": "https://github.com/isaacs/minimatch/issues"},
+              "homepage": "https://github.com/isaacs/minimatch",
+              "_id": "minimatch@0.3.0",
+              "_shasum": "275d8edaac4f1bb3326472089e7949c8394699dd",
+              "_from": "minimatch@0.3",
+              "_resolved": "https://registry.npmjs.org/minimatch/-/minimatch-0.3.0.tgz",
+              "realName": "minimatch",
+              "_dependencies": {
+                "lru-cache": "2",
+                "sigmund": "~1.0.0"
+              },
+              "extraneous": false,
+              "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/glob/node_modules/minimatch",
+              "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/glob/node_modules/minimatch",
+              "depth": 3,
+              "peerDependencies": {}
+            }
+          },
+          "devDependencies": {
+            "tap": "~0.4.0",
+            "mkdirp": "0",
+            "rimraf": "1"
+          },
+          "scripts": {
+            "test": "tap test/*.js",
+            "test-regen": "TEST_REGEN=1 node test/00-setup.js"
+          },
+          "license": "BSD",
+          "readme": "# Glob\n\nMatch files using the patterns the shell uses, like stars and stuff.\n\nThis is a glob implementation in JavaScript.  It uses the `minimatch`\nlibrary to do its matching.\n\n## Attention: node-glob users!\n\nThe API has changed dramatically between 2.x and 3.x. This library is\nnow 100% JavaScript, and the integer flags have been replaced with an\noptions object.\n\nAlso, there's an event emitter class, proper tests, and all the other\nthings you've come to expect from node modules.\n\nAnd best of all, no compilation!\n\n## Usage\n\n```javascript\nvar glob = require(\"glob\")\n\n// options is optional\nglob(\"**/*.js\", options, function (er, files) {\n  // files is an array of filenames.\n  // If the `nonull` option is set, and nothing\n  // was found, then files is [\"**/*.js\"]\n  // er is an error object or null.\n})\n```\n\n## Features\n\nPlease see the [minimatch\ndocumentation](https://github.com/isaacs/minimatch) for more details.\n\nSupports these glob features:\n\n* Brace Expansion\n* Extended glob matching\n* \"Globstar\" `**` matching\n\nSee:\n\n* `man sh`\n* `man bash`\n* `man 3 fnmatch`\n* `man 5 gitignore`\n* [minimatch documentation](https://github.com/isaacs/minimatch)\n\n## glob(pattern, [options], cb)\n\n* `pattern` {String} Pattern to be matched\n* `options` {Object}\n* `cb` {Function}\n  * `err` {Error | null}\n  * `matches` {Array<String>} filenames found matching the pattern\n\nPerform an asynchronous glob search.\n\n## glob.sync(pattern, [options])\n\n* `pattern` {String} Pattern to be matched\n* `options` {Object}\n* return: {Array<String>} filenames found matching the pattern\n\nPerform a synchronous glob search.\n\n## Class: glob.Glob\n\nCreate a Glob object by instanting the `glob.Glob` class.\n\n```javascript\nvar Glob = require(\"glob\").Glob\nvar mg = new Glob(pattern, options, cb)\n```\n\nIt's an EventEmitter, and starts walking the filesystem to find matches\nimmediately.\n\n### new glob.Glob(pattern, [options], [cb])\n\n* `pattern` {String} pattern to search for\n* `options` {Object}\n* `cb` {Function} Called when an error occurs, or matches are found\n  * `err` {Error | null}\n  * `matches` {Array<String>} filenames found matching the pattern\n\nNote that if the `sync` flag is set in the options, then matches will\nbe immediately available on the `g.found` member.\n\n### Properties\n\n* `minimatch` The minimatch object that the glob uses.\n* `options` The options object passed in.\n* `error` The error encountered.  When an error is encountered, the\n  glob object is in an undefined state, and should be discarded.\n* `aborted` Boolean which is set to true when calling `abort()`.  There\n  is no way at this time to continue a glob search after aborting, but\n  you can re-use the statCache to avoid having to duplicate syscalls.\n* `statCache` Collection of all the stat results the glob search\n  performed.\n* `cache` Convenience object.  Each field has the following possible\n  values:\n  * `false` - Path does not exist\n  * `true` - Path exists\n  * `1` - Path exists, and is not a directory\n  * `2` - Path exists, and is a directory\n  * `[file, entries, ...]` - Path exists, is a directory, and the\n    array value is the results of `fs.readdir`\n\n### Events\n\n* `end` When the matching is finished, this is emitted with all the\n  matches found.  If the `nonull` option is set, and no match was found,\n  then the `matches` list contains the original pattern.  The matches\n  are sorted, unless the `nosort` flag is set.\n* `match` Every time a match is found, this is emitted with the matched.\n* `error` Emitted when an unexpected error is encountered, or whenever\n  any fs error occurs if `options.strict` is set.\n* `abort` When `abort()` is called, this event is raised.\n\n### Methods\n\n* `abort` Stop the search.\n\n### Options\n\nAll the options that can be passed to Minimatch can also be passed to\nGlob to change pattern matching behavior.  Also, some have been added,\nor have glob-specific ramifications.\n\nAll options are false by default, unless otherwise noted.\n\nAll options are added to the glob object, as well.\n\n* `cwd` The current working directory in which to search.  Defaults\n  to `process.cwd()`.\n* `root` The place where patterns starting with `/` will be mounted\n  onto.  Defaults to `path.resolve(options.cwd, \"/\")` (`/` on Unix\n  systems, and `C:\\` or some such on Windows.)\n* `dot` Include `.dot` files in normal matches and `globstar` matches.\n  Note that an explicit dot in a portion of the pattern will always\n  match dot files.\n* `nomount` By default, a pattern starting with a forward-slash will be\n  \"mounted\" onto the root setting, so that a valid filesystem path is\n  returned.  Set this flag to disable that behavior.\n* `mark` Add a `/` character to directory matches.  Note that this\n  requires additional stat calls.\n* `nosort` Don't sort the results.\n* `stat` Set to true to stat *all* results.  This reduces performance\n  somewhat, and is completely unnecessary, unless `readdir` is presumed\n  to be an untrustworthy indicator of file existence.  It will cause\n  ELOOP to be triggered one level sooner in the case of cyclical\n  symbolic links.\n* `silent` When an unusual error is encountered\n  when attempting to read a directory, a warning will be printed to\n  stderr.  Set the `silent` option to true to suppress these warnings.\n* `strict` When an unusual error is encountered\n  when attempting to read a directory, the process will just continue on\n  in search of other matches.  Set the `strict` option to raise an error\n  in these cases.\n* `cache` See `cache` property above.  Pass in a previously generated\n  cache object to save some fs calls.\n* `statCache` A cache of results of filesystem information, to prevent\n  unnecessary stat calls.  While it should not normally be necessary to\n  set this, you may pass the statCache from one glob() call to the\n  options object of another, if you know that the filesystem will not\n  change between calls.  (See \"Race Conditions\" below.)\n* `sync` Perform a synchronous glob search.\n* `nounique` In some cases, brace-expanded patterns can result in the\n  same file showing up multiple times in the result set.  By default,\n  this implementation prevents duplicates in the result set.\n  Set this flag to disable that behavior.\n* `nonull` Set to never return an empty set, instead returning a set\n  containing the pattern itself.  This is the default in glob(3).\n* `nocase` Perform a case-insensitive match.  Note that case-insensitive\n  filesystems will sometimes result in glob returning results that are\n  case-insensitively matched anyway, since readdir and stat will not\n  raise an error.\n* `debug` Set to enable debug logging in minimatch and glob.\n* `globDebug` Set to enable debug logging in glob, but not minimatch.\n\n## Comparisons to other fnmatch/glob implementations\n\nWhile strict compliance with the existing standards is a worthwhile\ngoal, some discrepancies exist between node-glob and other\nimplementations, and are intentional.\n\nIf the pattern starts with a `!` character, then it is negated.  Set the\n`nonegate` flag to suppress this behavior, and treat leading `!`\ncharacters normally.  This is perhaps relevant if you wish to start the\npattern with a negative extglob pattern like `!(a|B)`.  Multiple `!`\ncharacters at the start of a pattern will negate the pattern multiple\ntimes.\n\nIf a pattern starts with `#`, then it is treated as a comment, and\nwill not match anything.  Use `\\#` to match a literal `#` at the\nstart of a line, or set the `nocomment` flag to suppress this behavior.\n\nThe double-star character `**` is supported by default, unless the\n`noglobstar` flag is set.  This is supported in the manner of bsdglob\nand bash 4.1, where `**` only has special significance if it is the only\nthing in a path part.  That is, `a/**/b` will match `a/x/y/b`, but\n`a/**b` will not.\n\nIf an escaped pattern has no matches, and the `nonull` flag is set,\nthen glob returns the pattern as-provided, rather than\ninterpreting the character escapes.  For example,\n`glob.match([], \"\\\\*a\\\\?\")` will return `\"\\\\*a\\\\?\"` rather than\n`\"*a?\"`.  This is akin to setting the `nullglob` option in bash, except\nthat it does not resolve escaped pattern characters.\n\nIf brace expansion is not disabled, then it is performed before any\nother interpretation of the glob pattern.  Thus, a pattern like\n`+(a|{b),c)}`, which would not be valid in bash or zsh, is expanded\n**first** into the set of `+(a|b)` and `+(a|c)`, and those patterns are\nchecked for validity.  Since those two are valid, matching proceeds.\n\n## Windows\n\n**Please only use forward-slashes in glob expressions.**\n\nThough windows uses either `/` or `\\` as its path separator, only `/`\ncharacters are used by this glob implementation.  You must use\nforward-slashes **only** in glob expressions.  Back-slashes will always\nbe interpreted as escape characters, not path separators.\n\nResults from absolute patterns such as `/foo/*` are mounted onto the\nroot setting using `path.join`.  On windows, this will by default result\nin `/foo/*` matching `C:\\foo\\bar.txt`.\n\n## Race Conditions\n\nGlob searching, by its very nature, is susceptible to race conditions,\nsince it relies on directory walking and such.\n\nAs a result, it is possible that a file that exists when glob looks for\nit may have been deleted or modified by the time it returns the result.\n\nAs part of its internal implementation, this program caches all stat\nand readdir calls that it makes, in order to cut down on system\noverhead.  However, this also makes it even more susceptible to races,\nespecially if the cache or statCache objects are reused between glob\ncalls.\n\nUsers are thus advised not to use a glob result as a guarantee of\nfilesystem state in the face of rapid changes.  For the vast majority\nof operations, this is never a problem.\n",
+          "readmeFilename": "README.md",
+          "bugs": {"url": "https://github.com/isaacs/node-glob/issues"},
+          "homepage": "https://github.com/isaacs/node-glob",
+          "_id": "glob@3.2.11",
+          "_shasum": "4a973f635b9190f715d10987d5c00fd2815ebe3d",
+          "_from": "glob@~3.2.1",
+          "_resolved": "https://registry.npmjs.org/glob/-/glob-3.2.11.tgz",
+          "realName": "glob",
+          "_dependencies": {
+            "inherits": "2",
+            "minimatch": "0.3"
+          },
+          "extraneous": false,
+          "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/glob",
+          "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/glob",
+          "depth": 2,
+          "peerDependencies": {}
+        },
+        "inherits": {
+          "name": "inherits",
+          "description": "Browser-friendly inheritance fully compatible with standard node.js inherits()",
+          "version": "2.0.1",
+          "keywords": [
+            "inheritance",
+            "class",
+            "klass",
+            "oop",
+            "object-oriented",
+            "inherits",
+            "browser",
+            "browserify"
+          ],
+          "main": "./inherits.js",
+          "browser": "./inherits_browser.js",
+          "repository": {
+            "type": "git",
+            "url": "git://github.com/isaacs/inherits"
+          },
+          "license": "ISC",
+          "scripts": {},
+          "readme": "Browser-friendly inheritance fully compatible with standard node.js\n[inherits](http://nodejs.org/api/util.html#util_util_inherits_constructor_superconstructor).\n\nThis package exports standard `inherits` from node.js `util` module in\nnode environment, but also provides alternative browser-friendly\nimplementation through [browser\nfield](https://gist.github.com/shtylman/4339901). Alternative\nimplementation is a literal copy of standard one located in standalone\nmodule to avoid requiring of `util`. It also has a shim for old\nbrowsers with no `Object.create` support.\n\nWhile keeping you sure you are using standard `inherits`\nimplementation in node.js environment, it allows bundlers such as\n[browserify](https://github.com/substack/node-browserify) to not\ninclude full `util` package to your client code if all you need is\njust `inherits` function. It worth, because browser shim for `util`\npackage is large and `inherits` is often the single function you need\nfrom it.\n\nIt's recommended to use this package instead of\n`require('util').inherits` for any code that has chances to be used\nnot only in node.js but in browser too.\n\n## usage\n\n```js\nvar inherits = require('inherits');\n// then use exactly as the standard one\n```\n\n## note on version ~1.0\n\nVersion ~1.0 had completely different motivation and is not compatible\nneither with 2.0 nor with standard node.js `inherits`.\n\nIf you are using version ~1.0 and planning to switch to ~2.0, be\ncareful:\n\n* new version uses `super_` instead of `super` for referencing\n  superclass\n* new version overwrites current prototype while old one preserves any\n  existing fields on it\n",
+          "readmeFilename": "README.md",
+          "bugs": {"url": "https://github.com/isaacs/inherits/issues"},
+          "homepage": "https://github.com/isaacs/inherits",
+          "_id": "inherits@2.0.1",
+          "_shasum": "b17d08d326b4423e568eff719f91b0b1cbdf69f1",
+          "_from": "inherits@*",
+          "_resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz",
+          "realName": "inherits",
+          "dependencies": {},
+          "_dependencies": {},
+          "extraneous": false,
+          "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/inherits",
+          "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/inherits",
+          "depth": 2,
+          "peerDependencies": {}
+        },
+        "mkdirp": {
+          "name": "mkdirp",
+          "description": "Recursively mkdir, like `mkdir -p`",
+          "version": "0.5.0",
+          "author": {
+            "name": "James Halliday",
+            "email": "mail@substack.net",
+            "url": "http://substack.net"
+          },
+          "main": "./index",
+          "keywords": [
+            "mkdir",
+            "directory"
+          ],
+          "repository": {
+            "type": "git",
+            "url": "https://github.com/substack/node-mkdirp.git"
+          },
+          "scripts": {"test": "tap test/*.js"},
+          "dependencies": {
+            "minimist": {
+              "name": "minimist",
+              "version": "0.0.8",
+              "description": "parse argument options",
+              "main": "index.js",
+              "devDependencies": {
+                "tape": "~1.0.4",
+                "tap": "~0.4.0"
+              },
+              "scripts": {"test": "tap test/*.js"},
+              "testling": {
+                "files": "test/*.js",
+                "browsers": [
+                  "ie/6..latest",
+                  "ff/5",
+                  "firefox/latest",
+                  "chrome/10",
+                  "chrome/latest",
+                  "safari/5.1",
+                  "safari/latest",
+                  "opera/12"
+                ]
+              },
+              "repository": {
+                "type": "git",
+                "url": "git://github.com/substack/minimist.git"
+              },
+              "homepage": "https://github.com/substack/minimist",
+              "keywords": [
+                "argv",
+                "getopt",
+                "parser",
+                "optimist"
+              ],
+              "author": {
+                "name": "James Halliday",
+                "email": "mail@substack.net",
+                "url": "http://substack.net"
+              },
+              "license": "MIT",
+              "bugs": {"url": "https://github.com/substack/minimist/issues"},
+              "_id": "minimist@0.0.8",
+              "dist": {
+                "shasum": "857fcabfc3397d2625b8228262e86aa7a011b05d",
+                "tarball": "http://ci.strongloop.com:4873/minimist/-/minimist-0.0.8.tgz"
+              },
+              "_from": "minimist@0.0.8",
+              "_npmVersion": "1.4.3",
+              "_npmUser": {
+                "name": "substack",
+                "email": "mail@substack.net"
+              },
+              "maintainers": [
+                {
+                  "name": "substack",
+                  "email": "mail@substack.net"
+                }
+              ],
+              "directories": {},
+              "_shasum": "857fcabfc3397d2625b8228262e86aa7a011b05d",
+              "_resolved": "http://ci.strongloop.com:4873/minimist/-/minimist-0.0.8.tgz",
+              "readme": "# minimist\n\nparse argument options\n\nThis module is the guts of optimist's argument parser without all the\nfanciful decoration.\n\n[![browser support](https://ci.testling.com/substack/minimist.png)](http://ci.testling.com/substack/minimist)\n\n[![build status](https://secure.travis-ci.org/substack/minimist.png)](http://travis-ci.org/substack/minimist)\n\n# example\n\n``` js\nvar argv = require('minimist')(process.argv.slice(2));\nconsole.dir(argv);\n```\n\n```\n$ node example/parse.js -a beep -b boop\n{ _: [], a: 'beep', b: 'boop' }\n```\n\n```\n$ node example/parse.js -x 3 -y 4 -n5 -abc --beep=boop foo bar baz\n{ _: [ 'foo', 'bar', 'baz' ],\n  x: 3,\n  y: 4,\n  n: 5,\n  a: true,\n  b: true,\n  c: true,\n  beep: 'boop' }\n```\n\n# methods\n\n``` js\nvar parseArgs = require('minimist')\n```\n\n## var argv = parseArgs(args, opts={})\n\nReturn an argument object `argv` populated with the array arguments from `args`.\n\n`argv._` contains all the arguments that didn't have an option associated with\nthem.\n\nNumeric-looking arguments will be returned as numbers unless `opts.string` or\n`opts.boolean` is set for that argument name.\n\nAny arguments after `'--'` will not be parsed and will end up in `argv._`.\n\noptions can be:\n\n* `opts.string` - a string or array of strings argument names to always treat as\nstrings\n* `opts.boolean` - a string or array of strings to always treat as booleans\n* `opts.alias` - an object mapping string names to strings or arrays of string\nargument names to use as aliases\n* `opts.default` - an object mapping string argument names to default values\n\n# install\n\nWith [npm](https://npmjs.org) do:\n\n```\nnpm install minimist\n```\n\n# license\n\nMIT\n",
+              "readmeFilename": "readme.markdown",
+              "realName": "minimist",
+              "dependencies": {},
+              "_dependencies": {},
+              "extraneous": false,
+              "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/mkdirp/node_modules/minimist",
+              "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/mkdirp/node_modules/minimist",
+              "depth": 3,
+              "peerDependencies": {}
+            }
+          },
+          "devDependencies": {
+            "tap": "~0.4.0",
+            "mock-fs": "~2.2.0"
+          },
+          "bin": {"mkdirp": "bin/cmd.js"},
+          "license": "MIT",
+          "bugs": {"url": "https://github.com/substack/node-mkdirp/issues"},
+          "homepage": "https://github.com/substack/node-mkdirp",
+          "_id": "mkdirp@0.5.0",
+          "dist": {
+            "shasum": "1d73076a6df986cd9344e15e71fcc05a4c9abf12",
+            "tarball": "http://ci.strongloop.com:4873/mkdirp/-/mkdirp-0.5.0.tgz"
+          },
+          "_from": "mkdirp@~0.3 || 0.4 || 0.5",
+          "_npmVersion": "1.4.3",
+          "_npmUser": {
+            "name": "substack",
+            "email": "mail@substack.net"
+          },
+          "maintainers": [
+            {
+              "name": "substack",
+              "email": "mail@substack.net"
+            }
+          ],
+          "directories": {},
+          "_shasum": "1d73076a6df986cd9344e15e71fcc05a4c9abf12",
+          "_resolved": "http://ci.strongloop.com:4873/mkdirp/-/mkdirp-0.5.0.tgz",
+          "readme": "ERROR: No README data found!",
+          "realName": "mkdirp",
+          "_dependencies": {"minimist": "0.0.8"},
+          "extraneous": false,
+          "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/mkdirp",
+          "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/mkdirp",
+          "depth": 2,
+          "peerDependencies": {}
+        },
+        "nopt": {
+          "name": "nopt",
+          "version": "2.2.1",
+          "description": "Option parsing for Node, supporting types, shorthands, etc. Used by npm.",
+          "author": {
+            "name": "Isaac Z. Schlueter",
+            "email": "i@izs.me",
+            "url": "http://blog.izs.me/"
+          },
+          "main": "lib/nopt.js",
+          "scripts": {"test": "tap test/*.js"},
+          "repository": {
+            "type": "git",
+            "url": "http://github.com/isaacs/nopt"
+          },
+          "bin": {"nopt": "./bin/nopt.js"},
+          "license": {
+            "type": "MIT",
+            "url": "https://github.com/isaacs/nopt/raw/master/LICENSE"
+          },
+          "dependencies": {
+            "abbrev": {
+              "name": "abbrev",
+              "version": "1.0.5",
+              "description": "Like ruby's abbrev module, but in js",
+              "author": {
+                "name": "Isaac Z. Schlueter",
+                "email": "i@izs.me"
+              },
+              "main": "abbrev.js",
+              "scripts": {"test": "node test.js"},
+              "repository": {
+                "type": "git",
+                "url": "http://github.com/isaacs/abbrev-js"
+              },
+              "license": {
+                "type": "MIT",
+                "url": "https://github.com/isaacs/abbrev-js/raw/master/LICENSE"
+              },
+              "readme": "# abbrev-js\n\nJust like [ruby's Abbrev](http://apidock.com/ruby/Abbrev).\n\nUsage:\n\n    var abbrev = require(\"abbrev\");\n    abbrev(\"foo\", \"fool\", \"folding\", \"flop\");\n    \n    // returns:\n    { fl: 'flop'\n    , flo: 'flop'\n    , flop: 'flop'\n    , fol: 'folding'\n    , fold: 'folding'\n    , foldi: 'folding'\n    , foldin: 'folding'\n    , folding: 'folding'\n    , foo: 'foo'\n    , fool: 'fool'\n    }\n\nThis is handy for command-line scripts, or other cases where you want to be able to accept shorthands.\n",
+              "readmeFilename": "README.md",
+              "bugs": {"url": "https://github.com/isaacs/abbrev-js/issues"},
+              "homepage": "https://github.com/isaacs/abbrev-js",
+              "_id": "abbrev@1.0.5",
+              "_shasum": "5d8257bd9ebe435e698b2fa431afde4fe7b10b03",
+              "_from": "abbrev@1",
+              "_resolved": "https://registry.npmjs.org/abbrev/-/abbrev-1.0.5.tgz",
+              "realName": "abbrev",
+              "dependencies": {},
+              "_dependencies": {},
+              "extraneous": false,
+              "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/nopt/node_modules/abbrev",
+              "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/nopt/node_modules/abbrev",
+              "depth": 3,
+              "peerDependencies": {}
+            }
+          },
+          "devDependencies": {"tap": "~0.4.8"},
+          "readme": "If you want to write an option parser, and have it be good, there are\ntwo ways to do it.  The Right Way, and the Wrong Way.\n\nThe Wrong Way is to sit down and write an option parser.  We've all done\nthat.\n\nThe Right Way is to write some complex configurable program with so many\noptions that you go half-insane just trying to manage them all, and put\nit off with duct-tape solutions until you see exactly to the core of the\nproblem, and finally snap and write an awesome option parser.\n\nIf you want to write an option parser, don't write an option parser.\nWrite a package manager, or a source control system, or a service\nrestarter, or an operating system.  You probably won't end up with a\ngood one of those, but if you don't give up, and you are relentless and\ndiligent enough in your procrastination, you may just end up with a very\nnice option parser.\n\n## USAGE\n\n    // my-program.js\n    var nopt = require(\"nopt\")\n      , Stream = require(\"stream\").Stream\n      , path = require(\"path\")\n      , knownOpts = { \"foo\" : [String, null]\n                    , \"bar\" : [Stream, Number]\n                    , \"baz\" : path\n                    , \"bloo\" : [ \"big\", \"medium\", \"small\" ]\n                    , \"flag\" : Boolean\n                    , \"pick\" : Boolean\n                    , \"many\" : [String, Array]\n                    }\n      , shortHands = { \"foofoo\" : [\"--foo\", \"Mr. Foo\"]\n                     , \"b7\" : [\"--bar\", \"7\"]\n                     , \"m\" : [\"--bloo\", \"medium\"]\n                     , \"p\" : [\"--pick\"]\n                     , \"f\" : [\"--flag\"]\n                     }\n                 // everything is optional.\n                 // knownOpts and shorthands default to {}\n                 // arg list defaults to process.argv\n                 // slice defaults to 2\n      , parsed = nopt(knownOpts, shortHands, process.argv, 2)\n    console.log(parsed)\n\nThis would give you support for any of the following:\n\n```bash\n$ node my-program.js --foo \"blerp\" --no-flag\n{ \"foo\" : \"blerp\", \"flag\" : false }\n\n$ node my-program.js ---bar 7 --foo \"Mr. Hand\" --flag\n{ bar: 7, foo: \"Mr. Hand\", flag: true }\n\n$ node my-program.js --foo \"blerp\" -f -----p\n{ foo: \"blerp\", flag: true, pick: true }\n\n$ node my-program.js -fp --foofoo\n{ foo: \"Mr. Foo\", flag: true, pick: true }\n\n$ node my-program.js --foofoo -- -fp  # -- stops the flag parsing.\n{ foo: \"Mr. Foo\", argv: { remain: [\"-fp\"] } }\n\n$ node my-program.js --blatzk -fp # unknown opts are ok.\n{ blatzk: true, flag: true, pick: true }\n\n$ node my-program.js --blatzk=1000 -fp # but you need to use = if they have a value\n{ blatzk: 1000, flag: true, pick: true }\n\n$ node my-program.js --no-blatzk -fp # unless they start with \"no-\"\n{ blatzk: false, flag: true, pick: true }\n\n$ node my-program.js --baz b/a/z # known paths are resolved.\n{ baz: \"/Users/isaacs/b/a/z\" }\n\n# if Array is one of the types, then it can take many\n# values, and will always be an array.  The other types provided\n# specify what types are allowed in the list.\n\n$ node my-program.js --many 1 --many null --many foo\n{ many: [\"1\", \"null\", \"foo\"] }\n\n$ node my-program.js --many foo\n{ many: [\"foo\"] }\n```\n\nRead the tests at the bottom of `lib/nopt.js` for more examples of\nwhat this puppy can do.\n\n## Types\n\nThe following types are supported, and defined on `nopt.typeDefs`\n\n* String: A normal string.  No parsing is done.\n* path: A file system path.  Gets resolved against cwd if not absolute.\n* url: A url.  If it doesn't parse, it isn't accepted.\n* Number: Must be numeric.\n* Date: Must parse as a date. If it does, and `Date` is one of the options,\n  then it will return a Date object, not a string.\n* Boolean: Must be either `true` or `false`.  If an option is a boolean,\n  then it does not need a value, and its presence will imply `true` as\n  the value.  To negate boolean flags, do `--no-whatever` or `--whatever\n  false`\n* NaN: Means that the option is strictly not allowed.  Any value will\n  fail.\n* Stream: An object matching the \"Stream\" class in node.  Valuable\n  for use when validating programmatically.  (npm uses this to let you\n  supply any WriteStream on the `outfd` and `logfd` config options.)\n* Array: If `Array` is specified as one of the types, then the value\n  will be parsed as a list of options.  This means that multiple values\n  can be specified, and that the value will always be an array.\n\nIf a type is an array of values not on this list, then those are\nconsidered valid values.  For instance, in the example above, the\n`--bloo` option can only be one of `\"big\"`, `\"medium\"`, or `\"small\"`,\nand any other value will be rejected.\n\nWhen parsing unknown fields, `\"true\"`, `\"false\"`, and `\"null\"` will be\ninterpreted as their JavaScript equivalents, and numeric values will be\ninterpreted as a number.\n\nYou can also mix types and values, or multiple types, in a list.  For\ninstance `{ blah: [Number, null] }` would allow a value to be set to\neither a Number or null.  When types are ordered, this implies a\npreference, and the first type that can be used to properly interpret\nthe value will be used.\n\nTo define a new type, add it to `nopt.typeDefs`.  Each item in that\nhash is an object with a `type` member and a `validate` method.  The\n`type` member is an object that matches what goes in the type list.  The\n`validate` method is a function that gets called with `validate(data,\nkey, val)`.  Validate methods should assign `data[key]` to the valid\nvalue of `val` if it can be handled properly, or return boolean\n`false` if it cannot.\n\nYou can also call `nopt.clean(data, types, typeDefs)` to clean up a\nconfig object and remove its invalid properties.\n\n## Error Handling\n\nBy default, nopt outputs a warning to standard error when invalid\noptions are found.  You can change this behavior by assigning a method\nto `nopt.invalidHandler`.  This method will be called with\nthe offending `nopt.invalidHandler(key, val, types)`.\n\nIf no `nopt.invalidHandler` is assigned, then it will console.error\nits whining.  If it is assigned to boolean `false` then the warning is\nsuppressed.\n\n## Abbreviations\n\nYes, they are supported.  If you define options like this:\n\n```javascript\n{ \"foolhardyelephants\" : Boolean\n, \"pileofmonkeys\" : Boolean }\n```\n\nThen this will work:\n\n```bash\nnode program.js --foolhar --pil\nnode program.js --no-f --pileofmon\n# etc.\n```\n\n## Shorthands\n\nShorthands are a hash of shorter option names to a snippet of args that\nthey expand to.\n\nIf multiple one-character shorthands are all combined, and the\ncombination does not unambiguously match any other option or shorthand,\nthen they will be broken up into their constituent parts.  For example:\n\n```json\n{ \"s\" : [\"--loglevel\", \"silent\"]\n, \"g\" : \"--global\"\n, \"f\" : \"--force\"\n, \"p\" : \"--parseable\"\n, \"l\" : \"--long\"\n}\n```\n\n```bash\nnpm ls -sgflp\n# just like doing this:\nnpm ls --loglevel silent --global --force --long --parseable\n```\n\n## The Rest of the args\n\nThe config object returned by nopt is given a special member called\n`argv`, which is an object with the following fields:\n\n* `remain`: The remaining args after all the parsing has occurred.\n* `original`: The args as they originally appeared.\n* `cooked`: The args after flags and shorthands are expanded.\n\n## Slicing\n\nNode programs are called with more or less the exact argv as it appears\nin C land, after the v8 and node-specific options have been plucked off.\nAs such, `argv[0]` is always `node` and `argv[1]` is always the\nJavaScript program being run.\n\nThat's usually not very useful to you.  So they're sliced off by\ndefault.  If you want them, then you can pass in `0` as the last\nargument, or any other number that you'd like to slice off the start of\nthe list.\n",
+          "readmeFilename": "README.md",
+          "bugs": {"url": "https://github.com/isaacs/nopt/issues"},
+          "homepage": "https://github.com/isaacs/nopt",
+          "_id": "nopt@2.2.1",
+          "_shasum": "2aa09b7d1768487b3b89a9c5aa52335bff0baea7",
+          "_from": "nopt@~2",
+          "_resolved": "https://registry.npmjs.org/nopt/-/nopt-2.2.1.tgz",
+          "realName": "nopt",
+          "_dependencies": {"abbrev": "1"},
+          "extraneous": false,
+          "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/nopt",
+          "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/nopt",
+          "depth": 2,
+          "peerDependencies": {}
+        },
+        "runforcover": {
+          "name": "runforcover",
+          "version": "0.0.2",
+          "description": "require plugin for js code coverage using bunker",
+          "main": "index.js",
+          "directories": {
+            "lib": ".",
+            "test": "test"
+          },
+          "dependencies": {
+            "bunker": {
+              "name": "bunker",
+              "version": "0.1.2",
+              "description": "code coverage in native javascript",
+              "main": "index.js",
+              "directories": {
+                "lib": ".",
+                "example": "example",
+                "test": "test"
+              },
+              "dependencies": {
+                "burrito": {
+                  "name": "burrito",
+                  "description": "Wrap up expressions with a trace function while walking the AST with rice and beans on the side",
+                  "version": "0.2.12",
+                  "repository": {
+                    "type": "git",
+                    "url": "git://github.com/substack/node-burrito.git"
+                  },
+                  "main": "./index.js",
+                  "keywords": [
+                    "trace",
+                    "ast",
+                    "walk",
+                    "syntax",
+                    "source",
+                    "tree",
+                    "uglify"
+                  ],
+                  "directories": {
+                    "lib": ".",
+                    "example": "example",
+                    "test": "test"
+                  },
+                  "scripts": {"test": "tap test/*.js"},
+                  "dependencies": {
+                    "traverse": {
+                      "name": "traverse",
+                      "version": "0.5.2",
+                      "description": "Traverse and transform objects by visiting every node on a recursive walk",
+                      "author": {"name": "James Halliday"},
+                      "license": "MIT/X11",
+                      "main": "./index",
+                      "repository": {
+                        "type": "git",
+                        "url": "git://github.com/substack/js-traverse.git"
+                      },
+                      "devDependencies": {"expresso": "0.7.x"},
+                      "scripts": {"test": "expresso"},
+                      "_npmJsonOpts": {
+                        "file": "/home/substack/.npm/traverse/0.5.2/package/package.json",
+                        "wscript": false,
+                        "contributors": false,
+                        "serverjs": false
+                      },
+                      "_id": "traverse@0.5.2",
+                      "dependencies": {},
+                      "engines": {"node": "*"},
+                      "_engineSupported": true,
+                      "_npmVersion": "1.0.30",
+                      "_nodeVersion": "v0.4.12",
+                      "_defaultsLoaded": true,
+                      "dist": {
+                        "shasum": "e203c58d5f7f0e37db6e74c0acb929bb09b61d85",
+                        "tarball": "http://ci.strongloop.com:4873/traverse/-/traverse-0.5.2.tgz"
+                      },
+                      "maintainers": [
+                        {
+                          "name": "substack",
+                          "email": "mail@substack.net"
+                        }
+                      ],
+                      "directories": {},
+                      "_shasum": "e203c58d5f7f0e37db6e74c0acb929bb09b61d85",
+                      "_from": "traverse@~0.5.1",
+                      "_resolved": "http://ci.strongloop.com:4873/traverse/-/traverse-0.5.2.tgz",
+                      "bugs": {"url": "https://github.com/substack/js-traverse/issues"},
+                      "readme": "ERROR: No README data found!",
+                      "homepage": "https://github.com/substack/js-traverse",
+                      "realName": "traverse",
+                      "_dependencies": {},
+                      "extraneous": false,
+                      "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/runforcover/node_modules/bunker/node_modules/burrito/node_modules/traverse",
+                      "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/runforcover/node_modules/bunker/node_modules/burrito/node_modules/traverse",
+                      "depth": 5,
+                      "peerDependencies": {}
+                    },
+                    "uglify-js": {
+                      "name": "uglify-js",
+                      "description": "JavaScript parser and compressor/beautifier toolkit",
+                      "author": {
+                        "name": "Mihai Bazon",
+                        "email": "mihai.bazon@gmail.com",
+                        "url": "http://mihai.bazon.net/blog"
+                      },
+                      "version": "1.1.1",
+                      "main": "./uglify-js.js",
+                      "bin": {"uglifyjs": "./bin/uglifyjs"},
+                      "repository": {
+                        "type": "git",
+                        "url": "git@github.com:mishoo/UglifyJS.git"
+                      },
+                      "_npmUser": {
+                        "name": "mishoo",
+                        "email": "mihai.bazon@gmail.com"
+                      },
+                      "_id": "uglify-js@1.1.1",
+                      "dependencies": {},
+                      "devDependencies": {},
+                      "engines": {"node": "*"},
+                      "_engineSupported": true,
+                      "_npmVersion": "1.0.94",
+                      "_nodeVersion": "v0.5.8",
+                      "_defaultsLoaded": true,
+                      "dist": {
+                        "shasum": "ee71a97c4cefd06a1a9b20437f34118982aa035b",
+                        "tarball": "http://ci.strongloop.com:4873/uglify-js/-/uglify-js-1.1.1.tgz"
+                      },
+                      "maintainers": [
+                        {
+                          "name": "caires",
+                          "email": "cairesvs@gmail.com"
+                        },
+                        {
+                          "name": "mape",
+                          "email": "mape@mape.me"
+                        },
+                        {
+                          "name": "mishoo",
+                          "email": "mihai.bazon@gmail.com"
+                        }
+                      ],
+                      "directories": {},
+                      "_shasum": "ee71a97c4cefd06a1a9b20437f34118982aa035b",
+                      "_from": "uglify-js@~1.1.1",
+                      "_resolved": "http://ci.strongloop.com:4873/uglify-js/-/uglify-js-1.1.1.tgz",
+                      "bugs": {"url": "https://github.com/mishoo/UglifyJS/issues"},
+                      "readme": "ERROR: No README data found!",
+                      "homepage": "https://github.com/mishoo/UglifyJS",
+                      "realName": "uglify-js",
+                      "_dependencies": {},
+                      "extraneous": false,
+                      "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/runforcover/node_modules/bunker/node_modules/burrito/node_modules/uglify-js",
+                      "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/runforcover/node_modules/bunker/node_modules/burrito/node_modules/uglify-js",
+                      "depth": 5,
+                      "peerDependencies": {}
+                    }
+                  },
+                  "devDependencies": {"tap": "~0.2.5"},
+                  "engines": {"node": ">=0.4.0"},
+                  "license": "BSD",
+                  "author": {
+                    "name": "James Halliday",
+                    "email": "mail@substack.net",
+                    "url": "http://substack.net"
+                  },
+                  "_npmUser": {
+                    "name": "substack",
+                    "email": "mail@substack.net"
+                  },
+                  "_id": "burrito@0.2.12",
+                  "optionalDependencies": {},
+                  "_engineSupported": true,
+                  "_npmVersion": "1.1.19",
+                  "_nodeVersion": "v0.6.11",
+                  "_defaultsLoaded": true,
+                  "dist": {
+                    "shasum": "d0d6e6ac81d5e99789c6fa4accb0b0031ea54f6b",
+                    "tarball": "http://ci.strongloop.com:4873/burrito/-/burrito-0.2.12.tgz"
+                  },
+                  "maintainers": [
+                    {
+                      "name": "substack",
+                      "email": "mail@substack.net"
+                    }
+                  ],
+                  "_shasum": "d0d6e6ac81d5e99789c6fa4accb0b0031ea54f6b",
+                  "_from": "burrito@>=0.2.5 <0.3",
+                  "_resolved": "http://ci.strongloop.com:4873/burrito/-/burrito-0.2.12.tgz",
+                  "bugs": {"url": "https://github.com/substack/node-burrito/issues"},
+                  "readme": "ERROR: No README data found!",
+                  "homepage": "https://github.com/substack/node-burrito",
+                  "realName": "burrito",
+                  "_dependencies": {
+                    "traverse": "~0.5.1",
+                    "uglify-js": "~1.1.1"
+                  },
+                  "extraneous": false,
+                  "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/runforcover/node_modules/bunker/node_modules/burrito",
+                  "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/runforcover/node_modules/bunker/node_modules/burrito",
+                  "depth": 4,
+                  "peerDependencies": {}
+                }
+              },
+              "devDependencies": {"tap": "~0.2.4"},
+              "scripts": {"test": "tap test/*.js"},
+              "repository": {
+                "type": "git",
+                "url": "git://github.com/substack/node-bunker.git"
+              },
+              "keywords": [
+                "code",
+                "coverage"
+              ],
+              "author": {
+                "name": "James Halliday",
+                "email": "mail@substack.net",
+                "url": "http://substack.net"
+              },
+              "license": "MIT/X11",
+              "engine": {"node": ">=0.4"},
+              "_npmUser": {
+                "name": "substack",
+                "email": "mail@substack.net"
+              },
+              "_id": "bunker@0.1.2",
+              "optionalDependencies": {},
+              "engines": {"node": "*"},
+              "_engineSupported": true,
+              "_npmVersion": "1.1.1",
+              "_nodeVersion": "v0.6.11",
+              "_defaultsLoaded": true,
+              "dist": {
+                "shasum": "c88992464a8e2a6ede86930375f92b58077ef97c",
+                "tarball": "http://ci.strongloop.com:4873/bunker/-/bunker-0.1.2.tgz"
+              },
+              "maintainers": [
+                {
+                  "name": "substack",
+                  "email": "mail@substack.net"
+                }
+              ],
+              "_shasum": "c88992464a8e2a6ede86930375f92b58077ef97c",
+              "_from": "bunker@0.1.X",
+              "_resolved": "http://ci.strongloop.com:4873/bunker/-/bunker-0.1.2.tgz",
+              "bugs": {"url": "https://github.com/substack/node-bunker/issues"},
+              "readme": "ERROR: No README data found!",
+              "homepage": "https://github.com/substack/node-bunker",
+              "realName": "bunker",
+              "_dependencies": {"burrito": ">=0.2.5 <0.3"},
+              "extraneous": false,
+              "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/runforcover/node_modules/bunker",
+              "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/runforcover/node_modules/bunker",
+              "depth": 3,
+              "peerDependencies": {}
+            }
+          },
+          "scripts": {"test": "node test/index.js"},
+          "repository": {
+            "type": "git",
+            "url": "git://github.com/chrisdickinson/node-runforcover.git"
+          },
+          "keywords": [
+            "code",
+            "coverage",
+            "bunker"
+          ],
+          "author": {
+            "name": "Chris Dickinson",
+            "email": "chris@neversaw.us",
+            "url": "http://neversaw.us"
+          },
+          "license": "new BSD",
+          "engine": {"node": ">=0.4"},
+          "_npmUser": {
+            "name": "chrisdickinson",
+            "email": "chris@neversaw.us"
+          },
+          "_id": "runforcover@0.0.2",
+          "devDependencies": {},
+          "engines": {"node": "*"},
+          "_engineSupported": true,
+          "_npmVersion": "1.1.0-alpha-2",
+          "_nodeVersion": "v0.6.3",
+          "_defaultsLoaded": true,
+          "dist": {
+            "shasum": "344f057d8d45d33aebc6cc82204678f69c4857cc",
+            "tarball": "http://ci.strongloop.com:4873/runforcover/-/runforcover-0.0.2.tgz"
+          },
+          "maintainers": [
+            {
+              "name": "chrisdickinson",
+              "email": "chris@neversaw.us"
+            }
+          ],
+          "_shasum": "344f057d8d45d33aebc6cc82204678f69c4857cc",
+          "_from": "runforcover@~0.0.2",
+          "_resolved": "http://ci.strongloop.com:4873/runforcover/-/runforcover-0.0.2.tgz",
+          "bugs": {"url": "https://github.com/chrisdickinson/node-runforcover/issues"},
+          "readme": "ERROR: No README data found!",
+          "homepage": "https://github.com/chrisdickinson/node-runforcover",
+          "realName": "runforcover",
+          "_dependencies": {"bunker": "0.1.X"},
+          "extraneous": false,
+          "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/runforcover",
+          "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/runforcover",
+          "depth": 2,
+          "peerDependencies": {}
+        },
+        "slide": {
+          "name": "slide",
+          "version": "1.1.6",
+          "author": {
+            "name": "Isaac Z. Schlueter",
+            "email": "i@izs.me",
+            "url": "http://blog.izs.me/"
+          },
+          "contributors": [
+            {
+              "name": "S. Sriram",
+              "email": "ssriram@gmail.com",
+              "url": "http://www.565labs.com"
+            }
+          ],
+          "description": "A flow control lib small enough to fit on in a slide presentation. Derived live at Oak.JS",
+          "main": "./lib/slide.js",
+          "dependencies": {},
+          "devDependencies": {},
+          "engines": {"node": "*"},
+          "repository": {
+            "type": "git",
+            "url": "git://github.com/isaacs/slide-flow-control.git"
+          },
+          "license": "ISC",
+          "gitHead": "8345e51ee41e35825abc1a40750ea11462f57028",
+          "bugs": {"url": "https://github.com/isaacs/slide-flow-control/issues"},
+          "homepage": "https://github.com/isaacs/slide-flow-control",
+          "_id": "slide@1.1.6",
+          "scripts": {},
+          "_shasum": "56eb027d65b4d2dce6cb2e2d32c4d4afc9e1d707",
+          "_from": "slide@*",
+          "_npmVersion": "2.0.0-beta.3",
+          "_npmUser": {
+            "name": "isaacs",
+            "email": "i@izs.me"
+          },
+          "maintainers": [
+            {
+              "name": "isaacs",
+              "email": "i@izs.me"
+            }
+          ],
+          "dist": {
+            "shasum": "56eb027d65b4d2dce6cb2e2d32c4d4afc9e1d707",
+            "tarball": "http://ci.strongloop.com:4873/slide/-/slide-1.1.6.tgz"
+          },
+          "directories": {},
+          "_resolved": "http://ci.strongloop.com:4873/slide/-/slide-1.1.6.tgz",
+          "readme": "ERROR: No README data found!",
+          "realName": "slide",
+          "_dependencies": {},
+          "extraneous": false,
+          "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/slide",
+          "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/slide",
+          "depth": 2,
+          "peerDependencies": {}
+        },
+        "yamlish": {
+          "name": "yamlish",
+          "description": "Parser/encoder for the yamlish format",
+          "repository": {
+            "type": "git",
+            "url": "https://github.com/isaacs/yamlish"
+          },
+          "version": "0.0.6",
+          "main": "yamlish.js",
+          "keywords": [
+            "yaml",
+            "yamlish",
+            "test",
+            "anything",
+            "protocol",
+            "tap"
+          ],
+          "license": {
+            "type": "MIT",
+            "url": "http://github.com/isaacs/yamlish/raw/master/LICENSE"
+          },
+          "author": {
+            "name": "Isaac Z. Schlueter",
+            "email": "i@izs.me",
+            "url": "http://blog.izs.me/"
+          },
+          "gitHead": "fbb89dc1c2d1b53feb07f7130f1fd0e4e402b718",
+          "bugs": {"url": "https://github.com/isaacs/yamlish/issues"},
+          "homepage": "https://github.com/isaacs/yamlish",
+          "_id": "yamlish@0.0.6",
+          "scripts": {},
+          "_shasum": "c5df8f7661731351e39eb52223f83a46659452e3",
+          "_from": "yamlish@*",
+          "_npmVersion": "2.0.0-alpha.6.0",
+          "_npmUser": {
+            "name": "isaacs",
+            "email": "i@izs.me"
+          },
+          "maintainers": [
+            {
+              "name": "isaacs",
+              "email": "i@izs.me"
+            }
+          ],
+          "dist": {
+            "shasum": "c5df8f7661731351e39eb52223f83a46659452e3",
+            "tarball": "http://ci.strongloop.com:4873/yamlish/-/yamlish-0.0.6.tgz"
+          },
+          "directories": {},
+          "_resolved": "http://ci.strongloop.com:4873/yamlish/-/yamlish-0.0.6.tgz",
+          "readme": "ERROR: No README data found!",
+          "realName": "yamlish",
+          "dependencies": {},
+          "_dependencies": {},
+          "extraneous": false,
+          "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/yamlish",
+          "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap/node_modules/yamlish",
+          "depth": 2,
+          "peerDependencies": {}
+        }
+      },
+      "keywords": [
+        "assert",
+        "test",
+        "tap"
+      ],
+      "contributors": [
+        {
+          "name": "Isaac Z. Schlueter",
+          "email": "i@izs.me",
+          "url": "http://blog.izs.me"
+        },
+        {
+          "name": "baudehlo",
+          "email": "helpme+github@gmail.com"
+        }
+      ],
+      "license": {
+        "type": "MIT",
+        "url": "https://github.com/isaacs/node-tap/raw/master/LICENSE"
+      },
+      "repository": {
+        "type": "git",
+        "url": "git://github.com/isaacs/node-tap.git"
+      },
+      "scripts": {"test": "bin/tap.js test/*.js"},
+      "devDependencies": {},
+      "gitHead": "3a56a2901e458128e36c069159d5713f0a8ef947",
+      "bugs": {"url": "https://github.com/isaacs/node-tap/issues"},
+      "homepage": "https://github.com/isaacs/node-tap",
+      "_id": "tap@0.5.0",
+      "_shasum": "b116e82458027af355048a4212526e7be2f653b6",
+      "_from": "tap@",
+      "_npmVersion": "2.2.0",
+      "_nodeVersion": "0.10.35",
+      "_npmUser": {
+        "name": "isaacs",
+        "email": "i@izs.me"
+      },
+      "maintainers": [
+        {
+          "name": "isaacs",
+          "email": "i@izs.me"
+        }
+      ],
+      "dist": {
+        "shasum": "b116e82458027af355048a4212526e7be2f653b6",
+        "tarball": "http://ci.strongloop.com:4873/tap/-/tap-0.5.0.tgz"
+      },
+      "directories": {},
+      "_resolved": "http://ci.strongloop.com:4873/tap/-/tap-0.5.0.tgz",
+      "readme": "ERROR: No README data found!",
+      "realName": "tap",
+      "_dependencies": {
+        "buffer-equal": "~0.0.0",
+        "deep-equal": "~0.0.0",
+        "difflet": "~0.2.0",
+        "glob": "~3.2.1",
+        "inherits": "*",
+        "mkdirp": "~0.3 || 0.4 || 0.5",
+        "nopt": "~2",
+        "runforcover": "~0.0.2",
+        "slide": "*",
+        "yamlish": "*"
+      },
+      "extraneous": false,
+      "path": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap",
+      "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719/node_modules/tap",
+      "depth": 1,
+      "peerDependencies": {}
+    }
+  },
+  "bundleDependencies": ["tap"],
+  "gitHead": "62e631256c7a6aefb29d21766d5db282abdba863",
+  "readme": "ERROR: No README data found!",
+  "_id": "test@0.0.0",
+  "realName": "test",
+  "_dependencies": {"tap": "^0.5.0"},
+  "extraneous": false,
+  "path": ".",
+  "realPath": "/Users/kraman/.strong-pm/work/62e631256c7a6aefb29d21766d5db282abdba863.1426097225719",
+  "depth": 0,
+  "peerDependencies": {},
+  "root": true
+}

@@ -6,15 +6,16 @@ var Parser = require('posix-getopt').BasicParser;
 var _ = require('lodash');
 var assert = require('assert');
 var concat = require('concat-stream');
-var home = require('osenv').home();
 var debug = require('debug')('strong-mesh-client:meshctl');
 var fs = require('fs');
+var home = require('osenv').home();
+var npmls = require('strong-npm-ls');
 var path = require('path');
-var userHome = require('user-home');
-var url = require('url');
-var util = require('util');
 var sprintf = require('sprintf');
+var url = require('url');
 var urlDefaults = require('strong-url-defaults');
+var userHome = require('user-home');
+var util = require('util');
 
 assert(userHome, 'User home directory cannot be determined!');
 
@@ -98,6 +99,7 @@ client.instanceFind(instanceId, function(err, instance) {
     'cpu-start': cmdCpuProfilingStart,
     'cpu-stop': cmdCpuProfilingStop,
     'heap-snapshot': cmdHeapSnapshot,
+    'ls': cmdLs,
   }[command] || unknown)(instance);
 });
 
@@ -279,6 +281,15 @@ function cmdHeapSnapshot(instance) {
       console.log('Heap snapshot written to `%s`, load into Chrome Dev Tools',
         fileName);
     });
+  });
+}
+
+function cmdLs(instance) {
+  var depth = optional(Number.MAX_VALUE);
+
+  instance.npmModuleList(function(err, response) {
+    dieIf(err);
+    console.log(npmls.printable(response, depth));
   });
 }
 
