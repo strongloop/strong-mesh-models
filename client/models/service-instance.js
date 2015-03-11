@@ -116,6 +116,30 @@ module.exports = function(ServiceInstance) {
   }
   ServiceInstance.prototype.clusterSizeSet = clusterSizeSet;
 
+  /**
+   * Start tracking objects on a worker.
+   *
+   * @param {number} target Worker PID or Worker Id.
+   * @param {function} callback Callback function.
+   */
+  function objectTrackingStart(target, callback) {
+    return this._appCommand({cmd: 'start-tracking-objects', target: target},
+      callback);
+  }
+  ServiceInstance.prototype.objectTrackingStart = objectTrackingStart;
+
+  /**
+   * Stop tracking objects on a worker.
+   *
+   * @param {number} target Worker PID or Worker Id.
+   * @param {function} callback Callback function.
+   */
+  function objectTrackingStop(target, callback) {
+    return this._appCommand({cmd: 'stop-tracking-objects', target: target},
+      callback);
+  }
+  ServiceInstance.prototype.objectTrackingStop = objectTrackingStop;
+
   function downloadProfile(profileId, callback) {
     var Service = ServiceInstance.app.models.ServerService;
 

@@ -92,6 +92,8 @@ client.instanceFind(instanceId, function(err, instance) {
     'soft-restart': cmdSoftRestart,
     'cluster-restart': cmdRollingRestart,
     'set-size': cmdSetClusterSize,
+    'objects-start': cmdObjectTrackingStart,
+    'objects-stop': cmdObjectTrackingStop,
   }[command] || unknown)(instance);
 });
 
@@ -211,7 +213,23 @@ function cmdRollingRestart(instance) {
 function cmdSetClusterSize(instance) {
   var size = mandatory('size');
 
-  instance.clusterSizeSet(size, false, function(err, response) {
+  instance.clusterSizeSet(size, false, function(err /*, response*/) {
+    dieIf(err);
+  });
+}
+
+function cmdObjectTrackingStart(instance) {
+  var target = mandatory('target');
+
+  instance.objectTrackingStart(target, function(err /*, response*/) {
+    dieIf(err);
+  });
+}
+
+function cmdObjectTrackingStop(instance) {
+  var target = mandatory('target');
+
+  instance.objectTrackingStop(target, function(err  /*, response*/) {
     dieIf(err);
   });
 }
