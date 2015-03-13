@@ -3,10 +3,18 @@ var ServiceManager = require('./service-manager');
 var boot = require('loopback-boot');
 var debug = require('debug')('strong-mesh-models:server');
 var loopback = require('loopback');
+var MinkeLite   = require('minkelite')
 
 function server(serviceManager) {
   var app = module.exports = loopback();
   app.serviceManager = serviceManager;
+  app.minkelite = new MinkeLite({
+    start_server: true, server_port: 8104, // start HTTP server for dev testing only
+    in_memory: false, // product call: persistent or not?
+    chart_minutes:1440, // product call: user settable?
+    stale_minutes: 1450, // 10 min. longer than chart_minutes to hold all the data
+    max_transaction_count: 100 // product call: user settable?
+  });
 
   // Bootstrap the application, configure models, datasources and middleware.
   // Sub-apps like REST API are mounted via boot scripts.
@@ -76,6 +84,11 @@ function server(serviceManager) {
         break;
       case 'agent:trace':
         AgentTrace.recordTrace(instanceId, uInfo, callback);
+        break;
+      case 'trace:object':
+        var traceVersion = uInfo.record.version;
+        var accountName = uInfo.record.packet.metadata.account_key;
+        app.minkelite.postRawPieces(traceVersion,accountName,uInfo.record.packet,callback);
         break;
       case 'express:usage-record':
         ExpressUsageRecord.recordUsage(instanceId, uInfo, callback);
