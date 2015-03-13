@@ -189,35 +189,35 @@ function cmdStatus(instance) {
 function cmdStart(instance) {
   instance.appStart(function(err, response) {
     dieIf(err);
-    console.log(response.toString());
+    console.log(response.message);
   });
 }
 
 function cmdStop(instance) {
   instance.appStop({}, function(err, response) {
     dieIf(err);
-    console.log(response.toString());
+    console.log(response.message);
   });
 }
 
 function cmdSoftStop(instance) {
   instance.appStop({soft: true}, function(err, response) {
     dieIf(err);
-    console.log(response.toString());
+    console.log(response.message);
   });
 }
 
 function cmdRestart(instance) {
   instance.appRestart({}, function(err, response) {
     dieIf(err);
-    console.log(response.toString());
+    console.log(response.message);
   });
 }
 
 function cmdSoftRestart(instance) {
   instance.appRestart({soft: true}, function(err, response) {
     dieIf(err);
-    console.log(response.toString());
+    console.log(response.message);
   });
 }
 

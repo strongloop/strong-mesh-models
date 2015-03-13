@@ -14,7 +14,7 @@ test('Test start command', function(t) {
     t.test('Setup service manager', function(tt) {
       function ctlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'start'}, 'Request should match');
-        callback(null, 'starting...');
+        callback(null, {message: 'starting...'});
       }
       TestServiceManager.prototype.ctlRequest = ctlRequest;
       tt.end();
@@ -23,7 +23,7 @@ test('Test start command', function(t) {
     t.test('Start API', function(tt) {
       instance.appStart(function(err, response) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.toString(), 'starting...',
+        tt.equal(response.message, 'starting...',
           'response should match');
         tt.end();
       });

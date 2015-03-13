@@ -14,7 +14,8 @@ test('Test restart command', function(t) {
     t.test('Setup service manager (hard restart)', function(tt) {
       function ctlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'restart'}, 'Request should match');
-        callback(null, 'hard stopped with status SIGTERM, restarting...');
+        callback(null,
+          {message: 'hard stopped with status SIGTERM, restarting...'});
       }
       TestServiceManager.prototype.ctlRequest = ctlRequest;
       tt.end();
@@ -23,7 +24,7 @@ test('Test restart command', function(t) {
     t.test('Restart API (hard restart)', function(tt) {
       instance.appRestart({}, function(err, response) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.toString(),
+        tt.equal(response.message,
           'hard stopped with status SIGTERM, restarting...',
           'response should match');
         tt.end();
@@ -43,7 +44,7 @@ test('Test restart command', function(t) {
     t.test('Setup service manager (soft restart)', function(tt) {
       function ctlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'soft-restart'}, 'Request should match');
-        callback(null, 'soft stopped with status 0, restarting...');
+        callback(null, {message: 'soft stopped with status 0, restarting...'});
       }
       TestServiceManager.prototype.ctlRequest = ctlRequest;
       tt.end();
@@ -52,7 +53,7 @@ test('Test restart command', function(t) {
     t.test('Restart API (soft restart)', function(tt) {
       instance.appRestart({soft: true}, function(err, response) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.toString(),
+        tt.equal(response.message,
           'soft stopped with status 0, restarting...',
           'response should match');
         tt.end();
@@ -73,7 +74,7 @@ test('Test restart command', function(t) {
       function ctlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'current', sub: 'restart'},
           'Request should match');
-        callback(null, 'discarded message');
+        callback(null, {message: 'discarded message'});
       }
       TestServiceManager.prototype.ctlRequest = ctlRequest;
       tt.end();
@@ -82,7 +83,7 @@ test('Test restart command', function(t) {
     t.test('Restart API (rolling restart)', function(tt) {
       instance.appRestart({rolling: true}, function(err, response) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.toString(), 'discarded message',
+        tt.equal(response.message, 'discarded message',
           'response should match');
         tt.end();
       });

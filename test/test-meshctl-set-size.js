@@ -14,7 +14,7 @@ test('Test set-size command', function(t) {
     t.test('Setup service manager (non-persisted)', function(tt) {
       function ctlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'current', sub: 'set-size', size: 2});
-        callback(null, 'size was changed');
+        callback(null, {message: 'size was changed'});
       }
       TestServiceManager.prototype.ctlRequest = ctlRequest;
       tt.end();
@@ -23,7 +23,7 @@ test('Test set-size command', function(t) {
     t.test('set-size API (non-persisted)', function(tt) {
       instance.clusterSizeSet(2, false, function(err, response) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.toString(), 'size was changed',
+        tt.equal(response.message, 'size was changed',
           'response should match');
         tt.end();
       });
@@ -42,7 +42,7 @@ test('Test set-size command', function(t) {
     t.test('Setup service manager (persisted)', function(tt) {
       function ctlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'current', sub: 'set-size', size: 3});
-        callback(null, 'size was changed');
+        callback(null, {message: 'size was changed'});
       }
       TestServiceManager.prototype.ctlRequest = ctlRequest;
 
@@ -58,7 +58,7 @@ test('Test set-size command', function(t) {
     t.test('set-size API (persisted)', function(tt) {
       instance.clusterSizeSet(3, true, function(err, response) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.toString(), 'size was changed',
+        tt.equal(response.message, 'size was changed',
           'response should match');
         tt.end();
       });

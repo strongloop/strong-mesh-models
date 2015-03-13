@@ -15,7 +15,7 @@ test('Test SSH tunnel', function(t) {
     t.test('Setup service manager', function(tt) {
       function ctlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'start'}, 'Request should match');
-        callback(null, 'starting...');
+        callback(null, {message: 'starting...'});
       }
       TestServiceManager.prototype.ctlRequest = ctlRequest;
       tt.end();

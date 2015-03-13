@@ -15,7 +15,7 @@ test('Test object-tracking commands', function(t) {
       function ctlRequest(s, i, req, callback) {
         assert.deepEqual(req,
           {cmd: 'current', sub: 'start-tracking-objects', target: 1});
-        callback(null, 'object tracking started');
+        callback(null, {message: 'object tracking started'});
       }
       TestServiceManager.prototype.ctlRequest = ctlRequest;
       tt.end();
@@ -24,7 +24,7 @@ test('Test object-tracking commands', function(t) {
     t.test('Start tracking API', function(tt) {
       instance.objectTrackingStart(1, function(err, response) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.toString(), 'object tracking started',
+        tt.equal(response.message, 'object tracking started',
           'Response should match');
         tt.end();
       });
@@ -43,7 +43,7 @@ test('Test object-tracking commands', function(t) {
       function ctlRequest(s, i, req, callback) {
         assert.deepEqual(req,
           {cmd: 'current', sub: 'stop-tracking-objects', target: 2});
-        callback(null, 'object tracking started');
+        callback(null, {message: 'object tracking started'});
       }
       TestServiceManager.prototype.ctlRequest = ctlRequest;
       tt.end();
@@ -52,7 +52,7 @@ test('Test object-tracking commands', function(t) {
     t.test('Stop tracking API', function(tt) {
       instance.objectTrackingStop(2, function(err, response) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.toString(), 'object tracking started',
+        tt.equal(response.message, 'object tracking started',
           'Response should match');
         tt.end();
       });

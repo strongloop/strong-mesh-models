@@ -14,7 +14,7 @@ test('Test stop command', function(t) {
     t.test('Setup service manager (hard stop)', function(tt) {
       function ctlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'stop'}, 'Request should match');
-        callback(null, 'hard stopped with status SIGTERM');
+        callback(null, {message: 'hard stopped with status SIGTERM'});
       }
       TestServiceManager.prototype.ctlRequest = ctlRequest;
       tt.end();
@@ -23,7 +23,7 @@ test('Test stop command', function(t) {
     t.test('Stop API (hard stop)', function(tt) {
       instance.appStop({}, function(err, response) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.toString(), 'hard stopped with status SIGTERM',
+        tt.equal(response.message, 'hard stopped with status SIGTERM',
           'response should match');
         tt.end();
       });
@@ -42,7 +42,7 @@ test('Test stop command', function(t) {
     t.test('Setup service manager (soft stop)', function(tt) {
       function ctlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'soft-stop'}, 'Request should match');
-        callback(null, 'soft stopped with status 0');
+        callback(null, {message: 'soft stopped with status 0'});
       }
       TestServiceManager.prototype.ctlRequest = ctlRequest;
       tt.end();
@@ -51,7 +51,7 @@ test('Test stop command', function(t) {
     t.test('Stop API (soft stop)', function(tt) {
       instance.appStop({soft: true}, function(err, response) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.toString(), 'soft stopped with status 0',
+        tt.equal(response.message, 'soft stopped with status 0',
           'Status response should match');
         tt.end();
       });
