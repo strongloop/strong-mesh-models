@@ -8,6 +8,19 @@ module.exports = function extServerService(ServerService) {
   }
   ServerService.prototype.getDeployEndpoint = getDeployEndpoint;
 
+  // Note:
+  //
+  // Methods like `ServerService.deploy` and `ServerService.getPack` are remote
+  // methods defined using the http ctx object. See
+  // `common/models/service.js#L19`. This means that when you boot up the
+  // models, LB tried to fill in the implementation but does it incorrectly.
+  // The implementation of `deploy` and `getPack` below is the corrected
+  // implementation.
+
+  // This file needs to be loaded after models are booted and attached to the
+  // remote datasource, otherwise they will be over-ridden by the incorrect
+  // implementation.
+
   function deploy(contentType, callback) {
     var url = this.getDeployEndpoint();
     var req = request.put(url, {headers: {'content-type': contentType}});

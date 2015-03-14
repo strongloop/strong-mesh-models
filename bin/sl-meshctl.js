@@ -84,6 +84,7 @@ if (process.env.SSH_KEY) {
 }
 
 maybeTunnel(apiUrl, sshOpts, function(err, apiUrl) {
+  dieIf(err);
   runCommand(apiUrl, command);
 });
 

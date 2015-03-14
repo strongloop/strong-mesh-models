@@ -69,8 +69,8 @@ function Client(apiUrl, options) {
   // client.models.ModelName.
   client.models();
 
-  // Override and implement the remote methods that use HTTP context because
-  // LB will not provide the correct client implementation.
+  // See comment in `client/models/server-service.js` for detail on why this is
+  // loaded here.
   serverService(client.models.ServerService);
   serviceInstance(client.models.ServiceInstance);
 }
