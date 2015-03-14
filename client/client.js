@@ -3,23 +3,55 @@ var assert = require('assert');
 var boot = require('loopback-boot');
 var debug = require('debug')('strong-mesh-models:client');
 var loopback = require('loopback');
-var request = require('request');
+var serverService = require('./models/server-service');
+var serviceInstance = require('./models/service-instance');
 var url = require('url');
+var urlDefaults = require('strong-url-defaults');
 var util = require('util');
+var path = require('path');
 
-function Client(apiUrl) {
+/**
+ * Mesh API Client
+ *
+ * @param {string} apiUrl URL for Mesh server. Formats supported include:
+ *   * /full/path/to.socket
+ *   * ./relative/path/to/socket
+ *   * http+unix:///full/path/to/socket
+ *   * http://host:port
+ *      - Uses 127.0.0.1 if host is omitted
+ *      - Uses 8701 if port is omitted
+ * @param {object} [options] Options object
+ * @param {string} [options.overridePath] Path to where API is mounted on remote
+ * server. This is normally `/api` however can be overridden if proxies or
+ * mounted at a different location.
+ * @constructor
+ */
+function Client(apiUrl, options) {
+  options = options || {};
+
+  // Useful in cases where the API requests are being proxies. This is used in
+  // Arc for the internal PM.
+  var apiBasePath = options.overridePath || '/api';
+
   // Normalize the URI
   var endpoint = url.parse(apiUrl);
-  debug('normalize endpoint %j', endpoint);
-
-  if (endpoint.protocol === 'http+unix:') {
+  if (!endpoint.protocol) {
+    this.apiUrl = util.format(
+      'http://unix:%s:%s',
+      path.resolve(apiUrl), apiBasePath
+    );
+  } else if (endpoint.protocol === 'http+unix:') {
     // Convert from our CLI format to the format request wants.
-    this.apiUrl = util.format('http://unix:%s:/api', endpoint.pathname);
+    this.apiUrl = util.format(
+      'http://unix:%s:/%s',
+      endpoint.pathname, apiBasePath
+    );
   } else if (endpoint.protocol === 'http:') {
-    endpoint.pathname = '/api'; // Loopback is mounted here
-    endpoint.hostname = endpoint.hostname || 'localhost'; // Allow http://:8888
-    delete endpoint.host; // So .hostname and .port are used to construct URL
-    this.apiUrl = url.format(endpoint);
+    this.apiUrl = urlDefaults(
+      apiUrl,
+      {host: '127.0.0.1', port: 8701},
+      {path: apiBasePath}
+    );
   } else {
     throw Error('Unknown protocol: ' + endpoint.protocol + '//');
   }
@@ -28,6 +60,7 @@ function Client(apiUrl) {
   var client = loopback();
   client.dataSource('remote', {'connector': 'remote', 'url': this.apiUrl});
   boot(client, __dirname);
+  client.set('apiUrl', this.apiUrl);
 
   this.loopback = client;
   this.models = client.models;
@@ -35,6 +68,11 @@ function Client(apiUrl) {
   // Populates the cache of models so you can access them with
   // client.models.ModelName.
   client.models();
+
+  // See comment in `client/models/server-service.js` for detail on why this is
+  // loaded here.
+  serverService(client.models.ServerService);
+  serviceInstance(client.models.ServiceInstance);
 }
 module.exports = Client;
 
@@ -68,6 +106,26 @@ function serviceDestroy(name, callback) {
   return this;
 }
 Client.prototype.serviceDestroy = serviceDestroy;
+
+/**
+ * Find a service.
+ *
+ * @param {string|number} serviceNameOrId Service ID or Name.
+ * @param {function} callback Callback function.
+ */
+function serviceFind(serviceNameOrId, callback) {
+  var Service = this.models.ServerService;
+  var filter = {
+    where: {
+      or: [
+        {name: serviceNameOrId},
+        {id: serviceNameOrId}
+      ]
+    }
+  };
+  Service.findOne(filter, callback);
+}
+Client.prototype.serviceFind = serviceFind;
 
 function groupCreate(serviceNameOrId, groupName, scale, callback) {
   var Service = this.models.ServerService;
@@ -128,67 +186,12 @@ function instanceList(serviceNameOrId, callback) {
 }
 Client.prototype.instanceList = instanceList;
 
-function runCommand(instance, req, callback) {
-  instance.actions.create({
-    request: req
-  }, function(err, action) {
-    if (err) return callback(err);
-    if (action.result && action.result.error)
-      return callback(Error(action.result.error));
+function instanceFind(instanceId, callback) {
+  var ServiceInstance = this.models.ServiceInstance;
 
-    callback(null, action.result);
+  ServiceInstance.findById(instanceId, function(err, instance) {
+    if (err || !instance) return callback(err);
+    callback(null, instance);
   });
 }
-Client.prototype.runCommand = runCommand;
-
-function downloadProfile(instance, profileId, callback) {
-  var self = this;
-  var Service = this.models.ServerService;
-
-  Service.findById(instance.serverServiceId, function(err, service) {
-    if (err) return callback(err);
-
-    service.profileDatas.findById(profileId, function(err, profile) {
-      if (err) return callback(err);
-      if (!profile) return callback(Error('Profile ' +
-      profileId +
-      ' not found'));
-
-      var url = util.format('%s/services/%s/profileDatas/%s/download',
-        self.apiUrl,
-        service.id,
-        profile.id);
-      var req = request.get(url);
-
-      // using events instead of callback interface to work around an issue
-      // where GETing the file over unix domain sockets would return an empty
-      // stream
-      req.on('response', function(rsp) {
-        if (callback) callback(null, rsp);
-        callback = null;
-      });
-      req.on('error', function(err) {
-        if (callback) callback(err);
-        callback = null;
-      });
-    });
-  });
-}
-Client.prototype.downloadProfile = downloadProfile;
-
-function getDeployEndpoint(service) {
-  return util.format('%s/services/%s/deploy', this.apiUrl, service.id);
-}
-Client.prototype.getDeployEndpoint = getDeployEndpoint;
-
-function serviceDeploy(service, contentType, callback) {
-  var url = this.getDeployEndpoint(service);
-  return request.put(url, {headers: {'content-type': contentType}}, callback);
-}
-Client.prototype.serviceDeploy = serviceDeploy;
-
-function serviceGetArtifact(service, callback) {
-  var url = util.format('%s/services/%s/pack', this.apiUrl, service.id);
-  request.get(url, callback);
-}
-Client.prototype.serviceGetArtifact = serviceGetArtifact;
+Client.prototype.instanceFind = instanceFind;

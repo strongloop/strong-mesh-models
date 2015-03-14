@@ -48,8 +48,8 @@ test('Create and destroy instances', function(t) {
       client.instanceList('My Service', function(err, instances) {
         t.ok(!err, 'Instance list should succeed');
         t.equal(instances.length, 1, 'Service should have 1 instance');
-        client.runCommand(
-          instances[0],
+        var instance = instances[0];
+        instance.runCommand(
           {cmd: 'my request'},
           function(err, res) {
             t.ok(!err, 'Request should succeed');

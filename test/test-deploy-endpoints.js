@@ -1,8 +1,9 @@
+var Client = require('../index').Client;
+var ServiceManager = require('../index').ServiceManager;
+var concat = require('concat-stream');
+var meshServer = require('../index').meshServer;
 var test = require('tap').test;
 var util = require('util');
-var meshServer = require('../index').meshServer;
-var ServiceManager = require('../index').ServiceManager;
-var Client = require('../index').Client;
 
 test('Create and destroy a service', function(t) {
   function TestServiceManager() {
@@ -33,36 +34,62 @@ test('Create and destroy a service', function(t) {
   }
   TestServiceManager.prototype.getDeployment = getDeployment;
 
-  t.plan(16);
   var server = meshServer(new TestServiceManager());
-  server.set('port', 0);
-  server.start(function(err, port) {
-    t.ok(!err, 'Server should start');
+  var client = null;
+  var service = null;
 
-    var client = new Client('http://127.0.0.1:' + port + '/api');
-    client.serviceCreate('My Service', 2, function(err, service) {
-      t.ok(!err, 'Create service should succeed');
-      t.equal(service.name, 'My Service', 'Service name should match');
-      t.equal(service._groups.length, 1, 'Service should have 1 group');
-      t.equal(service._groups[0].scale, 2, 'Group scale should be 2');
-      var req = client.serviceDeploy(
-        service,
-        'application/some-type',
-        function(err, res) {
-          t.ok(!err, 'Deploy should not error');
-          var responseBody = 'ok. ServiceID: ' + service.id;
-          t.equal(res.body, responseBody, 'deploy: Response should match');
-
-          client.serviceGetArtifact(service, function(err, res) {
-            t.ok(!err, 'download: Deployment download should succeed');
-            var expected = 'Data. ServiceID: ' + service.id;
-            t.equal(res.body, expected, 'download: Download body should match');
-            server.stop();
-          });
-        }
-      );
-
-      req.write('some data');
+  t.test('start server', function(tt) {
+    server.set('port', 0);
+    server.start(function(err, port) {
+      tt.ifError(err);
+      client = new Client('http://127.0.0.1:' + port + '/api');
+      tt.end();
     });
   });
+
+  t.test('inialize models', function(tt) {
+    client.serviceCreate('My Service', 2, function(err, s) {
+      tt.ifError(err);
+      tt.equal(s.name, 'My Service', 'Service name should match');
+      tt.equal(s._groups.length, 1, 'Service should have 1 group');
+      tt.equal(s._groups[0].scale, 2, 'Group scale should be 2');
+      service = s;
+      tt.end();
+    });
+  });
+
+  t.test('deploy a service', function(tt) {
+    var req = service.deploy('application/some-type', function(err, res) {
+      tt.ifError(err);
+      var expResponseBody = 'ok. ServiceID: ' + service.id;
+      res.setEncoding('utf8');
+      res.on('error', t.ifError.bind(t));
+      res.pipe(concat(function(responseBody) {
+        tt.equal(responseBody,
+          expResponseBody,
+          'deploy: Response should match');
+        tt.end();
+      }));
+    });
+    req.write('some data');
+  });
+
+  t.test('retrieve pack file', function(tt) {
+    service.getPack(function(err, res) {
+      tt.ifError(err);
+      res.setEncoding('utf8');
+      res.on('error', t.ifError.bind(t));
+
+      var expDownload = 'Data. ServiceID: ' + service.id;
+      res.pipe(concat(function(download) {
+        tt.equal(download,
+          expDownload,
+          'download: Download body should match');
+        server.stop();
+        tt.end();
+      }));
+    });
+  });
+
+  t.end();
 });

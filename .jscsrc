@@ -63,6 +63,10 @@
   "disallowSpacesInsideArrayBrackets": "all",
   "disallowSpacesInsideParentheses": true,
 
-  "disallowNewlineBeforeBlockStatements": true
+  "disallowNewlineBeforeBlockStatements": true,
+  "excludeFiles": [
+    "node_modules/**/*",
+    "coverage/**/*"
+  ]
 }
 

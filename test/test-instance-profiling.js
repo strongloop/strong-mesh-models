@@ -73,7 +73,7 @@ test('Check that heap-snapshot and cpu-profileing populates Profile models',
   });
 
 function runHeapSnapshot(t, client, service, instance, baseUrl, callback) {
-  client.runCommand(instance, {
+  instance.runCommand({
     cmd: 'current',
     sub: 'heap-snapshot',
     target: 1
@@ -84,7 +84,7 @@ function runHeapSnapshot(t, client, service, instance, baseUrl, callback) {
       t.ok(!err, 'Profile lookup should not return error');
       t.ok(p, 'Profile object should exist');
       fs.writeFileSync(p.fileName, 'test heapsnapshot');
-      client.downloadProfile(instance, p.id, function(err, res) {
+      instance.downloadProfile(p.id, function(err, res) {
         t.ok(!err, 'Profile download should not error');
         res.setEncoding('utf8');
         res.on('data', function(s) {
@@ -97,7 +97,7 @@ function runHeapSnapshot(t, client, service, instance, baseUrl, callback) {
 }
 
 function stopCpuProfiling(t, client, service, instance, baseUrl, callback) {
-  client.runCommand(instance, {
+  instance.runCommand({
     cmd: 'current',
     sub: 'stop-cpu-profiling',
     target: 1
