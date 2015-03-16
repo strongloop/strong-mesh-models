@@ -391,5 +391,10 @@ test('Test notifications', function(t) {
     });
   });
 
+  t.test('shutdown', function(tt) {
+    app.stop();
+    tt.end();
+  });
+
   t.end();
 });

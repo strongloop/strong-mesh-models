@@ -6,7 +6,12 @@
     "address": {
       "type": "string",
       "required": true,
-      "description": "The IP address or hostname on which the API server and gateway can access this executor"
+      "description": "The IP address on which the API server and gateway can access this executor"
+    },
+    "hostname": {
+      "type": "string",
+      "required": true,
+      "description": "The hostname of this executor"
     },
     "APIPort": {
       "type": "string",

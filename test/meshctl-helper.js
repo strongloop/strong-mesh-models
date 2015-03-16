@@ -10,13 +10,22 @@ function testCmdHelper(t, TestServiceManager, test) {
 
     t.test('Setup base models', function(tt) {
       var service = {
-        name: 'service 1', _groups: [{id: 1, name: 'group 1', scale: 1}]
+        name: 'service 1',
+        _groups: [{id: 1, name: 'group 1', scale: 1}],
       };
+
       var exec = {
-        address: '127.0.0.1', APIPort: 5000, totalCapacity: 2,
+        address: '127.0.0.1',
+        hostname: 'mockhost.mockdomain',
+        APIPort: 5000,
+        totalCapacity: 2,
       };
+
       var inst = {
-        serverServiceId: 1, groupId: 1, executorId: 1,
+        serverServiceId: 1,
+        groupId: 1,
+        executorId: 1,
+        applicationName: 'test-app',
       };
 
       var ServerService = server.models.ServerService;
@@ -40,7 +49,7 @@ function testCmdHelper(t, TestServiceManager, test) {
         service.instances.findById('1', function(err, instance) {
           tt.ifError(err, 'Default instance should be found');
 
-          test(tt, service, instance, port);
+          test(tt, service, instance, port, server);
           tt.end();
         });
       });

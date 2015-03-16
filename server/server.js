@@ -1,21 +1,39 @@
 /* eslint no-console:0 */
 var ServiceManager = require('./service-manager');
+var assert = require('assert');
 var boot = require('loopback-boot');
 var debug = require('debug')('strong-mesh-models:server');
 var loopback = require('loopback');
 var MinkeLite = require('minkelite');
 
-function server(serviceManager) {
+function server(serviceManager, options) {
   var app = module.exports = loopback();
   app.serviceManager = serviceManager;
+  options = options || {};
+
+  for (var k in options) {
+    if (!options.hasOwnProperty(k)) continue;
+    app.set(k, options[k]);
+  }
+
+  assert(!app.get('trace.db.inMemory') && !app.get('trace.db.path'),
+    'The path for trace data storage is required');
 
   /* eslint-disable camelcase */
   app.minkelite = new MinkeLite({
-    start_server: true, server_port: 8104, // start HTTP server for dev testing
-    in_memory: false, // product call: persistent or not?
-    chart_minutes: 1440, // product call: user settable?
-    stale_minutes: 1450, // 10 min. longer than chart_minutes to hold all data
-    max_transaction_count: 100 // product call: user settable?
+    start_server: !!app.get('trace.enableDebugServer'),
+    server_port: app.get('trace.debugServerPort') || 8104,
+
+    in_memory: !!app.get('trace.db.inMemory'),
+    db_name: app.get('trace.db.name'),
+    db_path: app.get('trace.db.path'),
+
+    // data points shown on the Timeline view
+    chart_minutes: parseInt(app.get('trace.data.chartMinutes'), 10) || 1440,
+    // how long we retain data in the db
+    stale_minutes: parseInt(app.get('trace.data.staleMinutes'), 10) || 1450,
+    max_transaction_count:
+      parseInt(app.get('trace.data.maxTransaction'), 10) || 100
   });
   /* eslint-enable camelcase */
 
@@ -35,10 +53,17 @@ function server(serviceManager) {
   };
 
   app.stop = function(callback) {
-    this._server.close(function() {
+    this.minkelite.shutdown();
+
+    if (!this._server) {
+      return cb();
+    }
+    this._server.close(cb);
+
+    function cb() {
       app.emit('stopped');
       if (callback) callback();
-    });
+    }
   };
 
   app.handleModelUpdate = function(instanceId, uInfo, callback) {
