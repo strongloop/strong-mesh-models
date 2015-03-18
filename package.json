@@ -38,8 +38,8 @@
     "serve-favicon": "^2.2.0",
     "sprintf": "^0.1.5",
     "strong-npm-ls": "^1.0.5",
-    "strong-tunnel": "^1.1.7",
-    "strong-url-defaults": "^1.0.1",
+    "strong-tunnel": "^1.0.0",
+    "strong-url-defaults": "^1.0.0",
     "user-home": "^1.1.1"
   },
   "optionalDependencies": {},
