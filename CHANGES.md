@@ -1,3 +1,9 @@
+2015-03-18, Version 5.0.1
+=========================
+
+ * Fix dependent package versions (Krishna Raman)
+
+
 2015-03-18, Version 5.0.0
 =========================
 
