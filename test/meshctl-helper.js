@@ -2,8 +2,17 @@ var async = require('async');
 var meshServer = require('../index').meshServer;
 var Client = require('../index').Client;
 
-function testCmdHelper(t, TestServiceManager, test) {
-  var server = meshServer(new TestServiceManager());
+function testCmdHelper(t, TestServiceManager, test, enableTrace) {
+  var server = null;
+  if (enableTrace) {
+    server = meshServer(new TestServiceManager(), {
+      'trace.enable': true,
+      'trace.db.path': __dirname
+    });
+  } else {
+    server = meshServer(new TestServiceManager());
+  }
+
   server.set('port', 0);
   server.start(function(err, port) {
     t.ifError(err, 'server should start. port: ' + port || -1);

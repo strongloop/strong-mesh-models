@@ -12,6 +12,7 @@ var MinkeLite = require('minkelite');
  *
  * @param {ServiceManager} serviceManager
  * @param {object} options Options object
+ * @param {bool} [options.'trace.enable'] Enable tracing. Default false.
  * @param {bool} [options.'trace.enableDebugServer'] Enable the minkelite debug
  * server. Default false.
  * @param {Number} [options.'trace.debugServerPort'] Minkelite debug server
@@ -39,26 +40,32 @@ function server(serviceManager, options) {
     app.set(k, options[k]);
   }
 
-  assert(!app.get('trace.db.inMemory') && !app.get('trace.db.path'),
-    'The path for trace data storage is required');
+  var enableTracing = !!app.get('trace.enable');
 
-  /* eslint-disable camelcase */
-  app.minkelite = new MinkeLite({
-    start_server: !!app.get('trace.enableDebugServer'),
-    server_port: app.get('trace.debugServerPort') || 8103,
+  if (enableTracing && !app.get('trace.db.inMemory')) {
+    assert(app.get('trace.db.path'),
+      'The path for trace data storage is required');
+  }
 
-    in_memory: !!app.get('trace.db.inMemory'),
-    db_name: app.get('trace.db.name') || 'minkelite.db',
-    db_path: app.get('trace.db.path'),
+  if (enableTracing) {
+    /* eslint-disable camelcase */
+    app.minkelite = new MinkeLite({
+      start_server: !!app.get('trace.enableDebugServer'),
+      server_port: app.get('trace.debugServerPort') || 8103,
 
-    // data points shown on the Timeline view
-    chart_minutes: parseInt(app.get('trace.data.chartMinutes'), 10) || 1440,
-    // how long we retain data in the db
-    stale_minutes: parseInt(app.get('trace.data.staleMinutes'), 10) || 1450,
-    max_transaction_count:
-      parseInt(app.get('trace.data.maxTransaction'), 10) || 30
-  });
-  /* eslint-enable camelcase */
+      in_memory: !!app.get('trace.db.inMemory'),
+      db_name: app.get('trace.db.name') || 'minkelite.db',
+      db_path: app.get('trace.db.path'),
+
+      // data points shown on the Timeline view
+      chart_minutes: parseInt(app.get('trace.data.chartMinutes'), 10) ||
+      1440, // how long we retain data in the db
+      stale_minutes: parseInt(app.get('trace.data.staleMinutes'), 10) || 1450,
+      max_transaction_count: parseInt(app.get('trace.data.maxTransaction'),
+        10) || 30
+    });
+    /* eslint-enable camelcase */
+  }
 
   // Bootstrap the application, configure models, datasources and middleware.
   // Sub-apps like REST API are mounted via boot scripts.
@@ -76,7 +83,8 @@ function server(serviceManager, options) {
   };
 
   app.stop = function(callback) {
-    this.minkelite.shutdown();
+    if (this.minkelite)
+      this.minkelite.shutdown();
 
     if (!this._server) {
       return cb();
@@ -139,9 +147,12 @@ function server(serviceManager, options) {
       case 'trace:object':
         var traceVersion = uInfo.record.version;
         var accountName = uInfo.record.packet.metadata.account_key;
-        app.minkelite.postRawPieces(
-          traceVersion, accountName, uInfo.record.packet, callback
-        );
+        if (!app.minkelite)
+          return callback();
+        app.minkelite.postRawPieces(traceVersion,
+          accountName,
+          uInfo.record.packet,
+          callback);
         break;
       case 'express:usage-record':
         ExpressUsageRecord.recordUsage(instanceId, uInfo, callback);

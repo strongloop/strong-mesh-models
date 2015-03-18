@@ -136,6 +136,8 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     var minkelite = ServiceProcess.app.minkelite;
     var pid = this.pid;
 
+    if (!minkelite) return callback(Error('Tracing is disabled'));
+
     this._getActAndHost(function(err, act, host) {
       if (err) return callback(err);
 
@@ -149,6 +151,8 @@ module.exports = function extendServiceProcess(ServiceProcess) {
   function getTransaction(trans, callback) {
     var minkelite = ServiceProcess.app.minkelite;
     var pid = this.pid;
+
+    if (!minkelite) return callback(Error('Tracing is disabled'));
 
     this._getActAndHost(function(err, act, host) {
       if (err) return callback(err);
@@ -164,6 +168,8 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     var minkelite = ServiceProcess.app.minkelite;
     var pid = this.pid;
 
+    if (!minkelite) return callback(Error('Tracing is disabled'));
+
     this._getActAndHost(function(err, act, host) {
       if (err) return callback(err);
 
@@ -176,6 +182,8 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
   function getTrace(pfKey, callback) {
     var minkelite = ServiceProcess.app.minkelite;
+
+    if (!minkelite) return callback(Error('Tracing is disabled'));
 
     minkelite.getRawPieces(pfKey, false, function(data) {
       callback(null, data);
