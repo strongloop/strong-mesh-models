@@ -1,3 +1,49 @@
+2015-03-18, Version 5.0.0
+=========================
+
+ * Add comment about load order of client model files (Krishna Raman)
+
+ * Fix tests to match how PM send back messages (Krishna Raman)
+
+ * Add usage information (Krishna Raman)
+
+ * Add API url defaults and SSH tunnel support (Krishna Raman)
+
+ * Add shutdown command (Krishna Raman)
+
+ * Add log-dump command (Krishna Raman)
+
+ * Add env commands (Krishna Raman)
+
+ * Add npm-list command (Krishna Raman)
+
+ * Add heap-snapshot command (Krishna Raman)
+
+ * Add cpu-profiling commands. (Krishna Raman)
+
+ * Add object-tracking command (Krishna Raman)
+
+ * Add set-size command (Krishna Raman)
+
+ * Add restart commands (Krishna Raman)
+
+ * Add stop command (Krishna Raman)
+
+ * Add start command (Krishna Raman)
+
+ * Extract test service setup into helper (Krishna Raman)
+
+ * Create meshctl script with status command (Krishna Raman)
+
+ * Add meshctl version test (Krishna Raman)
+
+ * Add help test (Krishna Raman)
+
+ * Move instance related functionality into model (Krishna Raman)
+
+ * Move deploy client functionality to service model (Krishna Raman)
+
+
 2015-03-09, Version 4.0.0
 =========================
 
