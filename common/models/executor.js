@@ -1,3 +1,5 @@
+var os = require('os');
+
 module.exports = function(Executor) {
   Executor.observe('before save', function(ctx, next) {
     if (ctx.instance) {
@@ -9,4 +11,9 @@ module.exports = function(Executor) {
       next();
     }
   });
+
+  function getDefaultHostname() {
+    return os.hostname();
+  }
+  Executor.definition.properties.hostname.default = getDefaultHostname;
 };

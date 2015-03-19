@@ -24,6 +24,9 @@ var path = require('path');
  * @param {string} [options.overridePath] Path to where API is mounted on remote
  * server. This is normally `/api` however can be overridden if proxies or
  * mounted at a different location.
+ * @param {string} [options.appBrowserifyId] Used by loopback-boot to load the
+ * correct set of models when building a browserify'ed bundle with multiple
+ * loopback apps.
  * @constructor
  */
 function Client(apiUrl, options) {
@@ -59,7 +62,11 @@ function Client(apiUrl, options) {
 
   var client = loopback();
   client.dataSource('remote', {'connector': 'remote', 'url': this.apiUrl});
-  boot(client, __dirname);
+  boot(client, {
+    // ID used by browserified loopback-boot to load correct set of models
+    appId: options.appBrowserifyId || 'meshClient',
+    appRootDir: __dirname
+  });
   client.set('apiUrl', this.apiUrl);
 
   this.loopback = client;

@@ -131,4 +131,78 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       }
     });
   }
+
+  function getMetaTransactions(callback) {
+    var minkelite = ServiceProcess.app.minkelite;
+    var pid = this.pid;
+
+    if (!minkelite) return callback(Error('Tracing is disabled'));
+
+    this._getActAndHost(function(err, act, host) {
+      if (err) return callback(err);
+
+      minkelite.getMetaTransactions(act, host, pid, function(data) {
+        callback(null, data);
+      });
+    });
+  }
+  ServiceProcess.prototype.getMetaTransactions = getMetaTransactions;
+
+  function getTransaction(trans, callback) {
+    var minkelite = ServiceProcess.app.minkelite;
+    var pid = this.pid;
+
+    if (!minkelite) return callback(Error('Tracing is disabled'));
+
+    this._getActAndHost(function(err, act, host) {
+      if (err) return callback(err);
+
+      minkelite.getTransaction(act, trans, host, pid, function(data) {
+        callback(null, data);
+      });
+    });
+  }
+  ServiceProcess.prototype.getTransaction = getTransaction;
+
+  function getTimeline(callback) {
+    var minkelite = ServiceProcess.app.minkelite;
+    var pid = this.pid;
+
+    if (!minkelite) return callback(Error('Tracing is disabled'));
+
+    this._getActAndHost(function(err, act, host) {
+      if (err) return callback(err);
+
+      minkelite.getRawMemoryPieces(act, host, pid, function(data) {
+        callback(null, data);
+      });
+    });
+  }
+  ServiceProcess.prototype.getTimeline = getTimeline;
+
+  function getTrace(pfKey, callback) {
+    var minkelite = ServiceProcess.app.minkelite;
+
+    if (!minkelite) return callback(Error('Tracing is disabled'));
+
+    minkelite.getRawPieces(pfKey, false, function(data) {
+      callback(null, data);
+    });
+  }
+  ServiceProcess.prototype.getTrace = getTrace;
+
+  function _getActAndHost(callback) {
+    this.serviceInstance(function(err, instance) {
+      if (err) return callback(err);
+      var act = instance.applicationName;
+
+      instance.executor(function(err, executor) {
+        if (err) return callback(err);
+        var host = executor.hostname.split('.')[0];
+
+        callback(null, act, host);
+      });
+    });
+  }
+  ServiceProcess.prototype._getActAndHost = _getActAndHost;
 };
