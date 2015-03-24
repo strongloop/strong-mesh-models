@@ -70,6 +70,8 @@ Commands:
         loaded into Chrome Dev Tools. The NAME is optional, and defaults to
         `node.<PID>`.
 
+  patch ID FILE           Apply patch FILE to worker ID.
+
   ls [DEPTH]              List dependencies of the current application.
 
   env[-get] [KEYS...]     List specified environment variables. If none are

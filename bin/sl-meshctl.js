@@ -108,6 +108,7 @@ function runCommand(apiUrl, command) {
       'cpu-stop': cmdCpuProfilingStop,
       'heap-snapshot': cmdHeapSnapshot,
       'ls': cmdLs,
+      'patch': cmdPatch,
       'env-set': cmdEnvSet,
       'env-unset': cmdEnvUnset,
       'env-get': cmdEnvGet,
@@ -302,6 +303,16 @@ function cmdLs(instance) {
   instance.npmModuleList(function(err, response) {
     dieIf(err);
     console.log(npmls.printable(response, depth));
+  });
+}
+
+function cmdPatch(instance) {
+  var target = mandatory('target');
+  var patchFile = mandatory('patch file');
+
+  var patchData = JSON.parse(fs.readFileSync(patchFile));
+  instance.applyPatch(target, patchData, function(err /*, response*/) {
+    dieIf(err);
   });
 }
 
