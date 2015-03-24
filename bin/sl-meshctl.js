@@ -144,6 +144,14 @@ function cmdStatus(instance) {
     fmt(1, 'port', '%s', rsp.port);
     fmt(1, 'base', '%s', rsp.base);
 
+    if (rsp.version) {
+      fmt(1, 'version');
+      Object.keys(rsp.version).forEach(function(k) {
+          fmt(2, k, 'v%s', rsp.version[k]);
+      });
+    }
+
+
     var current = rsp.current;
 
     if (!rsp.current) {
