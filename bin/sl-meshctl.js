@@ -11,7 +11,7 @@ var fs = require('fs');
 var home = require('osenv').home();
 var npmls = require('strong-npm-ls');
 var path = require('path');
-var sprintf = require('sprintf');
+var table = require('text-table');
 var userHome = require('user-home');
 var util = require('util');
 var maybeTunnel = require('strong-tunnel');
@@ -31,7 +31,8 @@ var $0 = process.env.CMD || path.basename(argv[1]);
 var parser = new Parser([
   ':v(version)',
   'h(help)',
-  'C:(control)'
+  'C:(control)',
+  'V(verbose)'
 ].join(''), argv);
 
 var apiUrl = process.env.STRONGLOOP_MESH_API ||
@@ -42,6 +43,7 @@ var apiUrl = process.env.STRONGLOOP_MESH_API ||
   'http://127.0.0.1:8701';
 
 var command = 'status';
+var verbose = false;
 var option;
 while ((option = parser.getopt()) !== undefined) {
   switch (option.option) {
@@ -55,6 +57,9 @@ while ((option = parser.getopt()) !== undefined) {
       break;
     case 'C':
       apiUrl = option.optarg;
+      break;
+    case 'V':
+      verbose = true;
       break;
     default:
       console.error('Invalid usage (near option \'%s\'), try `%s --help`.',
@@ -90,32 +95,29 @@ maybeTunnel(apiUrl, sshOpts, function(err, apiUrl) {
 
 function runCommand(apiUrl, command) {
   var client = new Client(apiUrl);
-  var instanceId = process.env.STRONG_MESH_INSTANCE_ID || '1';
-  client.instanceFind(instanceId, function(err, instance) {
-    dieIf(err);
-    ({
-      'status': cmdStatus,
-      'start': cmdStart,
-      'stop': cmdStop,
-      'soft-stop': cmdSoftStop,
-      'restart': cmdRestart,
-      'soft-restart': cmdSoftRestart,
-      'cluster-restart': cmdRollingRestart,
-      'set-size': cmdSetClusterSize,
-      'objects-start': cmdObjectTrackingStart,
-      'objects-stop': cmdObjectTrackingStop,
-      'cpu-start': cmdCpuProfilingStart,
-      'cpu-stop': cmdCpuProfilingStop,
-      'heap-snapshot': cmdHeapSnapshot,
-      'ls': cmdLs,
-      'patch': cmdPatch,
-      'env-set': cmdEnvSet,
-      'env-unset': cmdEnvUnset,
-      'env-get': cmdEnvGet,
-      'log-dump': cmdLogDump,
-      'shutdown': cmdShutdown,
-    }[command] || unknown)(instance);
-  });
+  ({
+    'status': cmdStatus,
+    'start': cmdStart,
+    'stop': cmdStop,
+    'soft-stop': cmdSoftStop,
+    'restart': cmdRestart,
+    'soft-restart': cmdSoftRestart,
+    'cluster-restart': cmdRollingRestart,
+    'set-size': cmdSetClusterSize,
+    'objects-start': cmdObjectTrackingStart,
+    'objects-stop': cmdObjectTrackingStop,
+    'cpu-start': cmdCpuProfilingStart,
+    'cpu-stop': cmdCpuProfilingStop,
+    'heap-snapshot': cmdHeapSnapshot,
+    'ls': cmdLs,
+    'patch': cmdPatch,
+    'env-set': cmdEnvSet,
+    'env-unset': cmdEnvUnset,
+    'env-get': cmdEnvGet,
+    'env': cmdEnvGet,
+    'log-dump': cmdLogDump,
+    'shutdown': cmdShutdown,
+  }[command] || unknown)(client);
 }
 
 function unknown() {
@@ -123,213 +125,332 @@ function unknown() {
   process.exit(1);
 }
 
-function cmdStatus(instance) {
-  instance.statusSummary(function fmtSummary(err, rsp) {
-    dieIf(err);
+function cmdStatus(client) {
+  var targetService = optional();
 
-    function fmt(depth, tag /*...*/) {
-      var value = util.format.apply(util, [].slice.call(arguments, 2));
-      var width = 22 - 2 * depth;
-      var line;
-      if (value.length > 0)
-        line = sprintf(w(depth) + '%-' + width + 's%s', tag + ':', value);
-      else
-        line = w(depth) + tag + ':';
-      console.log(line);
-      function w(depth) {
-        return sprintf('%' + (2 * depth) + 's', '');
+  if (targetService) {
+    client.serviceFind(targetService, function(err, service) {
+      dieIf(err);
+      printServiceStatus(service);
+    });
+  } else {
+    client.serviceList(function(err, services) {
+      dieIf(err);
+      for (var i in services) {
+        if (!services.hasOwnProperty(i)) continue;
+        printServiceStatus(services[i]);
       }
+    });
+  }
+}
+
+function printServiceEnv(env) {
+  if (Object.keys(env).length > 0) {
+    var envTable = [['  ', 'Name', 'Value']];
+    for (var k in env) {
+      if (!env.hasOwnProperty(k)) continue;
+      envTable.push(['', k, env[k]]);
     }
-    fmt(0, 'manager');
-    fmt(1, 'pid', '%s', rsp.pid);
-    fmt(1, 'port', '%s', rsp.port);
-    fmt(1, 'base', '%s', rsp.base);
+    console.log('%s', table(envTable));
+  } else {
+    console.log('  No environment variables defined');
+  }
+}
 
-    if (rsp.version) {
-      fmt(1, 'version');
-      Object.keys(rsp.version).forEach(function(k) {
-          fmt(2, k, 'v%s', rsp.version[k]);
-      });
+function printServiceStatus(service) {
+  service.getStatusSummary(function(err, summary) {
+    dieIf(err);
+
+    console.log('Service ID: %s', summary.id);
+    console.log('Service Name: %s', summary.name);
+
+    console.log('Environment variables:');
+    printServiceEnv(summary.env);
+
+    var instanceTable = [[
+      '  ', 'Version', 'API Version', 'Agent version', 'Cluster size'
+    ]];
+    for (var i in summary.instances) {
+      if (!summary.instances.hasOwnProperty(i)) continue;
+      var inst = summary.instances[i];
+      instanceTable.push(['',
+        inst.version, inst.apiVersion || 'unknown',
+        inst.agentVersion, inst.clusterSize
+      ]);
+    }
+    console.log('Instances:\n%s', table(instanceTable, {
+      align: ['c', 'c', 'c', 'c', 'c']
+    }));
+
+    var processTable = [
+      ['  ', 'ID', 'PID', 'WID', 'Tracking objects?', 'CPU profiling?']
+    ];
+    if (verbose)
+      processTable[0].push('Stop reason', 'Stop time');
+
+    for (i in summary.processes) {
+      if (!summary.processes.hasOwnProperty(i)) continue;
+      if (!verbose && summary.processes[i].stopReason) continue;
+
+      var proc = summary.processes[i];
+      var procEntry = [
+        '',
+        proc.displayId,
+        proc.pid,
+        proc.workerId,
+        proc.isTrackingObjects ? 'yes' : '',
+        proc.isProfiling ? 'yes' : ''
+      ];
+      if (verbose)
+        procEntry.push(proc.stopReason, proc.stopTime || '');
+      processTable.push(procEntry);
     }
 
-
-    var current = rsp.current;
-
-    if (!rsp.current) {
-      fmt(0, 'current', '(none)');
-      return;
-    }
-
-    var workers = current.workers;
-    var config = current.config;
-    var files = config.files;
-
-    fmt(0, 'current');
-    fmt(1, 'status', current.pid ? 'started' : 'stopped');
-    if (current.pid)
-      fmt(1, 'pid', '%s', current.pid);
-
-    fmt(1, 'link', '%s', current.pwd);
-    fmt(1, 'current', '%s',
-      path.relative(path.resolve(current.pwd, '..'), current.cwd));
-    if (current.branch) {
-      fmt(1, 'branch', '%s', current.branch);
-    }
-
-    fmt(1, 'worker count', '%d', workers ? workers.length : 0);
-    if (workers) {
-      for (var i = 0; i < workers.length; i++) {
-        var worker = workers[i];
-        var id = worker.id;
-        var pid = worker.pid;
-        fmt(2, util.format('[%d]', i + 1), 'cluster id %s, pid %d', id, pid);
-      }
-    }
-    if (files && Object.keys(files).length > 0) {
-      fmt(2, 'files');
-      Object.keys(files).sort().forEach(function(dst) {
-        var src = files[dst];
-        var srcFull = path.resolve(config.base, src);
-        fmt(3, dst, '(from) %s', srcFull);
-      });
+    if (processTable.length > 1) {
+      console.log('Processes:\n%s\n', table(processTable, {
+        align: [
+          'c', 'c', 'c', 'c', 'c', 'c', 'l', 'c'
+        ]
+      }));
+    } else {
+      console.log('Not started');
     }
   });
 }
 
-function cmdStart(instance) {
-  instance.appStart(function(err, response) {
+function printResponse(service, summmaryMsg, err, responses) {
+  dieIf(err);
+
+  var hasError = false;
+  var responseTable = [['  ', 'Instance', 'Response']];
+  for (var i in responses) {
+    if (!responses.hasOwnProperty(i)) continue;
+    var r = responses[i];
+    if (r.error) {
+      hasError = true;
+      responseTable.push(['', r.instance, r.error || '']);
+    } else {
+      responseTable.push(['', r.instance, r.response.message || '']);
+    }
+  }
+
+  if (verbose || hasError) {
+    console.log('Service: %s', service.name);
+    console.log(table(responseTable, {align: ['c', 'c']}));
+  } else if (summmaryMsg) {
+    console.log('Service %s %s', service.name, summmaryMsg);
+  }
+
+  if (hasError) dieIf('error');
+}
+
+function cmdStart(client) {
+  var targetService = mandatory('service');
+  client.serviceFind(targetService, function(err, service) {
     dieIf(err);
-    console.log(response.message);
+    service.start(printResponse.bind(null, service, 'starting...'));
   });
 }
 
-function cmdStop(instance) {
-  instance.appStop({}, function(err, response) {
+function cmdStop(client) {
+  var targetService = mandatory('service');
+  client.serviceFind(targetService, function(err, service) {
     dieIf(err);
-    console.log(response.message);
+    service.stop({}, printResponse.bind(null, service, 'hard stopped'));
   });
 }
 
-function cmdSoftStop(instance) {
-  instance.appStop({soft: true}, function(err, response) {
+function cmdSoftStop(client) {
+  var targetService = mandatory('service');
+  client.serviceFind(targetService, function(err, service) {
     dieIf(err);
-    console.log(response.message);
+    service.stop(
+      {soft: true},
+      printResponse.bind(null, service, 'soft stopped')
+    );
   });
 }
 
-function cmdRestart(instance) {
-  instance.appRestart({}, function(err, response) {
+function cmdRestart(client) {
+  var targetService = mandatory('service');
+  client.serviceFind(targetService, function(err, service) {
     dieIf(err);
-    console.log(response.message);
+    service.restart({}, printResponse.bind(null, service, 'restarting'));
   });
 }
 
-function cmdSoftRestart(instance) {
-  instance.appRestart({soft: true}, function(err, response) {
+function cmdSoftRestart(client) {
+  var targetService = mandatory('service');
+  client.serviceFind(targetService, function(err, service) {
     dieIf(err);
-    console.log(response.message);
+    service.restart(
+      {soft: true},
+      printResponse.bind(null, service, 'soft restarting')
+    );
   });
 }
 
-function cmdRollingRestart(instance) {
-  instance.appRestart({rolling: true}, function(err /*, response*/) {
+function cmdRollingRestart(client) {
+  var targetService = mandatory('service');
+  client.serviceFind(targetService, function(err, service) {
     dieIf(err);
+    service.restart({rolling: true}, printResponse.bind(null, service, null));
   });
 }
 
-function cmdSetClusterSize(instance) {
+function cmdSetClusterSize(client) {
+  var targetService = mandatory('service');
   var size = mandatory('size');
 
-  instance.clusterSizeSet(size, false, function(err /*, response*/) {
+  client.serviceFind(targetService, function(err, service) {
     dieIf(err);
+    service.setClusterSize(
+      size,
+      false,
+      printResponse.bind(null, service, null)
+    );
   });
 }
 
-function cmdObjectTrackingStart(instance) {
+function cmdObjectTrackingStart(client) {
   var target = mandatory('target');
 
-  instance.objectTrackingStart(target, function(err /*, response*/) {
-    dieIf(err);
-  });
-}
-
-function cmdObjectTrackingStop(instance) {
-  var target = mandatory('target');
-
-  instance.objectTrackingStop(target, function(err  /*, response*/) {
-    dieIf(err);
-  });
-}
-
-function cmdCpuProfilingStart(instance) {
-  var target = mandatory('target');
-  var timeout = optional(0);
-
-  instance.cpuProfilingStart(target, {watchdogTimeout: timeout},
-    function(err /*, response*/) {
+  client.resolveTarget(target,
+    function(err, service, executor, instance, process) {
       dieIf(err);
-      console.log('Profiler started, use cpu-stop to get profile');
+      process.startObjectTracking(dieIf);
     }
   );
 }
 
-function cmdCpuProfilingStop(instance) {
+function cmdObjectTrackingStop(client) {
+  var target = mandatory('target');
+
+  client.resolveTarget(target,
+    function(err, service, executor, instance, process) {
+      dieIf(err);
+      process.stopObjectTracking(dieIf);
+    }
+  );
+}
+
+function cmdCpuProfilingStart(client) {
+  var target = mandatory('target');
+  var timeout = optional(0);
+
+  client.resolveTarget(target,
+    function(err, service, executor, instance, process) {
+      dieIf(err);
+      process.startCpuProfiling({watchdogTimeout: timeout},
+        function(err /*, response*/) {
+          dieIf(err);
+          console.log('Profiler started, use cpu-stop to get profile');
+        }
+      );
+    }
+  );
+}
+
+function cmdCpuProfilingStop(client) {
   var target = mandatory('target');
   var prefix = optional(util.format('node.%s', target));
   var fileName = prefix + '.cpuprofile';
 
-  instance.cpuProfilingStop(target, function(err, response) {
-    dieIf(err);
-    var profileId = response.profileId;
-    download(instance, profileId, fileName, function(err) {
+  client.resolveTarget(target,
+    function(err, service, executor, instance, process) {
       dieIf(err);
-      console.log('CPU profile written to `%s`, load into Chrome Dev Tools',
-        fileName);
-    });
-  });
+      process.stopCpuProfiling(function(err, response) {
+        dieIf(err);
+        var profileId = response.profileId;
+        download(instance, profileId, fileName, function(err) {
+          dieIf(err);
+          console.log('CPU profile written to `%s`, load into Chrome Dev Tools',
+            fileName);
+        });
+      });
+    }
+  );
 }
 
-function cmdHeapSnapshot(instance) {
+function cmdHeapSnapshot(client) {
   var target = mandatory('target');
   var prefix = optional(util.format('node.%s', target));
   var fileName = prefix + '.heapsnapshot';
 
-  instance.heapSnapshot(target, function(err, response) {
-    dieIf(err);
-    var profileId = response.profileId;
-    download(instance, profileId, fileName, function(err) {
+  client.resolveTarget(target,
+    function(err, service, executor, instance, process) {
       dieIf(err);
-      console.log('Heap snapshot written to `%s`, load into Chrome Dev Tools',
-        fileName);
-    });
-  });
+      process.heapSnapshot(function(err, response) {
+        dieIf(err);
+        var profileId = response.profileId;
+        download(instance, profileId, fileName, function(err) {
+          dieIf(err);
+          console.log(
+            'Heap snapshot written to `%s`, load into Chrome Dev Tools',
+            fileName
+          );
+        });
+      });
+    }
+  );
 }
 
-function cmdLs(instance) {
+function cmdLs(client) {
+  var targetService = mandatory('service');
   var depth = optional(Number.MAX_VALUE);
 
-  instance.npmModuleList(function(err, response) {
-    dieIf(err);
-    console.log(npmls.printable(response, depth));
-  });
+  client.serviceFind(targetService,
+    function(err, service) {
+      dieIf(err);
+      service.instances({limit: 1}, function(err, instances) {
+        dieIf(err);
+        if (instances.length !== 1) dieIf(Error('Invalid service'));
+        var instance = instances[0];
+        instance.npmModuleList(function(err, response) {
+          dieIf(err);
+          console.log(npmls.printable(response, depth));
+        });
+      });
+    });
 }
 
-function cmdPatch(instance) {
+function cmdPatch(client) {
   var target = mandatory('target');
   var patchFile = mandatory('patch file');
 
   var patchData = JSON.parse(fs.readFileSync(patchFile));
-  instance.applyPatch(target, patchData, function(err /*, response*/) {
-    dieIf(err);
-  });
+  client.resolveTarget(target,
+    function(err, service, executor, instance, process) {
+      dieIf(err);
+      process.applyPatch(patchData, function(err /*, response*/) {
+        dieIf(err);
+      });
+    }
+  );
 }
 
-function cmdEnvSet(instance) {
+function cmdEnvSet(client) {
+  var targetService = mandatory('service');
   var vars = mandatorySome('K=V');
   var env = _.reduce(vars, extractKeyValue, {});
-  instance.envSet(env, function(err, response) {
+
+  client.serviceFind(targetService, function(err, service) {
     dieIf(err);
-    console.log('Environment updated: %j', response.message);
+    service.setEnvs(env, function(err, responses) {
+      dieIf(err);
+      // Fail if any of the instances failed to update
+      for (var i in responses) {
+        if (!responses.hasOwnProperty(i)) continue;
+        dieIf(responses[i].error);
+      }
+      service.refresh(function(err, service) {
+        dieIf(err);
+        console.log('Service ID: %s', service.id);
+        console.log('Service Name: %s\n', service.name);
+        console.log('Environment updated:');
+        printServiceEnv(service.env);
+      });
+    });
   });
 
   function extractKeyValue(store, pair) {
@@ -344,61 +465,87 @@ function cmdEnvSet(instance) {
   }
 }
 
-function cmdEnvUnset(instance) {
+function cmdEnvUnset(client) {
+  var targetService = mandatory('service');
   var keys = mandatorySome('KEYS');
   var nulls = _.map(keys, _.constant(null));
   var nulledKeys = _.zipObject(keys, nulls);
 
-  instance.envSet(nulledKeys, function(err, response) {
+  client.serviceFind(targetService, function(err, service) {
     dieIf(err);
-    console.log('Environment updated: %j', response.message);
+    service.setEnvs(nulledKeys, function(err, responses) {
+      dieIf(err);
+      // Fail if any of the instances failed to update
+      for (var i in responses) {
+        if (!responses.hasOwnProperty(i)) continue;
+        dieIf(responses[i].error);
+      }
+      service.refresh(function(err, service) {
+        dieIf(err);
+        console.log('Service ID: %s', service.id);
+        console.log('Service Name: %s\n', service.name);
+        console.log('Environment updated:');
+        printServiceEnv(service.env);
+      });
+    });
   });
 }
 
-function cmdEnvGet(instance) {
-  var vars = optionalSome();
+function cmdEnvGet(client) {
+  var targetService = mandatory('service');
+  var keys = optionalSome();
 
-  instance.envGet(function(err, response) {
+  client.serviceFind(targetService, function(err, service) {
     dieIf(err);
-    var filtered = vars.length > 0 ? _.pick(response.env, vars) : response.env;
+    console.log('Service ID: %s', service.id);
+    console.log('Service Name: %s\n', service.name);
+    var filtered = keys.length > 0 ? _.pick(service.env, keys) : service.env;
     console.log('Environment variables:');
     if (_.keys(filtered).length === 0) {
       console.log('  No matching environment variables defined');
     } else {
-      _.keys(filtered).sort().forEach(function(k) {
-        console.log(' %s=%s', k, filtered[k]);
+      printServiceEnv(filtered);
+    }
+  });
+}
+
+function cmdLogDump(client) {
+  var targetService = mandatory('service');
+  var repeat = (optional('NOFOLLOW') === '--follow');
+
+  client.serviceFind(targetService, function(err, service) {
+    dieIf(err);
+    return logDump();
+
+    function logDump() {
+      service.logDump(function(err, responses) {
+        dieIf(err);
+
+        for (var i in responses) {
+          if (!responses.hasOwnProperty(i)) continue;
+          dieIf(responses[i].error);
+
+          var rsp = responses[i].response;
+          if (rsp.message) {
+            console.error(rsp.message);
+          } else {
+            process.stdout.write(rsp.log);
+          }
+        }
+
+        if (repeat) {
+          setTimeout(logDump, 1000);
+        }
+        return repeat;
       });
     }
   });
 }
 
-function cmdLogDump(instance) {
-  var repeat = (optional('NOFOLLOW') === '--follow');
-
-  return logDump();
-
-  function logDump() {
-    instance.logDump(function(err, rsp) {
-      dieIf(err);
-
-      if (rsp.message) {
-        console.error(rsp.message);
-      } else {
-        process.stdout.write(rsp.log);
-      }
-
-      if (repeat) {
-        setTimeout(logDump, 1000);
-      }
-      return repeat;
-    });
-  }
-}
-
-function cmdShutdown(instance) {
-  instance.shutdown(function(err, response) {
+function cmdShutdown(client) {
+  client.getApi().shutdown(function(err) {
     dieIf(err);
-    console.log(response.message);
+    console.log('shutting down');
   });
 }
 

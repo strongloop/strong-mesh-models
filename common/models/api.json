@@ -1,0 +1,11 @@
+{
+  "name": "Api",
+  "plural": "Api",
+  "base": "Model",
+  "description": "API",
+  "properties": {},
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

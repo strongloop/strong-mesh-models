@@ -214,4 +214,120 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     });
   }
   ServiceProcess.prototype._getActAndHost = _getActAndHost;
+
+  /**
+   * Start tracking objects on a worker.
+   *
+   * @param {function} callback Callback function.
+   */
+  function startObjectTracking(callback) {
+    var self = this;
+    self.serviceInstance(function(err, instance) {
+      if (err) return callback(err);
+      return instance._appCommand({
+          cmd: 'start-tracking-objects',
+          target: self.pid,
+        },
+        callback);
+    });
+  }
+  ServiceProcess.prototype.startObjectTracking = startObjectTracking;
+
+  /**
+   * Stop tracking objects on a worker.
+   *
+   * @param {function} callback Callback function.
+   */
+  function stopObjectTracking(callback) {
+    var self = this;
+    self.serviceInstance(function(err, instance) {
+      if (err) return callback(err);
+      return instance._appCommand({
+          cmd: 'stop-tracking-objects',
+          target: self.pid,
+        },
+        callback);
+    });
+  }
+  ServiceProcess.prototype.stopObjectTracking = stopObjectTracking;
+
+  /**
+   * Start CPU profiling on a worker.
+   *
+   * @param {object} options Options object.
+   * @param {number} options.watchdogTimeout  Watchdog timeout, in milliseconds.
+   * In watchdog mode, the profiler is suspended until an event loop stall is
+   * detected.
+   * @param {function} callback Callback function.
+   */
+  function startCpuProfiling(options, callback) {
+    var timeout = options.watchdogTimeout || 0;
+    var self = this;
+    self.serviceInstance(function(err, instance) {
+      if (err) return callback(err);
+      return instance._appCommand({
+          cmd: 'start-cpu-profiling',
+          target: self.pid,
+          timeout: timeout,
+        },
+        callback);
+    });
+  }
+  ServiceProcess.prototype.startCpuProfiling = startCpuProfiling;
+
+  /**
+   * Stop CPU profiling on a worker.
+   *
+   * @param {function} callback Callback function.
+   */
+  function stopCpuProfiling(callback) {
+    var self = this;
+    self.serviceInstance(function(err, instance) {
+      if (err) return callback(err);
+      return instance._appCommand({
+          cmd: 'stop-cpu-profiling',
+          target: self.pid,
+        },
+        callback);
+    });
+  }
+  ServiceProcess.prototype.stopCpuProfiling = stopCpuProfiling;
+
+  /**
+   * Take a snapshot of the HEAP for a worker.
+   *
+   * @param {function} callback Callback function.
+   */
+  function heapSnapshot(callback) {
+    var self = this;
+    self.serviceInstance(function(err, instance) {
+      if (err) return callback(err);
+      return instance._appCommand({
+          cmd: 'heap-snapshot',
+          target: self.pid
+        },
+        callback);
+    });
+  }
+  ServiceProcess.prototype.heapSnapshot = heapSnapshot;
+
+  /**
+   * Apply patch to worker
+   *
+   * @param {object} patchData Patch data
+   * @param {function} callback Callback function.
+   */
+  function applyPatch(patchData, callback) {
+    var self = this;
+    self.serviceInstance(function(err, instance) {
+      if (err) return callback(err);
+      return instance._appCommand({
+          cmd: 'patch',
+          target: self.pid,
+          patch: patchData,
+        },
+        callback);
+    });
+  }
+  ServiceProcess.prototype.applyPatch = applyPatch;
 };

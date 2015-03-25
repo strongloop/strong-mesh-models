@@ -84,6 +84,158 @@ module.exports = function extendServiceInstance(ServiceInstance) {
   }
   ServiceInstance.recordInstanceInfo = recordInstanceInfo;
 
+  function runCommand(req, callback) {
+    this.actions.create({
+      request: req
+    }, function(err, action) {
+      if (err) return callback(err);
+      if (action.result && action.result.error)
+        return callback(Error(action.result.error));
+
+      callback(null, action.result);
+    });
+  }
+  ServiceInstance.prototype.runCommand = runCommand;
+
+  function _appCommand(obj, callback) {
+    obj.sub = obj.cmd;
+    obj.cmd = 'current';
+    this.runCommand(obj, callback);
+  }
+  ServiceInstance.prototype._appCommand = _appCommand;
+
+  function _simpleCommand(cmd, callback) {
+    this.runCommand({cmd: cmd}, callback);
+  }
+  ServiceInstance.prototype._simpleCommand = _simpleCommand;
+
+  /**
+   * Retrieve a summary status of the instance.
+   * @param {function} callback Callback function.
+   */
+  function statusSummary(callback) {
+    this.runCommand({cmd: 'status'}, callback);
+  }
+  ServiceInstance.prototype.statusSummary = statusSummary;
+
+  /**
+   * Start the application on the instance.
+   *
+   * @param {function} callback Callback function.
+   */
+  function start(callback) {
+    this._simpleCommand('start', callback);
+  }
+  ServiceInstance.prototype.start = start;
+
+  /**
+   * Stop the application on the instance.
+   *
+   * "Soft" stop notify workers they are being disconnected, and give them a
+   * grace period for any existing connections to finish. "Hard" stops kill the
+   * supervisor and its workers with `SIGTERM`.
+   *
+   * @param {object} options Options object.
+   * @param {boolean} options.soft Soft stop the application.
+   * @param {function} callback Callback function.
+   */
+  function stop(options, callback) {
+    if (options.soft)
+      return this._simpleCommand('soft-stop', callback);
+    return this._simpleCommand('stop', callback);
+  }
+  ServiceInstance.prototype.stop = stop;
+
+  /**
+   * Restart the application on the instance.
+   *
+   * "Soft" restart notifies all workers they are being disconnected, and give
+   * them a grace period for any existing connections to finish. It then stops
+   * all workers before starting them. "Hard" restart kill the supervisor and
+   * its workers with `SIGTERM` and then starts them.
+   *
+   * "Rolling" restart is a zero-downtime restart, the workers are soft
+   * restarted one-by-one, so that some workers will always be available to
+   * service requests.
+   *
+   * @param {object} options Options object.
+   * @param {boolean} options.soft Soft stop the application.
+   * @param {boolean} options.rolling Soft stop the application.
+   * @param {function} callback Callback function.
+   */
+  function restart(options, callback) {
+    if (options.rolling)
+      return this._appCommand({cmd: 'restart'}, callback);
+    if (options.soft)
+      return this._simpleCommand('soft-restart', callback);
+    return this._simpleCommand('restart', callback);
+  }
+  ServiceInstance.prototype.restart = restart;
+
+  /**
+   * Set cluster size to N workers.
+   *
+   * @param {int|string} size The number of workers. Set to 'CPU' to start one
+   * worker per CPU core available to the instance.
+   * @param {boolean} persist Persist the cluster size across restarts.
+   * @param {function} callback Callback function.
+   */
+  function setClusterSize(size, persist, callback) {
+    var self = this;
+    return this._appCommand({cmd: 'set-size', size: size},
+      function(err, response) {
+        if (err && !(persist && err.message === 'application not running')) {
+          return callback(err);
+        }
+        if (persist) {
+          return self.updateAttributes({cpus: size}, function(err) {
+            callback(err, response);
+          });
+        }
+        callback(null, response);
+      }
+    );
+  }
+  ServiceInstance.prototype.setClusterSize = setClusterSize;
+
+  /**
+   * List dependencies of the current application
+   *
+   * @param {function} callback Callback function.
+   */
+  function npmModuleList(callback) {
+    return this._appCommand({cmd: 'npm-ls'}, callback);
+  }
+  ServiceInstance.prototype.npmModuleList = npmModuleList;
+
+  /**
+   * Set or unset environment of the current application.
+   * This command will cause the application to restart.
+   *
+   * @param {object} env Object containing key and value of environment to set.
+   * Using a value of null will cause the environment to be unset.
+   * @param {function} callback Callback function.
+   */
+  function envSet(env, callback) {
+    return this.runCommand({cmd: 'env-set', env: env}, callback);
+  }
+  ServiceInstance.prototype.envSet = envSet;
+
+  /**
+   * Get environment of the current application.
+   *
+   * @param {function} callback Callback function.
+   */
+  function envGet(callback) {
+    return this._simpleCommand('env-get', callback);
+  }
+  ServiceInstance.prototype.envGet = envGet;
+
+  function logDump(callback) {
+    this._simpleCommand('log-dump', callback);
+  }
+  ServiceInstance.prototype.logDump = logDump;
+
   // Only allow updating ServiceInstance
   ServiceInstance.disableRemoteMethod('create', true);
   ServiceInstance.disableRemoteMethod('upsert', true);

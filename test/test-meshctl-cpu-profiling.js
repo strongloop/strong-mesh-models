@@ -14,8 +14,10 @@ test('Test cpu-profiling commands', function(t) {
   testCmdHelper(t, TestServiceManager, function(t, service, instance, port) {
     t.test('Setup service manager (start profiling)', function(tt) {
       function ctlRequest(s, i, req, callback) {
-        assert.deepEqual(req,
-          {cmd: 'current', sub: 'start-cpu-profiling', timeout: 0, target: 1});
+        assert.deepEqual(req, {
+          cmd: 'current', sub: 'start-cpu-profiling',
+          timeout: 0, target: 1231
+        });
         callback(null, {});
       }
       TestServiceManager.prototype.ctlRequest = ctlRequest;
@@ -23,10 +25,14 @@ test('Test cpu-profiling commands', function(t) {
     });
 
     t.test('Start profiling API', function(tt) {
-      instance.cpuProfilingStart(1, 0, function(err, status) {
+      instance.processes({where: {pid: 1231}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
-        tt.deepEqual(status, {}, 'Response should match');
-        tt.end();
+        proc = proc[0];
+        proc.startCpuProfiling({}, function(err, status) {
+          tt.ifError(err, 'call should not error');
+          tt.deepEqual(status, {}, 'Response should match');
+          tt.end();
+        });
       });
     });
 
@@ -42,8 +48,10 @@ test('Test cpu-profiling commands', function(t) {
 
     t.test('Setup service manager (watchdog)', function(tt) {
       function ctlRequest(s, i, req, callback) {
-        assert.deepEqual(req,
-          {cmd: 'current', sub: 'start-cpu-profiling', timeout: 10, target: 2});
+        assert.deepEqual(req, {
+          cmd: 'current', sub: 'start-cpu-profiling',
+          timeout: 10, target: 1232
+        });
         callback(null, {});
       }
       TestServiceManager.prototype.ctlRequest = ctlRequest;
@@ -51,13 +59,15 @@ test('Test cpu-profiling commands', function(t) {
     });
 
     t.test('Start profiling API (watchdog)', function(tt) {
-      instance.cpuProfilingStart(2, {watchdogTimeout: 10},
-        function(err, status) {
+      instance.processes({where: {pid: 1232}}, function(err, proc) {
+        tt.ifError(err, 'call should not error');
+        proc = proc[0];
+        proc.startCpuProfiling({watchdogTimeout: 10}, function(err, status) {
           tt.ifError(err, 'call should not error');
           tt.deepEqual(status, {}, 'Response should match');
           tt.end();
-        }
-      );
+        });
+      });
     });
 
     t.test('Start profiling CLI (watchdog)', function(tt) {
@@ -72,8 +82,10 @@ test('Test cpu-profiling commands', function(t) {
 
     t.test('Setup service manager (error)', function(tt) {
       function ctlRequest(s, i, req, callback) {
-        assert.deepEqual(req,
-          {cmd: 'current', sub: 'start-cpu-profiling', timeout: 0, target: 3});
+        assert.deepEqual(req, {
+          cmd: 'current', sub: 'start-cpu-profiling',
+          timeout: 0, target: 1233
+        });
         callback(Error('something bad happened'));
       }
       TestServiceManager.prototype.ctlRequest = ctlRequest;
@@ -81,12 +93,14 @@ test('Test cpu-profiling commands', function(t) {
     });
 
     t.test('Start profiling API (error)', function(tt) {
-      instance.cpuProfilingStart(3, {},
-        function(err /*, status*/) {
+      instance.processes({where: {pid: 1233}}, function(err, proc) {
+        tt.ifError(err, 'call should not error');
+        proc = proc[0];
+        proc.startCpuProfiling({}, function(err /*, status*/) {
           tt.ok(err, 'call should error');
           tt.end();
-        }
-      );
+        });
+      });
     });
 
     t.test('Start profiling CLI (error)', function(tt) {
@@ -104,7 +118,7 @@ test('Test cpu-profiling commands', function(t) {
       function ctlRequest(s, i, req, callback) {
         assert.equal(req.cmd, 'current');
         assert.equal(req.sub, 'stop-cpu-profiling');
-        assert.equal(req.target, 1);
+        assert.equal(req.target, 1231);
         assert.ok(req.filePath);
         fs.writeFileSync(req.filePath, 'some data');
         callback(null, {});
@@ -114,13 +128,16 @@ test('Test cpu-profiling commands', function(t) {
     });
 
     t.test('Stop profiling API', function(tt) {
-      instance.cpuProfilingStop(1, function(err, status) {
+      instance.processes({where: {pid: 1231}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
-        tt.deepEqual(status, {
-          url: '/api/Services/1/ProfileDatas/1/download',
-          profileId: 1
-        }, 'Response should match');
-        tt.end();
+        proc = proc[0];
+        proc.stopCpuProfiling(function(err, status) {
+          tt.ifError(err, 'call should not error');
+          tt.deepEqual(status, {
+            url: '/api/Services/1/ProfileDatas/1/download', profileId: 1
+          }, 'Response should match');
+          tt.end();
+        });
       });
     });
 

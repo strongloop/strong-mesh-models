@@ -14,7 +14,7 @@ test('Test object-tracking commands', function(t) {
     t.test('Setup service manager (start tracking)', function(tt) {
       function ctlRequest(s, i, req, callback) {
         assert.deepEqual(req,
-          {cmd: 'current', sub: 'start-tracking-objects', target: 1});
+          {cmd: 'current', sub: 'start-tracking-objects', target: 1231});
         callback(null, {message: 'object tracking started'});
       }
       TestServiceManager.prototype.ctlRequest = ctlRequest;
@@ -22,11 +22,16 @@ test('Test object-tracking commands', function(t) {
     });
 
     t.test('Start tracking API', function(tt) {
-      instance.objectTrackingStart(1, function(err, response) {
+      instance.processes({where: {pid: 1231}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.message, 'object tracking started',
-          'Response should match');
-        tt.end();
+        proc = proc[0];
+        proc.startObjectTracking(function(err, response) {
+          tt.ifError(err, 'call should not error');
+          tt.equal(response.message,
+            'object tracking started',
+            'Response should match');
+          tt.end();
+        });
       });
     });
 
@@ -42,7 +47,7 @@ test('Test object-tracking commands', function(t) {
     t.test('Setup service manager (stop tracking)', function(tt) {
       function ctlRequest(s, i, req, callback) {
         assert.deepEqual(req,
-          {cmd: 'current', sub: 'stop-tracking-objects', target: 2});
+          {cmd: 'current', sub: 'stop-tracking-objects', target: 1232});
         callback(null, {message: 'object tracking started'});
       }
       TestServiceManager.prototype.ctlRequest = ctlRequest;
@@ -50,11 +55,16 @@ test('Test object-tracking commands', function(t) {
     });
 
     t.test('Stop tracking API', function(tt) {
-      instance.objectTrackingStop(2, function(err, response) {
+      instance.processes({where: {pid: 1232}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.message, 'object tracking started',
-          'Response should match');
-        tt.end();
+        proc = proc[0];
+        proc.stopObjectTracking(2, function(err, response) {
+          tt.ifError(err, 'call should not error');
+          tt.equal(response.message,
+            'object tracking started',
+            'Response should match');
+          tt.end();
+        });
       });
     });
 
@@ -70,7 +80,7 @@ test('Test object-tracking commands', function(t) {
     t.test('Setup service manager (error case)', function(tt) {
       function ctlRequest(s, i, req, callback) {
         assert.deepEqual(req,
-          {cmd: 'current', sub: 'start-tracking-objects', target: 3});
+          {cmd: 'current', sub: 'start-tracking-objects', target: 1233});
         callback(Error('Unable to start tracking'));
       }
       TestServiceManager.prototype.ctlRequest = ctlRequest;
@@ -78,9 +88,13 @@ test('Test object-tracking commands', function(t) {
     });
 
     t.test('Start tracking API (error case)', function(tt) {
-      instance.objectTrackingStart(3, function(err /*, response*/) {
-        tt.ok(err, 'call should error');
-        tt.end();
+      instance.processes({where: {pid: 1233}}, function(err, proc) {
+        tt.ifError(err, 'call should not error');
+        proc = proc[0];
+        proc.startObjectTracking(function(err /*, response*/) {
+          tt.ok(err, 'call should error');
+          tt.end();
+        });
       });
     });
 

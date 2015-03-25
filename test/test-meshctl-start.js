@@ -21,9 +21,9 @@ test('Test start command', function(t) {
     });
 
     t.test('Start API', function(tt) {
-      instance.appStart(function(err, response) {
+      service.start(function(err, responses) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.message, 'starting...',
+        tt.equal(responses[0].response.message, 'starting...',
           'response should match');
         tt.end();
       });
@@ -31,9 +31,10 @@ test('Test start command', function(t) {
 
     t.test('Start CLI', function(tt) {
       exec.resetHome();
-      exec(port, 'start', function(err, stdout) {
+      exec(port, 'start 1', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, 'starting...\n', 'Rendered output should match');
+        tt.equal(stdout, 'Service service 1 starting...\n',
+          'Rendered output should match');
         tt.end();
       });
     });
@@ -48,18 +49,18 @@ test('Test start command', function(t) {
     });
 
     t.test('Start API (failure case)', function(tt) {
-      instance.appStart(function(err, status) {
-        tt.ok(err, 'call should error: ' + err || status);
+      service.start(function(err, responses) {
+        tt.ifError(err);
+        tt.ok(responses[0].error, 'call should error');
         tt.end();
       });
     });
 
     t.test('Start CLI (failure case)', function(tt) {
       exec.resetHome();
-      exec(port, 'start', function(err, stdout, stderr) {
+      exec(port, 'start 1', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        tt.equal(stderr, 'Command start failed with Error: ' +
-          'application running, so cannot be started\n',
+        tt.equal(stderr, 'Command start failed with error\n',
           'Rendered error should match');
         tt.end();
       });

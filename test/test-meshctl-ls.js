@@ -42,7 +42,7 @@ test('Test ls command', function(t) {
 
     t.test('module list CLI', function(tt) {
       exec.resetHome();
-      exec(port, 'ls', function(err, stdout) {
+      exec(port, 'ls 1', function(err, stdout) {
         tt.ifError(err, 'command should not error');
         tt.equal(stdout, FULL_RENDER, 'Rendered output should match');
         tt.end();
@@ -51,7 +51,7 @@ test('Test ls command', function(t) {
 
     t.test('module list CLI (limit depth)', function(tt) {
       exec.resetHome();
-      exec(port, 'ls 2', function(err, stdout) {
+      exec(port, 'ls 1 2', function(err, stdout) {
         tt.ifError(err, 'command should not error');
         tt.equal(stdout, DEPTH_2_RENDER, 'Rendered output should match');
         tt.end();
@@ -77,7 +77,7 @@ test('Test ls command', function(t) {
 
     t.test('module list CLI', function(tt) {
       exec.resetHome();
-      exec(port, 'ls', function(err, stdout, stderr) {
+      exec(port, 'ls 1', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
         tt.equal(stderr, 'Command ls failed with Error: no app deployed\n',
           'Rendered error should match');

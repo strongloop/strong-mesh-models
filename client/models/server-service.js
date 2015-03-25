@@ -1,3 +1,4 @@
+var async = require('async');
 var request = require('request');
 var util = require('util');
 
@@ -55,4 +56,80 @@ module.exports = function extServerService(ServerService) {
     ServerService.findById(this.id, callback);
   }
   ServerService.prototype.refresh = refresh;
+
+
+  function getStatusSummary(callback) {
+    var serviceInfo = {};
+    serviceInfo.clientApiVersion = require('../../package.json').version;
+    serviceInfo.env = this.env;
+    serviceInfo.name = this.name;
+    serviceInfo.id = this.id;
+
+    this.instances(function(err, instances) {
+      if (err) return callback(err);
+      serviceInfo.instances = {};
+      for (var i in instances) {
+        if (!instances.hasOwnProperty(i)) continue;
+        var instance = instances[i];
+        serviceInfo.instances[instance.id] = {
+          version: instance.containerVersionInfo.container.version,
+          apiVersion: instance.containerVersionInfo.container.apiVersion,
+          port: instance.PMPort,
+          restartCount: instance.restartCount,
+          agentVersion: instance.agentVersion,
+          nodeVersion: instance.containerVersionInfo.node,
+          clusterSize: instance.setSize
+        };
+      }
+
+      // Collect process information for each instance
+      async.map(instances, collectProcesses, function(err, map) {
+        if (err) return callback(err);
+        serviceInfo.processes = [];
+        for (var i in map) {
+          if (!map.hasOwnProperty(i)) continue;
+          serviceInfo.processes =
+            serviceInfo.processes.concat(map[i].processes);
+          serviceInfo.instances[map[i].instanceId].numProcesses =
+            map[i].processes.length;
+        }
+        callback(null, serviceInfo);
+      });
+    });
+
+    function collectProcesses(instance, callback) {
+      var filter = {
+        order: ['stopTime DESC', 'serviceInstanceId ASC', 'workerId ASC']
+      };
+      instance.processes(filter, function(err, processes) {
+        if (err) return callback(err);
+        return async.map(processes, setDisplayId, function(err, procs) {
+          if (err) return callback(err);
+          callback(null, {
+            instanceId: instance.id,
+            processes: procs,
+          });
+        });
+
+        function setDisplayId(process, callback) {
+          process.displayId = util.format('%s.%s.%s',
+            instance.serverServiceId, instance.executorId, process.pid);
+          callback(null, process);
+        }
+      });
+    }
+  }
+  ServerService.prototype.getStatusSummary = getStatusSummary;
+
+  function npmModuleList(callback) {
+    this.instances({limit: 1}, function(err, insts) {
+      if (err) return callback(err);
+      if (insts.length !== 1) return callback(Error('Unable to find instance'));
+      var instance = insts[0];
+      instance.npmModuleList(callback);
+    });
+  }
+  ServerService.prototype.npmModuleList = npmModuleList;
+
+
 };
