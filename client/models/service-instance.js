@@ -185,6 +185,15 @@ module.exports = function(ServiceInstance) {
   }
   ServiceInstance.prototype.heapSnapshot = heapSnapshot;
 
+  function applyPatch(target, fileData, callback) {
+    return this._appCommand({
+      cmd: 'patch',
+      target: target,
+      patch: fileData
+    }, callback);
+  }
+  ServiceInstance.prototype.applyPatch = applyPatch;
+
   /**
    * List dependencies of the current application
    *
