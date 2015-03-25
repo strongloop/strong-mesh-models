@@ -60,7 +60,8 @@
     },
     "stopReason": {
       "type": "string",
-      "description": "The signal or reason this process exited"
+      "description": "The signal or reason this process exited",
+      "default": ""
     }
   },
   "validations": [],

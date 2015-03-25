@@ -41,6 +41,24 @@ module.exports = function(Service) {
       description: 'Set environment variables'
     });
 
+    this.remoteMethod('setEnvs', {
+      isStatic: false,
+      http: {path: '/env/', verb: 'put'},
+      accepts: [
+        {
+          arg: 'env',
+          required: true,
+          type: 'object',
+          http: {source: 'body'},
+          root: true,
+          description: 'Key-value describing environment variables to add. ' +
+            'A null value causes the variable to be removed',
+        }
+      ],
+      returns: {arg: 'env', type: 'object'},
+      description: 'Set multiple environment variables.'
+    });
+
     this.remoteMethod('unsetEnv', {
       isStatic: false,
       http: {path: '/env/:name', verb: 'delete'},
@@ -67,6 +85,85 @@ module.exports = function(Service) {
       ],
       description: 'Download service profiling information'
     });
+
+    this.remoteMethod(
+      'start',
+      {
+        http: {path: '/start', verb: 'post'},
+        isStatic: false,
+        accepts: [],
+        returns: {arg: 'response', type: 'object', root: true},
+        description: 'Start the application on the instance.'
+      }
+    );
+
+    this.remoteMethod(
+      'stop',
+      {
+        http: {path: '/stop', verb: 'post'},
+        isStatic: false,
+        accepts: [
+          {
+            arg: 'options',
+            required: true,
+            type: 'object',
+            http: {source: 'body'}
+          }
+        ],
+        returns: {arg: 'response', type: 'object', root: true},
+        description: 'Stop the application on the instance.'
+      }
+    );
+
+    this.remoteMethod(
+      'restart',
+      {
+        http: {path: '/restart', verb: 'post'},
+        isStatic: false,
+        accepts: [
+          {
+            arg: 'options',
+            required: true,
+            type: 'object',
+            http: {source: 'body'}
+          }
+        ],
+        returns: {arg: 'response', type: 'object', root: true},
+        description: 'Restart the application on the instance.'
+      }
+    );
+
+    this.remoteMethod(
+      'logDump',
+      {
+        http: {path: '/logs', verb: 'post'},
+        isStatic: false,
+        accepts: [],
+        returns: {arg: 'response', type: 'object', root: true},
+        description: 'Retrieve logs for the application.'
+      }
+    );
+
+    this.remoteMethod(
+      'setClusterSize',
+      {
+        http: {path: '/setClusterSize', verb: 'post'},
+        isStatic: false,
+        accepts: [
+          {
+            arg: 'size',
+            required: true,
+            type: 'any',
+          }, {
+            arg: 'persist',
+            required: true,
+            type: 'boolean',
+          }
+        ],
+        returns: {arg: 'response', type: 'object', root: true},
+        description: 'Set cluster size'
+      }
+    );
 
     this.disableRemoteMethod('__delete__actions');
     this.disableRemoteMethod('__destroyById__actions');

@@ -19,30 +19,30 @@ test('Test trace client api', function(t) {
   function getMetaTransactions(act, host, pid, callback) {
     assert.equal(act, 'test-app');
     assert.equal(host, 'mockhost');
-    assert.equal(pid, 1235);
+    assert.equal(pid, 1230);
 
     // Minkelite does use follow err first callback
-    callback({act: 'test-app', hosts: {'mockhost': {1235: {data: 1}}}});
+    callback({act: 'test-app', hosts: {'mockhost': {1230: {data: 1}}}});
   }
   MockMinkelite.prototype.getMetaTransactions = getMetaTransactions;
 
   function getTransaction(act, trans, host, pid, callback) {
     assert.equal(act, 'test-app');
     assert.equal(host, 'mockhost');
-    assert.equal(pid, 1235);
+    assert.equal(pid, 1230);
     assert.equal(trans, 'trans 1');
 
-    callback({act: 'test-app', hosts: {'mockhost': {1235: {transData: 1}}}});
+    callback({act: 'test-app', hosts: {'mockhost': {1230: {transData: 1}}}});
   }
   MockMinkelite.prototype.getTransaction = getTransaction;
 
   function getRawMemoryPieces(act, host, pid, callback) {
     assert.equal(act, 'test-app');
     assert.equal(host, 'mockhost');
-    assert.equal(pid, 1235);
+    assert.equal(pid, 1230);
 
     callback(
-      {act: 'test-app', hosts: {'mockhost': {1235: {timelineData: 1}}}}
+      {act: 'test-app', hosts: {'mockhost': {1230: {timelineData: 1}}}}
     );
   }
   MockMinkelite.prototype.getRawMemoryPieces = getRawMemoryPieces;
@@ -70,20 +70,6 @@ test('Test trace client api', function(t) {
       server.minkelite.shutdown();
       server.minkelite = new MockMinkelite();
       tt.end();
-    });
-
-    t.test('setup mock process', function(tt) {
-      server.models.ServiceProcess.create({
-        id: 1,
-        parentPid: 1234,
-        pid: 1235,
-        workerId: 1,
-        serviceInstanceId: 1
-      }, function(err, proc) {
-        tt.ifError(err, 'mock process creation should succeed');
-        tt.ok(proc, 'process object should be returned');
-        tt.end();
-      });
     });
 
     t.test('send trace notification', function(tt) {

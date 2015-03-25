@@ -144,4 +144,76 @@ module.exports = function extendServerService(ServerService) {
     });
   }
   ServerService.prototype.unsetEnv = unsetEnv;
+
+  function setEnvs(envUpd, callback) {
+    debug('setEnvs(%j)', envUpd);
+    this.env = this.env || {};
+    for (var k in envUpd) {
+      if (!envUpd.hasOwnProperty(k)) continue;
+      if (!envUpd[k])
+        delete this.env[k];
+      else
+        this.env[k] = envUpd[k];
+    }
+    this.save(function(err, res) {
+      callback(err, res && res.env);
+    });
+  }
+  ServerService.prototype.setEnvs = setEnvs;
+
+  function start(callback) {
+    this._callOnInstances('start', callback);
+  }
+  ServerService.prototype.start = start;
+
+  function stop(options, callback) {
+    this._callOnInstances('stop', options, callback);
+  }
+  ServerService.prototype.stop = stop;
+
+  function restart(options, callback) {
+    this._callOnInstances('restart', options, callback);
+  }
+  ServerService.prototype.restart = restart;
+
+  function logDump(callback) {
+    this._callOnInstances('logDump', callback);
+  }
+  ServerService.prototype.logDump = logDump;
+
+  // XXX: Should move this to ServiceGroup.verticalScale or something similar
+  function setClusterSize(size, persist, callback) {
+    this._callOnInstances('setClusterSize', size, persist, callback);
+  }
+  ServerService.prototype.setClusterSize = setClusterSize;
+
+  /**
+   * Call the requested function on each instance that is part of the service
+   * and return an array or instances and corresponding responses.
+   *
+   * @param {String} fn The function to call
+   * @param {*} ... Options or other arguments for the funtion
+   * @param {function} callback Callback function.
+   * @private
+   */
+  function _callOnInstances(fn) {
+    //Cut out the function name and separate out the callback
+    var args = Array.prototype.slice.call(arguments, 1);
+    var callback = args.pop();
+
+    this.instances(function(err, instances) {
+      if (err) callback(err);
+      async.map(instances, function(instance, callback) {
+        function cb(err, response) {
+          if (err)
+            return callback(null, {instance: instance.id, error: err.message});
+          callback(null, {instance: instance, response: response});
+        }
+        var fnArgs = [].concat(args);
+        fnArgs.push(cb);
+        instance[fn].apply(instance, fnArgs);
+      }, callback);
+    });
+  }
+  ServerService.prototype._callOnInstances = _callOnInstances;
 };

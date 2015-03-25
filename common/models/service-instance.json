@@ -1,11 +1,6 @@
 {
   "name": "ServiceInstance",
   "base": "PersistedModel",
-  "options": {
-    "hidden": [
-      "executorId"
-    ]
-  },
   "description": "Represents an instance of a service running on an executor",
   "properties": {
     "executorId": {

@@ -46,4 +46,10 @@ function ctlRequest(service, instance, req, callback) {
 }
 ServiceManager.prototype.ctlRequest = ctlRequest;
 
+function apiRequest(req, callback) {
+  debug('apiRequest(%j)', req);
+  callback(Error('Not implemented'));
+}
+ServiceManager.prototype.apiRequest = apiRequest;
+
 module.exports = ServiceManager;

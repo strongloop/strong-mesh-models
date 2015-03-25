@@ -19,11 +19,13 @@ function testCmdHelper(t, TestServiceManager, test, enableTrace) {
 
     t.test('Setup base models', function(tt) {
       var service = {
+        id: 1,
         name: 'service 1',
         _groups: [{id: 1, name: 'group 1', scale: 1}],
       };
 
       var exec = {
+        id: 1,
         address: '127.0.0.1',
         hostname: 'mockhost.mockdomain',
         APIPort: 5000,
@@ -31,19 +33,64 @@ function testCmdHelper(t, TestServiceManager, test, enableTrace) {
       };
 
       var inst = {
+        id: 1,
         serverServiceId: 1,
         groupId: 1,
         executorId: 1,
         applicationName: 'test-app',
+        containerVersionInfo: {
+          container: {
+            version: '1.2.3',
+            apiVersion: '4.5.6',
+          },
+          node: '0.10',
+        },
+        PMPort: 8701,
+        restartCount: 0,
+        agentVersion: '7.8.9',
+        setSize: 3,
+      };
+
+      var proc0 = {
+        workerId: 0,
+        pid: 1230,
+        parentPid: 1229,
+        serviceInstanceId: 1
+      };
+
+      var proc1 = {
+        workerId: 1,
+        pid: 1231,
+        parentPid: 1230,
+        serviceInstanceId: 1
+      };
+
+      var proc2 = {
+        workerId: 2,
+        pid: 1232,
+        parentPid: 1230,
+        serviceInstanceId: 1
+      };
+
+      var proc3 = {
+        workerId: 3,
+        pid: 1233,
+        parentPid: 1230,
+        serviceInstanceId: 1
       };
 
       var ServerService = server.models.ServerService;
       var ServiceInstance = server.models.ServiceInstance;
       var Executor = server.models.Executor;
+      var ServiceProcess = server.models.ServiceProcess;
       async.series([
         ServerService.create.bind(ServerService, service),
         Executor.create.bind(Executor, exec),
         ServiceInstance.create.bind(ServiceInstance, inst),
+        ServiceProcess.create.bind(ServiceProcess, proc0),
+        ServiceProcess.create.bind(ServiceProcess, proc1),
+        ServiceProcess.create.bind(ServiceProcess, proc2),
+        ServiceProcess.create.bind(ServiceProcess, proc3),
       ],
         function(err) {
           tt.ifError(err, 'base models should be created');

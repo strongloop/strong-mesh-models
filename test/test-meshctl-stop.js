@@ -21,9 +21,10 @@ test('Test stop command', function(t) {
     });
 
     t.test('Stop API (hard stop)', function(tt) {
-      instance.appStop({}, function(err, response) {
+      service.stop({}, function(err, responses) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.message, 'hard stopped with status SIGTERM',
+        tt.equal(responses[0].response.message,
+          'hard stopped with status SIGTERM',
           'response should match');
         tt.end();
       });
@@ -31,9 +32,9 @@ test('Test stop command', function(t) {
 
     t.test('Stop CLI (hard stop)', function(tt) {
       exec.resetHome();
-      exec(port, 'stop', function(err, stdout) {
+      exec(port, 'stop 1', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, 'hard stopped with status SIGTERM\n',
+        tt.equal(stdout, 'Service service 1 hard stopped\n',
           'Rendered output should match');
         tt.end();
       });
@@ -49,9 +50,10 @@ test('Test stop command', function(t) {
     });
 
     t.test('Stop API (soft stop)', function(tt) {
-      instance.appStop({soft: true}, function(err, response) {
+      service.stop({soft: true}, function(err, responses) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.message, 'soft stopped with status 0',
+        tt.equal(responses[0].response.message,
+          'soft stopped with status 0',
           'Status response should match');
         tt.end();
       });
@@ -59,9 +61,9 @@ test('Test stop command', function(t) {
 
     t.test('Stop CLI (soft stop)', function(tt) {
       exec.resetHome();
-      exec(port, 'soft-stop', function(err, stdout) {
+      exec(port, 'soft-stop 1', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, 'soft stopped with status 0\n',
+        tt.equal(stdout, 'Service service 1 soft stopped\n',
           'Rendered output should match');
         tt.end();
       });
@@ -77,18 +79,18 @@ test('Test stop command', function(t) {
     });
 
     t.test('Start API (failure case)', function(tt) {
-      instance.appStop({}, function(err, response) {
-        tt.ok(err, 'call should error: ' + err || response);
+      service.stop({}, function(err, responses) {
+        tt.ifError(err);
+        tt.ok(responses[0].error, 'call should error');
         tt.end();
       });
     });
 
     t.test('Status summary CLI (failure case)', function(tt) {
       exec.resetHome();
-      exec(port, 'stop', function(err, stdout, stderr) {
+      exec(port, 'stop 1', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        tt.equal(stderr, 'Command stop failed with Error: ' +
-          'application not running, so cannot be stopped\n',
+        tt.equal(stderr, 'Command stop failed with error\n',
           'Rendered error should match');
         tt.end();
       });

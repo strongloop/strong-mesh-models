@@ -55,4 +55,82 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       description: 'Retrieve trace data for a profile key (pfKey)'
     }
   );
+
+  ServiceProcess.remoteMethod(
+    'stopObjectTracking',
+    {
+      http: {path: '/stopObjectTracking', verb: 'post'},
+      isStatic: false,
+      accepts: [],
+      returns: {arg: 'response', type: 'object', root: true},
+      description: 'Stop tracking objects on a process.'
+    }
+  );
+
+  ServiceProcess.remoteMethod(
+    'startObjectTracking',
+    {
+      http: {path: '/startObjectTracking', verb: 'post'},
+      isStatic: false,
+      accepts: [],
+      returns: {arg: 'response', type: 'object', root: true},
+      description: 'Start tracking objects on a process.'
+    }
+  );
+
+  ServiceProcess.remoteMethod(
+    'startCpuProfiling',
+    {
+      http: {path: '/startCpuProfiling', verb: 'post'},
+      isStatic: false,
+      accepts: [{
+        arg: 'options',
+        required: false,
+        type: 'object',
+        http: {source: 'body'},
+        root: true,
+      }],
+      returns: {arg: 'response', type: 'object', root: true},
+      description: 'Start CPU profiling on a process.'
+    }
+  );
+
+  ServiceProcess.remoteMethod(
+    'stopCpuProfiling',
+    {
+      http: {path: '/stopCpuProfiling', verb: 'post'},
+      isStatic: false,
+      accepts: [],
+      returns: {arg: 'response', type: 'object', root: true},
+      description: 'Stop CPU profiling on a process.'
+    }
+  );
+
+  ServiceProcess.remoteMethod(
+    'heapSnapshot',
+    {
+      http: {path: '/heapSnapshot', verb: 'post'},
+      isStatic: false,
+      accepts: [],
+      returns: {arg: 'response', type: 'object', root: true},
+      description: 'Take a snapshot of the HEAP for a process.'
+    }
+  );
+
+  ServiceProcess.remoteMethod(
+    'applyPatch',
+    {
+      http: {path: '/applyPatch', verb: 'post'},
+      isStatic: false,
+      accepts: [{
+        arg: 'patchData',
+        required: true,
+        type: 'object',
+        http: {source: 'body'},
+        root: true,
+      }],
+      returns: {arg: 'response', type: 'object', root: true},
+      description: 'Take a snapshot of the HEAP for a process.'
+    }
+  );
 };

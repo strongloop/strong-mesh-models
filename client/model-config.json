@@ -7,6 +7,9 @@
       "./models"
     ]
   },
+  "Api": {
+    "dataSource": "remote"
+  },
   "User": {
     "dataSource": "remote"
   },
