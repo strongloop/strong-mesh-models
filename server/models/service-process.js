@@ -185,7 +185,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
     if (!minkelite) return callback(Error('Tracing is disabled'));
 
-    minkelite.getRawPieces(pfKey, false, function(data) {
+    minkelite.getRawPieces(pfKey, true, function(data) {
       callback(null, data);
     });
   }

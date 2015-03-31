@@ -45,9 +45,9 @@ test('Test trace client api', function(t) {
   }
   MockMinkelite.prototype.getRawMemoryPieces = getRawMemoryPieces;
 
-  function getRawPieces(traceId, compress, callback) {
+  function getRawPieces(traceId, decompress, callback) {
     assert.equal(traceId, 'trace 1');
-    assert.equal(compress, false);
+    assert.equal(decompress, true);
 
     callback({traceData: 1});
   }
