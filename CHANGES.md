@@ -1,3 +1,23 @@
+2015-04-02, Version 5.0.2
+=========================
+
+ * meshctl: report pm versions in status (Sam Roberts)
+
+ * Add patch command (Krishna Raman)
+
+ * Add optional app ID for broserified loopback-boot (Krishna Raman)
+
+ * Disable tracing by default. Have option to enable. (Krishna Raman)
+
+ * Update minkelite option defaults and add jsdoc (Krishna Raman)
+
+ * Add methods to retrieve trace data from minkelite (Krishna Raman)
+
+ * Fix style errors (Krishna Raman)
+
+ * implement TraceObject mesh model (Setogit)
+
+
 2015-03-18, Version 5.0.1
 =========================
 
