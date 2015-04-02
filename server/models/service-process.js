@@ -140,9 +140,12 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
     this._getActAndHost(function(err, act, host) {
       if (err) return callback(err);
+      if (!host || !act) return callback(null, []);
 
       minkelite.getMetaTransactions(act, host, pid, function(data) {
-        callback(null, data);
+        if (data && data.hosts && data.hosts[host] && data.hosts[host][pid])
+	  return callback(null, data.hosts[host][pid]);
+        callback(null, []);
       });
     });
   }
@@ -156,9 +159,12 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
     this._getActAndHost(function(err, act, host) {
       if (err) return callback(err);
+      if (!host || !act) return callback(null, []);
 
       minkelite.getTransaction(act, trans, host, pid, function(data) {
-        callback(null, data);
+        if (data && data.hosts && data.hosts[host] && data.hosts[host][pid])
+	  return callback(null, data.hosts[host][pid]);
+        callback(null, []);
       });
     });
   }
@@ -172,9 +178,12 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
     this._getActAndHost(function(err, act, host) {
       if (err) return callback(err);
+      if (!host || !act) return callback(null, []);
 
       minkelite.getRawMemoryPieces(act, host, pid, function(data) {
-        callback(null, data);
+        if (data && data.hosts && data.hosts[host] && data.hosts[host][pid])
+	  return callback(null, data.hosts[host][pid]);
+        callback(null, []);
       });
     });
   }

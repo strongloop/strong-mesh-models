@@ -22,7 +22,7 @@ test('Test trace client api', function(t) {
     assert.equal(pid, 1235);
 
     // Minkelite does use follow err first callback
-    callback({data: 1});
+    callback({act: 'test-app', hosts: { 'mockhost': { 1235: {data: 1}}}});
   }
   MockMinkelite.prototype.getMetaTransactions = getMetaTransactions;
 
@@ -32,7 +32,7 @@ test('Test trace client api', function(t) {
     assert.equal(pid, 1235);
     assert.equal(trans, 'trans 1');
 
-    callback({transData: 1});
+    callback({act: 'test-app', hosts: { 'mockhost': { 1235: {transData: 1}}}});
   }
   MockMinkelite.prototype.getTransaction = getTransaction;
 
@@ -41,7 +41,9 @@ test('Test trace client api', function(t) {
     assert.equal(host, 'mockhost');
     assert.equal(pid, 1235);
 
-    callback({timelineData: 1});
+    callback(
+      {act: 'test-app', hosts: { 'mockhost': { 1235: {timelineData: 1}}}}
+    );
   }
   MockMinkelite.prototype.getRawMemoryPieces = getRawMemoryPieces;
 
