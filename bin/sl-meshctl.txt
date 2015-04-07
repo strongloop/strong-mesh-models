@@ -71,7 +71,7 @@ Commands:
 
   patch ID FILE           Apply patch FILE to worker ID.
 
-  ls ID [DEPTH]       List dependencies of the service SRV_ID.
+  ls ID [DEPTH]           List dependencies of the service ID.
 
   env[-get] SRV_ID [KEYS...]
         List specified environment variables for service SRV_ID. If none are

@@ -97,12 +97,12 @@ module.exports = function extendServiceInstance(ServiceInstance) {
   }
   ServiceInstance.prototype.runCommand = runCommand;
 
-  function _appCommand(obj, callback) {
+  function appCommand(obj, callback) {
     obj.sub = obj.cmd;
     obj.cmd = 'current';
     this.runCommand(obj, callback);
   }
-  ServiceInstance.prototype._appCommand = _appCommand;
+  ServiceInstance.prototype.appCommand = appCommand;
 
   function _simpleCommand(cmd, callback) {
     this.runCommand({cmd: cmd}, callback);
@@ -165,7 +165,7 @@ module.exports = function extendServiceInstance(ServiceInstance) {
    */
   function restart(options, callback) {
     if (options.rolling)
-      return this._appCommand({cmd: 'restart'}, callback);
+      return this.appCommand({cmd: 'restart'}, callback);
     if (options.soft)
       return this._simpleCommand('soft-restart', callback);
     return this._simpleCommand('restart', callback);
@@ -182,7 +182,7 @@ module.exports = function extendServiceInstance(ServiceInstance) {
    */
   function setClusterSize(size, persist, callback) {
     var self = this;
-    return this._appCommand({cmd: 'set-size', size: size},
+    return this.appCommand({cmd: 'set-size', size: size},
       function(err, response) {
         if (err && !(persist && err.message === 'application not running')) {
           return callback(err);
@@ -204,7 +204,7 @@ module.exports = function extendServiceInstance(ServiceInstance) {
    * @param {function} callback Callback function.
    */
   function npmModuleList(callback) {
-    return this._appCommand({cmd: 'npm-ls'}, callback);
+    return this.appCommand({cmd: 'npm-ls'}, callback);
   }
   ServiceInstance.prototype.npmModuleList = npmModuleList;
 

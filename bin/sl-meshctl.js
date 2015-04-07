@@ -230,7 +230,8 @@ function printResponse(service, summmaryMsg, err, responses) {
       hasError = true;
       responseTable.push(['', r.instance, r.error || '']);
     } else {
-      responseTable.push(['', r.instance, r.response.message || '']);
+      var msg = r.response && r.response.message ? r.response.message : '';
+      responseTable.push(['', r.instance, msg]);
     }
   }
 
@@ -438,16 +439,11 @@ function cmdEnvSet(client) {
     dieIf(err);
     service.setEnvs(env, function(err, responses) {
       dieIf(err);
-      // Fail if any of the instances failed to update
-      for (var i in responses) {
-        if (!responses.hasOwnProperty(i)) continue;
-        dieIf(responses[i].error);
-      }
+
+      ///XXX: Update when server supports rollback if instance update fails.
+      printResponse(service, 'environment updated', err, responses);
       service.refresh(function(err, service) {
         dieIf(err);
-        console.log('Service ID: %s', service.id);
-        console.log('Service Name: %s\n', service.name);
-        console.log('Environment updated:');
         printServiceEnv(service.env);
       });
     });
@@ -475,16 +471,11 @@ function cmdEnvUnset(client) {
     dieIf(err);
     service.setEnvs(nulledKeys, function(err, responses) {
       dieIf(err);
-      // Fail if any of the instances failed to update
-      for (var i in responses) {
-        if (!responses.hasOwnProperty(i)) continue;
-        dieIf(responses[i].error);
-      }
+
+      ///XXX: Update when server supports rollback if instance update fails.
+      printResponse(service, 'environment updated', err, responses);
       service.refresh(function(err, service) {
         dieIf(err);
-        console.log('Service ID: %s', service.id);
-        console.log('Service Name: %s\n', service.name);
-        console.log('Environment updated:');
         printServiceEnv(service.env);
       });
     });

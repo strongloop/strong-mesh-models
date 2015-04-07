@@ -144,7 +144,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
       minkelite.getMetaTransactions(act, host, pid, function(data) {
         if (data && data.hosts && data.hosts[host] && data.hosts[host][pid])
-	  return callback(null, data.hosts[host][pid]);
+          return callback(null, data.hosts[host][pid]);
         callback(null, []);
       });
     });
@@ -163,7 +163,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
       minkelite.getTransaction(act, trans, host, pid, function(data) {
         if (data && data.hosts && data.hosts[host] && data.hosts[host][pid])
-	  return callback(null, data.hosts[host][pid]);
+          return callback(null, data.hosts[host][pid]);
         callback(null, []);
       });
     });
@@ -182,7 +182,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
       minkelite.getRawMemoryPieces(act, host, pid, function(data) {
         if (data && data.hosts && data.hosts[host] && data.hosts[host][pid])
-	  return callback(null, data.hosts[host][pid]);
+          return callback(null, data.hosts[host][pid]);
         callback(null, []);
       });
     });
@@ -215,21 +215,26 @@ module.exports = function extendServiceProcess(ServiceProcess) {
   }
   ServiceProcess.prototype._getActAndHost = _getActAndHost;
 
+  function _appCommand(cmd, callback) {
+    var self = this;
+    self.serviceInstance(function(err, instance) {
+      if (err) return callback(err);
+      return instance.appCommand(cmd, callback);
+    });
+  }
+  ServiceProcess.prototype._appCommand = _appCommand;
+
   /**
    * Start tracking objects on a worker.
    *
    * @param {function} callback Callback function.
    */
   function startObjectTracking(callback) {
-    var self = this;
-    self.serviceInstance(function(err, instance) {
-      if (err) return callback(err);
-      return instance._appCommand({
-          cmd: 'start-tracking-objects',
-          target: self.pid,
-        },
-        callback);
-    });
+    this._appCommand({
+        cmd: 'start-tracking-objects',
+        target: this.pid,
+      }, callback
+    );
   }
   ServiceProcess.prototype.startObjectTracking = startObjectTracking;
 
@@ -239,15 +244,11 @@ module.exports = function extendServiceProcess(ServiceProcess) {
    * @param {function} callback Callback function.
    */
   function stopObjectTracking(callback) {
-    var self = this;
-    self.serviceInstance(function(err, instance) {
-      if (err) return callback(err);
-      return instance._appCommand({
-          cmd: 'stop-tracking-objects',
-          target: self.pid,
-        },
-        callback);
-    });
+    this._appCommand({
+        cmd: 'stop-tracking-objects',
+        target: this.pid,
+      }, callback
+    );
   }
   ServiceProcess.prototype.stopObjectTracking = stopObjectTracking;
 
@@ -262,16 +263,12 @@ module.exports = function extendServiceProcess(ServiceProcess) {
    */
   function startCpuProfiling(options, callback) {
     var timeout = options.watchdogTimeout || 0;
-    var self = this;
-    self.serviceInstance(function(err, instance) {
-      if (err) return callback(err);
-      return instance._appCommand({
-          cmd: 'start-cpu-profiling',
-          target: self.pid,
-          timeout: timeout,
-        },
-        callback);
-    });
+    this._appCommand({
+        cmd: 'start-cpu-profiling',
+        target: this.pid,
+        timeout: timeout,
+      }, callback
+    );
   }
   ServiceProcess.prototype.startCpuProfiling = startCpuProfiling;
 
@@ -281,15 +278,11 @@ module.exports = function extendServiceProcess(ServiceProcess) {
    * @param {function} callback Callback function.
    */
   function stopCpuProfiling(callback) {
-    var self = this;
-    self.serviceInstance(function(err, instance) {
-      if (err) return callback(err);
-      return instance._appCommand({
-          cmd: 'stop-cpu-profiling',
-          target: self.pid,
-        },
-        callback);
-    });
+    this._appCommand({
+        cmd: 'stop-cpu-profiling',
+        target: this.pid,
+      }, callback
+    );
   }
   ServiceProcess.prototype.stopCpuProfiling = stopCpuProfiling;
 
@@ -299,15 +292,11 @@ module.exports = function extendServiceProcess(ServiceProcess) {
    * @param {function} callback Callback function.
    */
   function heapSnapshot(callback) {
-    var self = this;
-    self.serviceInstance(function(err, instance) {
-      if (err) return callback(err);
-      return instance._appCommand({
-          cmd: 'heap-snapshot',
-          target: self.pid
-        },
-        callback);
-    });
+    this._appCommand({
+        cmd: 'heap-snapshot',
+        target: this.pid
+      }, callback
+    );
   }
   ServiceProcess.prototype.heapSnapshot = heapSnapshot;
 
@@ -318,16 +307,12 @@ module.exports = function extendServiceProcess(ServiceProcess) {
    * @param {function} callback Callback function.
    */
   function applyPatch(patchData, callback) {
-    var self = this;
-    self.serviceInstance(function(err, instance) {
-      if (err) return callback(err);
-      return instance._appCommand({
-          cmd: 'patch',
-          target: self.pid,
-          patch: patchData,
-        },
-        callback);
-    });
+    this._appCommand({
+        cmd: 'patch',
+        target: this.pid,
+        patch: patchData,
+      }, callback
+    );
   }
   ServiceProcess.prototype.applyPatch = applyPatch;
 };

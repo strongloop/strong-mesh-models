@@ -40,9 +40,7 @@ test('Test env commands', function(t) {
       exec.resetHome();
       exec(port, 'env-set 1 A=1 B=2', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, 'Service ID: 1\n' +
-          'Service Name: service 1\n\n' +
-          'Environment updated:\n' +
+        tt.equal(stdout, 'Service service 1 environment updated\n' +
           '    Name  Value\n' +
           '    A     1\n' +
           '    B     2\n',
@@ -72,9 +70,7 @@ test('Test env commands', function(t) {
       exec.resetHome();
       exec(port, 'env-unset 1 A B', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, 'Service ID: 1\n' +
-          'Service Name: service 1\n\n' +
-          'Environment updated:\n' +
+        tt.equal(stdout, 'Service service 1 environment updated\n' +
           '  No environment variables defined\n',
           'Rendered output should match');
         tt.end();

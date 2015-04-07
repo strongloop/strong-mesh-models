@@ -6,7 +6,7 @@ module.exports = function Api(Api) {
       isStatic: true,
       accepts: [],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Shutdown this executor.'
+      description: 'Shutdown this server.'
     }
   );
 };
