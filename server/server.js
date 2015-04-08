@@ -103,7 +103,7 @@ function server(serviceManager, options) {
     // take care to not callback until any actions are complete.
     if (!callback) {
       callback = function(err) {
-        if (err) throw Error(err);
+        if (err) throw err;
       };
     }
 
