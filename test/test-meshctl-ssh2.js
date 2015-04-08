@@ -13,11 +13,11 @@ test('Test SSH tunnel', function(t) {
 
   testCmdHelper(t, TestServiceManager, function(t, service, instance, port) {
     t.test('Setup service manager', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'start'}, 'Request should match');
         callback(null, {message: 'starting...'});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 

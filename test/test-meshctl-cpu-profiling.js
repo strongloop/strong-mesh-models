@@ -13,12 +13,12 @@ test('Test cpu-profiling commands', function(t) {
 
   testCmdHelper(t, TestServiceManager, function(t, service, instance, port) {
     t.test('Setup service manager (start profiling)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req,
           {cmd: 'current', sub: 'start-cpu-profiling', timeout: 0, target: 1});
         callback(null, {});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
@@ -41,12 +41,12 @@ test('Test cpu-profiling commands', function(t) {
     });
 
     t.test('Setup service manager (watchdog)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req,
           {cmd: 'current', sub: 'start-cpu-profiling', timeout: 10, target: 2});
         callback(null, {});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
@@ -71,12 +71,12 @@ test('Test cpu-profiling commands', function(t) {
     });
 
     t.test('Setup service manager (error)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req,
           {cmd: 'current', sub: 'start-cpu-profiling', timeout: 0, target: 3});
         callback(Error('something bad happened'));
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
@@ -101,7 +101,7 @@ test('Test cpu-profiling commands', function(t) {
     });
 
     t.test('Setup service manager (stop profiling)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.equal(req.cmd, 'current');
         assert.equal(req.sub, 'stop-cpu-profiling');
         assert.equal(req.target, 1);
@@ -109,7 +109,7 @@ test('Test cpu-profiling commands', function(t) {
         fs.writeFileSync(req.filePath, 'some data');
         callback(null, {});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 

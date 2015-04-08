@@ -13,14 +13,14 @@ test('Test patch commands', function(t) {
 
   testCmdHelper(t, TestServiceManager, function(t, service, instance, port) {
     t.test('Setup service manager (patch)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.equal(req.cmd, 'current');
         assert.equal(req.sub, 'patch');
         assert.equal(req.target, 1);
         assert.deepEqual(req.patch, {file: 'some patch data'});
         callback(null, {ok: true});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
@@ -47,14 +47,14 @@ test('Test patch commands', function(t) {
     });
 
     t.test('Setup service manager (error)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.equal(req.cmd, 'current');
         assert.equal(req.sub, 'patch');
         assert.equal(req.target, 1);
         assert.deepEqual(req.patch, {file: 'some patch data'});
         callback(Error('some error'));
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 

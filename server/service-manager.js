@@ -40,10 +40,10 @@ function getDeployment(service, req, res) {
 }
 ServiceManager.prototype.getDeployment = getDeployment;
 
-function ctlRequest(service, instance, req, callback) {
-  debug('ctlRequest(%j, %j, %j)', service, instance, req);
+function onCtlRequest(service, instance, req, callback) {
+  debug('onCtlRequest(%j, %j, %j)', service, instance, req);
   callback(null, {error: 'Not implemented'});
 }
-ServiceManager.prototype.ctlRequest = ctlRequest;
+ServiceManager.prototype.onCtlRequest = onCtlRequest;
 
 module.exports = ServiceManager;

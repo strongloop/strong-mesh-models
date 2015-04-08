@@ -23,12 +23,12 @@ test('Test ls command', function(t) {
 
   testCmdHelper(t, TestServiceManager, function(t, service, instance, port) {
     t.test('Setup service manager', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'current', sub: 'npm-ls'},
           'Request should match');
         callback(null, NPM_DATA);
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
@@ -59,12 +59,12 @@ test('Test ls command', function(t) {
     });
 
     t.test('Setup service manager (error case)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'current', sub: 'npm-ls'},
           'Request should match');
         callback(Error('no app deployed'));
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
