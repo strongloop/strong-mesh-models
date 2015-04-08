@@ -161,6 +161,10 @@ function server(serviceManager, options) {
       case 'express:usage-record':
         ExpressUsageRecord.recordUsage(instanceId, uInfo, callback);
         break;
+      case 'status:wd':
+        // So it isn't reported as Unknown.
+        callback();
+        break;
       default:
         debug('Unknown request: %j', uInfo);
         callback();
