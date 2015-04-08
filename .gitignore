@@ -45,3 +45,4 @@ node_modules
 *.tgz
 *.xml
 *._*
+test/minkelite.db
