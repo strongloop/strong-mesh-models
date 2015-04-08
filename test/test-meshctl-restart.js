@@ -12,12 +12,12 @@ test('Test restart command', function(t) {
 
   testCmdHelper(t, TestServiceManager, function(t, service, instance, port) {
     t.test('Setup service manager (hard restart)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'restart'}, 'Request should match');
         callback(null,
           {message: 'hard stopped with status SIGTERM, restarting...'});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
@@ -42,11 +42,11 @@ test('Test restart command', function(t) {
     });
 
     t.test('Setup service manager (soft restart)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'soft-restart'}, 'Request should match');
         callback(null, {message: 'soft stopped with status 0, restarting...'});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
@@ -71,12 +71,12 @@ test('Test restart command', function(t) {
     });
 
     t.test('Setup service manager (rolling restart)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'current', sub: 'restart'},
           'Request should match');
         callback(null, {message: 'discarded message'});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
@@ -99,11 +99,11 @@ test('Test restart command', function(t) {
     });
 
     t.test('Setup service manager (failure case)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'restart'}, 'Request should match');
         callback(Error('application not running, so cannot be stopped'));
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 

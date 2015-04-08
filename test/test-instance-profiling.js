@@ -12,12 +12,36 @@ test('Check that heap-snapshot and cpu-profileing populates Profile models',
     }
     util.inherits(TestServiceManager, ServiceManager);
 
-    function ctlRequest(service, instance, req, callback) {
+    function onServiceUpdate(service, callback) {
+      t.equal(service.name, 'My Service', 'create: Service name should match');
+      t.equal(service._groups.length, 1, 'create: Service should have 1 group');
+      t.equal(service._groups[0].scale, 1, 'create: Group scale should be 1');
+
+      var app = service.constructor.app;
+      var ServiceInstance = app.models.ServiceInstance;
+      var Executor = app.models.Executor;
+      Executor.create({
+        address: '127.0.0.1',
+        APIPort: 5000,
+        totalCapacity: 2,
+      }, function(err, executor) {
+        t.ok(!err, 'Executor should be created');
+
+        ServiceInstance.create({
+          serverServiceId: service.id,
+          groupId: service._groups[0].id,
+          executorId: executor.id,
+        }, callback);
+      });
+    }
+    TestServiceManager.prototype.onServiceUpdate = onServiceUpdate;
+
+    function onCtlRequest(service, instance, req, callback) {
       t.equal(service.id, 1, 'request: Service id should match');
       t.equal(instance.id, 1, 'request: Instance id should match');
       callback(null, {response: 'ok'});
     }
-    TestServiceManager.prototype.ctlRequest = ctlRequest;
+    TestServiceManager.prototype.onCtlRequest = onCtlRequest;
 
     testCmdHelper(t, TestServiceManager, function(t, service, instance) {
       t.test('heap snapshot', function(tt) {

@@ -20,13 +20,13 @@ test('Test log-dump command', function(t) {
         'line 4 line 4 line 4 line 4\n',
       ];
 
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'log-dump'});
         if (logData.length > 0)
           return callback(null, {log: logData.shift()});
         return callback(Error('done'));
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 

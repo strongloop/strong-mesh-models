@@ -12,12 +12,12 @@ test('Test object-tracking commands', function(t) {
 
   testCmdHelper(t, TestServiceManager, function(t, service, instance, port) {
     t.test('Setup service manager (start tracking)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req,
           {cmd: 'current', sub: 'start-tracking-objects', target: 1231});
         callback(null, {message: 'object tracking started'});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
@@ -45,12 +45,12 @@ test('Test object-tracking commands', function(t) {
     });
 
     t.test('Setup service manager (stop tracking)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req,
           {cmd: 'current', sub: 'stop-tracking-objects', target: 1232});
         callback(null, {message: 'object tracking started'});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
@@ -78,12 +78,12 @@ test('Test object-tracking commands', function(t) {
     });
 
     t.test('Setup service manager (error case)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req,
           {cmd: 'current', sub: 'start-tracking-objects', target: 1233});
         callback(Error('Unable to start tracking'));
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 

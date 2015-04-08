@@ -12,7 +12,7 @@ test('Test env commands', function(t) {
 
   testCmdHelper(t, TestServiceManager, function(t, service, instance, port) {
     t.test('Setup service manager', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req,
           {
             cmd: 'env-set',
@@ -24,7 +24,7 @@ test('Test env commands', function(t) {
         });
       }
 
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
@@ -50,7 +50,7 @@ test('Test env commands', function(t) {
     });
 
     t.test('Setup service manager', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req,
           {
             cmd: 'env-set',
@@ -62,7 +62,7 @@ test('Test env commands', function(t) {
         });
       }
 
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
