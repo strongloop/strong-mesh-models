@@ -148,7 +148,7 @@ function cmdStatus(instance) {
     if (rsp.version) {
       fmt(1, 'version');
       Object.keys(rsp.version).forEach(function(k) {
-          fmt(2, k, 'v%s', rsp.version[k]);
+        fmt(2, k, 'v%s', rsp.version[k]);
       });
     }
 

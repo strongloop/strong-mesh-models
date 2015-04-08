@@ -10,6 +10,7 @@ var config = {
   'port': dbUrl.port,
   'connector': dbUrl.protocol.slice(0, -1)
 };
+if (dbUrl.path) config.file = dbUrl.path;
 
 debug('Datasource config: %j', config);
 

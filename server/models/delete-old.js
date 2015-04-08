@@ -13,8 +13,10 @@ module.exports = function deleteOld(ModelClass, callback) {
   var where = {
     timeStamp: {lt: now - timeWindow},
   };
-  debug('Deleting records of %s matching %j', ModelClass.modelName, where);
-  ModelClass.destroyAll(where, function(err) {
+  debug('Deleting records of %s matching %j (window: %d)',
+    ModelClass.modelName, where, timeWindow);
+  ModelClass.destroyAll(where, function(err, info) {
+    debug('deleted %d records', info.count);
     callback(err);
   });
 };

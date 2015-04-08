@@ -144,7 +144,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
       minkelite.getMetaTransactions(act, host, pid, function(data) {
         if (data && data.hosts && data.hosts[host] && data.hosts[host][pid])
-	  return callback(null, data.hosts[host][pid]);
+          return callback(null, data.hosts[host][pid]);
         callback(null, []);
       });
     });
@@ -163,7 +163,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
       minkelite.getTransaction(act, trans, host, pid, function(data) {
         if (data && data.hosts && data.hosts[host] && data.hosts[host][pid])
-	  return callback(null, data.hosts[host][pid]);
+          return callback(null, data.hosts[host][pid]);
         callback(null, []);
       });
     });
@@ -182,7 +182,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
       minkelite.getRawMemoryPieces(act, host, pid, function(data) {
         if (data && data.hosts && data.hosts[host] && data.hosts[host][pid])
-	  return callback(null, data.hosts[host][pid]);
+          return callback(null, data.hosts[host][pid]);
         callback(null, []);
       });
     });

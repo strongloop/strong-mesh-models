@@ -341,7 +341,7 @@ test('Test notifications', function(t) {
   t.test('Notify express usage records with current data',
     notifyExpressRecord.bind(this, 0));
   t.test('Notify express usage records with stale data',
-    notifyExpressRecord.bind(this, 10 * 60 * 1000));
+    notifyExpressRecord.bind(this, 24 * 60 * 60 * 1000 + 1));
 
   t.test('Check worker 1 express usage records', function(tt) {
     app.models.ExpressUsageRecord.find({}, function(err, records) {
