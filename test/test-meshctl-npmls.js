@@ -12,13 +12,13 @@ test('Test ls command', function(t) {
   }
   util.inherits(TestServiceManager, ServiceManager);
 
-  var npmDataFile = path.join(__dirname, './test-meshctl-ls.json');
+  var npmDataFile = path.join(__dirname, './test-meshctl-npmls.json');
   var NPM_DATA = JSON.parse(fs.readFileSync(npmDataFile));
 
-  var renderedFile = path.join(__dirname, './test-meshctl-ls.render-full');
+  var renderedFile = path.join(__dirname, './test-meshctl-npmls.render-full');
   var FULL_RENDER = fs.readFileSync(renderedFile).toString();
 
-  renderedFile = path.join(__dirname, './test-meshctl-ls.render-2');
+  renderedFile = path.join(__dirname, './test-meshctl-npmls.render-2');
   var DEPTH_2_RENDER = fs.readFileSync(renderedFile).toString();
 
   testCmdHelper(t, TestServiceManager, function(t, service, instance, port) {
@@ -42,7 +42,7 @@ test('Test ls command', function(t) {
 
     t.test('module list CLI', function(tt) {
       exec.resetHome();
-      exec(port, 'ls 1', function(err, stdout) {
+      exec(port, 'npmls 1', function(err, stdout) {
         tt.ifError(err, 'command should not error');
         tt.equal(stdout, FULL_RENDER, 'Rendered output should match');
         tt.end();
@@ -51,7 +51,7 @@ test('Test ls command', function(t) {
 
     t.test('module list CLI (limit depth)', function(tt) {
       exec.resetHome();
-      exec(port, 'ls 1 2', function(err, stdout) {
+      exec(port, 'npmls 1 2', function(err, stdout) {
         tt.ifError(err, 'command should not error');
         tt.equal(stdout, DEPTH_2_RENDER, 'Rendered output should match');
         tt.end();
@@ -77,9 +77,9 @@ test('Test ls command', function(t) {
 
     t.test('module list CLI', function(tt) {
       exec.resetHome();
-      exec(port, 'ls 1', function(err, stdout, stderr) {
+      exec(port, 'npmls 1', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        tt.equal(stderr, 'Command ls failed with Error: no app deployed\n',
+        tt.equal(stderr, 'Command npmls failed with Error: no app deployed\n',
           'Rendered error should match');
         tt.end();
       });

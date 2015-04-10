@@ -100,10 +100,10 @@ function serviceList(callback) {
 }
 Client.prototype.serviceList = serviceList;
 
-function serviceDestroy(name, callback) {
+function serviceDestroy(nameOrId, callback) {
   var Service = this.models.ServerService;
 
-  var q = {where: {name: name}};
+  var q = {where: {or: [{name: nameOrId}, {id: nameOrId}]}};
   Service.findOne(q, function(err, service) {
     if (err || !service) return callback(err, service);
 

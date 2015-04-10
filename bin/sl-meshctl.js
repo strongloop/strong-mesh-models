@@ -96,6 +96,9 @@ maybeTunnel(apiUrl, sshOpts, function(err, apiUrl) {
 function runCommand(apiUrl, command) {
   var client = new Client(apiUrl);
   ({
+    'create': cmdCreateService,
+    'remove': cmdRemoveService,
+    'ls': cmdListServices,
     'status': cmdStatus,
     'start': cmdStart,
     'stop': cmdStop,
@@ -109,7 +112,7 @@ function runCommand(apiUrl, command) {
     'cpu-start': cmdCpuProfilingStart,
     'cpu-stop': cmdCpuProfilingStop,
     'heap-snapshot': cmdHeapSnapshot,
-    'ls': cmdLs,
+    'npmls': cmdLs,
     'patch': cmdPatch,
     'env-set': cmdEnvSet,
     'env-unset': cmdEnvUnset,
@@ -243,6 +246,55 @@ function printResponse(service, summmaryMsg, err, responses) {
   }
 
   if (hasError) dieIf('error');
+}
+
+function cmdCreateService(client) {
+  var name = mandatory('name');
+  var scale = optional(1);
+
+  client.serviceCreate(name, scale, function(err, result) {
+    debug('service-create: %j', err || result);
+    dieIf(err);
+    var g = result._groups[0];
+    console.log('Created Service id: %s name: %j group: %j scale: %d',
+      result.id, result.name, g.name, g.scale);
+  });
+}
+
+function cmdListServices(client) {
+  client.serviceList(function(err, result) {
+    debug('service-list: %j', err || result);
+    dieIf(err);
+
+    if (result.length) {
+      var data = [];
+      data.push(['Id', 'Name', 'Scale']);
+      for (var i in result) {
+        if (!result.hasOwnProperty(i)) continue;
+        var s = result[i];
+        var scale = 0;
+        for (var g in s._groups) {
+          if (!s._groups.hasOwnProperty(g)) continue;
+          scale += s._groups[g].scale;
+        }
+
+        data.push([s.id, s.name, scale]);
+      }
+      console.log(table(data, {align: ['c', 'c', 'c']}));
+    } else {
+      console.log('No services defined');
+    }
+  });
+}
+
+function cmdRemoveService(client) {
+  var name = mandatory('name');
+
+  client.serviceDestroy(name, function(err, result) {
+    debug('service-destroy: %j', err || result);
+    dieIf(err);
+    console.log('Destroyed service name: %s', name);
+  });
 }
 
 function cmdStart(client) {
