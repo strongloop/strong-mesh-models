@@ -12,11 +12,11 @@ test('Test set-size command', function(t) {
 
   testCmdHelper(t, TestServiceManager, function(t, service, instance, port) {
     t.test('Setup service manager (non-persisted)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'current', sub: 'set-size', size: 2});
         callback(null, {message: 'size was changed'});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
@@ -40,11 +40,11 @@ test('Test set-size command', function(t) {
     });
 
     t.test('Setup service manager (persisted)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'current', sub: 'set-size', size: 3});
         callback(null, {message: 'size was changed'});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
 
       function onInstanceUpdate(instance, callback) {
         assert.equal(instance.cpus, 3);
@@ -65,11 +65,11 @@ test('Test set-size command', function(t) {
     });
 
     t.test('Setup service manager (no app, persist case)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'current', sub: 'set-size', size: 4});
         callback(Error('application not running'));
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
 
       function onInstanceUpdate(instance, callback) {
         assert.equal(instance.cpus, 4);
@@ -87,11 +87,11 @@ test('Test set-size command', function(t) {
     });
 
     t.test('Setup service manager (failure case)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'current', sub: 'set-size', size: 5});
         callback(Error('application not running'));
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 

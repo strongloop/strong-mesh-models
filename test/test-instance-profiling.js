@@ -37,12 +37,12 @@ test('Check that heap-snapshot and cpu-profileing populates Profile models',
     }
     TestServiceManager.prototype.onServiceUpdate = onServiceUpdate;
 
-    function ctlRequest(service, instance, req, callback) {
+    function onCtlRequest(service, instance, req, callback) {
       t.equal(service.id, 1, 'request: Service id should match');
       t.equal(instance.id, 1, 'request: Instance id should match');
       callback(null, {response: 'ok'});
     }
-    TestServiceManager.prototype.ctlRequest = ctlRequest;
+    TestServiceManager.prototype.onCtlRequest = onCtlRequest;
 
     t.plan(23);
     var server = meshServer(new TestServiceManager());

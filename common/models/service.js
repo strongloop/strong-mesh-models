@@ -26,7 +26,10 @@ module.exports = function(Service) {
         {path: '/deploy', verb: 'post'},
         {path: '/deploy', verb: 'put'},
       ],
-      accepts: {arg: 'ctx', http: {source: 'context'}},
+      accepts: [
+        {arg: 'req', http: {source: 'req'}},
+        {arg: 'res', http: {source: 'res'}}
+      ],
       description: 'Deploy service'
     });
 

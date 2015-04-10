@@ -12,11 +12,11 @@ test('Test stop command', function(t) {
 
   testCmdHelper(t, TestServiceManager, function(t, service, instance, port) {
     t.test('Setup service manager (hard stop)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'stop'}, 'Request should match');
         callback(null, {message: 'hard stopped with status SIGTERM'});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
@@ -40,11 +40,11 @@ test('Test stop command', function(t) {
     });
 
     t.test('Setup service manager (soft stop)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'soft-stop'}, 'Request should match');
         callback(null, {message: 'soft stopped with status 0'});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
@@ -68,11 +68,11 @@ test('Test stop command', function(t) {
     });
 
     t.test('Setup service manager (failure case)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'stop'}, 'Request should match');
         callback(Error('application not running, so cannot be stopped'));
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
