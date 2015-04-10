@@ -46,7 +46,7 @@
   },
   "optionalDependencies": {},
   "devDependencies": {
-    "eslint": "^0.15.0",
+    "eslint": "^0.18.0",
     "istanbul": "^0.3.0",
     "jscs": "^1.11.3",
     "tap": "^0.7.0",

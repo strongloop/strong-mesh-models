@@ -66,7 +66,7 @@ module.exports = function extendServerService(ServerService) {
   }
   ServerService.setServiceCommit = setServiceCommit;
 
-  function deploy(req, res, callback) {
+  function deploy(req, res) {
     ServerService.app.serviceManager.onDeployment(this, req, res);
   }
   ServerService.prototype.deploy = deploy;

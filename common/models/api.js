@@ -1,4 +1,4 @@
-module.exports = function Api(Api) {
+module.exports = function api(Api) {
   Api.remoteMethod(
     'shutdown',
     {
