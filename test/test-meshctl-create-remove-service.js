@@ -42,7 +42,7 @@ test('Test service commands', function(t) {
       exec.resetHome();
       exec(port, 'remove aservice', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, 'Destroyed service name: aservice\n');
+        tt.equal(stdout, 'Destroyed service: aservice\n');
         tt.end();
       });
     });

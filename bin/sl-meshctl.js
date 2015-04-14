@@ -293,7 +293,7 @@ function cmdRemoveService(client) {
   client.serviceDestroy(name, function(err, result) {
     debug('service-destroy: %j', err || result);
     dieIf(err);
-    console.log('Destroyed service name: %s', name);
+    console.log('Destroyed service: %s', name);
   });
 }
 
