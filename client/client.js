@@ -83,6 +83,16 @@ function Client(apiUrl, options) {
 }
 module.exports = Client;
 
+function serviceFindOrCreate(name, scale, callback) {
+  var self = this;
+  self.serviceFind(name, function(err, service) {
+    if (err && err.statusCode !== 404) return callback(err);
+    if (service) return callback(null, service);
+    self.serviceCreate(name, scale, callback);
+  });
+}
+Client.prototype.serviceFindOrCreate = serviceFindOrCreate;
+
 function serviceCreate(name, scale, callback) {
   var Service = this.models.ServerService;
 
