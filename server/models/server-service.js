@@ -31,7 +31,7 @@ module.exports = function extendServerService(ServerService) {
       ServerService.app.serviceManager.onServiceUpdate(ctx.instance, next);
     } else {
       // Save of multiple Services
-      ServerService.find(ctx.where, function(err, services) {
+      ServerService.find({where: ctx.where}, function(err, services) {
         if (err) return next(err);
         return async.each(
           services,
@@ -45,7 +45,7 @@ module.exports = function extendServerService(ServerService) {
   });
 
   ServerService.observe('before delete', function(ctx, next) {
-    ctx.Model.find(ctx.where, function(err, instances) {
+    ctx.Model.find({where: ctx.where}, function(err, instances) {
       if (err) next(err);
       return async.each(
         instances,
