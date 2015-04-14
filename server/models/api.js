@@ -8,7 +8,7 @@ module.exports = function extendApi(Api) {
    * @param {function} callback Callback function.
    */
   function shutdown(callback) {
-    Api.app.serviceManager.apiRequest(
+    Api.app.serviceManager.onApiRequest(
       {
         cmd: 'shutdown',
       },
