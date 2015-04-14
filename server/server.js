@@ -106,9 +106,7 @@ function server(serviceManager, options) {
     // However, the unit tests need to know when models have been updated, so
     // take care to not callback until any actions are complete.
     if (!callback) {
-      callback = function(err) {
-        if (err) throw err;
-      };
+      callback = assert.ifError;
     }
 
     var ServiceMetric = app.models.ServiceMetric;
@@ -119,6 +117,8 @@ function server(serviceManager, options) {
 
     switch (uInfo.cmd) {
       case 'started':
+        // Note carefully that strong-pm doesn't actually pass the started cmd
+        // directly, it first annotates it with a bunch of extra information.
         ServiceInstance.recordInstanceInfo(instanceId, uInfo, function(err) {
           if (err) return callback(err);
           ServiceProcess.recordFork(instanceId, uInfo, callback);
