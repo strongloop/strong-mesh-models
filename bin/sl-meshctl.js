@@ -586,9 +586,9 @@ function cmdLogDump(client) {
 }
 
 function cmdShutdown(client) {
-  client.getApi().shutdown(function(err) {
+  client.getApi().shutdown(function(err, res) {
     dieIf(err);
-    console.log('shutting down');
+    console.log('%s', res.message);
   });
 }
 
