@@ -79,7 +79,7 @@ test('Test ls command', function(t) {
       exec.resetHome();
       exec(port, 'npmls 1', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        tt.equal(stderr, 'Command npmls failed with Error: no app deployed\n',
+        tt.equal(stderr, 'Command "npmls" failed with Error: no app deployed\n',
           'Rendered error should match');
         tt.end();
       });

@@ -60,7 +60,7 @@ test('Test start command', function(t) {
       exec.resetHome();
       exec(port, 'start 1', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        tt.equal(stderr, 'Command start failed with error\n',
+        tt.equal(stderr, 'Command "start" failed with error\n',
           'Rendered error should match');
         tt.end();
       });

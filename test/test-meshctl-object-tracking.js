@@ -102,7 +102,7 @@ test('Test object-tracking commands', function(t) {
       exec.resetHome();
       exec(port, 'objects-start 3', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        tt.equal(stderr, 'Command objects-start failed with Error: ' +
+        tt.equal(stderr, 'Command "objects-start" failed with Error: ' +
           'Unable to start tracking\n',
           'Rendered error should match');
         tt.end();

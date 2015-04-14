@@ -77,7 +77,7 @@ test('Test patch commands', function(t) {
       exec(port, 'patch 1 patch.file', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
         tt.equal(stderr,
-          'Command patch failed with Error: some error\n');
+          'Command "patch" failed with Error: some error\n');
         tt.end();
       });
     });

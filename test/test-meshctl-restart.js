@@ -119,7 +119,7 @@ test('Test restart command', function(t) {
       exec.resetHome();
       exec(port, 'restart 1', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        tt.equal(stderr, 'Command restart failed with error\n',
+        tt.equal(stderr, 'Command "restart" failed with error\n',
           'Rendered error should match');
         tt.end();
       });

@@ -85,7 +85,7 @@ test('Test heap-snapshot commands', function(t) {
       exec(port, 'heap-snapshot 2', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
         tt.equal(stderr,
-          'Command heap-snapshot failed with Error: ' +
+          'Command "heap-snapshot" failed with Error: ' +
           'code 500/Profiling failed: Error: something bad happened\n',
           'Rendered error should match');
         tt.end();

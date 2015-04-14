@@ -90,7 +90,7 @@ test('Test stop command', function(t) {
       exec.resetHome();
       exec(port, 'stop 1', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        tt.equal(stderr, 'Command stop failed with error\n',
+        tt.equal(stderr, 'Command "stop" failed with error\n',
           'Rendered error should match');
         tt.end();
       });

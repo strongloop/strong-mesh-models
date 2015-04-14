@@ -13,7 +13,7 @@ test('Check that heap-snapshot and cpu-profileing populates Profile models',
     util.inherits(TestServiceManager, ServiceManager);
 
     function onServiceUpdate(service, callback) {
-      t.equal(service.name, 'My Service', 'create: Service name should match');
+      t.equal(service.name, 'service 1', 'create: Service name should match');
       t.equal(service._groups.length, 1, 'create: Service should have 1 group');
       t.equal(service._groups[0].scale, 1, 'create: Group scale should be 1');
 
