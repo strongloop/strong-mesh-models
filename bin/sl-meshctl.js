@@ -681,7 +681,7 @@ function dieIf(err) {
   // Split into first line, and the rest.
   var msgs = msg.split('.');
 
-  console.error('Command %s failed with %s', command, msgs.shift());
+  console.error('Command %j failed with %s', command, msgs.shift());
   if (msgs.length) {
     console.error('%s', msgs.join('.').trim());
   }
