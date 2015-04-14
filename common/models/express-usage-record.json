@@ -15,6 +15,33 @@
       "type": "date",
       "required": true
     },
+    "requestMethod": {
+      "type": "string"
+    },
+    "requestUrl": {
+      "type": "string"
+    },
+    "clientAddress": {
+      "type": "string"
+    },
+    "clientUsername": {
+      "type": "string"
+    },
+    "clientId": {
+      "type": "string"
+    },
+    "clientDetail": {
+      "type": "object"
+    },
+    "lbModelName": {
+      "type": "string"
+    },
+    "lbInstanceId": {
+      "type": "string"
+    },
+    "lbRemoteMethod": {
+      "type": "string"
+    },
     "detail": {
       "type": "object"
     }

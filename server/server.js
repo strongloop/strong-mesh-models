@@ -35,6 +35,10 @@ function server(serviceManager, options) {
   app.serviceManager = serviceManager;
   options = options || {};
 
+  var duration1Day = 24 * 60 * 60 * 1000;
+  options['ExpressUsageRecord.deleteWindow'] =
+    options['ExpressUsageRecord.deleteWindow'] || String(duration1Day);
+
   for (var k in options) {
     if (!options.hasOwnProperty(k)) continue;
     app.set(k, options[k]);
