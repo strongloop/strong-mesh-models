@@ -16,7 +16,7 @@ module.exports = function deleteOld(ModelClass, callback) {
   debug('Deleting records of %s matching %j (window: %d)',
     ModelClass.modelName, where, timeWindow);
   ModelClass.destroyAll(where, function(err, info) {
-    debug('deleted %d records', info.count);
+    debug('deleted %d records', info ? info.count : 0);
     callback(err);
   });
 };
