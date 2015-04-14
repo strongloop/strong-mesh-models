@@ -60,6 +60,10 @@ module.exports = function extendServerService(ServerService) {
   function setServiceCommit(serviceId, commit, callback) {
     ServerService.findById(serviceId, function(err, service) {
       if (err) return callback(err);
+      // With loopback, !err isn't the same as 'success'! :-(
+      if (!service) callback(new Error(util.format(
+        'setServiceCommit: service %j not found', serviceId
+      )));
       service.deploymentInfo = commit;
       service.save(callback);
     });
