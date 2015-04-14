@@ -45,7 +45,6 @@ test('Test notifications', function(t) {
       cmd: 'started',
       commitHash: 'some hash',
       appName: 'my app',
-      npmModules: {name: 'list of npm modules'},
       PMPort: 5000,
       containerVersionInfo: {
         os: {
@@ -83,7 +82,6 @@ test('Test notifications', function(t) {
       tt.ok(!!inst.startTime, 'start time should be set');
       tt.ok(!!inst.started, 'started should be true');
       tt.equal(inst.applicationName, 'my app', 'app name should match');
-      tt.deepEqual(inst.npmModules, {name: 'list of npm modules'});
       tt.equal(inst.PMPort, 5000, 'PM port should match');
       tt.deepEqual(inst.containerVersionInfo, {
         os: {

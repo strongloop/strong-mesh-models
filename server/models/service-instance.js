@@ -67,13 +67,14 @@ module.exports = function extendServiceInstance(ServiceInstance) {
   });
 
   function recordInstanceInfo(instanceId, instInfo, callback) {
+    // XXX(sam) closely tied to strong-pm's mangling of the strong-supervisor
+    // started notification... :-(
     ServiceInstance.findById(instanceId, function(err, instance) {
       if (err) return callback(err);
       instance.currentDeploymentId = instInfo.commitHash;
       instance.startTime = new Date();
       instance.started = true;
       instance.applicationName = instInfo.appName;
-      instance.npmModules = instInfo.npmModules;
       instance.PMPort = instInfo.PMPort;
       instance.containerVersionInfo = instInfo.containerVersionInfo;
       instance.setSize = instInfo.setSize;
