@@ -16,6 +16,9 @@
     "url": "https://github.com/strongloop/strong-mesh-models/blob/master/LICENSE.md"
   },
   "main": "index.js",
+  "bin": {
+    "sl-meshctl": "./bin/sl-meshctl.js"
+  },
   "scripts": {
     "lint": "eslint . && jscs .",
     "test": "tap --tap --stdout --stderr --timeout=300 test/test-*.js",
