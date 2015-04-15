@@ -1,4 +1,4 @@
-2015-04-02, Version 5.0.2
+2015-04-01, Version 5.0.2
 =========================
 
  * meshctl: report pm versions in status (Sam Roberts)
