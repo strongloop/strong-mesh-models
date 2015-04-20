@@ -239,10 +239,10 @@ function printResponse(service, summmaryMsg, err, responses) {
   }
 
   if (verbose || hasError) {
-    console.log('Service: %s', service.name);
+    console.log('Service: %j', service.name);
     console.log(table(responseTable, {align: ['c', 'c']}));
   } else if (summmaryMsg) {
-    console.log('Service %s %s', service.name, summmaryMsg);
+    console.log('Service %j %s', service.name, summmaryMsg);
   }
 
   if (hasError) dieIf('error');

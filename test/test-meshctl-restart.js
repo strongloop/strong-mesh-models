@@ -35,7 +35,7 @@ test('Test restart command', function(t) {
       exec.resetHome();
       exec(port, 'restart 1', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, 'Service service 1 restarting\n',
+        tt.equal(stdout, 'Service "service 1" restarting\n',
           'Rendered output should match');
         tt.end();
       });
@@ -64,7 +64,7 @@ test('Test restart command', function(t) {
       exec.resetHome();
       exec(port, 'soft-restart 1', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, 'Service service 1 soft restarting\n',
+        tt.equal(stdout, 'Service "service 1" soft restarting\n',
           'Rendered output should match');
         tt.end();
       });

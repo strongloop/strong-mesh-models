@@ -34,7 +34,7 @@ test('Test stop command', function(t) {
       exec.resetHome();
       exec(port, 'stop 1', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, 'Service service 1 hard stopped\n',
+        tt.equal(stdout, 'Service "service 1" hard stopped\n',
           'Rendered output should match');
         tt.end();
       });
@@ -63,7 +63,7 @@ test('Test stop command', function(t) {
       exec.resetHome();
       exec(port, 'soft-stop 1', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, 'Service service 1 soft stopped\n',
+        tt.equal(stdout, 'Service "service 1" soft stopped\n',
           'Rendered output should match');
         tt.end();
       });

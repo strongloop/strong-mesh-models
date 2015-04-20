@@ -33,7 +33,7 @@ test('Test start command', function(t) {
       exec.resetHome();
       exec(port, 'start 1', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, 'Service service 1 starting...\n',
+        tt.equal(stdout, 'Service "service 1" starting...\n',
           'Rendered output should match');
         tt.end();
       });
