@@ -29,30 +29,30 @@ be overridden to use an existing private key instead of an agent by setting the
 `SSH_KEY` environment variable to the path of the private key to be used.
 
 Commands:
-  status [SRV_ID]         Report status for service SRV_ID, or all services if
-        no SRV_ID is provided. This is the default command.
+  status [SVC]            Report status for service SVC, or all services if
+        no SVC is provided. This is the default command.
 
   create NAME [SCALE]     Create service named NAME, SCALE defaults to 1.
   ls                      List services.
-  remove SRV_ID           Remove a service SRV_ID.
+  remove SVC              Remove a service SVC.
 
   shutdown                Shutdown the process manager.
 
-  start SRV_ID            Start service SRV_ID.
-  stop SRV_ID             Hard stop service SRV_ID.
-  soft-stop SRV_ID        Soft stop service SRV_ID.
-  restart SRV_ID          Hard stop and restart service SRV_ID with new config.
-  soft-restart SRV_ID     Soft stop and restart service SRV_ID with new config.
+  start SVC               Start service SVC.
+  stop SVC                Hard stop service SVC.
+  soft-stop SVC           Soft stop service SVC.
+  restart SVC             Hard stop and restart service SVC with new config.
+  soft-restart SVC        Soft stop and restart service SVC with new config.
         "Soft" stops notify workers they are being disconnected, and give them
         a grace period for any existing connections to finish. "Hard" stops
         kill the supervisor and its workers with `SIGTERM`.
 
-  cluster-restart SRV_ID  Restart the service SRV_ID cluster workers.
+  cluster-restart SVC     Restart the service SVC cluster workers.
         This is a zero-downtime restart, the workers are soft restarted
         one-by-one, so that some workers will always be available to service
         requests.
 
-  set-size SRV_ID N       Set cluster size for service SRV_ID to N workers.
+  set-size SVC N          Set cluster size for service SVC to N workers.
         The default cluster size is the number of CPU cores.
 
   objects-start ID        Start tracking objects on worker ID.
@@ -79,23 +79,23 @@ Commands:
 
   npmls ID [DEPTH]        List dependencies of the service ID.
 
-  env[-get] SRV_ID [KEYS...]
-        List specified environment variables for service SRV_ID. If none are
+  env[-get] SVC [KEYS...]
+        List specified environment variables for service SVC. If none are
         specified, list all variables.
-  env-set SRV_ID K=V...   Set one or more environment variables for
-        service SRV_ID.
-  env-unset SRV_ID KEYS...
-        Unset one or more environment variables for service SRV_ID. The
+  env-set SVC K=V...   Set one or more environment variables for
+        service SVC.
+  env-unset SVC KEYS...
+        Unset one or more environment variables for service SVC. The
         environment variables are applied to the current application, and the
         application is hard restarted with the new environment after change
         (either set or unset).
 
-  log-dump SRV_ID [--follow]
-        Empty the log buffer, dumping the contents to stdout for service SRV_ID.
+  log-dump SVC [--follow]
+        Empty the log buffer, dumping the contents to stdout for service SVC.
         If --follow is given the log buffer is continuously dumped to stdout.
 
-`SRV_ID` is either ID or Name of a service. It can be obtained by listing
-services using `service-list` or looking up service status with `status`.
+`SVC` is either a service ID or service Name. It can be obtained by listing
+services using `ls` or `status`.
 
-Worker `ID` can be obtained using the `status` command and refers to a specific
-worker of a service.
+`ID` is a worker ID. It can be obtained using the `status` command and refers
+to a specific worker of a specific service.
