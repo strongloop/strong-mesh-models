@@ -296,3 +296,20 @@ function apiInfo(callback) {
   Api.apiInfo(callback);
 }
 Client.prototype.apiInfo = apiInfo;
+
+function dailyExpressMetricsSummary(callback) {
+  this.models.ExpressUsageRecord.dailySummary(callback);
+}
+Client.prototype.dailyExpressMetricsSummary = dailyExpressMetricsSummary;
+
+function hourlyExpressMetricsSummary(modelOrUri, callback) {
+  this.models.ExpressUsageRecord.hourlySummary(modelOrUri, callback);
+}
+Client.prototype.hourlyExpressMetricsSummary = hourlyExpressMetricsSummary;
+
+function expressMetricsEndpointDetail(modelOrUri, windowStartTime, callback) {
+  this.models.ExpressUsageRecord.endpointDetail(
+    modelOrUri, windowStartTime, callback
+  );
+}
+Client.prototype.expressMetricsEndpointDetail = expressMetricsEndpointDetail;

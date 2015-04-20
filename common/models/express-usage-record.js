@@ -15,13 +15,11 @@ module.exports = function expressUsageRecord(ExpressUsageRecord) {
         arg: 'modelOrUri',
         required: true,
         type: 'string',
-      }, {
-        arg: 'windowStartTime',
-        required: true,
-        type: 'date',
       }
     ],
-    description: 'Hourly summary by endpoint and method'
+    returns: {arg: 'summary', type: 'object', root: true},
+    description: 'Number of calls to endpoint/method summarized ' +
+      'by hour for one day',
   });
 
   ExpressUsageRecord.remoteMethod('endpointDetail', {
@@ -37,6 +35,7 @@ module.exports = function expressUsageRecord(ExpressUsageRecord) {
         required: true,
         type: 'date',
       }],
-    description: 'Endpoint detail'
+    returns: {arg: 'summary', type: 'object', root: true},
+    description: 'Endpoint details for one hour'
   });
 };

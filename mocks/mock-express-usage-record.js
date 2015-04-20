@@ -61,6 +61,9 @@ function genExpressMetrics(cb) {
     method: 'POST'
   }];
 
+  var dataStartTime = new Date(new Date() - 23 * 60 * 60 * 1000);
+  console.log('Data starts at %s', dataStartTime.toString());
+
   for (var i = 0; i < 500; i++) {
     var status = Math.random() >= 0.5 ? 200 : 404;
     var d = new Date();
@@ -80,7 +83,8 @@ function genExpressMetrics(cb) {
       },
       'response': {
         'status': status,
-        'duration': Math.round((Math.random() * 100))
+        'duration': Math.round((Math.random() * 100)),
+        'bytes': null
       },
       'process': {
         'pid': 1002
