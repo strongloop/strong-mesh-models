@@ -44,6 +44,15 @@
     },
     "detail": {
       "type": "object"
+    },
+    "responseDuration": {
+      "type": "number"
+    },
+    "responseSize": {
+      "type": "number"
+    },
+    "statusCode": {
+      "type": "number"
     }
   },
   "validations": [],

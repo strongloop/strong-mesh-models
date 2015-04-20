@@ -102,7 +102,8 @@ test('express usage record', function(t) {
             },
             'response': {
               'status': status,
-              'duration': Math.round((Math.random() * 100))
+              'duration': Math.round((Math.random() * 100)),
+              'bytes': null
             },
             'process': {
               'pid': 1235
@@ -139,12 +140,11 @@ test('express usage record', function(t) {
       });
 
       t.test('hourly summary should return data', function(tt) {
-        var hrsAgo5 = new Date() - 5 * 60 * 1000;
         server.models.ExpressUsageRecord.hourlySummary(
-          'ModelA', hrsAgo5, function(err, data) {
+          'ModelA', function(err, data) {
             tt.ifError(err);
             debug(data);
-            tt.assert(data.length > 0, 'Data should be returned');
+            tt.equal(data.length, 25, 'Data should be returned');
             tt.end();
           }
         );
@@ -166,7 +166,7 @@ test('express usage record', function(t) {
             var callCount = data[i].GET + data[i].POST +
               data[i].DELETE + data[i].PUT;
             if (callCount > 0) {
-              dataEntry = data;
+              dataEntry = data[i];
               break;
             }
           }
@@ -176,9 +176,8 @@ test('express usage record', function(t) {
           );
         }
 
-        var hrsAgo5 = new Date() - 5 * 60 * 1000;
         server.models.ExpressUsageRecord.hourlySummary(
-          'ModelA', hrsAgo5, processHourlySummary
+          'ModelA', processHourlySummary
         );
       });
     }
