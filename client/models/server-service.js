@@ -71,9 +71,12 @@ module.exports = function extServerService(ServerService) {
       for (var i in instances) {
         if (!instances.hasOwnProperty(i)) continue;
         var instance = instances[i];
+        if (!instance.containerVersionInfo)
+          continue;
+        var container = instance.containerVersionInfo.container;
         serviceInfo.instances[instance.id] = {
-          version: instance.containerVersionInfo.container.version,
-          apiVersion: instance.containerVersionInfo.container.apiVersion,
+          version: container.version,
+          apiVersion: container.apiVersion,
           port: instance.PMPort,
           restartCount: instance.restartCount,
           agentVersion: instance.agentVersion,
@@ -88,6 +91,7 @@ module.exports = function extServerService(ServerService) {
         serviceInfo.processes = [];
         for (var i in map) {
           if (!map.hasOwnProperty(i)) continue;
+          if (!serviceInfo.instances[map[i].instanceId]) continue;
           serviceInfo.processes =
             serviceInfo.processes.concat(map[i].processes);
           serviceInfo.instances[map[i].instanceId].numProcesses =
