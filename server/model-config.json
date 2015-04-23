@@ -8,7 +8,7 @@
     ]
   },
   "Api": {
-    "dataSource": false,
+    "dataSource": null,
     "public": true
   },
   "User": {
