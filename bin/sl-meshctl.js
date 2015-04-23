@@ -139,6 +139,11 @@ function cmdStatus(client) {
   } else {
     client.serviceList(function(err, services) {
       dieIf(err);
+      if (!services.length) {
+        console.log('No services exist');
+        return;
+      }
+
       for (var i in services) {
         if (!services.hasOwnProperty(i)) continue;
         printServiceStatus(services[i]);
