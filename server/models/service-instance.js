@@ -85,6 +85,15 @@ module.exports = function extendServiceInstance(ServiceInstance) {
   }
   ServiceInstance.recordInstanceInfo = recordInstanceInfo;
 
+  function recordStatusUpdate(instanceId, instInfo, callback) {
+    ServiceInstance.findById(instanceId, function(err, instance) {
+      if (err) return callback(err);
+      if (instInfo.master) instance.setSize = instInfo.master.setSize || 0;
+      instance.save(callback);
+    });
+  }
+  ServiceInstance.recordStatusUpdate = recordStatusUpdate;
+
   function runCommand(req, callback) {
     this.actions.create({
       request: req

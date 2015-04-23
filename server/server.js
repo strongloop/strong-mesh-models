@@ -139,8 +139,7 @@ function server(serviceManager, options) {
         ServiceProcess.recordProfilingState(instanceId, uInfo, callback);
         break;
       case 'status':
-        // not used
-        callback();
+        ServiceInstance.recordStatusUpdate(instanceId, uInfo, callback);
         break;
       case 'metrics':
         ServiceMetric.recordMetrics(instanceId, uInfo, callback);
