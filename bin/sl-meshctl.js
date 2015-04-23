@@ -564,7 +564,12 @@ function cmdGetProcessCount(client) {
     dieIf(err);
     service.getStatusSummary(function(err, summary) {
       dieIf(err);
-      var processes = summary.processes.length;
+      var processes = 0;
+      for (var i in summary.processes) {
+        if (!summary.processes.hasOwnProperty(i)) continue;
+        if (summary.processes[i].stopReason) continue;
+        processes++;
+      }
       console.log('Service ID %j processes: %d', service.id, processes);
     });
   });
