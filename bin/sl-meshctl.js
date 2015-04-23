@@ -118,6 +118,7 @@ function runCommand(apiUrl, command) {
     'env-unset': cmdEnvUnset,
     'env-get': cmdEnvGet,
     'env': cmdEnvGet,
+    'get-process-count': cmdGetProcessCount, // No docs, internal use only.
     'log-dump': cmdLogDump,
     'shutdown': cmdShutdown,
   }[command] || unknown)(client);
@@ -554,6 +555,18 @@ function cmdEnvGet(client) {
     } else {
       printServiceEnv(filtered);
     }
+  });
+}
+
+function cmdGetProcessCount(client) {
+  var targetService = mandatory();
+  client.serviceFind(targetService, function(err, service) {
+    dieIf(err);
+    service.getStatusSummary(function(err, summary) {
+      dieIf(err);
+      var processes = summary.processes.length;
+      console.log('Service ID %j processes: %d', service.id, processes);
+    });
   });
 }
 

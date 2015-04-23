@@ -72,5 +72,15 @@ test('Test status command', function(t) {
         tt.end();
       });
     });
+
+    t.test('Status get-process-count CLI (using REST models)', function(tt) {
+      exec.resetHome();
+      var EXPECT = 'Service ID 1 processes: 4\n';
+      exec(port, 'get-process-count 1', function(err, stdout) {
+        tt.ifError(err, 'command should not error');
+        tt.equal(EXPECT, stdout, 'Rendered status should match');
+        tt.end();
+      });
+    });
   });
 });
