@@ -19,13 +19,6 @@ test('Test status command', function(t) {
     current: {
       pwd: BASE + '/work/current',
       cwd: BASE + '/work/462df261bc2a8df5455289a801f91ad7a95e8bb0',
-      config: {
-        prepare: ['npm rebuild', 'npm install --production'],
-        start: ['sl-run --cluster=CPU'],
-        stop: ['SIGTERM'],
-        replace: ['SIGHUP'],
-        files: {}
-      },
       pid: 90423,
       workers: [{
         id: '1',
