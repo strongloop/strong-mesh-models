@@ -9,6 +9,11 @@
       "required": true,
       "description": "Version of this server"
     },
+    "apiPort": {
+      "type": "number",
+      "required": true,
+      "description": "Port that this server is listening on"
+    },
     "apiVersion": {
       "type": "string",
       "required": true,
