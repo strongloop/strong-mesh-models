@@ -16,4 +16,9 @@ module.exports = function extendApi(Api) {
     );
   }
   Api.shutdown = shutdown;
+
+  function apiInfo(callback) {
+    Api.app.serviceManager.getApiVersionInfo(callback);
+  }
+  Api.apiInfo = apiInfo;
 };

@@ -290,3 +290,9 @@ function resolveTarget(targetId, callback) {
   }
 }
 Client.prototype.resolveTarget = resolveTarget;
+
+function apiInfo(callback) {
+  var Api = this.models.Api;
+  Api.apiInfo(callback);
+}
+Client.prototype.apiInfo = apiInfo;

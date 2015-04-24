@@ -9,4 +9,14 @@ module.exports = function api(Api) {
       description: 'Shutdown this server.'
     }
   );
+  Api.remoteMethod(
+    'apiInfo',
+    {
+      http: {path: '/', verb: 'get'},
+      isStatic: true,
+      accepts: [],
+      returns: {arg: 'response', type: 'Api', root: true},
+      description: 'Get API information'
+    }
+  );
 };

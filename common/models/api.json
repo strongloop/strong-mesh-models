@@ -3,7 +3,28 @@
   "plural": "Api",
   "base": "Model",
   "description": "API",
-  "properties": {},
+  "properties": {
+    "version": {
+      "type": "string",
+      "required": true,
+      "description": "Version of this server"
+    },
+    "apiVersion": {
+      "type": "string",
+      "required": true,
+      "description": "Version of the REST API"
+    },
+    "driverType": {
+      "type": "string",
+      "required": true,
+      "description": "The driver type run by this server"
+    },
+    "driverStatus": {
+      "type": "string",
+      "required": true,
+      "description": "The hostname of this executor"
+    }
+  },
   "validations": [],
   "relations": {},
   "acls": [],

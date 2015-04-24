@@ -52,4 +52,10 @@ function onApiRequest(req, callback) {
 }
 ServiceManager.prototype.onApiRequest = onApiRequest;
 
+function getApiVersionInfo(callback) {
+  debug('getApiVersionInfo()');
+  callback(Error('API request not implemented'));
+}
+ServiceManager.prototype.getApiVersionInfo = getApiVersionInfo;
+
 module.exports = ServiceManager;

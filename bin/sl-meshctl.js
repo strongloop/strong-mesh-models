@@ -100,6 +100,7 @@ function runCommand(apiUrl, command) {
     'remove': cmdRemoveService,
     'ls': cmdListServices,
     'status': cmdStatus,
+    'info': cmdInfo,
     'start': cmdStart,
     'stop': cmdStop,
     'soft-stop': cmdSoftStop,
@@ -153,6 +154,20 @@ function cmdStatus(client) {
   }
 }
 
+function cmdInfo(client) {
+  client.apiInfo(function(err, info) {
+    dieIf(err);
+
+    var infoTable = [
+      ['PM Version:', info.version],
+      ['API Version:', info.apiVersion],
+      ['Driver Type:', info.driverType],
+      ['Driver Status:', info.driverStatus],
+    ];
+    console.log('%s', table(infoTable));
+  });
+}
+
 function printServiceEnv(env) {
   if (Object.keys(env).length > 0) {
     var envTable = [['  ', 'Name', 'Value']];
@@ -177,14 +192,13 @@ function printServiceStatus(service) {
     printServiceEnv(summary.env);
 
     var instanceTable = [[
-      '  ', 'Version', 'API Version', 'Agent version', 'Cluster size'
+      '  ', 'Version', 'Agent version', 'Cluster size'
     ]];
     for (var i in summary.instances) {
       if (!summary.instances.hasOwnProperty(i)) continue;
       var inst = summary.instances[i];
       instanceTable.push(['',
-        inst.version, inst.apiVersion || 'unknown',
-        inst.agentVersion, inst.clusterSize
+        inst.version, inst.agentVersion, inst.clusterSize
       ]);
     }
     console.log('Instances:\n%s', table(instanceTable, {
