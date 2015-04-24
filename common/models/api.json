@@ -9,6 +9,11 @@
       "required": true,
       "description": "Version of this server"
     },
+    "serverPid": {
+      "type": "number",
+      "required": true,
+      "description": "Operating system PID of the server process"
+    },
     "apiPort": {
       "type": "number",
       "required": true,

@@ -160,6 +160,7 @@ function cmdInfo(client) {
 
     var infoTable = [
       ['PM Version:', info.version],
+      ['Server PID:', info.serverPid],
       ['API Version:', info.apiVersion],
       ['API Port:', info.apiPort],
       ['Driver Type:', info.driverType],
