@@ -88,7 +88,13 @@ module.exports = function extendServiceInstance(ServiceInstance) {
   function recordStatusUpdate(instanceId, instInfo, callback) {
     ServiceInstance.findById(instanceId, function(err, instance) {
       if (err) return callback(err);
-      if (instInfo.master) instance.setSize = instInfo.master.setSize || 0;
+      if (instInfo.master && instInfo.master.setSize) {
+        instance.setSize = instInfo.master.setSize;
+        instance.started = true;
+      } else {
+        instance.setSize = 0;
+        instance.started = false;
+      }
       instance.save(callback);
     });
   }
