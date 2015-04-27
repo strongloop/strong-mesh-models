@@ -40,10 +40,22 @@ function getDeployment(service, req, res) {
 }
 ServiceManager.prototype.getDeployment = getDeployment;
 
-function ctlRequest(service, instance, req, callback) {
-  debug('ctlRequest(%j, %j, %j)', service, instance, req);
-  callback(null, {error: 'Not implemented'});
+function onCtlRequest(service, instance, req, callback) {
+  debug('onCtlRequest(%j, %j, %j)', service, instance, req);
+  callback(null, {error: 'Control request not implemented'});
 }
-ServiceManager.prototype.ctlRequest = ctlRequest;
+ServiceManager.prototype.onCtlRequest = onCtlRequest;
+
+function onApiRequest(req, callback) {
+  debug('onApiRequest(%j)', req);
+  callback(Error('API request not implemented'));
+}
+ServiceManager.prototype.onApiRequest = onApiRequest;
+
+function getApiVersionInfo(callback) {
+  debug('getApiVersionInfo()');
+  callback(Error('API request not implemented'));
+}
+ServiceManager.prototype.getApiVersionInfo = getApiVersionInfo;
 
 module.exports = ServiceManager;

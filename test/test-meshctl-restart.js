@@ -12,19 +12,19 @@ test('Test restart command', function(t) {
 
   testCmdHelper(t, TestServiceManager, function(t, service, instance, port) {
     t.test('Setup service manager (hard restart)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'restart'}, 'Request should match');
         callback(null,
           {message: 'hard stopped with status SIGTERM, restarting...'});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
     t.test('Restart API (hard restart)', function(tt) {
-      instance.appRestart({}, function(err, response) {
+      service.restart({}, function(err, responses) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.message,
+        tt.equal(responses[0].response.message,
           'hard stopped with status SIGTERM, restarting...',
           'response should match');
         tt.end();
@@ -33,27 +33,27 @@ test('Test restart command', function(t) {
 
     t.test('Restart CLI (hard restart)', function(tt) {
       exec.resetHome();
-      exec(port, 'restart', function(err, stdout) {
+      exec(port, 'restart 1', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, 'hard stopped with status SIGTERM, restarting...\n',
+        tt.equal(stdout, 'Service "service 1" restarting\n',
           'Rendered output should match');
         tt.end();
       });
     });
 
     t.test('Setup service manager (soft restart)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'soft-restart'}, 'Request should match');
         callback(null, {message: 'soft stopped with status 0, restarting...'});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
     t.test('Restart API (soft restart)', function(tt) {
-      instance.appRestart({soft: true}, function(err, response) {
+      service.restart({soft: true}, function(err, responses) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.message,
+        tt.equal(responses[0].response.message,
           'soft stopped with status 0, restarting...',
           'response should match');
         tt.end();
@@ -62,28 +62,28 @@ test('Test restart command', function(t) {
 
     t.test('Restart CLI (soft restart)', function(tt) {
       exec.resetHome();
-      exec(port, 'soft-restart', function(err, stdout) {
+      exec(port, 'soft-restart 1', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, 'soft stopped with status 0, restarting...\n',
+        tt.equal(stdout, 'Service "service 1" soft restarting\n',
           'Rendered output should match');
         tt.end();
       });
     });
 
     t.test('Setup service manager (rolling restart)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'current', sub: 'restart'},
           'Request should match');
         callback(null, {message: 'discarded message'});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
     t.test('Restart API (rolling restart)', function(tt) {
-      instance.appRestart({rolling: true}, function(err, response) {
+      service.restart({rolling: true}, function(err, responses) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.message, 'discarded message',
+        tt.equal(responses[0].response.message, 'discarded message',
           'response should match');
         tt.end();
       });
@@ -91,7 +91,7 @@ test('Test restart command', function(t) {
 
     t.test('Restart CLI (rolling restart)', function(tt) {
       exec.resetHome();
-      exec(port, 'cluster-restart', function(err, stdout) {
+      exec(port, 'cluster-restart 1', function(err, stdout) {
         tt.ifError(err, 'command should not error');
         tt.equal(stdout, '', 'Rendered output should match');
         tt.end();
@@ -99,27 +99,27 @@ test('Test restart command', function(t) {
     });
 
     t.test('Setup service manager (failure case)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'restart'}, 'Request should match');
         callback(Error('application not running, so cannot be stopped'));
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
     t.test('Restart API (failure case)', function(tt) {
-      instance.appRestart({}, function(err, response) {
-        tt.ok(err, 'call should error: ' + err || response.toString());
+      service.restart({}, function(err, responses) {
+        tt.ifError(err);
+        tt.ok(responses[0].error, 'call should error');
         tt.end();
       });
     });
 
     t.test('Restart CLI (failure case)', function(tt) {
       exec.resetHome();
-      exec(port, 'restart', function(err, stdout, stderr) {
+      exec(port, 'restart 1', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        tt.equal(stderr, 'Command restart failed with Error: ' +
-          'application not running, so cannot be stopped\n',
+        tt.equal(stderr, 'Command "restart" failed with error\n',
           'Rendered error should match');
         tt.end();
       });

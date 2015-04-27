@@ -47,7 +47,7 @@ test('Create and destroy a service', function(t) {
     });
   });
 
-  t.test('inialize models', function(tt) {
+  t.test('initialize models', function(tt) {
     client.serviceCreate('My Service', 2, function(err, s) {
       tt.ifError(err);
       tt.equal(s.name, 'My Service', 'Service name should match');

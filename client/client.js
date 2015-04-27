@@ -83,6 +83,16 @@ function Client(apiUrl, options) {
 }
 module.exports = Client;
 
+function serviceFindOrCreate(name, scale, callback) {
+  var self = this;
+  self.serviceFind(name, function(err, service) {
+    if (err && err.statusCode !== 404) return callback(err);
+    if (service) return callback(null, service);
+    self.serviceCreate(name, scale, callback);
+  });
+}
+Client.prototype.serviceFindOrCreate = serviceFindOrCreate;
+
 function serviceCreate(name, scale, callback) {
   var Service = this.models.ServerService;
 
@@ -100,10 +110,10 @@ function serviceList(callback) {
 }
 Client.prototype.serviceList = serviceList;
 
-function serviceDestroy(name, callback) {
+function serviceDestroy(nameOrId, callback) {
   var Service = this.models.ServerService;
 
-  var q = {where: {name: name}};
+  var q = {where: {or: [{name: nameOrId}, {id: nameOrId}]}};
   Service.findOne(q, function(err, service) {
     if (err || !service) return callback(err, service);
 
@@ -118,18 +128,21 @@ Client.prototype.serviceDestroy = serviceDestroy;
  * Find a service.
  *
  * @param {string|number} serviceNameOrId Service ID or Name.
+ * Service with the lowest ID will be returned.
  * @param {function} callback Callback function.
  */
 function serviceFind(serviceNameOrId, callback) {
   var Service = this.models.ServerService;
-  var filter = {
-    where: {
+
+  var filter = {order: ['id ASC']};
+  if (serviceNameOrId) {
+    filter.where = {
       or: [
         {name: serviceNameOrId},
         {id: serviceNameOrId}
       ]
-    }
-  };
+    };
+  }
   Service.findOne(filter, callback);
 }
 Client.prototype.serviceFind = serviceFind;
@@ -202,3 +215,84 @@ function instanceFind(instanceId, callback) {
   });
 }
 Client.prototype.instanceFind = instanceFind;
+
+function getApi() {
+  return this.models.Api;
+}
+Client.prototype.getApi = getApi;
+
+/**
+ * Find the service, executor, instance and process based on target ID.
+ *
+ * @param {string}targetId ID in the format <Service.Executor.Process>.
+ * default to the lowest available IDs.
+ * @param {function} callback Callback function.
+ */
+function resolveTarget(targetId, callback) {
+  targetId = targetId.split('.').slice(0, 3);
+  var processId = targetId.pop();
+  var serviceId = targetId.shift();
+  var executorId = targetId.pop();
+  debug('Target input to: %j',
+    {proc: processId, serv: serviceId || '?', exec: executorId || '?'});
+
+  var ServiceInstance = this.models.ServiceInstance;
+  var ServerService = this.models.ServerService;
+  var Executor = this.models.Executor;
+
+  var serviceFilter = {order: ['id ASC']};
+  if (serviceId) {
+    serviceFilter.where = {
+      or: [
+        {name: serviceId},
+        {id: serviceId}
+      ]
+    };
+  }
+  return ServerService.findOne(serviceFilter, resolveExecutor);
+
+  function resolveExecutor(err, service) {
+    if (err) return callback(err);
+    if (!service) return callback(Error('Service not found'));
+    var executorFilter = {order: ['id ASC']};
+    if (executorId) executorFilter.where = {id: executorId};
+    Executor.findOne(executorFilter, resolveInstance.bind(null, service));
+  }
+
+  function resolveInstance(service, err, executor) {
+    if (err) return callback(err);
+    if (!executor) return callback(Error('Service not found'));
+    var instanceFilter = {where: {
+      serverServiceId: service.id,
+      executorId: executor.id
+    }};
+    ServiceInstance.findOne(instanceFilter,
+      resolveProcess.bind(null, service, executor));
+  }
+
+  function resolveProcess(service, executor, err, instance) {
+    if (err) return callback(err);
+    if (!instance) return callback(Error('Service not deployed'));
+    var processFilter = {
+      limit: 1,
+      where: {or: [{pid: processId}, {workerId: processId}], stopReason: ''}
+    };
+    instance.processes(processFilter, function(err, processes) {
+      if (err) return callback(err);
+      if (processes.length !== 1) return callback('Unable to find process');
+      var process = processes[0];
+      debug('Target resolved to: %j', {
+        proc: process.pid, serv: service.id,
+        exec: executor.id, inst: instance.id
+      });
+      callback(err, service, executor, instance, process);
+    });
+  }
+}
+Client.prototype.resolveTarget = resolveTarget;
+
+function apiInfo(callback) {
+  var Api = this.models.Api;
+  Api.apiInfo(callback);
+}
+Client.prototype.apiInfo = apiInfo;

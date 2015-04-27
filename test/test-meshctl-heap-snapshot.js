@@ -1,3 +1,5 @@
+/* eslint max-nested-callbacks:0 */
+
 var ServiceManager = require('../index').ServiceManager;
 var assert = require('assert');
 var exec = require('./exec-meshctl');
@@ -13,26 +15,29 @@ test('Test heap-snapshot commands', function(t) {
 
   testCmdHelper(t, TestServiceManager, function(t, service, instance, port) {
     t.test('Setup service manager (heap snapshot)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.equal(req.cmd, 'current');
         assert.equal(req.sub, 'heap-snapshot');
-        assert.equal(req.target, 1);
+        assert.equal(req.target, 1231);
         assert.ok(req.filePath);
         fs.writeFileSync(req.filePath, 'some data');
         callback(null, {});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
     t.test('Stop snapshot API', function(tt) {
-      instance.heapSnapshot(1, function(err, response) {
+      instance.processes({where: {pid: 1231}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
-        tt.deepEqual(response, {
-          url: '/api/Services/1/ProfileDatas/1/download',
-          profileId: 1
-        }, 'Response should match');
-        tt.end();
+        proc = proc[0];
+        proc.heapSnapshot(function(err, response) {
+          tt.ifError(err, 'call should not error');
+          tt.deepEqual(response, {
+            url: '/api/Services/1/ProfileDatas/1/download', profileId: 1
+          }, 'Response should match');
+          tt.end();
+        });
       });
     });
 
@@ -48,19 +53,21 @@ test('Test heap-snapshot commands', function(t) {
     });
 
     t.test('Setup service manager (error)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.equal(req.cmd, 'current');
         assert.equal(req.sub, 'heap-snapshot');
-        assert.equal(req.target, 3);
+        assert.equal(req.target, 1232);
         callback(Error('something bad happened'));
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
     t.test('Start snapshot API (error)', function(tt) {
-      instance.heapSnapshot(3,
-        function(err, response) {
+      instance.processes({where: {pid: 1232}}, function(err, proc) {
+        tt.ifError(err, 'call should not error');
+        proc = proc[0];
+        proc.heapSnapshot(function(err, response) {
           tt.ifError(err);
           service.profileDatas.findById(response.profileId,
             function(err, prof) {
@@ -69,16 +76,16 @@ test('Test heap-snapshot commands', function(t) {
               tt.end();
             }
           );
-        }
-      );
+        });
+      });
     });
 
     t.test('Start snapshot CLI (error)', function(tt) {
       exec.resetHome();
-      exec(port, 'heap-snapshot 3', function(err, stdout, stderr) {
+      exec(port, 'heap-snapshot 2', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
         tt.equal(stderr,
-          'Command heap-snapshot failed with Error: ' +
+          'Command "heap-snapshot" failed with Error: ' +
           'code 500/Profiling failed: Error: something bad happened\n',
           'Rendered error should match');
         tt.end();

@@ -12,18 +12,18 @@ test('Test start command', function(t) {
 
   testCmdHelper(t, TestServiceManager, function(t, service, instance, port) {
     t.test('Setup service manager', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'start'}, 'Request should match');
         callback(null, {message: 'starting...'});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
     t.test('Start API', function(tt) {
-      instance.appStart(function(err, response) {
+      service.start(function(err, responses) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.message, 'starting...',
+        tt.equal(responses[0].response.message, 'starting...',
           'response should match');
         tt.end();
       });
@@ -31,35 +31,36 @@ test('Test start command', function(t) {
 
     t.test('Start CLI', function(tt) {
       exec.resetHome();
-      exec(port, 'start', function(err, stdout) {
+      exec(port, 'start 1', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, 'starting...\n', 'Rendered output should match');
+        tt.equal(stdout, 'Service "service 1" starting...\n',
+          'Rendered output should match');
         tt.end();
       });
     });
 
     t.test('Setup service manager (failure case)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'start'}, 'Request should match');
         callback(Error('application running, so cannot be started'));
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
     t.test('Start API (failure case)', function(tt) {
-      instance.appStart(function(err, status) {
-        tt.ok(err, 'call should error: ' + err || status);
+      service.start(function(err, responses) {
+        tt.ifError(err);
+        tt.ok(responses[0].error, 'call should error');
         tt.end();
       });
     });
 
     t.test('Start CLI (failure case)', function(tt) {
       exec.resetHome();
-      exec(port, 'start', function(err, stdout, stderr) {
+      exec(port, 'start 1', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        tt.equal(stderr, 'Command start failed with Error: ' +
-          'application running, so cannot be started\n',
+        tt.equal(stderr, 'Command "start" failed with error\n',
           'Rendered error should match');
         tt.end();
       });

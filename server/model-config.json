@@ -7,6 +7,10 @@
       "./models"
     ]
   },
+  "Api": {
+    "dataSource": null,
+    "public": true
+  },
   "User": {
     "dataSource": "db"
   },

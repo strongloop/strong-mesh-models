@@ -20,20 +20,21 @@ test('Test log-dump command', function(t) {
         'line 4 line 4 line 4 line 4\n',
       ];
 
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'log-dump'});
         if (logData.length > 0)
           return callback(null, {log: logData.shift()});
         return callback(Error('done'));
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
     t.test('log-dump API', function(tt) {
-      instance.logDump(function(err, response) {
+      service.logDump(function(err, instanceResponses) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.log, 'line 1 line 1 line 1 line 1\n',
+        tt.equal(instanceResponses[0].response.log,
+          'line 1 line 1 line 1 line 1\n',
           'response should match');
         tt.end();
       });
@@ -41,7 +42,7 @@ test('Test log-dump command', function(t) {
 
     t.test('log-dump CLI', function(tt) {
       exec.resetHome();
-      exec(port, 'log-dump', function(err, stdout) {
+      exec(port, 'log-dump 1', function(err, stdout) {
         tt.ifError(err, 'command should not error');
         tt.equal(stdout, 'line 2 line 2 line 2 line 2\n',
           'log should match');
@@ -51,12 +52,12 @@ test('Test log-dump command', function(t) {
 
     t.test('log-dump CLI', function(tt) {
       exec.resetHome();
-      exec(port, 'log-dump --follow', function(err, stdout, stderr) {
+      exec(port, 'log-dump 1 --follow', function(err, stdout, stderr) {
         tt.ok(err); // expect error after last line is read
         tt.equal(stdout, 'line 3 line 3 line 3 line 3\n' +
           'line 4 line 4 line 4 line 4\n',
           'log should match');
-        tt.equal(stderr, 'Command log-dump failed with Error: done\n');
+        tt.equal(stderr, 'Command "log-dump" failed with done\n');
         tt.end();
       });
     });

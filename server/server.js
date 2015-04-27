@@ -106,9 +106,7 @@ function server(serviceManager, options) {
     // However, the unit tests need to know when models have been updated, so
     // take care to not callback until any actions are complete.
     if (!callback) {
-      callback = function(err) {
-        if (err) throw Error(err);
-      };
+      callback = assert.ifError;
     }
 
     var ServiceMetric = app.models.ServiceMetric;
@@ -119,6 +117,8 @@ function server(serviceManager, options) {
 
     switch (uInfo.cmd) {
       case 'started':
+        // Note carefully that strong-pm doesn't actually pass the started cmd
+        // directly, it first annotates it with a bunch of extra information.
         ServiceInstance.recordInstanceInfo(instanceId, uInfo, function(err) {
           if (err) return callback(err);
           ServiceProcess.recordFork(instanceId, uInfo, callback);
@@ -139,8 +139,7 @@ function server(serviceManager, options) {
         ServiceProcess.recordProfilingState(instanceId, uInfo, callback);
         break;
       case 'status':
-        // not used
-        callback();
+        ServiceInstance.recordStatusUpdate(instanceId, uInfo, callback);
         break;
       case 'metrics':
         ServiceMetric.recordMetrics(instanceId, uInfo, callback);
@@ -160,6 +159,10 @@ function server(serviceManager, options) {
         break;
       case 'express:usage-record':
         ExpressUsageRecord.recordUsage(instanceId, uInfo, callback);
+        break;
+      case 'status:wd':
+        // So it isn't reported as Unknown.
+        callback();
         break;
       default:
         debug('Unknown request: %j', uInfo);

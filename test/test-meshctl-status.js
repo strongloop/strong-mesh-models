@@ -19,13 +19,6 @@ test('Test status command', function(t) {
     current: {
       pwd: BASE + '/work/current',
       cwd: BASE + '/work/462df261bc2a8df5455289a801f91ad7a95e8bb0',
-      config: {
-        prepare: ['npm rebuild', 'npm install --production'],
-        start: ['sl-run --cluster=CPU'],
-        stop: ['SIGTERM'],
-        replace: ['SIGHUP'],
-        files: {}
-      },
       pid: 90423,
       workers: [{
         id: '1',
@@ -36,31 +29,34 @@ test('Test status command', function(t) {
   };
 
   var RENDERED_STATUS = [
-    'manager:',
-    '  pid:                90422',
-    '  port:               8701',
-    '  base:               /strongloop/strong-pm/.strong-pm',
-    'current:',
-    '  status:             started',
-    '  pid:                90423',
-    '  link:               /strongloop/strong-pm/.strong-pm/work/current',
-    '  current:            462df261bc2a8df5455289a801f91ad7a95e8bb0',
-    '  worker count:       1',
-    '    [1]:              cluster id 1, pid 90424',
+    'Service ID: 1',
+    'Service Name: service 1',
+    'Environment variables:',
+    '  No environment variables defined',
+    'Instances:',
+    '    Version  Agent version  Cluster size',
+    '     1.2.3       7.8.9            3',
+    'Processes:',
+    '       ID      PID  WID  Tracking objects?  CPU profiling?',
+    '    1.1.1230  1230   0',
+    '    1.1.1231  1231   1',
+    '    1.1.1232  1232   2',
+    '    1.1.1233  1233   3',
+    '',
     ''
   ].join('\n');
 
   testCmdHelper(t, TestServiceManager, function(t, service, instance, port) {
     t.test('Setup service manager', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'status'}, 'Request should match');
         callback(null, STATUS);
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
-    t.test('Status summary API', function(tt) {
+    t.test('Status summary command API', function(tt) {
       instance.statusSummary(function(err, status) {
         tt.ifError(err, 'status call should not error');
         tt.deepEqual(status, STATUS, 'Status response should match');
@@ -68,11 +64,21 @@ test('Test status command', function(t) {
       });
     });
 
-    t.test('Status summary CLI', function(tt) {
+    t.test('Status summary CLI (using REST models)', function(tt) {
       exec.resetHome();
       exec(port, 'status', function(err, stdout) {
         tt.ifError(err, 'command should not error');
         tt.equal(RENDERED_STATUS, stdout, 'Rendered status should match');
+        tt.end();
+      });
+    });
+
+    t.test('Status get-process-count CLI (using REST models)', function(tt) {
+      exec.resetHome();
+      var EXPECT = 'Service ID 1 processes: 4\n';
+      exec(port, 'get-process-count 1', function(err, stdout) {
+        tt.ifError(err, 'command should not error');
+        tt.equal(EXPECT, stdout, 'Rendered status should match');
         tt.end();
       });
     });

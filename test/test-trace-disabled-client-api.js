@@ -37,20 +37,6 @@ test('Test trace client api (disabled trace)', function(t) {
       });
     });
 
-    t.test('setup mock process', function(tt) {
-      server.models.ServiceProcess.create({
-        id: 1,
-        parentPid: 1234,
-        pid: 1235,
-        workerId: 1,
-        serviceInstanceId: 1
-      }, function(err, proc) {
-        tt.ifError(err, 'mock process creation should succeed');
-        tt.ok(proc, 'process object should be returned');
-        tt.end();
-      });
-    });
-
     t.test('test getMetaTransactions', function(tt) {
       instance.processes.findById('1', function(err, proc) {
         tt.ifError(err, 'instance lookup should succeed');

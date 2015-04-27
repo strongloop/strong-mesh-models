@@ -13,27 +13,29 @@ test('Test patch commands', function(t) {
 
   testCmdHelper(t, TestServiceManager, function(t, service, instance, port) {
     t.test('Setup service manager (patch)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.equal(req.cmd, 'current');
         assert.equal(req.sub, 'patch');
-        assert.equal(req.target, 1);
+        assert.equal(req.target, 1231);
         assert.deepEqual(req.patch, {file: 'some patch data'});
         callback(null, {ok: true});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
     t.test('patch API', function(tt) {
-      instance.applyPatch(1, {file: 'some patch data'},
-        function(err, response) {
+      instance.processes({where: {pid: 1231}}, function(err, proc) {
+        tt.ifError(err, 'call should not error');
+        proc = proc[0];
+        proc.applyPatch({file: 'some patch data'}, function(err, response) {
           tt.ifError(err, 'call should not error');
           tt.deepEqual(response, {
             ok: true
           }, 'Response should match');
           tt.end();
-        }
-      );
+        });
+      });
     });
 
     t.test('patch CLI', function(tt) {
@@ -47,24 +49,26 @@ test('Test patch commands', function(t) {
     });
 
     t.test('Setup service manager (error)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.equal(req.cmd, 'current');
         assert.equal(req.sub, 'patch');
-        assert.equal(req.target, 1);
+        assert.equal(req.target, 1231);
         assert.deepEqual(req.patch, {file: 'some patch data'});
         callback(Error('some error'));
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
     t.test('Start snapshot API (error)', function(tt) {
-      instance.applyPatch(1, {file: 'some patch data'},
-        function(err) {
+      instance.processes({where: {pid: 1231}}, function(err, proc) {
+        tt.ifError(err, 'call should not error');
+        proc = proc[0];
+        proc.applyPatch({file: 'some patch data'}, function(err) {
           tt.ok(err, 'patch operation should error');
           tt.end();
-        }
-      );
+        });
+      });
     });
 
     t.test('patch CLI (error)', function(tt) {
@@ -73,7 +77,7 @@ test('Test patch commands', function(t) {
       exec(port, 'patch 1 patch.file', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
         tt.equal(stderr,
-          'Command patch failed with Error: some error\n');
+          'Command "patch" failed with Error: some error\n');
         tt.end();
       });
     });

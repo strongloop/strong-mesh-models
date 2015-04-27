@@ -1,0 +1,42 @@
+{
+  "name": "Api",
+  "plural": "Api",
+  "base": "Model",
+  "description": "API",
+  "properties": {
+    "version": {
+      "type": "string",
+      "required": true,
+      "description": "Version of this server"
+    },
+    "serverPid": {
+      "type": "number",
+      "required": true,
+      "description": "Operating system PID of the server process"
+    },
+    "apiPort": {
+      "type": "number",
+      "required": true,
+      "description": "Port that this server is listening on"
+    },
+    "apiVersion": {
+      "type": "string",
+      "required": true,
+      "description": "Version of the REST API"
+    },
+    "driverType": {
+      "type": "string",
+      "required": true,
+      "description": "The driver type run by this server"
+    },
+    "driverStatus": {
+      "type": "string",
+      "required": true,
+      "description": "The hostname of this executor"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

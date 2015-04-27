@@ -31,7 +31,7 @@ module.exports = function extendServerService(ServerService) {
       ServerService.app.serviceManager.onServiceUpdate(ctx.instance, next);
     } else {
       // Save of multiple Services
-      ServerService.find(ctx.where, function(err, services) {
+      ServerService.find({where: ctx.where}, function(err, services) {
         if (err) return next(err);
         return async.each(
           services,
@@ -45,7 +45,7 @@ module.exports = function extendServerService(ServerService) {
   });
 
   ServerService.observe('before delete', function(ctx, next) {
-    ctx.Model.find(ctx.where, function(err, instances) {
+    ctx.Model.find({where: ctx.where}, function(err, instances) {
       if (err) next(err);
       return async.each(
         instances,
@@ -60,14 +60,18 @@ module.exports = function extendServerService(ServerService) {
   function setServiceCommit(serviceId, commit, callback) {
     ServerService.findById(serviceId, function(err, service) {
       if (err) return callback(err);
+      // With loopback, !err isn't the same as 'success'! :-(
+      if (!service) callback(new Error(util.format(
+        'setServiceCommit: service %j not found', serviceId
+      )));
       service.deploymentInfo = commit;
       service.save(callback);
     });
   }
   ServerService.setServiceCommit = setServiceCommit;
 
-  function deploy(ctx) {
-    ServerService.app.serviceManager.onDeployment(this, ctx.req, ctx.res);
+  function deploy(req, res) {
+    ServerService.app.serviceManager.onDeployment(this, req, res);
   }
   ServerService.prototype.deploy = deploy;
 
@@ -144,4 +148,76 @@ module.exports = function extendServerService(ServerService) {
     });
   }
   ServerService.prototype.unsetEnv = unsetEnv;
+
+  function setEnvs(envUpd, callback) {
+    debug('setEnvs(%j)', envUpd);
+    this.env = this.env || {};
+    for (var k in envUpd) {
+      if (!envUpd.hasOwnProperty(k)) continue;
+      if (!envUpd[k])
+        delete this.env[k];
+      else
+        this.env[k] = envUpd[k];
+    }
+    this.save(function(err, res) {
+      callback(err, res && res.env);
+    });
+  }
+  ServerService.prototype.setEnvs = setEnvs;
+
+  function start(callback) {
+    this._callOnInstances('start', callback);
+  }
+  ServerService.prototype.start = start;
+
+  function stop(options, callback) {
+    this._callOnInstances('stop', options, callback);
+  }
+  ServerService.prototype.stop = stop;
+
+  function restart(options, callback) {
+    this._callOnInstances('restart', options, callback);
+  }
+  ServerService.prototype.restart = restart;
+
+  function logDump(callback) {
+    this._callOnInstances('logDump', callback);
+  }
+  ServerService.prototype.logDump = logDump;
+
+  // XXX: Should move this to ServiceGroup.verticalScale or something similar
+  function setClusterSize(size, persist, callback) {
+    this._callOnInstances('setClusterSize', size, persist, callback);
+  }
+  ServerService.prototype.setClusterSize = setClusterSize;
+
+  /**
+   * Call the requested function on each instance that is part of the service
+   * and return an array or instances and corresponding responses.
+   *
+   * @param {String} fn The function to call
+   * @param {*} ... Options or other arguments for the funtion
+   * @param {function} callback Callback function.
+   * @private
+   */
+  function _callOnInstances(fn) {
+    //Cut out the function name and separate out the callback
+    var args = Array.prototype.slice.call(arguments, 1);
+    var callback = args.pop();
+
+    this.instances(function(err, instances) {
+      if (err) callback(err);
+      async.map(instances, function(instance, callback) {
+        function cb(err, response) {
+          if (err)
+            return callback(null, {instance: instance.id, error: err.message});
+          callback(null, {instance: instance, response: response});
+        }
+        var fnArgs = [].concat(args);
+        fnArgs.push(cb);
+        instance[fn].apply(instance, fnArgs);
+      }, callback);
+    });
+  }
+  ServerService.prototype._callOnInstances = _callOnInstances;
 };

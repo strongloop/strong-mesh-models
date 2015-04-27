@@ -63,5 +63,9 @@
   "AgentTrace": {
     "dataSource": "db",
     "public": false
+  },
+  "Api": {
+    "dataSource": false,
+    "public": false
   }
 }

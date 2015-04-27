@@ -34,7 +34,7 @@ module.exports = function extendInstanceAction(InstanceAction) {
         runProfile(service, executor, instance, action, 'heapsnapshot', next);
         return this;
       default: {
-        InstanceAction.app.serviceManager.ctlRequest(
+        InstanceAction.app.serviceManager.onCtlRequest(
           service,
           instance,
           action.request,
@@ -116,7 +116,7 @@ module.exports = function extendInstanceAction(InstanceAction) {
         });
       }
 
-      InstanceAction.app.serviceManager.ctlRequest(service,
+      InstanceAction.app.serviceManager.onCtlRequest(service,
         instance,
         req,
         complete);

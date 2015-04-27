@@ -12,18 +12,18 @@ test('Test set-size command', function(t) {
 
   testCmdHelper(t, TestServiceManager, function(t, service, instance, port) {
     t.test('Setup service manager (non-persisted)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'current', sub: 'set-size', size: 2});
         callback(null, {message: 'size was changed'});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
     t.test('set-size API (non-persisted)', function(tt) {
-      instance.clusterSizeSet(2, false, function(err, response) {
+      service.setClusterSize(2, false, function(err, responses) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.message, 'size was changed',
+        tt.equal(responses[0].response.message, 'size was changed',
           'response should match');
         tt.end();
       });
@@ -31,7 +31,7 @@ test('Test set-size command', function(t) {
 
     t.test('set-size CLI (non-persisted)', function(tt) {
       exec.resetHome();
-      exec(port, 'set-size 2', function(err, stdout) {
+      exec(port, 'set-size 1 2', function(err, stdout) {
         tt.ifError(err, 'command should not error');
         tt.equal(stdout, '',
           'Rendered output should match');
@@ -40,11 +40,11 @@ test('Test set-size command', function(t) {
     });
 
     t.test('Setup service manager (persisted)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'current', sub: 'set-size', size: 3});
         callback(null, {message: 'size was changed'});
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
 
       function onInstanceUpdate(instance, callback) {
         assert.equal(instance.cpus, 3);
@@ -56,20 +56,20 @@ test('Test set-size command', function(t) {
     });
 
     t.test('set-size API (persisted)', function(tt) {
-      instance.clusterSizeSet(3, true, function(err, response) {
+      service.setClusterSize(3, true, function(err, responses) {
         tt.ifError(err, 'call should not error');
-        tt.equal(response.message, 'size was changed',
+        tt.equal(responses[0].response.message, 'size was changed',
           'response should match');
         tt.end();
       });
     });
 
     t.test('Setup service manager (no app, persist case)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'current', sub: 'set-size', size: 4});
         callback(Error('application not running'));
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
 
       function onInstanceUpdate(instance, callback) {
         assert.equal(instance.cpus, 4);
@@ -80,34 +80,34 @@ test('Test set-size command', function(t) {
     });
 
     t.test('set-size API (no app, persist case)', function(tt) {
-      instance.clusterSizeSet(4, true, function(err) {
+      service.setClusterSize(4, true, function(err) {
         tt.ifError(err, 'call should not error');
         tt.end();
       });
     });
 
     t.test('Setup service manager (failure case)', function(tt) {
-      function ctlRequest(s, i, req, callback) {
+      function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {cmd: 'current', sub: 'set-size', size: 5});
         callback(Error('application not running'));
       }
-      TestServiceManager.prototype.ctlRequest = ctlRequest;
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
     });
 
     t.test('set-size API (failure case)', function(tt) {
-      instance.clusterSizeSet(5, false, function(err, response) {
-        tt.ok(err, 'call should error: ' + err || response);
+      service.setClusterSize(5, false, function(err, responses) {
+        tt.ifError(err);
+        tt.ok(responses[0].error, 'call should error');
         tt.end();
       });
     });
 
     t.test('set-size CLI (failure case)', function(tt) {
       exec.resetHome();
-      exec(port, 'set-size 5', function(err, stdout, stderr) {
+      exec(port, 'set-size 1 5', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        tt.equal(stderr, 'Command set-size failed with Error: ' +
-          'application not running\n',
+        tt.equal(stderr, 'Command "set-size" failed with error\n',
           'Rendered error should match');
         tt.end();
       });
