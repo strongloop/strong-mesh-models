@@ -29,6 +29,11 @@ module.exports = function extendExpressUsageRecord(ExpressUsageRecord) {
         detail: record.data || {},
       };
 
+      if (record.response) {
+        usageRecord.responseDuration = record.response.duration || null;
+        usageRecord.responseSize = record.response.bytes || 0;
+        usageRecord.statusCode = record.response.status || null;
+      }
       if (record.request) {
         usageRecord.requestMethod = record.request.method || null;
         usageRecord.requestUrl = null;
@@ -76,26 +81,20 @@ module.exports = function extendExpressUsageRecord(ExpressUsageRecord) {
   }
   ExpressUsageRecord.dailySummary = dailySummary;
 
-  function hourlySummary(modelOrUri, windowStartTime, callback) {
-    var windowStart = new Date(windowStartTime);
-    windowStart.setMinutes(0);
-    windowStart.setSeconds(0);
-    windowStart.setMilliseconds(0);
-    windowStart = Number(windowStart);
-
-    var windowEnd = windowStart + 60 * 60 * 1000;
-    var q = {
-      where: {
-        or: [{lbModelName: modelOrUri}, {requestUrl: modelOrUri}],
-        timeStamp: {gt: windowStart, lt: windowEnd}
-      }
-    };
-    ExpressUsageRecord.find(q, function(err, records) {
+  function hourlySummary(modelOrUri, callback) {
+    var q = {order: ['timeStamp ASC']};
+    ExpressUsageRecord.findOne(q, function(err, firstRecord) {
       if (err) return callback(err);
-      var bucket = new Array(20);
-      for (var i = 0; i < 20; i++) {
-        bucket[i] = {
-          timeStamp: windowStart + (i * 5) * 60 * 1000,
+      var windowStart = firstRecord.timeStamp;
+      windowStart.setMinutes(0);
+      windowStart.setSeconds(0);
+      windowStart.setMilliseconds(0);
+
+      var bucket = new Array(25);
+      for (var i = 0; i < 25; i++) {
+        var ts = new Date(+windowStart + (i * 60) * 60 * 1000);
+        bucket[bucketKey(ts)] = {
+          timeStamp: ts.toString(),
           GET: 0,
           POST: 0,
           PUT: 0,
@@ -103,31 +102,45 @@ module.exports = function extendExpressUsageRecord(ExpressUsageRecord) {
         };
       }
 
-      for (var r in records) {
-        if (!records.hasOwnProperty(r)) continue;
-        var ts = records[r].timeStamp;
-        var method = records[r].requestMethod;
-        var key = Math.floor(ts.getMinutes() / 5);
-        bucket[key][method] += 1;
+      q = {
+        where: {
+          or: [{lbModelName: modelOrUri}, {requestUrl: modelOrUri}]
+        }
+      };
+      ExpressUsageRecord.find(q, function(err, records) {
+        if (err) return callback(err);
+
+        for (var r in records) {
+          if (!records.hasOwnProperty(r)) continue;
+          var ts = records[r].timeStamp;
+          var method = records[r].requestMethod;
+          var key = bucketKey(ts);
+          bucket[key][method] += 1;
+        }
+        callback(null, bucket);
+      });
+
+      function bucketKey(ts) {
+        return Math.floor((+ts - +windowStart) / (60 * 60 * 1000));
       }
-      callback(null, bucket);
     });
   }
   ExpressUsageRecord.hourlySummary = hourlySummary;
 
   function endpointDetail(modelOrUri, windowStartTime, callback) {
     var windowStart = new Date(windowStartTime);
-    var minutes = windowStart.getMinutes();
-    windowStart.setMinutes(minutes - minutes % 5);
+    windowStart.setMinutes(0);
     windowStart.setSeconds(0);
     windowStart.setMilliseconds(0);
-    windowStart = Number(windowStart);
-    var windowEnd = windowStart + 5 * 60 * 1000;
+    var windowEnd = new Date(+windowStart + 60 * 60 * 1000);
 
     var q = {
       where: {
-        or: [{lbModelName: modelOrUri}, {requestUrl: modelOrUri}],
-        timeStamp: {gt: windowStart, lt: windowEnd}
+        and: [
+          {or: [{lbModelName: modelOrUri}, {requestUrl: modelOrUri}]},
+          {timeStamp: {gt: +windowStart}},
+          {timeStamp: {lt: +windowEnd}},
+        ]
       }
     };
     ExpressUsageRecord.find(q, callback);
