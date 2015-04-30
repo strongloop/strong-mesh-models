@@ -1,3 +1,94 @@
+2015-04-30, Version 6.0.0
+=========================
+
+ * Update over Express metrics aggregation APIs (Krishna Raman)
+
+ * package: remove strong-scheduler from README (Sam Roberts)
+
+ * Skip failing tests (Sam Roberts)
+
+ * Add server pid to API model (Krishna Raman)
+
+ * Add server port to API model (Krishna Raman)
+
+ * Update instance started status based on notifications (Krishna Raman)
+
+ * Add info command to print server/api/driver info (Krishna Raman)
+
+ * Update instance setSize based on status notification (Krishna Raman)
+
+ * meshctl: ignore stopped procs in get-process-count (Sam Roberts)
+
+ * Fix Api model dataSource error message (Krishna Raman)
+
+ * meshctl: implement get-process-count SVC for tests (Sam Roberts)
+
+ * meshctl: status not silent with no services (Sam Roberts)
+
+ * client/server-service: check that instance exists (Sam Roberts)
+
+ * test: remove config property from meshctl-status (Sam Roberts)
+
+ * meshctl: use SVC in usage, not SVC_ID (Sam Roberts)
+
+ * meshctl: quote service name (Sam Roberts)
+
+ * Comment on recordInstanceInfo (Sam Roberts)
+
+ * Fix where clause in LB hooks (Sam Roberts)
+
+ * Fix tests (Krishna Raman)
+
+ * sl-meshctl: don't call a service ID a "name" (Sam Roberts)
+
+ * sl-meshctl: quote the command name in error message (Sam Roberts)
+
+ * meshctl: fix usage, create's scale has a default (Sam Roberts)
+
+ * service-manager: rename apiRequest to onApiRequest (Sam Roberts)
+
+ * sl-meshctl: log server response to shutdown (Sam Roberts)
+
+ * server: assert if error, not throw (Sam Roberts)
+
+ * package: install sl-meshctl when linked (Sam Roberts)
+
+ * server-service: lack of error doesn't mean success (Sam Roberts)
+
+ * Add service find-or-create support (Krishna Raman)
+
+ * lint: update eslint to 0.18 (Sam Roberts)
+
+ * .gitignore: ignore minkelite test output (Sam Roberts)
+
+ * service-manager: rename ctlRequest to onCtlRequest (Sam Roberts)
+
+ * server-service: deploy() needs raw request (Sam Roberts)
+
+ * test: fix typo in deploy-endpoints test name (Sam Roberts)
+
+ * server: don't report status:wd as "unknown" (Sam Roberts)
+
+ * server: assume err is already an Error (Sam Roberts)
+
+ * create/list/destroy service (Krishna Raman)
+
+ * Add method to locate service or target process Collect service summary from models Add verbose option Move commands into appropriate models (Krishna Raman)
+
+ * Fix debug statement (Krishna Raman)
+
+ * Add loopback metrics to express metrics api (Krishna Raman)
+
+ * Remove redundant host/pid info from trace data (Krishna Raman)
+
+ * Return decompressed traces (Krishna Raman)
+
+
+2015-04-15, Version 5.0.3
+=========================
+
+
+
 2015-04-01, Version 5.0.2
 =========================
 
