@@ -23,7 +23,7 @@ test('Test status command', function(t) {
       workers: [{
         id: '1',
         pid: 90424,
-        uptime: 4915
+        uptime: 4915,
       }]
     }
   };
@@ -37,11 +37,11 @@ test('Test status command', function(t) {
     '    Version  Agent version  Cluster size',
     '     1.2.3       7.8.9            3',
     'Processes:',
-    '       ID      PID  WID  Tracking objects?  CPU profiling?',
+    '       ID      PID  WID          Listening Ports         Tracking objects?  CPU profiling?',
     '    1.1.1230  1230   0',
-    '    1.1.1231  1231   1',
-    '    1.1.1232  1232   2',
-    '    1.1.1233  1233   3',
+    '    1.1.1231  1231   1   0.0.0.0:4321, unix:some-socket',
+    '    1.1.1232  1232   2            0.0.0.0:4321',
+    '    1.1.1233  1233   3            0.0.0.0:4321',
     '',
     ''
   ].join('\n');
@@ -68,7 +68,7 @@ test('Test status command', function(t) {
       exec.resetHome();
       exec(port, 'status', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(RENDERED_STATUS, stdout, 'Rendered status should match');
+        tt.equal(stdout, RENDERED_STATUS, 'Rendered status should match');
         tt.end();
       });
     });
