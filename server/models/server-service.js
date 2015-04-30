@@ -70,6 +70,50 @@ module.exports = function extendServerService(ServerService) {
   }
   ServerService.setServiceCommit = setServiceCommit;
 
+  // XXX(sam) serviceFindOrCreate, serviceCreate, serviceFind were almost
+  // verbatim ripped from client/client.js: there should be a way of sharing the
+  // implementation, perhaps this code can be attached to ServerService in
+  // common/models and be available identically on client and server as a js
+  // method?
+  function serviceFindOrCreate(name, scale, callback) {
+    var self = this;
+    self.serviceFind(name, function(err, service) {
+      if (err && err.statusCode !== 404) return callback(err);
+      if (service) return callback(null, service);
+      self.serviceCreate(name, scale, callback);
+    });
+  }
+  ServerService.serviceFindOrCreate = serviceFindOrCreate;
+
+  function serviceCreate(name, scale, callback) {
+    var Service = this; /* eslint consistent-this:0 */
+
+    if (scale == null) scale = 1;
+    var svc = {name: name, _groups: [{id: 1, name: 'default', scale: scale}]};
+    Service.create(svc, callback);
+
+    return this;
+  }
+  ServerService.serviceCreate = serviceCreate;
+
+  function serviceFind(serviceNameOrId, callback) {
+    var Service = this; /* eslint consistent-this:0 */
+
+    var filter = {order: ['id ASC']};
+    if (serviceNameOrId) {
+      filter.where = {
+        or: [
+          {name: serviceNameOrId},
+          {id: serviceNameOrId}
+        ]
+      };
+    }
+    Service.findOne(filter, callback);
+
+    return this;
+  }
+  ServerService.serviceFind = serviceFind;
+
   function deploy(req, res) {
     ServerService.app.serviceManager.onDeployment(this, req, res);
   }
