@@ -198,6 +198,8 @@ module.exports = function extendServiceInstance(ServiceInstance) {
    */
   function setClusterSize(size, persist, callback) {
     var self = this;
+    debug('setClusterSize(%d) size %j persist? %j',
+          self.id, size, persist);
     return this.appCommand({cmd: 'set-size', size: size},
       function(err, response) {
         if (err && !(persist && err.message === 'application not running')) {
