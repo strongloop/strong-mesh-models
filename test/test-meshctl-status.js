@@ -28,6 +28,8 @@ test('Test status command', function(t) {
     }
   };
 
+  /*eslint-disable max-len */
+  //jscs:disable maximumLineLength
   var RENDERED_STATUS = [
     'Service ID: 1',
     'Service Name: service 1',
@@ -45,6 +47,8 @@ test('Test status command', function(t) {
     '',
     ''
   ].join('\n');
+  //jscs:enable maximumLineLength
+  /*eslint-enable max-len */
 
   testCmdHelper(t, TestServiceManager, function(t, service, instance, port) {
     t.test('Setup service manager', function(tt) {

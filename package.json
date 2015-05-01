@@ -21,6 +21,7 @@
   },
   "scripts": {
     "lint": "eslint . && jscs .",
+    "pretest": "eslint . && jscs .",
     "test": "tap --tap --stdout --stderr --timeout=300 test/test-*.js",
     "cover": "test/cover.sh"
   },
@@ -49,7 +50,7 @@
   },
   "optionalDependencies": {},
   "devDependencies": {
-    "eslint": "^0.18.0",
+    "eslint": "^0.20.0",
     "istanbul": "^0.3.0",
     "jscs": "^1.11.3",
     "tap": "^0.7.0",

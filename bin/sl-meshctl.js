@@ -244,11 +244,13 @@ function printServiceStatus(service) {
     }
   });
   function addr2str(address) {
+    var str;
     if ('address' in address) {
-      return address.address + ':' + address.port;
+      str = address.address + ':' + address.port;
     } else {
-      return 'unix:' + address;
+      str = 'unix:' + address;
     }
+    return str;
   }
 }
 
