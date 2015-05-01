@@ -387,12 +387,13 @@ function cmdRollingRestart(client) {
 function cmdSetClusterSize(client) {
   var targetService = mandatory('service');
   var size = mandatory('size');
+  var persist = false;
 
   client.serviceFind(targetService, function(err, service) {
     dieIf(err);
     service.setClusterSize(
       size,
-      false,
+      persist,
       printResponse.bind(null, service, null)
     );
   });

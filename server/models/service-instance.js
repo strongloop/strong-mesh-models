@@ -14,19 +14,6 @@ module.exports = function extendServiceInstance(ServiceInstance) {
     }
   );
 
-  ServiceInstance.observe('before save', function beforeUpdate(ctx, next) {
-    if (ctx.instance) {
-      // create or full update of instance model
-      if (isNaN(parseInt(ctx.instance.cpus, 10))) {
-        ctx.instance.cpus = 'CPU';
-      }
-    } else if (ctx.data && ctx.data.cpus &&
-      isNaN(parseInt(ctx.data.cpus, 10))) {
-      ctx.data.cpus = 'CPU';
-    }
-    next();
-  });
-
   // For save, the manager is notified after the model has  been persisted in
   // DB so that queries on the DB will return correct information. Similarly
   // for delete, the manager is notified before the model has been deleted from
@@ -200,19 +187,12 @@ module.exports = function extendServiceInstance(ServiceInstance) {
     var self = this;
     debug('setClusterSize(%d) size %j persist? %j',
           self.id, size, persist);
-    return this.appCommand({cmd: 'set-size', size: size},
-      function(err, response) {
-        if (err && !(persist && err.message === 'application not running')) {
-          return callback(err);
-        }
-        if (persist) {
-          return self.updateAttributes({cpus: size}, function(err) {
-            callback(err, response);
-          });
-        }
-        callback(null, response);
-      }
-    );
+    if (persist) {
+      return self.updateAttributes({cpus: size}, function(err) {
+        return callback(err, {message: 'size was changed'});
+      });
+    }
+    return this.appCommand({cmd: 'set-size', size: size}, callback);
   }
   ServiceInstance.prototype.setClusterSize = setClusterSize;
 

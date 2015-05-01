@@ -53,7 +53,6 @@
     },
     "cpus": {
       "type": "string",
-      "default": "cpus",
       "description": "The number of cpus to use when starting the service on this instance"
     },
     "applicationName": {
