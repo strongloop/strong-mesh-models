@@ -415,7 +415,7 @@ function cmdRollingRestart(client) {
 function cmdSetClusterSize(client) {
   var targetService = mandatory('service');
   var size = mandatory('size');
-  var persist = false;
+  var persist = true;
 
   client.serviceFind(targetService, function(err, service) {
     dieIf(err);

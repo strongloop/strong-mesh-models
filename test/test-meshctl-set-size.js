@@ -34,15 +34,20 @@ test('Test set-size command', function(t) {
       });
     });
 
-    t.test('set-size CLI (non-persisted)', function(tt) {
+    t.test('set-size CLI (persisted)', function(tt) {
       tt.plan(3);
 
       function onCtlRequest(s, i, req, callback) {
-        debug('onCtlRequest:', req);
-        tt.match(req, {cmd: 'current', sub: 'set-size', size: 2});
-        callback(null, {message: 'size was changed'});
+        tt.fail('should not be called');
+        callback(Error('application not running')); // Don't timeout on fail
       }
       TestServiceManager.prototype.onCtlRequest = onCtlRequest;
+
+      function onInstanceUpdate(instance, callback) {
+        tt.same(instance.cpus, 2);
+        callback();
+      }
+      TestServiceManager.prototype.onInstanceUpdate = onInstanceUpdate;
 
       exec.resetHome();
       exec(port, 'set-size 1 2', function(err, stdout) {
@@ -109,25 +114,6 @@ test('Test set-size command', function(t) {
       service.setClusterSize(5, false, function(err, responses) {
         tt.ifError(err);
         tt.equal(responses[0].error, 'FAILURE', 'call should error');
-        tt.end();
-      });
-    });
-
-    t.test('set-size CLI (failure case)', function(tt) {
-      tt.plan(3);
-
-      function onCtlRequest(s, i, req, callback) {
-        tt.match(req, {cmd: 'current', sub: 'set-size', size: 5});
-        callback(Error('FAILURE'));
-      }
-      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
-
-      exec.resetHome();
-      exec(port, 'set-size 1 5', function(err, stdout) {
-        tt.ok(err, 'command should error');
-        // N.b., [^] is js regex idiom for matching any char, include NL
-        var patt = /Instance[^]*Response[^]*FAILURE/;
-        tt.match(stdout, patt, 'Rendered error should match');
         tt.end();
       });
     });
