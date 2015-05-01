@@ -204,11 +204,12 @@ function printServiceStatus(service) {
       ]);
     }
     console.log('Instances:\n%s', table(instanceTable, {
-      align: ['c', 'c', 'c', 'c', 'c']
+      align: ['c', 'c', 'c', 'c', 'c', 'c']
     }));
 
     var processTable = [
-      ['  ', 'ID', 'PID', 'WID', 'Tracking objects?', 'CPU profiling?']
+      ['  ', 'ID', 'PID', 'WID', 'Listening Ports',
+          'Tracking objects?', 'CPU profiling?']
     ];
     if (verbose)
       processTable[0].push('Stop reason', 'Stop time');
@@ -223,6 +224,7 @@ function printServiceStatus(service) {
         proc.displayId,
         proc.pid,
         proc.workerId,
+        proc.listeningSockets.map(addr2str).join(', '),
         proc.isTrackingObjects ? 'yes' : '',
         proc.isProfiling ? 'yes' : ''
       ];
@@ -241,6 +243,13 @@ function printServiceStatus(service) {
       console.log('Not started');
     }
   });
+  function addr2str(address) {
+    if ('address' in address) {
+      return address.address + ':' + address.port;
+    } else {
+      return 'unix:' + address;
+    }
+  }
 }
 
 function printResponse(service, summmaryMsg, err, responses) {

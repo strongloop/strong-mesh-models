@@ -55,28 +55,34 @@ function testCmdHelper(t, TestServiceManager, test, enableTrace) {
         workerId: 0,
         pid: 1230,
         parentPid: 1229,
-        serviceInstanceId: 1
+        serviceInstanceId: 1,
       };
 
       var proc1 = {
         workerId: 1,
         pid: 1231,
         parentPid: 1230,
-        serviceInstanceId: 1
+        serviceInstanceId: 1,
+        listeningSockets: [
+          {address: '0.0.0.0', port: 4321},
+          'some-socket',
+        ],
       };
 
       var proc2 = {
         workerId: 2,
         pid: 1232,
         parentPid: 1230,
-        serviceInstanceId: 1
+        serviceInstanceId: 1,
+        listeningSockets: [{address: '0.0.0.0', port: 4321}],
       };
 
       var proc3 = {
         workerId: 3,
         pid: 1233,
         parentPid: 1230,
-        serviceInstanceId: 1
+        serviceInstanceId: 1,
+        listeningSockets: [{address: '0.0.0.0', port: 4321}],
       };
 
       var ServerService = server.models.ServerService;
