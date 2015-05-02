@@ -28,62 +28,29 @@ overridden by setting an `SSH_USER` environment variable. The authentication can
 be overridden to use an existing private key instead of an agent by setting the
 `SSH_KEY` environment variable to the path of the private key to be used.
 
-Commands:
-  status [SVC]            Report status for service SVC, or all services if
-        no SVC is provided. This is the default command.
 
-  create NAME [SCALE]     Create service named NAME, SCALE defaults to 1.
-  ls                      List services.
-  remove SVC              Remove a service SVC.
+Global commands: apply to the process manager itself
 
+  info                    Information about the process manager.
   shutdown                Shutdown the process manager.
 
-  start SVC               Start service SVC.
-  stop SVC                Hard stop service SVC.
-  soft-stop SVC           Soft stop service SVC.
-  restart SVC             Hard stop and restart service SVC with new config.
-  soft-restart SVC        Soft stop and restart service SVC with new config.
-        "Soft" stops notify workers they are being disconnected, and give them
-        a grace period for any existing connections to finish. "Hard" stops
-        kill the supervisor and its workers with `SIGTERM`.
+
+Service commands: apply to a specific service
+
+`SVC` is either a service ID or service Name. It can be obtained by listing
+services using `ls` or `status`.
+
+  create NAME [SCALE]     Create service named NAME, SCALE defaults to 1.
 
   cluster-restart SVC     Restart the service SVC cluster workers.
         This is a zero-downtime restart, the workers are soft restarted
         one-by-one, so that some workers will always be available to service
         requests.
 
-  set-size SVC N          Set cluster size for service SVC to N workers.
-        The default cluster size is the number of CPU cores.
-
-  objects-start ID        Start tracking objects on worker ID.
-  objects-stop ID         Stop tracking objects on worker ID.
-        Object tracking is published as metrics, and requires configuration so
-        that the `--metrics=URL` option is passed to the runner.
-
-  cpu-start ID [TIMEOUT]  Start CPU profiling on worker ID.
-        TIMEOUT is the optional watchdog timeout, in milliseconds.  In watchdog
-        mode, the profiler is suspended until an event loop stall is detected;
-        i.e. when a script is running for too long.  Only supported on Linux.
-
-  cpu-stop ID [NAME]      Stop CPU profiling on worker ID.
-        The profile is saved as `<NAME>.cpuprofile`. CPU profiles must be
-        loaded into Chrome Dev Tools. The NAME is optional, and defaults to
-        `node.<PID>`.
-
-  heap-snapshot ID [NAME] Save heap snapshot for worker ID.
-        The snapshot is saved as `<NAME>.heapsnapshot`.  Heap snapshots must be
-        loaded into Chrome Dev Tools. The NAME is optional, and defaults to
-        `node.<PID>`.
-
-  patch ID FILE           Apply patch FILE to worker ID.
-
-  npmls ID [DEPTH]        List dependencies of the service ID.
-
   env[-get] SVC [KEYS...]
         List specified environment variables for service SVC. If none are
         specified, list all variables.
-  env-set SVC K=V...   Set one or more environment variables for
-        service SVC.
+  env-set SVC K=V...      Set one or more environment variables for service SVC.
   env-unset SVC KEYS...
         Unset one or more environment variables for service SVC. The
         environment variables are applied to the current application, and the
@@ -94,8 +61,58 @@ Commands:
         Empty the log buffer, dumping the contents to stdout for service SVC.
         If --follow is given the log buffer is continuously dumped to stdout.
 
-`SVC` is either a service ID or service Name. It can be obtained by listing
-services using `ls` or `status`.
+  ls                      List services.
 
-`ID` is a worker ID. It can be obtained using the `status` command and refers
-to a specific worker of a specific service.
+  npmls SVC [DEPTH]       List dependencies of the service.
+
+  remove SVC              Remove a service SVC.
+
+  restart SVC             Hard stop and restart service SVC with new config.
+
+  set-size SVC N          Set cluster size for service SVC to N workers.
+        The default cluster size is the number of CPU cores.
+
+  start SVC               Start service SVC.
+
+  status [SVC]            Report status for service SVC, or all services if
+        no SVC is provided. This is the default command.
+
+  stop SVC                Hard stop service SVC.
+
+  soft-stop SVC           Soft stop service SVC.
+  soft-restart SVC        Soft stop and restart service SVC with new config.
+        "Soft" stops notify workers they are being disconnected, and give them
+        a grace period for any existing connections to finish. "Hard" stops
+        kill the supervisor and its workers with `SIGTERM`.
+
+
+Worker commands: apply to a specific worker
+
+A `WRK` specification is either `<SVC>.1.<PID>` or `<SVC>.1.<WID>`, where SVC
+is the service ID, `1` is the executor ID (limited to 1 in this release), and
+the final part is either the process ID, or the cluster worker ID.
+
+The WRK specification can be copied directly from the output of the status
+command.
+
+  cpu-start WRK [TIMEOUT]  Start CPU profiling on worker WRK.
+        TIMEOUT is the optional watchdog timeout, in milliseconds.  In watchdog
+        mode, the profiler is suspended until an event loop stall is detected;
+        i.e. when a script is running for too long.  Only supported on Linux.
+
+  cpu-stop WRK [NAME]      Stop CPU profiling on worker WRK.
+        The profile is saved as `<NAME>.cpuprofile`. CPU profiles must be
+        loaded into Chrome Dev Tools. The NAME is optional, and defaults to
+        `node.<WRK>`.
+
+  heap-snapshot WRK [NAME] Save heap snapshot for worker WRK.
+        The snapshot is saved as `<NAME>.heapsnapshot`.  Heap snapshots must be
+        loaded into Chrome Dev Tools. The NAME is optional, and defaults to
+        `node.<WRK>`.
+
+  objects-start WRK        Start tracking objects on worker WRK.
+  objects-stop WRK         Stop tracking objects on worker WRK.
+        Object tracking is published as metrics, and requires configuration so
+        that the `--metrics=URL` option is passed to the runner.
+
+  patch WRK FILE           Apply patch FILE to worker WRK.
