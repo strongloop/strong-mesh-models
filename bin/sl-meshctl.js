@@ -730,11 +730,11 @@ function dieIf(err) {
   //   User already exists (value: 'admin'); `email` Email already exists
   //   (value: 'ignore@me.com').
   // Split into first line, and the rest.
-  var msgs = msg.split('.');
+  var msgs = msg.split('. ');
 
   console.error('Command %j failed with %s', command, msgs.shift());
   if (msgs.length) {
-    console.error('%s', msgs.join('.').trim());
+    console.error('%s', msgs.join('. ').trim());
   }
   process.exit(1);
 }
