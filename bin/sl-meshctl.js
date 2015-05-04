@@ -482,6 +482,12 @@ function dieIf(err) {
   if (!err)
     return;
 
+  if (err.message === 'unsupported') {
+    console.error('%s version %s not supported by %s, try upgrading client.',
+      $0, require('../package.json').version, apiUrl);
+    process.exit(1);
+  }
+
   var msg = String(err);
 
   // loopback error messages are very long and verbose... like:
