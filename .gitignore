@@ -46,3 +46,4 @@ node_modules
 *.xml
 *._*
 test/minkelite.db
+test/patch.file
