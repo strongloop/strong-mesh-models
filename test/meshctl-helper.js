@@ -74,7 +74,8 @@ function testCmdHelper(t, TestServiceManager, test, enableTrace) {
         pid: 1232,
         parentPid: 1230,
         serviceInstanceId: 1,
-        listeningSockets: [{address: '0.0.0.0', port: 4321}],
+        // null address should display as '0.0.0.0'
+        listeningSockets: [{address: null, port: 4321}],
       };
 
       var proc3 = {

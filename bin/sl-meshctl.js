@@ -7,13 +7,13 @@ var _ = require('lodash');
 var assert = require('assert');
 var concat = require('concat-stream');
 var debug = require('debug')('strong-mesh-client:meshctl');
+var fmt = require('util').format;
 var fs = require('fs');
 var home = require('osenv').home();
 var npmls = require('strong-npm-ls');
 var path = require('path');
 var table = require('text-table');
 var userHome = require('user-home');
-var util = require('util');
 var maybeTunnel = require('strong-tunnel');
 
 assert(userHome, 'User home directory cannot be determined!');
@@ -246,9 +246,9 @@ function printServiceStatus(service) {
   function addr2str(address) {
     var str;
     if ('address' in address) {
-      str = address.address + ':' + address.port;
+      str = fmt('%s:%d', address.address || '0.0.0.0', address.port);
     } else {
-      str = 'unix:' + address;
+      str = fmt('unix:%s', address);
     }
     return str;
   }
@@ -440,7 +440,7 @@ function cmdCpuProfilingStart(client) {
 
 function cmdCpuProfilingStop(client) {
   var target = mandatory('target');
-  var prefix = optional(util.format('node.%s', target));
+  var prefix = optional(fmt('node.%s', target));
   var fileName = prefix + '.cpuprofile';
 
   client.resolveTarget(target,
@@ -461,7 +461,7 @@ function cmdCpuProfilingStop(client) {
 
 function cmdHeapSnapshot(client) {
   var target = mandatory('target');
-  var prefix = optional(util.format('node.%s', target));
+  var prefix = optional(fmt('node.%s', target));
   var fileName = prefix + '.heapsnapshot';
 
   client.resolveTarget(target,
@@ -669,7 +669,7 @@ function download(instance, profileId, file, callback) {
       default: {
         // Collect response stream to use as error message.
         out = concat(function(data) {
-          callback(Error(util.format('code %d/%s',
+          callback(Error(fmt('code %d/%s',
             res.statusCode, data)));
         });
         res.once('error', callback);
