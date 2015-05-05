@@ -3,19 +3,29 @@ var debug = require('debug')('strong-mesh-models:server:service-process');
 
 module.exports = function extendServiceProcess(ServiceProcess) {
   function recordFork(instanceId, pInfo, callback) {
-    debug('Process forked: worker id %d pid %d ppid %d',
-      pInfo.id, pInfo.pid, pInfo.ppid);
+    debug('Process forked: worker id %d pid %d ppid %d pst %d',
+      pInfo.id, pInfo.pid, pInfo.ppid, pInfo.pst || pInfo.startTime);
 
-    var proc = new ServiceProcess({
+    var filter = {
       pid: pInfo.pid,
       parentPid: pInfo.ppid,
       workerId: pInfo.id,
       serviceInstanceId: instanceId,
-      startTime: new Date()
-    });
+    };
+    var data = {
+      pid: pInfo.pid,
+      parentPid: pInfo.ppid,
+      workerId: pInfo.id,
+      serviceInstanceId: instanceId,
+      startTime: new Date(pInfo.pst || pInfo.startTime || Date.now()),
+    };
 
-    proc.save(function(err, proc) {
-      debug('upsert Process: %j', err || proc);
+    if (pInfo.pst || pInfo.startTime) {
+      filter.startTime = new Date(pInfo.pst || pInfo.startTime);
+    }
+
+    ServiceProcess.findOrCreate({where: filter}, data, function(err, proc) {
+      debug('upsert Process: %j', err || proc, pInfo);
       if (err) return callback(err);
       callback();
     });
@@ -61,7 +71,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     }
 
     return async.waterfall([
-      _findProcess(instanceId, +pInfo.id, pInfo.pid),
+      _findProcess(instanceId, +pInfo.id, +pInfo.pid, +pInfo.pst),
       updateProcess,
       updateChildren
     ], function ensureSave(err, proc) {
@@ -83,7 +93,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     }
 
     return async.waterfall([
-      _findProcess(instanceId, +pInfo.id, pInfo.pid),
+      _findProcess(instanceId, +pInfo.id, +pInfo.pid, +pInfo.pst),
       updateWorker
     ], function ensureSave(err, proc) {
       debug('Listening of %j, save Process: %j', pInfo, err || proc);
@@ -112,7 +122,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     }
 
     return async.waterfall([
-      _findProcess(instanceId, +pInfo.id, pInfo.pid),
+      _findProcess(instanceId, +pInfo.id, pInfo.pid, +pInfo.pst),
 
       updateProcessStatus
     ], function(err, proc) {
@@ -122,14 +132,18 @@ module.exports = function extendServiceProcess(ServiceProcess) {
   }
   ServiceProcess.recordProfilingState = recordProfilingState;
 
-  function _findProcess(instanceId, workerId, pid) {
-    return ServiceProcess.findOne.bind(ServiceProcess, {
+  function _findProcess(instanceId, workerId, pid, pst) {
+    var filter = {
       where: {
         serviceInstanceId: instanceId,
         workerId: +workerId,
         pid: pid,
       }
-    });
+    };
+    if (pst) {
+      filter.where.startTime = new Date(pst);
+    }
+    return ServiceProcess.findOne.bind(ServiceProcess, filter);
   }
 
   function getMetaTransactions(callback) {
