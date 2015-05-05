@@ -41,6 +41,22 @@ module.exports = function(Service) {
       description: 'Set environment variables'
     });
 
+    this.remoteMethod('setEnvs', {
+      isStatic: false,
+      http: {path: '/env/', verb: 'put'},
+      accepts: [{
+        arg: 'env',
+        required: true,
+        type: 'object',
+        http: {source: 'body'},
+        root: true,
+        description: 'Key-value describing environment variables to add. ' +
+          'A null value causes the variable to be removed',
+      }],
+      returns: {arg: 'env', type: 'object'},
+      description: 'Set multiple environment variables.'
+    });
+
     this.remoteMethod('unsetEnv', {
       isStatic: false,
       http: {path: '/env/:name', verb: 'delete'},

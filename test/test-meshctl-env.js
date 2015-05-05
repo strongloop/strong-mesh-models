@@ -33,6 +33,14 @@ test('Test env commands', function(t) {
       });
     });
 
+    t.test('env-set API', function(tt) {
+      service.setEnvs({A: 1, B: 2}, function(err, response) {
+        tt.ifError(err, 'call should not error');
+        assert.deepEqual(response, {A: 1, B: 2});
+        tt.end();
+      });
+    });
+
     t.test('env-set CLI', function(tt) {
       exec.resetHome();
       exec(port, 'env-set A=1 B=2', function(err, stdout) {
