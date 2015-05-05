@@ -71,6 +71,7 @@ function Client(apiUrl, options) {
 
   this.loopback = client;
   this.models = client.models;
+  this.version = require('../package.json').version;
 
   // Populates the cache of models so you can access them with
   // client.models.ModelName.
@@ -82,6 +83,42 @@ function Client(apiUrl, options) {
   serviceInstance(client.models.ServiceInstance);
 }
 module.exports = Client;
+
+function checkRemoteApiSemver(callback) {
+  var self = this;
+
+  self.apiInfo(function(err, info) {
+    // 404 means the route isn't there, so its an old PM.
+    // Success means it supports the info command, we can check versions.
+    // Anything else we shrug off so that the specific command can deal with
+    // it (and the unit tests don't fully implement the info API, and since
+    // its is technically optional, forcing it to exist is harmful).
+
+    if (err) {
+      debug('apiInfo error:', err);
+
+      if (err.statusCode === 404)
+        return callback(new Error(
+          'incompatible remote API v5 or earlier'
+        ));
+      return callback();
+    }
+
+    var localMajor = self.version.split('.')[0];
+    var remoteMajor = info.apiVersion.split('.')[0];
+
+    debug('local %s %s.x remote %s %s.x', self.version, localMajor,
+          info.apiVersion, remoteMajor);
+
+    if (localMajor !== remoteMajor) {
+      return callback(new Error(
+        'incompatible remote API v' + info.apiVersion
+      ));
+    }
+    return callback();
+  });
+}
+Client.prototype.checkRemoteApiSemver = checkRemoteApiSemver;
 
 function serviceFindOrCreate(name, scale, callback) {
   var self = this;

@@ -90,11 +90,15 @@ if (process.env.SSH_KEY) {
 
 maybeTunnel(apiUrl, sshOpts, function(err, apiUrl) {
   dieIf(err);
-  runCommand(apiUrl, command);
+  var client = new Client(apiUrl);
+
+  client.checkRemoteApiSemver(function(err) {
+    dieIf(err);
+    runCommand(client, command);
+  });
 });
 
-function runCommand(apiUrl, command) {
-  var client = new Client(apiUrl);
+function runCommand(client, command) {
   ({
     'create': cmdCreateService,
     'remove': cmdRemoveService,
