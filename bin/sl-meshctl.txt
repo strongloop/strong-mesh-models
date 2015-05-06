@@ -32,6 +32,7 @@ be overridden to use an existing private key instead of an agent by setting the
 Global commands: apply to the process manager itself
 
   info                    Information about the process manager.
+  ls                      List services.
   shutdown                Shutdown the process manager.
 
 
@@ -60,8 +61,6 @@ services using `ls` or `status`.
   log-dump SVC [--follow]
         Empty the log buffer, dumping the contents to stdout for service SVC.
         If --follow is given the log buffer is continuously dumped to stdout.
-
-  ls                      List services.
 
   npmls SVC [DEPTH]       List dependencies of the service.
 
