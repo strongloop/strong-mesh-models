@@ -1,3 +1,24 @@
+2015-05-06, Version 5.1.0
+=========================
+
+ * Add setEnvs remote method to Service model (Ryan Graham)
+
+ * Update over Express metrics aggregation APIs (Krishna Raman)
+
+ * Fix debug statement (Krishna Raman)
+
+ * Add loopback metrics to express metrics api (Krishna Raman)
+
+ * Remove redundant host/pid info from trace data (Krishna Raman)
+
+ * Return decompressed traces (Krishna Raman)
+
+
+2015-04-15, Version 5.0.3
+=========================
+
+
+
 2015-04-01, Version 5.0.2
 =========================
 
