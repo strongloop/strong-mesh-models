@@ -84,10 +84,8 @@ test('Test heap-snapshot commands', function(t) {
       exec.resetHome();
       exec(port, 'heap-snapshot 2', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        tt.equal(stderr,
-          'Command "heap-snapshot" failed with Error: ' +
-          'code 500/Profiling failed: Error: something bad happened\n',
-          'Rendered error should match');
+        var patt = /Command "heap-snapshot" on "\S+" failed with Error:.+500/;
+        tt.assert(patt.test(stderr), 'Rendered error should match');
         tt.end();
       });
     });
