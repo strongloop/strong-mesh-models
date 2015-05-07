@@ -12,17 +12,17 @@
     "executorId": {
       "type": "number",
       "index": 1,
-      "description": "The ID if the Executor instance the process was running on"
+      "description": "The ID of the Executor instance the process was running on"
     },
     "serverServiceId": {
       "type": "number",
       "index": 1,
-      "description": "The ID if the Service the process was running"
+      "description": "The ID of the Service the process was running"
     },
     "instanceId": {
       "type": "number",
       "index": 1,
-      "description": "The ID if the Service instance the process was part of"
+      "description": "The ID of the Service instance the process was part of"
     },
     "type": {
       "type": "string",
