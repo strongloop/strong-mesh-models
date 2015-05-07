@@ -76,8 +76,8 @@ test('Test patch commands', function(t) {
       fs.writeFileSync('patch.file', '{"file": "some patch data"}');
       exec(port, 'patch 1 patch.file', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        tt.equal(stderr,
-          'Command "patch" failed with Error: some error\n');
+        var patt = /Command "patch" on "\S+" failed with Error: some error/;
+        tt.assert(patt.test(stderr), 'Rendered error should match');
         tt.end();
       });
     });

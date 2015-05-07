@@ -107,8 +107,8 @@ test('Test set-size command', function(t) {
       exec.resetHome();
       exec(port, 'set-size 1 5', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        tt.equal(stderr, 'Command "set-size" failed with error\n',
-          'Rendered error should match');
+        var patt = /Command "set-size" on "\S+" failed with error/;
+        tt.assert(patt.test(stderr), 'Rendered error should match');
         tt.end();
       });
     });

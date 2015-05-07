@@ -107,9 +107,8 @@ test('Test cpu-profiling commands', function(t) {
       exec.resetHome();
       exec(port, 'cpu-start 3', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        tt.equal(stderr,
-          'Command "cpu-start" failed with Error: something bad happened\n',
-          'Rendered error should match');
+        var patt = /Command "cpu-start" on "\S+" failed with Error: something/;
+        tt.assert(patt.test(stderr), 'Rendered error should match');
         tt.end();
       });
     });

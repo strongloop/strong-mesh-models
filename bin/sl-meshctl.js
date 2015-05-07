@@ -88,7 +88,9 @@ if (process.env.SSH_KEY) {
   sshOpts.privateKey = fs.readFileSync(process.env.SSH_KEY);
 }
 
+dieIf.url = apiUrl;
 maybeTunnel(apiUrl, sshOpts, function(err, apiUrl) {
+  dieIf.url = apiUrl || dieIf.url;
   dieIf(err);
   var client = new Client(apiUrl);
 
@@ -736,7 +738,8 @@ function dieIf(err) {
   // Split into first line, and the rest.
   var msgs = msg.split('. ');
 
-  console.error('Command %j failed with %s', command, msgs.shift());
+  console.error('Command %j on %j failed with %s',
+                command, dieIf.url, msgs.shift());
   if (msgs.length) {
     console.error('%s', msgs.join('. ').trim());
   }

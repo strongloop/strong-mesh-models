@@ -60,8 +60,8 @@ test('Test start command', function(t) {
       exec.resetHome();
       exec(port, 'start 1', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        tt.equal(stderr, 'Command "start" failed with error\n',
-          'Rendered error should match');
+        var patt = /Command "start" on "\S+" failed with error/;
+        tt.assert(patt.test(stderr), 'Rendered error should match');
         tt.end();
       });
     });

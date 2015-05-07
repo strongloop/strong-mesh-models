@@ -79,8 +79,8 @@ test('Test ls command', function(t) {
       exec.resetHome();
       exec(port, 'npmls 1', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        tt.equal(stderr, 'Command "npmls" failed with Error: no app deployed\n',
-          'Rendered error should match');
+        var patt = /Command "npmls" on "\S+" failed with Error: no app /;
+        tt.assert(patt.test(stderr), 'Rendered error should match');
         tt.end();
       });
     });

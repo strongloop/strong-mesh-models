@@ -97,8 +97,8 @@ test('Test env commands', function(t) {
       exec.resetHome();
       exec(port, 'env-set 1 A=1 B=2', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        tt.equal(stderr, 'Command "env-set" failed with Error: bad stuff\n',
-          'Rendered error should match');
+        var patt = /Command "env-set" on "\S+" failed with Error: bad stuff/;
+        tt.assert(patt.test(stderr), 'Rendered error should match');
         tt.end();
       });
     });
@@ -107,8 +107,8 @@ test('Test env commands', function(t) {
       exec.resetHome();
       exec(port, 'env-unset 1 C', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        tt.equal(stderr, 'Command "env-unset" failed with Error: bad stuff\n',
-          'Rendered error should match');
+        var patt = /Command "env-unset" on "\S+" failed with Error: bad stuff/;
+        tt.assert(patt.test(stderr), 'Rendered error should match');
         tt.end();
       });
     });

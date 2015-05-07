@@ -90,8 +90,8 @@ test('Test stop command', function(t) {
       exec.resetHome();
       exec(port, 'stop 1', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        tt.equal(stderr, 'Command "stop" failed with error\n',
-          'Rendered error should match');
+        var patt = /Command "stop" on "\S+" failed with error/;
+        tt.assert(patt.test(stderr), 'Rendered error should match');
         tt.end();
       });
     });
