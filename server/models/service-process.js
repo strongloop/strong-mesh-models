@@ -231,6 +231,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
   function _appCommand(cmd, callback) {
     var self = this;
+    cmd.serviceProcessId = self.id;
     self.serviceInstance(function(err, instance) {
       if (err) return callback(err);
       return instance.appCommand(cmd, callback);

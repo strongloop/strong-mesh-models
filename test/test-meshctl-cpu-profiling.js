@@ -30,7 +30,9 @@ test('Test cpu-profiling commands', function(t) {
         proc = proc[0];
         proc.startCpuProfiling({}, function(err, status) {
           tt.ifError(err, 'call should not error');
-          tt.deepEqual(status, {}, 'Response should match');
+          tt.deepEqual(status, {
+            url: '/api/Services/1/ProfileDatas/1/download', profileId: 1
+          }, 'Response should match');
           tt.end();
         });
       });
@@ -64,7 +66,9 @@ test('Test cpu-profiling commands', function(t) {
         proc = proc[0];
         proc.startCpuProfiling({watchdogTimeout: 10}, function(err, status) {
           tt.ifError(err, 'call should not error');
-          tt.deepEqual(status, {}, 'Response should match');
+          tt.deepEqual(status, {
+            url: '/api/Services/1/ProfileDatas/2/download', profileId: 2
+          }, 'Response should match');
           tt.end();
         });
       });
