@@ -1,4 +1,9 @@
 {
+  "excludeFiles": [
+    "node_modules/**/*",
+    "coverage/**/*",
+    ".*"
+  ],
   "disallowMixedSpacesAndTabs": true,
   "disallowKeywordsOnNewLine": [],
   "requireCurlyBraces": [
@@ -63,10 +68,5 @@
   "disallowSpacesInsideArrayBrackets": "all",
   "disallowSpacesInsideParentheses": true,
 
-  "disallowNewlineBeforeBlockStatements": true,
-  "excludeFiles": [
-    "node_modules/**/*",
-    "coverage/**/*"
-  ]
+  "disallowNewlineBeforeBlockStatements": true
 }
-
