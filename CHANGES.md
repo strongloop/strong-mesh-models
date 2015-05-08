@@ -1,3 +1,35 @@
+2015-05-08, Version 6.1.0
+=========================
+
+ * models: correct typos in description properties (Sam Roberts)
+
+ * ctl: mention URL in all error messages (Ryan Graham)
+
+ * meshctl: ls should be listed as global (Sam Roberts)
+
+ * use process start time for real process upsert (Ryan Graham)
+
+ * meshctl: clarify usage message (Sam Roberts)
+
+ * meshctl: check remote API version (Sam Roberts)
+
+ * client: implement checkRemoteApiSemver() (Sam Roberts)
+
+ * .gitignore test patch.file output (Sam Roberts)
+
+ * meshctl: fix message splitting (Sam Roberts)
+
+ * fix null listening addresses in meshctl status (Ryan Graham)
+
+ * server: persist instance.cpus to trigger resize (Sam Roberts)
+
+ * lint: make lint run as pretest (Ryan Graham)
+
+ * server: debug log instance.setClusterSize (Sam Roberts)
+
+ * list listening ports in status report (Ryan Graham)
+
+
 2015-04-30, Version 6.0.0
 =========================
 
