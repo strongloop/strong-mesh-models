@@ -435,8 +435,9 @@ function cmdCpuProfilingStart(client) {
     function(err, service, executor, instance, process) {
       dieIf(err);
       process.startCpuProfiling({watchdogTimeout: timeout},
-        function(err /*, response*/) {
+        function(err, response) {
           dieIf(err);
+          debug('startCpuProfiling: %j', response);
           console.log('Profiler started, use cpu-stop to get profile');
         }
       );
