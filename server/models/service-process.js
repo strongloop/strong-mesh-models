@@ -5,6 +5,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
   function recordFork(instanceId, pInfo, callback) {
     debug('Process forked: worker id %d pid %d ppid %d pst %d',
       pInfo.id, pInfo.pid, pInfo.ppid, pInfo.pst || pInfo.startTime);
+    // XXX(sam) why .pst || .startTime?
 
     var filter = {
       pid: pInfo.pid,
@@ -18,6 +19,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       workerId: pInfo.id,
       serviceInstanceId: instanceId,
       startTime: new Date(pInfo.pst || pInfo.startTime || Date.now()),
+      // XXX(sam) when will this be Date.now()? If it is... its unusable.
     };
 
     if (pInfo.pst || pInfo.startTime) {
@@ -111,6 +113,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
         case 'cpu-profiling':
           proc.isProfiling = pInfo.isRunning;
           proc.watchdogTimeout = pInfo.timeout || 0;
+          proc.watchdogStallout = pInfo.stallout || 0;
           break;
         case 'heap-snapshot':
           proc.isSnapshotting = pInfo.isRunning;
@@ -272,16 +275,17 @@ module.exports = function extendServiceProcess(ServiceProcess) {
    *
    * @param {object} options Options object.
    * @param {number} options.watchdogTimeout  Watchdog timeout, in milliseconds.
-   * In watchdog mode, the profiler is suspended until an event loop stall is
-   * detected.
+   * @param {number} options.watchdogStallout  Watchdog stallout, in counts.
    * @param {function} callback Callback function.
    */
   function startCpuProfiling(options, callback) {
     var timeout = options.watchdogTimeout || 0;
+    var stallout = options.watchdogStallout || 0;
     this._appCommand({
         cmd: 'start-cpu-profiling',
         target: this.pid,
         timeout: timeout,
+        stallout: stallout,
       }, callback
     );
   }

@@ -16,6 +16,7 @@ test('Test cpu-profiling commands', function(t) {
       function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {
           cmd: 'current', sub: 'start-cpu-profiling',
+          stallout: 0,
           timeout: 0, target: 1231
         });
         callback(null, {});
@@ -52,6 +53,7 @@ test('Test cpu-profiling commands', function(t) {
       function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {
           cmd: 'current', sub: 'start-cpu-profiling',
+          stallout: 0,
           timeout: 10, target: 1232
         });
         callback(null, {});
@@ -88,6 +90,7 @@ test('Test cpu-profiling commands', function(t) {
       function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {
           cmd: 'current', sub: 'start-cpu-profiling',
+          stallout: 0,
           timeout: 0, target: 1233
         });
         callback(Error('something bad happened'));

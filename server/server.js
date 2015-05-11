@@ -109,11 +109,12 @@ function server(serviceManager, options) {
       callback = assert.ifError;
     }
 
-    var ServiceMetric = app.models.ServiceMetric;
     var AgentTrace = app.models.AgentTrace;
     var ExpressUsageRecord = app.models.ExpressUsageRecord;
-    var ServiceProcess = app.models.ServiceProcess;
+    var ProfileData = app.models.ProfileData;
     var ServiceInstance = app.models.ServiceInstance;
+    var ServiceMetric = app.models.ServiceMetric;
+    var ServiceProcess = app.models.ServiceProcess;
 
     switch (uInfo.cmd) {
       case 'started':
@@ -159,6 +160,9 @@ function server(serviceManager, options) {
         break;
       case 'express:usage-record':
         ExpressUsageRecord.recordUsage(instanceId, uInfo, callback);
+        break;
+      case 'cpu:profile-data':
+        ProfileData.recordProfileData(instanceId, uInfo, callback);
         break;
       case 'status:wd':
         // So it isn't reported as Unknown.

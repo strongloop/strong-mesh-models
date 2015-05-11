@@ -56,10 +56,11 @@ module.exports = function extendInstanceAction(InstanceAction) {
   function startCpuProfiling(service, executor, instance, action, cb) {
     request(service, executor, instance, action, function(err) {
       if (err) return cb(err);
-      findProfile(service, executor, instance, action, function(err) {
-        return cb(err);
-      });
+      findProfile(service, executor, instance, action, 'cpuprofile', _cb);
     });
+    function _cb(err) {
+      return cb(err); // Pass only the error, not the profile
+    }
   }
 
   function request(service, executor, instance, action, cb) {
@@ -76,7 +77,7 @@ module.exports = function extendInstanceAction(InstanceAction) {
       });
   }
 
-  function findProfile(service, executor, instance, action, cb) {
+  function findProfile(service, executor, instance, action, type, cb) {
     var ProfileData = InstanceAction.app.models.ProfileData;
     var serviceProcessId = action.serviceProcessId;
 
@@ -89,7 +90,7 @@ module.exports = function extendInstanceAction(InstanceAction) {
       serviceProcessId: serviceProcessId,
       targetId: action.request.target,
       startTime: action.timestamp,
-      type: 'cpuprofile',
+      type: type,
     };
     var where = {
       where: {
@@ -142,7 +143,9 @@ module.exports = function extendInstanceAction(InstanceAction) {
       return callback(Error('Missing required argument: `target`'));
     }
 
-    findProfile(service, executor, instance, action, function(err, profile) {
+    findProfile(service, executor, instance, action, type, withProfile);
+
+    function withProfile(err, profile) {
       if (err) return callback(err);
 
       debug('finishing profile: %j', profile);
@@ -187,6 +190,6 @@ module.exports = function extendInstanceAction(InstanceAction) {
       // available. Though, if the process dies, the polling should stop...
       // caveat emptor.
       setImmediate(callback);
-    });
+    }
   }
 };

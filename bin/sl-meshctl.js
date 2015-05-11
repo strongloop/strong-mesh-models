@@ -232,11 +232,18 @@ function printServiceStatus(service) {
         proc.workerId,
         proc.listeningSockets.map(addr2str).join(', '),
         proc.isTrackingObjects ? 'yes' : '',
-        proc.isProfiling ? 'yes' : ''
+        profiling(proc),
       ];
       if (verbose)
         procEntry.push(proc.stopReason, proc.stopTime || '');
       processTable.push(procEntry);
+    }
+
+    function profiling(proc) {
+      if (!proc.isProfiling) return '';
+      if (!proc.watchdogTimeout) return 'yes';
+      if (!proc.watchdogStallout) return proc.watchdogTimeout + 'ms';
+      return proc.watchdogStallout + 'x' + proc.watchdogTimeout + 'ms';
     }
 
     if (processTable.length > 1) {
@@ -430,12 +437,16 @@ function cmdObjectTrackingStop(client) {
 function cmdCpuProfilingStart(client) {
   var target = mandatory('target');
   var timeout = optional(0);
+  var stallout = optional(0);
 
   client.resolveTarget(target,
     function(err, service, executor, instance, process) {
       dieIf(err);
-      process.startCpuProfiling({watchdogTimeout: timeout},
-        function(err, response) {
+      var cmd = {
+        watchdogTimeout: timeout,
+        watchdogStallout: stallout,
+      };
+      process.startCpuProfiling(cmd, function(err, response) {
           dieIf(err);
           debug('startCpuProfiling: %j', response);
           console.log('Profiler started, use cpu-stop to get profile');
