@@ -90,6 +90,11 @@ module.exports = function extendServerService(ServerService) {
         return res.end(util.format('Profile data not found: %s', err.message));
       }
 
+      if (!profile) {
+        res.statusCode = 404;
+        return res.end(util.format('Profile data not found'));
+      }
+
       if (profile.errored) {
         var reason = util.format('Profiling failed: %s', profile.errored);
         debug('profile %d errored 500/%s', profileId, reason);

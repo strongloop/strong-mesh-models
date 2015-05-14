@@ -16,6 +16,7 @@ test('Test cpu-profiling commands', function(t) {
       function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {
           cmd: 'current', sub: 'start-cpu-profiling',
+          stallout: 0,
           timeout: 0, target: 1231
         });
         callback(null, {});
@@ -30,7 +31,9 @@ test('Test cpu-profiling commands', function(t) {
         proc = proc[0];
         proc.startCpuProfiling({}, function(err, status) {
           tt.ifError(err, 'call should not error');
-          tt.deepEqual(status, {}, 'Response should match');
+          tt.deepEqual(status, {
+            url: '/api/Services/1/ProfileDatas/1/download', profileId: 1
+          }, 'Response should match');
           tt.end();
         });
       });
@@ -50,6 +53,7 @@ test('Test cpu-profiling commands', function(t) {
       function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {
           cmd: 'current', sub: 'start-cpu-profiling',
+          stallout: 0,
           timeout: 10, target: 1232
         });
         callback(null, {});
@@ -64,7 +68,9 @@ test('Test cpu-profiling commands', function(t) {
         proc = proc[0];
         proc.startCpuProfiling({watchdogTimeout: 10}, function(err, status) {
           tt.ifError(err, 'call should not error');
-          tt.deepEqual(status, {}, 'Response should match');
+          tt.deepEqual(status, {
+            url: '/api/Services/1/ProfileDatas/2/download', profileId: 2
+          }, 'Response should match');
           tt.end();
         });
       });
@@ -84,6 +90,7 @@ test('Test cpu-profiling commands', function(t) {
       function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {
           cmd: 'current', sub: 'start-cpu-profiling',
+          stallout: 0,
           timeout: 0, target: 1233
         });
         callback(Error('something bad happened'));

@@ -24,6 +24,12 @@
       "index": 1,
       "description": "The ID of the Service instance the process was part of"
     },
+    "serviceProcessId": {
+      "type": "number",
+      "do we need? required": true,
+      "index": 1,
+      "description": "The ID of the ServiceProcess"
+    },
     "type": {
       "type": "string",
       "required": true,
@@ -32,7 +38,9 @@
     "targetId": {
       "type": "number",
       "required": true,
-      "description": "The OS Process ID or cluster worker ID of the process."
+      "description": "The OS Process ID or cluster worker ID of the process.",
+      "_comment1": "UNUSED? you can start on a pid, and stop on a wid",
+      "_comment2": "so field is unreliable, and appears without possible use"
     },
     "startTime": {
       "type": "date",

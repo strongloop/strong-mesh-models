@@ -44,6 +44,11 @@
       "default": 0,
       "description": "Watchdog timeout, in milliseconds. (0 = watchdog disabled)"
     },
+    "watchdogStallout": {
+      "type": "number",
+      "default": 0,
+      "description": "Watchdog stallout, in stall counts. (0 = stall disabled)"
+    },
     "isSnapshotting": {
       "type": "boolean",
       "required": true,
