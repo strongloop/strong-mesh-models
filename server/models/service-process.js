@@ -7,29 +7,22 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       pInfo.id, pInfo.pid, pInfo.ppid, pInfo.pst || pInfo.startTime);
     // XXX(sam) why .pst || .startTime?
 
-    var filter = {
+    var forkedProcess = {
       pid: pInfo.pid,
       parentPid: pInfo.ppid,
       workerId: pInfo.id,
       serviceInstanceId: instanceId,
+      startTime: new Date(pInfo.pst || pInfo.startTime),
     };
-    var data = {
-      pid: pInfo.pid,
-      parentPid: pInfo.ppid,
-      workerId: pInfo.id,
-      serviceInstanceId: instanceId,
-      startTime: new Date(pInfo.pst || pInfo.startTime || Date.now()),
-      // XXX(sam) when will this be Date.now()? If it is... its unusable.
-    };
+    var filter = {where: forkedProcess};
 
-    if (pInfo.pst || pInfo.startTime) {
-      filter.startTime = new Date(pInfo.pst || pInfo.startTime);
-    }
-
-    ServiceProcess.findOrCreate({where: filter}, data, function(err, proc) {
+    ServiceProcess.findOrCreate(filter, forkedProcess, function(err, proc) {
       debug('upsert Process: %j', err || proc, pInfo);
       if (err) return callback(err);
-      callback();
+      proc.updateAttributes({
+        stopReason: '',
+        stopTime: null,
+      }, callback);
     });
   }
   ServiceProcess.recordFork = recordFork;
@@ -45,7 +38,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
         debug('exit event for an unknown process: %j', pInfo);
         return asyncCb();
       }
-      if (proc.stopTime === undefined) {
+      if (proc.stopTime == null) {
         proc.stopTime = new Date();
         proc.stopReason = pInfo.reason;
         return proc.save(asyncCb);
