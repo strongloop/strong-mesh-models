@@ -26,7 +26,7 @@ test('Create and destroy a service', function(t) {
   }
   TestServiceManager.prototype.onServiceDestroy = onServiceDestroy;
 
-  t.plan(12);
+  t.plan(13);
   var server = meshServer(new TestServiceManager());
   server.set('port', 0);
   server.start(function(err, port) {

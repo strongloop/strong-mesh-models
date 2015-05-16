@@ -91,5 +91,7 @@ test('Create and destroy a service', function(t) {
     });
   });
 
-  t.end();
+  server.on('stopped', function() {
+    t.end();
+  });
 });
