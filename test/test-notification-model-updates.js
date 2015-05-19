@@ -65,6 +65,7 @@ test('Test notifications', function(t) {
       id: 0,
       pid: 1234,
       ppid: 3456,
+      pst: 1432076622256,
     };
     app.handleModelUpdate(1, notification, function(err) {
       tt.ifError(err);
@@ -129,6 +130,7 @@ test('Test notifications', function(t) {
       id: 1,
       pid: 1235,
       ppid: 1234,
+      pst: 1432076622256,
     };
     app.handleModelUpdate(1, notification, function(err) {
       tt.ifError(err);
@@ -353,21 +355,23 @@ test('Test notifications', function(t) {
     });
   });
 
-  t.test('Emit exit', function(tt) {
+  t.test('Emit exit worker 0', function(tt) {
     var notification = {
       cmd: 'exit',
       pid: 1234,
       id: 0,
       reason: 'foo',
     };
+    tt.plan(1);
     app.handleModelUpdate(1, notification, function(err) {
-      tt.ifError(err);
+      tt.ifError(err, 'exit handled without error');
       tt.end();
     });
   });
 
   t.test('Check process exit state', function(tt) {
     var ServiceProcess = app.models.ServiceProcess;
+    tt.plan(9);
     ServiceProcess.find({where: {workerId: 0}}, function(err, procs) {
       tt.ok(!err, 'process records should be found');
       tt.equal(procs.length, 1, 'only one process should be present');
@@ -388,6 +392,77 @@ test('Test notifications', function(t) {
       });
     });
   });
+
+  t.test('Notify started (resume)', function(tt) {
+    var notification = {
+      cmd: 'started',
+      commitHash: 'some hash',
+      appName: 'my app',
+      PMPort: 5000,
+      containerVersionInfo: {
+        os: {
+          platform: os.platform(),
+          arch: os.arch(),
+          release: os.release()
+        },
+        node: process.version,
+        container: {
+          name: 'test-container',
+          version: 10.0
+        },
+      },
+      setSize: 1,
+      agentVersion: '1.0.2',
+      restartCount: 10,
+
+      id: 0,
+      pid: 1234,
+      ppid: 3456,
+      pst: 1432076622256,
+    };
+    app.handleModelUpdate(1, notification, function(err) {
+      tt.ifError(err);
+      tt.end();
+    });
+  });
+
+  t.test('Check worker 0 resumed', function(tt) {
+    var q = {where: {
+      workerId: 0,
+      serviceInstanceId: 1
+    }};
+    app.models.ServiceProcess.find(q, function(err, procs) {
+      tt.ok(!err, 'process should be found');
+      tt.equal(procs.length, 1, 'only one process should be found');
+      var proc = procs[0] || {};
+      tt.equal(proc.parentPid, 3456, 'parent pid should match');
+      tt.equal(proc.pid, 1234, 'pid should match');
+      tt.ok(!proc.isTrackingObjects, 'tracking-obj should be false');
+      tt.ok(!proc.isProfiling, 'tracking-obj should be false');
+      tt.ok(!proc.isSnapshotting, 'tracking-obj should be false');
+      tt.ok(!!proc.startTime, 'start time should be set');
+      tt.ok(!proc.stopTime, 'stop time should not be set');
+      tt.ok(!proc.stopReason, 'stop reason should not be set');
+      tt.end();
+    });
+  });
+
+  t.test('Notify fork worker 1 (resumed)', function(tt) {
+    var notification = {
+      cmd: 'fork',
+      id: 1,
+      pid: 1235,
+      ppid: 1234,
+      pst: 1432076622256,
+    };
+    app.handleModelUpdate(1, notification, function(err) {
+      tt.ifError(err);
+      tt.end();
+    });
+  });
+
+  t.test('Check worker 1 resumed',
+    checkWorker1.bind(this, {stopTime: true, stopReason: null}));
 
   t.test('shutdown', function(tt) {
     app.stop();
