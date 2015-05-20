@@ -63,15 +63,9 @@ test('Test trace client api', function(t) {
   }
   MockMinkelite.prototype.postRawPieces = postRawPieces;
 
-  testCmdHelper(t, TestServiceManager, traceTest, true);
+  testCmdHelper(t, TestServiceManager, traceTest, MockMinkelite);
 
   function traceTest(t, service, instance, port, server) {
-    t.test('setup mock minkelite server', function(tt) {
-      server.minkelite.shutdown();
-      server.minkelite = new MockMinkelite();
-      tt.end();
-    });
-
     t.test('send trace notification', function(tt) {
       /* eslint-disable camelcase */
       var notification = {

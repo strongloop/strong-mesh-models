@@ -2,13 +2,10 @@ var async = require('async');
 var meshServer = require('../index').meshServer;
 var Client = require('../index').Client;
 
-function testCmdHelper(t, TestServiceManager, test, enableTrace) {
+function testCmdHelper(t, TestServiceManager, test, MockMinkelite) {
   var server = null;
-  if (enableTrace) {
-    server = meshServer(new TestServiceManager(), {
-      'trace.enable': true,
-      'trace.db.path': __dirname
-    });
+  if (MockMinkelite) {
+    server = meshServer(new TestServiceManager(), new MockMinkelite(), {});
   } else {
     server = meshServer(new TestServiceManager());
   }

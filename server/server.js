@@ -4,33 +4,16 @@ var assert = require('assert');
 var boot = require('loopback-boot');
 var debug = require('debug')('strong-mesh-models:server');
 var loopback = require('loopback');
-var MinkeLite = require('minkelite');
 
 /**
  * Factory method that returns a loopback server object. This object can be used
  * as express middleware.
  *
  * @param {ServiceManager} serviceManager
+ * @param {Minkelite} minkelite instance for tracing
  * @param {object} options Options object
- * @param {bool} [options.'trace.enable'] Enable tracing. Default false.
- * @param {bool} [options.'trace.enableDebugServer'] Enable the minkelite debug
- * server. Default false.
- * @param {Number} [options.'trace.debugServerPort'] Minkelite debug server
- * port. Default 8103.
- * @param {bool} [options.'trace.inMemory'] Persist data in memory rather than
- * on disk. Default false.
- * @param {String} [options.'trace.db.name'] DB file name when persisting to
- * disk. Default minkelite.db.
- * @param {String} options.'trace.db.path' path where DB file is stored.
- * No default, must be specified.
- * @param {Number} [options.'trace.data.chartMinutes'] Number of minutes of data
- * points shown on the Timeline view. Default 1440.
- * @param {Number} [options.'trace.data.staleMinutes'] How long (in minutes) to
- * retain data in the db. Default 1450.
- * @param {Number} [options.'trace.data.maxTransaction'] Number of transactions
- * returned by the getTransation API (JS or HTTP). Default 30.
  */
-function server(serviceManager, options) {
+function server(serviceManager, minkelite, options) {
   var app = module.exports = loopback();
   app.serviceManager = serviceManager;
   options = options || {};
@@ -44,32 +27,7 @@ function server(serviceManager, options) {
     app.set(k, options[k]);
   }
 
-  var enableTracing = !!app.get('trace.enable');
-
-  if (enableTracing && !app.get('trace.db.inMemory')) {
-    assert(app.get('trace.db.path'),
-      'The path for trace data storage is required');
-  }
-
-  if (enableTracing) {
-    /* eslint-disable camelcase */
-    app.minkelite = new MinkeLite({
-      start_server: !!app.get('trace.enableDebugServer'),
-      server_port: app.get('trace.debugServerPort') || 8103,
-
-      in_memory: !!app.get('trace.db.inMemory'),
-      db_name: app.get('trace.db.name') || 'minkelite.db',
-      db_path: app.get('trace.db.path'),
-
-      // data points shown on the Timeline view
-      chart_minutes: parseInt(app.get('trace.data.chartMinutes'), 10) ||
-      1440, // how long we retain data in the db
-      stale_minutes: parseInt(app.get('trace.data.staleMinutes'), 10) || 1450,
-      max_transaction_count: parseInt(app.get('trace.data.maxTransaction'),
-        10) || 30
-    });
-    /* eslint-enable camelcase */
-  }
+  app.minkelite = minkelite;
 
   // Bootstrap the application, configure models, datasources and middleware.
   // Sub-apps like REST API are mounted via boot scripts.
