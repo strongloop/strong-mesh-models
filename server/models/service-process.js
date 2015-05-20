@@ -128,6 +128,23 @@ module.exports = function extendServiceProcess(ServiceProcess) {
   }
   ServiceProcess.recordProfilingState = recordProfilingState;
 
+  function recordStatusWdUpdate(instanceId, pInfo, callback) {
+    return async.waterfall([
+      _findProcess(instanceId, +pInfo.id, pInfo.pid, +pInfo.pst),
+
+      updateProcessStatus
+    ], function(err, proc) {
+      debug('Process entry updated: %j', err || proc);
+      callback(err);
+    });
+
+    function updateProcessStatus(proc, asyncCb) {
+      proc.isTracing = !!pInfo.isTracing;
+      proc.save(asyncCb);
+    }
+  }
+  ServiceProcess.recordStatusWdUpdate = recordStatusWdUpdate;
+
   function _findProcess(instanceId, workerId, pid, pst) {
     var filter = {
       where: {

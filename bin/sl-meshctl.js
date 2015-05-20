@@ -119,6 +119,8 @@ function runCommand(client, command) {
     'cpu-start': cmdCpuProfilingStart,
     'cpu-stop': cmdCpuProfilingStop,
     'heap-snapshot': cmdHeapSnapshot,
+    'tracing-start': cmdTracingStart,
+    'tracing-stop': cmdTracingStop,
     'npmls': cmdLs,
     'patch': cmdPatch,
     'env-set': cmdEnvSet,
@@ -215,7 +217,7 @@ function printServiceStatus(service) {
 
     var processTable = [
       ['  ', 'ID', 'PID', 'WID', 'Listening Ports',
-          'Tracking objects?', 'CPU profiling?']
+          'Tracking objects?', 'CPU profiling?', 'Tracing?']
     ];
     if (verbose)
       processTable[0].push('Stop reason', 'Stop time');
@@ -232,6 +234,7 @@ function printServiceStatus(service) {
         proc.workerId,
         proc.listeningSockets.map(addr2str).join(', '),
         proc.isTrackingObjects ? 'yes' : '',
+        proc.isTracing ? 'yes' : '',
         profiling(proc),
       ];
       if (verbose)
@@ -472,6 +475,32 @@ function cmdCpuProfilingStop(client) {
           console.log('CPU profile written to `%s`, load into Chrome Dev Tools',
             fileName);
         });
+      });
+    }
+  );
+}
+
+function cmdTracingStart(client) {
+  var target = mandatory('target');
+  client.resolveTarget(target,
+    function(err, service, executor, instance) {
+      dieIf(err);
+      instance.tracingStart(function(err) {
+        dieIf(err);
+        console.log('Tracing started');
+      });
+    }
+  );
+}
+
+function cmdTracingStop(client) {
+  var target = mandatory('target');
+  client.resolveTarget(target,
+    function(err, service, executor, instance) {
+      dieIf(err);
+      instance.tracingStop(function(err) {
+        dieIf(err);
+        console.log('Tracing stopped');
       });
     }
   );

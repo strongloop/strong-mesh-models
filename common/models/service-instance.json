@@ -55,6 +55,11 @@
       "type": "string",
       "description": "The number of cpus to use when starting the service on this instance"
     },
+    "tracingEnabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Indicates if tracing is enabled on this instance"
+    },
     "applicationName": {
       "type": "string",
       "description": "The application name that strong-agent uses to report its metrics"
