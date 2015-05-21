@@ -1,5 +1,6 @@
 var assert = require('assert');
 var debug = require('debug')('strong-mesh-models:server:instance-action');
+var fs = require('fs');
 var fmt = require('util').format;
 var path = require('path');
 var util = require('util');
@@ -150,12 +151,11 @@ module.exports = function extendInstanceAction(InstanceAction) {
 
       debug('finishing profile: %j', profile);
 
-      var filePath = path.resolve(fmt('profile.%s.%s', profile.id, type));
+      var fileName = path.resolve(fmt('profile.%s.%s', profile.id, type));
       var req = {
         cmd: 'current',
         sub: action.request.sub,
         target: action.request.target,
-        filePath: filePath
       };
 
       InstanceAction.app.serviceManager.onCtlRequest(service,
@@ -166,22 +166,38 @@ module.exports = function extendInstanceAction(InstanceAction) {
       function complete(err, res) {
         if (err) {
           res = res || {};
-          res.error = err;
+          res.error = err.message;
         }
 
         if (res.error) {
           profile.errored = res.error;
-        } else {
-          profile.completed = true;
-          profile.fileName = filePath;
+
+          return saveProfile();
         }
 
-        profile.save(function(err, savedProfile) {
-          debug('end profile after create: %j', err || savedProfile);
+        writeProfileData(res.profile);
+      }
+
+      function writeProfileData(profileData) {
+        assert(profileData);
+        fs.writeFile(fileName, profileData, function(err) {
           if (err) {
-            console.error('Unrecoverable error updating %j', profile);
-            throw err;
+            console.error('Failed to write profile %d, file %j: %s',
+                          profile.id, fileName, err);
+            profile.errored = err.message;
+          } else {
+            profile.completed = true;
+            profile.fileName = fileName;
           }
+          saveProfile();
+        });
+
+      }
+
+      function saveProfile() {
+        profile.save(function(err, savedProfile) {
+          debug('end profile after stop: %j', err || savedProfile);
+          assert.ifError(err);
         });
       }
 
