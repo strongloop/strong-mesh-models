@@ -7,7 +7,7 @@ module.exports = function extendServiceInstance(ServiceInstance) {
     function(ctx, _, next) {
       debug('updateAttributes with %j', ctx.args.data);
       // When updating the instance via REST, only allow changes to cpus
-      // and enableTracing
+      // and tracingEnabled
       var reqData = ctx.args.data;
       ctx.args.data = {};
       if (reqData.cpus)
