@@ -71,7 +71,7 @@ function Client(apiUrl, options) {
 
   this.loopback = client;
   this.models = client.models;
-  this.version = require('../package.json').version;
+  this.apiVersion = require('../package.json').apiVersion;
 
   // Populates the cache of models so you can access them with
   // client.models.ModelName.
@@ -104,10 +104,10 @@ function checkRemoteApiSemver(callback) {
       return callback();
     }
 
-    var localMajor = self.version.split('.')[0];
+    var localMajor = self.apiVersion.split('.')[0];
     var remoteMajor = info.apiVersion.split('.')[0];
 
-    debug('local %s %s.x remote %s %s.x', self.version, localMajor,
+    debug('local %s %s.x remote %s %s.x', self.apiVersion, localMajor,
           info.apiVersion, remoteMajor);
 
     if (localMajor !== remoteMajor) {

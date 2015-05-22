@@ -60,7 +60,7 @@ module.exports = function extServerService(ServerService) {
 
   function getStatusSummary(callback) {
     var serviceInfo = {};
-    serviceInfo.clientApiVersion = require('../../package.json').version;
+    serviceInfo.clientApiVersion = require('../../package.json').apiVersion;
     serviceInfo.env = this.env;
     serviceInfo.name = this.name;
     serviceInfo.id = this.id;
