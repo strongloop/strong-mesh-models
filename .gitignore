@@ -38,12 +38,13 @@ node_modules
 *.swo
 
 #Misc
-.DS_Store
+*._*
 *.csv
 *.dat
 *.out
 *.tgz
 *.xml
-*._*
+.DS_Store
+.strong-pm
 test/minkelite.db
 test/patch.file

@@ -3,7 +3,6 @@
 var ServiceManager = require('../index').ServiceManager;
 var assert = require('assert');
 var exec = require('./exec-meshctl');
-var fs = require('fs');
 var test = require('tap').test;
 var testCmdHelper = require('./meshctl-helper');
 var util = require('util');
@@ -19,9 +18,7 @@ test('Test heap-snapshot commands', function(t) {
         assert.equal(req.cmd, 'current');
         assert.equal(req.sub, 'heap-snapshot');
         assert.equal(req.target, 1231);
-        assert.ok(req.filePath);
-        fs.writeFileSync(req.filePath, 'some data');
-        callback(null, {});
+        callback(null, {profile: 'some data'});
       }
       TestServiceManager.prototype.onCtlRequest = onCtlRequest;
       tt.end();
