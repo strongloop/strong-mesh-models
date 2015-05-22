@@ -112,6 +112,26 @@ module.exports = function(ServiceInstance) {
   );
 
   ServiceInstance.remoteMethod(
+    'tracingStart',
+    {
+      http: {path: '/tracingStart', verb: 'post'},
+      isStatic: false,
+      returns: {arg: 'response', type: 'object', root: true},
+      description: 'Restart all workers with tracing on.'
+    }
+  );
+
+  ServiceInstance.remoteMethod(
+    'tracingStop',
+    {
+      http: {path: '/tracingStop', verb: 'post'},
+      isStatic: false,
+      returns: {arg: 'response', type: 'object', root: true},
+      description: 'Restart all workers with tracing off.'
+    }
+  );
+
+  ServiceInstance.remoteMethod(
     'npmModuleList',
     {
       http: {path: '/npmModuleList', verb: 'post'},

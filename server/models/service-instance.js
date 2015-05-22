@@ -7,9 +7,15 @@ module.exports = function extendServiceInstance(ServiceInstance) {
     function(ctx, _, next) {
       debug('updateAttributes with %j', ctx.args.data);
       // When updating the instance via REST, only allow changes to cpus
-      ctx.args.data = {
-        cpus: ctx.args.data.cpus
-      };
+      // and enableTracing
+      var reqData = ctx.args.data;
+      ctx.args.data = {};
+      if (reqData.cpus)
+        ctx.args.data.cpus = reqData.cpus;
+
+      if (reqData.tracingEnabled)
+        ctx.args.data.tracingEnabled = reqData.tracingEnabled;
+
       next();
     }
   );
@@ -228,6 +234,32 @@ module.exports = function extendServiceInstance(ServiceInstance) {
     return this._simpleCommand('env-get', callback);
   }
   ServiceInstance.prototype.envGet = envGet;
+
+  /**
+   * Start tracing on all workers on this instance
+   *
+   * @param {function} callback Callback function.
+   */
+  function tracingStart(callback) {
+    return this.updateAttributes({tracingEnabled: true}, function(err) {
+      if (err) return callback(err);
+      return callback(null, {message: 'tracing started'});
+    });
+  }
+  ServiceInstance.prototype.tracingStart = tracingStart;
+
+  /**
+   * Stop tracing on all workers on this instance
+   *
+   * @param {function} callback Callback function.
+   */
+  function tracingStop(callback) {
+    return this.updateAttributes({tracingEnabled: false}, function(err) {
+      if (err) return callback(err);
+      return callback(null, {message: 'tracing stopped'});
+    });
+  }
+  ServiceInstance.prototype.tracingStop = tracingStop;
 
   function logDump(callback) {
     this._simpleCommand('log-dump', callback);

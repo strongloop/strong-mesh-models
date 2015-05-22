@@ -31,13 +31,19 @@
       "type": "boolean",
       "required": true,
       "default": false,
-      "description": "Indicates if this object-tracking is turned on for this process"
+      "description": "Indicates if object-tracking is turned on for this process"
     },
     "isProfiling": {
       "type": "boolean",
       "required": true,
       "default": false,
-      "description": "Indicates if this cpu-profiling is turned on for this process"
+      "description": "Indicates if cpu-profiling is turned on for this process"
+    },
+    "isTracing": {
+      "type": "boolean",
+      "required": true,
+      "default": false,
+      "description": "Indicates if tracing is turned on for this process"
     },
     "watchdogTimeout": {
       "type": "number",

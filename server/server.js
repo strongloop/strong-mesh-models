@@ -123,8 +123,7 @@ function server(serviceManager, minkelite, options) {
         ProfileData.recordProfileData(instanceId, uInfo, callback);
         break;
       case 'status:wd':
-        // So it isn't reported as Unknown.
-        callback();
+        ServiceProcess.recordStatusWdUpdate(instanceId, uInfo, callback);
         break;
       default:
         debug('Unknown request: %j', uInfo);

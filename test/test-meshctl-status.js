@@ -39,7 +39,7 @@ test('Test status command', function(t) {
     '    Version  Agent version  Cluster size',
     '     1.2.3       7.8.9            3',
     'Processes:',
-    '       ID      PID  WID          Listening Ports         Tracking objects?  CPU profiling?',
+    '       ID      PID  WID          Listening Ports         Tracking objects?  CPU profiling?  Tracing?',
     '    1.1.1230  1230   0',
     '    1.1.1231  1231   1   0.0.0.0:4321, unix:some-socket',
     '    1.1.1232  1232   2            0.0.0.0:4321',
