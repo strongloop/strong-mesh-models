@@ -20,14 +20,14 @@ test('Test trace client api (disabled trace)', function(t) {
       /* eslint-disable camelcase */
       var notification = {
         cmd: 'trace:object',
-        record: {
+        record: JSON.stringify({
           version: '1.2.3',
           packet: {
             metadata: {
               account_key: 'key key key'
             }
           }
-        }
+        })
       };
       /* eslint-enable camelcase */
 

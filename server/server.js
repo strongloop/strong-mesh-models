@@ -107,13 +107,12 @@ function server(serviceManager, minkelite, options) {
         AgentTrace.recordTrace(instanceId, uInfo, callback);
         break;
       case 'trace:object':
-        var traceVersion = uInfo.record.version;
-        var accountName = uInfo.record.packet.metadata.account_key;
         if (!app.minkelite)
           return callback();
-        app.minkelite.postRawPieces(traceVersion,
-          accountName,
-          uInfo.record.packet,
+        var record = JSON.parse(uInfo.record);
+        app.minkelite.postRawPieces(record.version,
+          record.packet.metadata.account_key,
+          record.packet,
           callback);
         break;
       case 'express:usage-record':
