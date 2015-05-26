@@ -18,7 +18,7 @@ var server = meshServer(manager);
 server.set('port', 0);
 
 test('check non-matching version', function(tt) {
-  apiVersion = require('../package').version;
+  apiVersion = require('../package.json').apiVersion;
 
   server.start(function onStart(err, port) {
     tt.ifError(err, 'server started successfully');

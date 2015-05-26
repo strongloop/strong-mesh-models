@@ -1,6 +1,6 @@
 var exec = require('./exec-meshctl');
 var test = require('tap').test;
-var version = require('../package').version;
+var version = require('../package.json').version;
 
 test('Test help messages', function(t) {
   exec(0, '--version', function(err, version1) {
