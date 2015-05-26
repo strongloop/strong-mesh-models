@@ -84,6 +84,10 @@ services using `ls` or `status`.
         a grace period for any existing connections to finish. "Hard" stops
         kill the supervisor and its workers with `SIGTERM`.
 
+  tracing-start SVC       Restart all workers with tracing on.
+
+  tracing-stop SVC        Restart all workers with tracing off.
+
 
 Worker commands: apply to a specific worker
 

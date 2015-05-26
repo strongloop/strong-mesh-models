@@ -328,6 +328,61 @@ function resolveTarget(targetId, callback) {
 }
 Client.prototype.resolveTarget = resolveTarget;
 
+/**
+ * Find the service, executor, instance based on target ID.
+ *
+ * @param {string} targetId ID in the format <Service.Executor>.
+ * default to the lowest available IDs.
+ * @param {function} callback Callback function.
+ */
+function resolveInstance(targetId, callback) {
+  targetId = targetId.split('.').slice(0, 3);
+  var serviceId = targetId.shift();
+  var executorId = targetId.pop();
+  debug('Instance input to: %j',
+    {serv: serviceId || '?', exec: executorId || '?'});
+
+  var ServiceInstance = this.models.ServiceInstance;
+  var ServerService = this.models.ServerService;
+  var Executor = this.models.Executor;
+
+  var serviceFilter = {order: ['id ASC']};
+  if (serviceId) {
+    serviceFilter.where = {
+      or: [
+        {name: serviceId},
+        {id: serviceId}
+      ]
+    };
+  }
+  return ServerService.findOne(serviceFilter, resolveExecutor);
+
+  function resolveExecutor(err, service) {
+    if (err) return callback(err);
+    if (!service) return callback(Error('Service not found'));
+    var executorFilter = {order: ['id ASC']};
+    if (executorId) executorFilter.where = {id: executorId};
+    Executor.findOne(executorFilter, resolveInstance.bind(null, service));
+  }
+
+  function resolveInstance(service, err, executor) {
+    if (err) return callback(err);
+    if (!executor) return callback(Error('Service not found'));
+    var instanceFilter = {where: {
+      serverServiceId: service.id,
+      executorId: executor.id
+    }};
+    ServiceInstance.findOne(instanceFilter, function(err, instance) {
+      if (err) return callback(err);
+      debug('Instance resolved to: %j', {
+        serv: service.id, exec: executor.id, inst: instance.id
+      });
+      callback(err, service, executor, instance);
+    });
+  }
+}
+Client.prototype.resolveInstance = resolveInstance;
+
 function apiInfo(callback) {
   var Api = this.models.Api;
   Api.apiInfo(callback);
