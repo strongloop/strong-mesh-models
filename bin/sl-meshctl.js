@@ -234,8 +234,8 @@ function printServiceStatus(service) {
         proc.workerId,
         proc.listeningSockets.map(addr2str).join(', '),
         proc.isTrackingObjects ? 'yes' : '',
-        proc.isTracing ? 'yes' : '',
         profiling(proc),
+        proc.isTracing ? 'yes' : '',
       ];
       if (verbose)
         procEntry.push(proc.stopReason, proc.stopTime || '');
@@ -482,7 +482,7 @@ function cmdCpuProfilingStop(client) {
 
 function cmdTracingStart(client) {
   var target = mandatory('target');
-  client.resolveTarget(target,
+  client.resolveInstance(target,
     function(err, service, executor, instance) {
       dieIf(err);
       instance.tracingStart(function(err) {
@@ -495,7 +495,7 @@ function cmdTracingStart(client) {
 
 function cmdTracingStop(client) {
   var target = mandatory('target');
-  client.resolveTarget(target,
+  client.resolveInstance(target,
     function(err, service, executor, instance) {
       dieIf(err);
       instance.tracingStop(function(err) {
