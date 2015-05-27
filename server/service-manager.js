@@ -4,8 +4,8 @@ function ServiceManager() {
   debug('ServiceManager created');
 }
 
-function onServiceUpdate(service, callback) {
-  debug('onServiceUpdate(%j)', service);
+function onServiceUpdate(service, isNew, callback) {
+  debug('onServiceUpdate(%j, %s)', service, isNew);
   setImmediate(callback);
 }
 ServiceManager.prototype.onServiceUpdate = onServiceUpdate;
@@ -16,7 +16,13 @@ function onServiceDestroy(service, callback) {
 }
 ServiceManager.prototype.onServiceDestroy = onServiceDestroy;
 
-function onInstanceUpdate(instance, callback) {
+function onExecutorUpdate(executor, isNew, callback) {
+  debug('onExecutorUpdate(%j, %s)', executor, isNew);
+  setImmediate(callback);
+}
+ServiceManager.prototype.onExecutorUpdate = onExecutorUpdate;
+
+function onInstanceUpdate(instance, isNew, callback) {
   debug('onInstanceUpdate(%j)', instance);
   setImmediate(callback);
 }

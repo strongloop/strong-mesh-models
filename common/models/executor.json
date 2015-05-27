@@ -5,17 +5,28 @@
   "properties": {
     "address": {
       "type": "string",
-      "required": true,
       "description": "The IP address on which the API server and gateway can access this executor"
     },
     "hostname": {
       "type": "string",
-      "required": true,
       "description": "The hostname of this executor"
     },
     "APIPort": {
       "type": "string",
-      "description": "The port this executor is listening on for API commands"
+      "description": "The port this executor is listening on for API commands. (deprecated)"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Driver and connection metadata for remote host",
+      "default": {}
+    },
+    "token": {
+      "type": "string",
+      "description": "Authentication token for executor to connect to central"
+    },
+    "driver": {
+      "type": "string",
+      "description": "The driver used to connect to this executor"
     },
     "totalCapacity": {
       "type": "number",

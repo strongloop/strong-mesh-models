@@ -46,7 +46,7 @@ test('Test set-size command', function(t) {
       }
       TestServiceManager.prototype.onCtlRequest = onCtlRequest;
 
-      function onInstanceUpdate(instance, callback) {
+      function onInstanceUpdate(instance, isNew, callback) {
         assert.equal(instance.cpus, 3);
         callback();
       }
@@ -71,7 +71,7 @@ test('Test set-size command', function(t) {
       }
       TestServiceManager.prototype.onCtlRequest = onCtlRequest;
 
-      function onInstanceUpdate(instance, callback) {
+      function onInstanceUpdate(instance, isNew, callback) {
         assert.equal(instance.cpus, 4);
         callback();
       }

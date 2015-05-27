@@ -11,7 +11,7 @@ test('Create and destroy instances', function(t) {
   }
   util.inherits(TestServiceManager, ServiceManager);
 
-  function onServiceUpdate(service, callback) {
+  function onServiceUpdate(service, isNew, callback) {
     t.equal(service.name, 'My Service', 'create: Service name should match');
     t.equal(service._groups.length, 1, 'create: Service should have 1 group');
     t.equal(service._groups[0].scale, 1, 'create: Group scale should be 1');
@@ -41,7 +41,7 @@ test('Create and destroy instances', function(t) {
   }
   TestServiceManager.prototype.onServiceDestroy = onServiceDestroy;
 
-  function onInstanceUpdate(instance, callback) {
+  function onInstanceUpdate(instance, isNew, callback) {
     t.equal(instance.serverServiceId, 1, 'create: Instance service Id is set');
     t.equal(instance.groupId, 1, 'create: Instance group Id is set');
     callback();

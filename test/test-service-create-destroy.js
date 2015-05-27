@@ -10,7 +10,7 @@ test('Create and destroy a service', function(t) {
   }
   util.inherits(TestServiceManager, ServiceManager);
 
-  function onServiceUpdate(service, callback) {
+  function onServiceUpdate(service, isNew, callback) {
     t.equal(service.name, 'My Service', 'create: Service name should match');
     t.equal(service._groups.length, 1, 'create: Service should have 1 group');
     t.equal(service._groups[0].scale, 2, 'create: Group scale should be 2');
