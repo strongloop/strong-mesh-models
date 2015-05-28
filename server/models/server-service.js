@@ -81,7 +81,7 @@ module.exports = function extendServerService(ServerService) {
     var res = ctx.res;
     var fileName;
 
-    debug('Download profile %s, profileId');
+    debug('Download profile %s', profileId);
     ProfileData.findById(profileId, sendProfile);
 
     function sendProfile(err, profile) {
