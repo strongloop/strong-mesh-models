@@ -207,9 +207,9 @@ function printServiceStatus(service) {
     for (var i in summary.instances) {
       if (!summary.instances.hasOwnProperty(i)) continue;
       var inst = summary.instances[i];
-      assert(inst.version);
-      assert(inst.agentVersion);
-      assert(inst.clusterSize);
+      assert('version' in inst);
+      assert('agentVersion' in inst);
+      assert('clusterSize' in inst);
       instanceTable.push(['',
         inst.version, inst.agentVersion, inst.clusterSize
       ]);
