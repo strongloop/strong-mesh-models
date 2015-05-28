@@ -28,7 +28,30 @@ module.exports = function extendInstanceAction(InstanceAction) {
         instance.executor(function(err, executor) {
           if (err) return next(err);
 
-          processAction(service, executor, instance, action, next);
+          // If we know the target ServiceProcess, or the command has no
+          // target, we can process the action.
+          if (action.serviceProcessId || action.request.target == null) {
+            return processAction(service, executor, instance, action, next);
+          }
+
+          // XXX arc is currently directly creating actions, once it starts
+          // using the methods on ServiceProcess this branch will never happen.
+          // Othewise, we need to find the target ServiceProces
+          var target = action.request.target;
+          var processFilter = {
+            limit: 1,
+            where: {or: [{pid: target}, {workerId: target}], stopReason: ''}
+          };
+          debug('find process: %j', processFilter);
+          instance.processes(processFilter, function(err, processes) {
+            if (err) return next(err);
+            if (processes.length !== 1)
+              return next(new Error('Unable to find target ' + target));
+            var proc = processes[0];
+            action.serviceProcessId = proc.id;
+            console.log('ACTION %j', action);
+            return processAction(service, executor, instance, action, next);
+          });
         });
       });
     });
