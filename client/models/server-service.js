@@ -81,6 +81,7 @@ module.exports = function extServerService(ServerService) {
           restartCount: instance.restartCount,
           agentVersion: instance.agentVersion,
           nodeVersion: instance.containerVersionInfo.node,
+          driverMeta: instance.containerVersionInfo.driverMeta,
           clusterSize: instance.setSize
         };
       }
