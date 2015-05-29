@@ -41,6 +41,7 @@ function testCmdHelper(t, TestServiceManager, test, MockMinkelite) {
             apiVersion: '4.5.6',
           },
           node: '0.10',
+          driverMeta: {},
         },
         PMPort: 8701,
         restartCount: 0,
