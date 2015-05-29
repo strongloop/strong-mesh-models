@@ -39,9 +39,10 @@ module.exports = function extendServiceProcess(ServiceProcess) {
         return asyncCb();
       }
       if (proc.stopTime == null) {
-        proc.stopTime = new Date();
-        proc.stopReason = pInfo.reason;
-        return proc.save(asyncCb);
+        return proc.updateAttributes({
+          stopTime: new Date(),
+          stopReason: pInfo.reason,
+        }, asyncCb);
       }
       // Found proc, but it was stopped, so nothing to do.
       return asyncCb();
@@ -79,8 +80,9 @@ module.exports = function extendServiceProcess(ServiceProcess) {
   function recordListeningEndpoint(instanceId, pInfo, callback) {
     function updateWorker(proc, asyncCb) {
       if (proc) {
-        proc.listeningSockets.push(pInfo.address);
-        return proc.save(asyncCb);
+        return proc.updateAttributes({
+          listeningSockets: proc.listeningSockets.concat(pInfo.address),
+        }, asyncCb);
       }
 
       debug('Listening update for an unknown process: %j', pInfo);
@@ -99,22 +101,23 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
   function recordProfilingState(instanceId, pInfo, callback) {
     function updateProcessStatus(proc, asyncCb) {
+      var changes = {};
       switch (pInfo.cmd) {
         case 'object-tracking':
-          proc.isTrackingObjects = pInfo.isRunning;
+          changes.isTrackingObjects = pInfo.isRunning;
           break;
         case 'cpu-profiling':
-          proc.isProfiling = pInfo.isRunning;
-          proc.watchdogTimeout = pInfo.timeout || 0;
-          proc.watchdogStallout = pInfo.stallout || 0;
+          changes.isProfiling = pInfo.isRunning;
+          changes.watchdogTimeout = pInfo.timeout || 0;
+          changes.watchdogStallout = pInfo.stallout || 0;
           break;
         case 'heap-snapshot':
-          proc.isSnapshotting = pInfo.isRunning;
+          changes.isSnapshotting = pInfo.isRunning;
           break;
         default:
           break;
       }
-      proc.save(asyncCb);
+      proc.updateAttributes(changes, asyncCb);
     }
 
     return async.waterfall([
@@ -140,7 +143,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
     function updateProcessStatus(proc, asyncCb) {
       proc.isTracing = !!pInfo.isTracing;
-      proc.save(asyncCb);
+      proc.updateAttributes({isTracing: !!pInfo.isTracing}, asyncCb);
     }
   }
   ServiceProcess.recordStatusWdUpdate = recordStatusWdUpdate;
