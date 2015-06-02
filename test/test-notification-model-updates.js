@@ -155,6 +155,29 @@ test('Test notifications', function(t) {
     });
   });
 
+  t.test('Notify status:wd', function(tt) {
+    var notification = {
+      cmd: 'status:wd',
+      pwd: process.env.PWD,
+      cwd: process.cwd(),
+      pid: 1235,
+      id: 1,
+      isTracing: false,
+      appName: 'my app 2',
+    };
+    app.handleModelUpdate(1, notification, function(err) {
+      tt.ifError(err);
+
+      app.models.ServiceInstance.find({}, function(err, instances) {
+        tt.ok(!err, 'instances should be found');
+        tt.equal(instances.length, 1, 'only one instance should be found');
+        var inst = instances[0] || {};
+        tt.equal(inst.applicationName, 'my app 2', 'app name should match');
+        tt.end();
+      });
+    });
+  });
+
   function checkWorker1(prof, tt) {
     var q = {where: {
       workerId: 1,

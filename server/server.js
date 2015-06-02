@@ -122,7 +122,17 @@ function server(serviceManager, minkelite, options) {
         ProfileData.recordProfileData(instanceId, uInfo, callback);
         break;
       case 'status:wd':
-        ServiceProcess.recordStatusWdUpdate(instanceId, uInfo, callback);
+        ServiceProcess.recordStatusWdUpdate(instanceId, uInfo, function(err) {
+          if (err) return callback(err);
+
+          // Work around for versions of supervisor which dont include appName
+          // in status:wd message
+          if (!uInfo.appName) {
+            return process.nextTick(callback);
+          }
+
+          ServiceInstance.recordStatusWdUpdate(instanceId, uInfo, callback);
+        });
         break;
       default:
         debug('Unknown request: %j', uInfo);
