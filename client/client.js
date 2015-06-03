@@ -405,3 +405,20 @@ function expressMetricsEndpointDetail(modelOrUri, windowStartTime, callback) {
   );
 }
 Client.prototype.expressMetricsEndpointDetail = expressMetricsEndpointDetail;
+
+function executorCreate(driver, callback) {
+  this.models.Executor.create({
+    driver: driver || 'executor'
+  }, callback);
+}
+Client.prototype.executorCreate = executorCreate;
+
+function executorList(callback) {
+  this.models.Executor.find({}, callback);
+}
+Client.prototype.executorList = executorList;
+
+function executorDestroy(id, callback) {
+  this.models.Executor.deleteById(id, callback);
+}
+Client.prototype.executorDestroy = executorDestroy;

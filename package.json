@@ -18,7 +18,8 @@
   },
   "main": "index.js",
   "bin": {
-    "sl-meshctl": "./bin/sl-meshctl.js"
+    "sl-meshctl": "./bin/sl-meshctl.js",
+    "sl-meshadm": "./bin/sl-meshadm.js"
   },
   "scripts": {
     "lint": "eslint . && jscs .",
