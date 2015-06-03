@@ -1,3 +1,55 @@
+2015-06-03, Version 7.0.0
+=========================
+
+ * Update instance appName based on status:wd msgs (Krishna Raman)
+
+ * report driver metadata for each instance (Ryan Graham)
+
+ * fix race condition in process update processing (Ryan Graham)
+
+ * instance-action: support profiling via actions (Sam Roberts)
+
+ * server-service: fix error in debug message format (Sam Roberts)
+
+ * fix over aggressive assert (Ryan Graham)
+
+ * meshctl: assert instance is well-formed (Sam Roberts)
+
+ * Use SVC.EXEC when starting/stopping tracing on CLI (Krishna Raman)
+
+ * Fix column order for tracing in status output (Krishna Raman)
+
+ * Distinguish REST API and js API version (Sam Roberts)
+
+ * trace-object: records are stringified now (Ben Noordhuis)
+
+ * instance-action: receive profile data via message (Sam Roberts)
+
+ * Ignore .strong-pm (Sam Roberts)
+
+ * Rename enableTracing field on instance model (Krishna Raman)
+
+ * Enabled tracing to be enabled/disabled via API (Krishna Raman)
+
+ * Move Minkelite dependency to PM (Krishna Raman)
+
+ * tests: upgrade to tap@1 (Ryan Graham)
+
+ * allow exited processes to be resumed if matched (Ryan Graham)
+
+ * Support automatic stallout of cpu profiler (Sam Roberts)
+
+ * profiling: create profile data object at start (Sam Roberts)
+
+ * server-service: 404 if profile data not found (Sam Roberts)
+
+ * meshctl: debug log the cpu prof response (Sam Roberts)
+
+ * package: exclude .strong-pm from jscs coverage (Sam Roberts)
+
+ * meshctl: debug as strong-mesh-models, not -client (Sam Roberts)
+
+
 2015-05-08, Version 6.1.0
 =========================
 
