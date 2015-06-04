@@ -28,7 +28,11 @@ module.exports = function extendServiceInstance(ServiceInstance) {
     var serviceManager = ServiceInstance.app.serviceManager;
     if (ctx.instance) {
       // Full save of Instance (create)
-      serviceManager.onInstanceUpdate(ctx.instance, next);
+      if (serviceManager.onInstanceUpdate.length === 2) {
+        serviceManager.onInstanceUpdate(ctx.instance, next);
+      } else {
+        serviceManager.onInstanceUpdate(ctx.instance, ctx.isNewInstance, next);
+      }
     } else {
       // Save of multiple Services
       ServiceInstance.find({where: ctx.where}, function(err, services) {
@@ -36,7 +40,11 @@ module.exports = function extendServiceInstance(ServiceInstance) {
         return async.each(
           services,
           function(instance, callback) {
-            serviceManager.onInstanceUpdate(instance, callback);
+            if (serviceManager.onInstanceUpdate.length === 2) {
+              serviceManager.onInstanceUpdate(instance, callback);
+            } else {
+              serviceManager.onInstanceUpdate(instance, false, callback);
+            }
           },
           next
         );

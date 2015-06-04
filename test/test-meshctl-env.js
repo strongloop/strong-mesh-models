@@ -78,7 +78,7 @@ test('Test env commands', function(t) {
     });
 
     t.test('Setup service manager (failure case)', function(tt) {
-      function onServiceUpdate(service, callback) {
+      function onServiceUpdate(service, isNew, callback) {
         callback(Error('bad stuff'));
       }
       TestServiceManager.prototype.onServiceUpdate = onServiceUpdate;

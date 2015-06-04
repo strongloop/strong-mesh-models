@@ -41,6 +41,10 @@
       "type": "object",
       "description": "Information about the host, operating system, node version and container technology hosting this instance"
     },
+    "token": {
+      "type": "string",
+      "description": "Authentication token for executor to connect to central"
+    },
     "started": {
       "type": "boolean",
       "default": false,

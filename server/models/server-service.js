@@ -26,9 +26,15 @@ module.exports = function extendServerService(ServerService) {
   });
 
   ServerService.observe('after save', function(ctx, next) {
+    var serviceManager = ServerService.app.serviceManager;
+
     if (ctx.instance) {
       // Full save of Service
-      ServerService.app.serviceManager.onServiceUpdate(ctx.instance, next);
+      if (serviceManager.onServiceUpdate.length === 2) {
+        serviceManager.onServiceUpdate(ctx.instance, next);
+      } else {
+        serviceManager.onServiceUpdate(ctx.instance, ctx.isNewInstance, next);
+      }
     } else {
       // Save of multiple Services
       ServerService.find({where: ctx.where}, function(err, services) {
@@ -36,7 +42,11 @@ module.exports = function extendServerService(ServerService) {
         return async.each(
           services,
           function(service, callback) {
-            ServerService.app.serviceManager.onServiceUpdate(service, callback);
+            if (serviceManager.onServiceUpdate.length === 2) {
+              serviceManager.onServiceUpdate(service, callback);
+            } else {
+              serviceManager.onServiceUpdate(service, false, callback);
+            }
           },
           next
         );
