@@ -58,9 +58,9 @@ function onApiRequest(req, callback) {
 }
 ServiceManager.prototype.onApiRequest = onApiRequest;
 
+// Expected to callback with err, or null and a new models.Api
 function getApiVersionInfo(callback) {
-  debug('getApiVersionInfo()');
-  callback(Error('API request not implemented'));
+  callback(Error('API version info request not implemented'));
 }
 ServiceManager.prototype.getApiVersionInfo = getApiVersionInfo;
 

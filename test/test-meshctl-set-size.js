@@ -1,9 +1,14 @@
-var assert = require('assert');
+var debug = require('debug')('strong-mesh-models:test');
 var exec = require('./exec-meshctl');
 var test = require('tap').test;
 var testCmdHelper = require('./meshctl-helper');
 var util = require('util');
 var ServiceManager = require('../index').ServiceManager;
+
+// Note in the following:
+// - persistent size changes show up only as an instance update. Its the drivers
+//   job to send any control messages to update the size if the app is running.
+// - non-persistent size changes show up only as a set-size control message.
 
 test('Test set-size command', function(t) {
   function TestServiceManager() {
@@ -11,16 +16,16 @@ test('Test set-size command', function(t) {
   util.inherits(TestServiceManager, ServiceManager);
 
   testCmdHelper(t, TestServiceManager, function(t, service, instance, port) {
-    t.test('Setup service manager (non-persisted)', function(tt) {
+    t.test('set-size API (non-persisted)', function(tt) {
+      tt.plan(3);
+
       function onCtlRequest(s, i, req, callback) {
-        assert.deepEqual(req, {cmd: 'current', sub: 'set-size', size: 2});
+        debug('onCtlRequest:', req);
+        tt.match(req, {cmd: 'current', sub: 'set-size', size: 2});
         callback(null, {message: 'size was changed'});
       }
       TestServiceManager.prototype.onCtlRequest = onCtlRequest;
-      tt.end();
-    });
 
-    t.test('set-size API (non-persisted)', function(tt) {
       service.setClusterSize(2, false, function(err, responses) {
         tt.ifError(err, 'call should not error');
         tt.equal(responses[0].response.message, 'size was changed',
@@ -29,33 +34,45 @@ test('Test set-size command', function(t) {
       });
     });
 
-    t.test('set-size CLI (non-persisted)', function(tt) {
+    t.test('set-size CLI (persisted)', function(tt) {
+      tt.plan(3);
+
+      function onCtlRequest(s, i, req, callback) {
+        tt.fail('should not be called');
+        callback(Error('application not running')); // Don't timeout on fail
+      }
+      TestServiceManager.prototype.onCtlRequest = onCtlRequest;
+
+      function onInstanceUpdate(instance, callback) {
+        tt.same(instance.cpus, 2);
+        callback();
+      }
+      TestServiceManager.prototype.onInstanceUpdate = onInstanceUpdate;
+
       exec.resetHome();
       exec(port, 'set-size 1 2', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, '',
+        tt.match(stdout, /Service.*size was set to 2/,
           'Rendered output should match');
         tt.end();
       });
     });
 
-    t.test('Setup service manager (persisted)', function(tt) {
+    t.test('set-size API (persisted)', function(tt) {
+      tt.plan(3);
+
       function onCtlRequest(s, i, req, callback) {
-        assert.deepEqual(req, {cmd: 'current', sub: 'set-size', size: 3});
-        callback(null, {message: 'size was changed'});
+        tt.fail('should not be called');
+        callback(Error('application not running')); // Don't timeout on fail
       }
       TestServiceManager.prototype.onCtlRequest = onCtlRequest;
 
       function onInstanceUpdate(instance, isNew, callback) {
-        assert.equal(instance.cpus, 3);
+        tt.same(instance.cpus, 3);
         callback();
       }
       TestServiceManager.prototype.onInstanceUpdate = onInstanceUpdate;
 
-      tt.end();
-    });
-
-    t.test('set-size API (persisted)', function(tt) {
       service.setClusterSize(3, true, function(err, responses) {
         tt.ifError(err, 'call should not error');
         tt.equal(responses[0].response.message, 'size was changed',
@@ -64,51 +81,39 @@ test('Test set-size command', function(t) {
       });
     });
 
-    t.test('Setup service manager (no app, persist case)', function(tt) {
+    t.test('set-size API (no app, persist case)', function(tt) {
+      tt.plan(2);
+
       function onCtlRequest(s, i, req, callback) {
-        assert.deepEqual(req, {cmd: 'current', sub: 'set-size', size: 4});
-        callback(Error('application not running'));
+        tt.fail('should not be called');
+        callback(Error('application not running')); // Don't timeout on fail
       }
       TestServiceManager.prototype.onCtlRequest = onCtlRequest;
 
       function onInstanceUpdate(instance, isNew, callback) {
-        assert.equal(instance.cpus, 4);
+        tt.same(instance.cpus, 4);
         callback();
       }
       TestServiceManager.prototype.onInstanceUpdate = onInstanceUpdate;
-      tt.end();
-    });
 
-    t.test('set-size API (no app, persist case)', function(tt) {
       service.setClusterSize(4, true, function(err) {
         tt.ifError(err, 'call should not error');
         tt.end();
       });
     });
 
-    t.test('Setup service manager (failure case)', function(tt) {
+    t.test('set-size API (failure case)', function(tt) {
+      tt.plan(3);
+
       function onCtlRequest(s, i, req, callback) {
-        assert.deepEqual(req, {cmd: 'current', sub: 'set-size', size: 5});
-        callback(Error('application not running'));
+        tt.match(req, {cmd: 'current', sub: 'set-size', size: 5});
+        callback(Error('FAILURE'));
       }
       TestServiceManager.prototype.onCtlRequest = onCtlRequest;
-      tt.end();
-    });
 
-    t.test('set-size API (failure case)', function(tt) {
       service.setClusterSize(5, false, function(err, responses) {
         tt.ifError(err);
-        tt.ok(responses[0].error, 'call should error');
-        tt.end();
-      });
-    });
-
-    t.test('set-size CLI (failure case)', function(tt) {
-      exec.resetHome();
-      exec(port, 'set-size 1 5', function(err, stdout, stderr) {
-        tt.ok(err, 'command should error');
-        var patt = /Command "set-size" on "\S+" failed with error/;
-        tt.assert(patt.test(stderr), 'Rendered error should match');
+        tt.equal(responses[0].error, 'FAILURE', 'call should error');
         tt.end();
       });
     });

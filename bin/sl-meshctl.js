@@ -279,11 +279,17 @@ function printServiceStatus(service) {
 function printResponse(service, summmaryMsg, err, responses) {
   dieIf(err);
 
+  debug('response service %j', service);
+  debug('response summary %j', summmaryMsg);
+  debug('response err %j', err);
+
   var hasError = false;
   var responseTable = [['  ', 'Instance', 'Response']];
   for (var i in responses) {
     if (!responses.hasOwnProperty(i)) continue;
     var r = responses[i];
+    debug('responses[%d] instance %j', i, r.instance);
+    debug('responses[%d] response %j', i, r.response);
     if (r.error) {
       hasError = true;
       responseTable.push(['', r.instance, r.error || '']);
@@ -409,14 +415,14 @@ function cmdRollingRestart(client) {
 function cmdSetClusterSize(client) {
   var targetService = mandatory('service');
   var size = mandatory('size');
-  var persist = false;
+  var persist = true;
 
   client.serviceFind(targetService, function(err, service) {
     dieIf(err);
     service.setClusterSize(
       size,
       persist,
-      printResponse.bind(null, service, null)
+      printResponse.bind(null, service, fmt('size was set to %d', size))
     );
   });
 }

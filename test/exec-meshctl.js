@@ -1,7 +1,7 @@
 var Dir = require('temporary').Dir;
 var assert = require('assert');
 var execFile = require('child_process').execFile;
-var debug = require('debug')('strong-scheduler:test');
+var debug = require('debug')('strong-mesh-models:test:exec');
 
 module.exports = exec;
 module.exports.resetHome = resetHome;
