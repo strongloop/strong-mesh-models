@@ -9,7 +9,6 @@ var concat = require('concat-stream');
 var debug = require('debug')('strong-mesh-models:meshctl');
 var fmt = require('util').format;
 var fs = require('fs');
-var home = require('osenv').home();
 var npmls = require('strong-npm-ls');
 var path = require('path');
 var table = require('text-table');
@@ -37,9 +36,6 @@ var parser = new Parser([
 
 var apiUrl = process.env.STRONGLOOP_MESH_API ||
   process.env.STRONGLOOP_PM ||
-  exists('pmctl') ||
-  exists(path.join(home, '.strong-pm', 'pmctl')) ||
-  exists('/var/lib/strong-pm/pmctl') ||
   'http://127.0.0.1:8701';
 
 var command = 'status';
@@ -737,11 +733,6 @@ function download(instance, profileId, file, callback) {
       }
     }
   });
-}
-
-function exists(path) {
-  if (fs.existsSync(path))
-    return path;
 }
 
 function mandatory(name) {
