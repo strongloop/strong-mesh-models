@@ -4,13 +4,13 @@ var debug = require('debug')('strong-mesh-models:server:service-process');
 module.exports = function extendServiceProcess(ServiceProcess) {
   function recordFork(instanceId, pInfo, callback) {
     debug('Process forked: worker id %d pid %d ppid %d pst %d',
-      pInfo.id, pInfo.pid, pInfo.ppid, pInfo.pst || pInfo.startTime);
+      pInfo.wid, pInfo.pid, pInfo.ppid, pInfo.pst || pInfo.startTime);
     // XXX(sam) why .pst || .startTime?
 
     var forkedProcess = {
       pid: pInfo.pid,
       parentPid: pInfo.ppid,
-      workerId: pInfo.id,
+      workerId: pInfo.wid,
       serviceInstanceId: instanceId,
       startTime: new Date(pInfo.pst || pInfo.startTime),
     };
@@ -29,7 +29,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
   function recordExit(instanceId, pInfo, callback) {
     debug('Process exited: worker id %d pid %d reason %s suicide? %s',
-      pInfo.id, pInfo.pid, pInfo.reason, pInfo.suicide);
+      pInfo.wid, pInfo.pid, pInfo.reason, pInfo.suicide);
 
     function updateProcess(proc, asyncCb) {
       if (!proc) {
@@ -67,7 +67,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     }
 
     return async.waterfall([
-      _findProcess(instanceId, +pInfo.id, +pInfo.pid, +pInfo.pst),
+      _findProcess(instanceId, +pInfo.wid, +pInfo.pid, +pInfo.pst),
       updateProcess,
       updateChildren
     ], function ensureSave(err, proc) {
@@ -90,7 +90,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     }
 
     return async.waterfall([
-      _findProcess(instanceId, +pInfo.id, +pInfo.pid, +pInfo.pst),
+      _findProcess(instanceId, +pInfo.wid, +pInfo.pid, +pInfo.pst),
       updateWorker
     ], function ensureSave(err, proc) {
       debug('Listening of %j, save Process: %j', pInfo, err || proc);
@@ -121,7 +121,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     }
 
     return async.waterfall([
-      _findProcess(instanceId, +pInfo.id, pInfo.pid, +pInfo.pst),
+      _findProcess(instanceId, +pInfo.wid, pInfo.pid, +pInfo.pst),
 
       updateProcessStatus
     ], function(err, proc) {
@@ -133,7 +133,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
   function recordStatusWdUpdate(instanceId, pInfo, callback) {
     return async.waterfall([
-      _findProcess(instanceId, +pInfo.id, pInfo.pid, +pInfo.pst),
+      _findProcess(instanceId, +pInfo.wid, pInfo.pid, +pInfo.pst),
 
       updateProcessStatus
     ], function(err, proc) {
@@ -142,6 +142,8 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     });
 
     function updateProcessStatus(proc, asyncCb) {
+      if (!proc)
+        return asyncCb(Error('Unable to find process for msg: %j', pInfo));
       proc.isTracing = !!pInfo.isTracing;
       proc.updateAttributes({isTracing: !!pInfo.isTracing}, asyncCb);
     }
@@ -247,7 +249,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
   function _appCommand(cmd, callback) {
     var self = this;
-    cmd.serviceProcessId = self.id;
+    cmd.serviceProcessId = self.wid;
     self.serviceInstance(function(err, instance) {
       if (err) return callback(err);
       return instance.appCommand(cmd, callback);
