@@ -118,6 +118,33 @@ module.exports = function extendServiceProcess(ServiceProcess) {
   );
 
   ServiceProcess.remoteMethod(
+    'queryCapabilities',
+    {
+      http: {path: '/queryCapabilities/:feature', verb: 'get'},
+      isStatic: false,
+      accepts: [{
+        arg: 'feature',
+        required: true,
+        type: 'string',
+        http: {source: 'path'}
+      }],
+      returns: {arg: 'response', type: 'object', root: true},
+      description: 'Check support for the specified feature (feature).'
+    }
+  );
+
+  ServiceProcess.remoteMethod(
+    'queryCapabilitiesAll',
+    {
+      http: {path: '/queryCapabilities/', verb: 'get'},
+      isStatic: false,
+      accepts: [],
+      returns: {arg: 'response', type: 'object', root: true},
+      description: 'Returns all capabilities which are supported.'
+    }
+  );
+
+  ServiceProcess.remoteMethod(
     'applyPatch',
     {
       http: {path: '/applyPatch', verb: 'post'},
