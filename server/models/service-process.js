@@ -333,6 +333,34 @@ module.exports = function extendServiceProcess(ServiceProcess) {
   ServiceProcess.prototype.heapSnapshot = heapSnapshot;
 
   /**
+   * Check to see if a specific capability is supported.
+   *
+   * @param {string} feature Feature to check.
+   * @param {function} callback Callback function.
+   */
+  function queryCapabilities(feature, callback) {
+    this._appCommand({
+        cmd: 'query-capabilities',
+        target: this.pid,
+        feature: feature,
+      }, callback);
+  }
+  ServiceProcess.prototype.queryCapabilities = queryCapabilities;
+
+  /**
+   * Check the status of all capabilities that are supported.
+   *
+   * @param {function} callback Callback function.
+   */
+  function queryCapabilitiesAll(callback) {
+    this._appCommand({
+        cmd: 'query-capabilities',
+        target: this.pid
+      }, callback);
+  }
+  ServiceProcess.prototype.queryCapabilitiesAll = queryCapabilitiesAll;
+
+  /**
    * Apply patch to worker
    *
    * @param {object} patchData Patch data
