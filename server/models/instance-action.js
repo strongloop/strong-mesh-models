@@ -23,10 +23,24 @@ module.exports = function extendInstanceAction(InstanceAction) {
 
     action.serviceInstance(function(err, instance) {
       if (err) return next(err);
+      if (!instance)
+        return next(Error('Invalid action, no associated instance found'));
+
       instance.serverService(function(err, service) {
         if (err) return next(err);
+        if (!service)
+          return next(Error(fmt(
+            'Invalid instance (ID: %s), no associated service found',
+            instance.id
+          )));
+
         instance.executor(function(err, executor) {
           if (err) return next(err);
+          if (!executor)
+            return next(Error(fmt(
+              'Invalid instance (ID: %s), no associated executor found',
+              instance.id
+            )));
 
           // If we know the target ServiceProcess, or the command has no
           // target, we can process the action.

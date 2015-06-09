@@ -1,5 +1,6 @@
 var async = require('async');
 var debug = require('debug')('strong-mesh-models:server:service-instance');
+var fmt = require('util').format;
 
 module.exports = function extendServiceInstance(ServiceInstance) {
   ServiceInstance.beforeRemote(
@@ -112,6 +113,10 @@ module.exports = function extendServiceInstance(ServiceInstance) {
   function recordStatusUpdate(instanceId, instInfo, callback) {
     ServiceInstance.findById(instanceId, function(err, instance) {
       if (err) return callback(err);
+      if (!instance)
+        return callback(Error(
+          fmt('Instance with ID %s not found', instanceId)));
+
       if (instInfo.master && instInfo.master.setSize) {
         instance.setSize = instInfo.master.setSize;
         instance.started = true;
@@ -127,6 +132,9 @@ module.exports = function extendServiceInstance(ServiceInstance) {
   function recordStatusWdUpdate(instanceId, instInfo, callback) {
     ServiceInstance.findById(instanceId, function(err, instance) {
       if (err) return callback(err);
+      if (!instance)
+        return callback(Error(fmt('Instance with ID %s not found', instanceId
+          )));
 
       instance.applicationName = instInfo.appName;
       return instance.save(callback);

@@ -1,7 +1,7 @@
 var async = require('async');
 var debug = require('debug')('strong-mesh-models:server:server-service');
 var fs = require('fs');
-var util = require('util');
+var fmt = require('util').format;
 
 module.exports = function extendServerService(ServerService) {
   ServerService.disableRemoteMethod('upsert', true);
@@ -80,9 +80,8 @@ module.exports = function extendServerService(ServerService) {
     ServerService.findById(serviceId, function(err, service) {
       if (err) return callback(err);
       // With loopback, !err isn't the same as 'success'! :-(
-      if (!service) callback(new Error(util.format(
-        'setServiceCommit: service %j not found', serviceId
-      )));
+      if (!service) callback(new Error(
+        fmt('setServiceCommit: service %j not found', serviceId)));
       service.deploymentInfo = commit;
       service.save(callback);
     });
@@ -106,16 +105,16 @@ module.exports = function extendServerService(ServerService) {
     function sendProfile(err, profile) {
       if (err) {
         res.statusCode = 404;
-        return res.end(util.format('Profile data not found: %s', err.message));
+        return res.end(fmt('Profile data not found: %s', err.message));
       }
 
       if (!profile) {
         res.statusCode = 404;
-        return res.end(util.format('Profile data not found'));
+        return res.end('Profile data not found');
       }
 
       if (profile.errored) {
-        var reason = util.format('Profiling failed: %s', profile.errored);
+        var reason = fmt('Profiling failed: %s', profile.errored);
         debug('profile %d errored 500/%s', profileId, reason);
         res.statusCode = 500;
         return res.end(reason);

@@ -85,6 +85,8 @@ module.exports = function extendExpressUsageRecord(ExpressUsageRecord) {
     var q = {order: ['timeStamp ASC']};
     ExpressUsageRecord.findOne(q, function(err, firstRecord) {
       if (err) return callback(err);
+      if (!firstRecord) return callback(null, []);
+
       var windowStart = firstRecord.timeStamp;
       windowStart.setMinutes(0);
       windowStart.setSeconds(0);
