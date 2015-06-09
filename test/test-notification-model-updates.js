@@ -62,7 +62,7 @@ test('Test notifications', function(t) {
       agentVersion: '1.0.2',
       restartCount: 10,
 
-      id: 0,
+      wid: 0,
       pid: 1234,
       ppid: 3456,
       pst: 1432076622256,
@@ -127,7 +127,7 @@ test('Test notifications', function(t) {
   t.test('Notify fork', function(tt) {
     var notification = {
       cmd: 'fork',
-      id: 1,
+      wid: 1,
       pid: 1235,
       ppid: 1234,
       pst: 1432076622256,
@@ -141,7 +141,7 @@ test('Test notifications', function(t) {
   t.test('Notify listen', function(tt) {
     var notification = {
       cmd: 'listening',
-      id: 1,
+      wid: 1,
       pid: 1235,
       address: {
         address: '0.0.0.0',
@@ -161,7 +161,7 @@ test('Test notifications', function(t) {
       pwd: process.env.PWD,
       cwd: process.cwd(),
       pid: 1235,
-      id: 1,
+      wid: 1,
       isTracing: false,
       appName: 'my app 2',
     };
@@ -212,7 +212,7 @@ test('Test notifications', function(t) {
   function notifyProfiling(type, value, tt) {
     var notification = {
       cmd: type,
-      id: 1,
+      wid: 1,
       pid: 1235,
       isRunning: value
     };
@@ -264,7 +264,7 @@ test('Test notifications', function(t) {
   function notifyMetrics(dateBy, tt) {
     var notification = {
       cmd: 'metrics',
-      id: 1,
+      wid: 1,
       pid: 1235,
       metrics: {
         processes: {
@@ -382,7 +382,7 @@ test('Test notifications', function(t) {
     var notification = {
       cmd: 'exit',
       pid: 1234,
-      id: 0,
+      wid: 0,
       reason: 'foo',
     };
     tt.plan(1);
@@ -438,7 +438,7 @@ test('Test notifications', function(t) {
       agentVersion: '1.0.2',
       restartCount: 10,
 
-      id: 0,
+      wid: 0,
       pid: 1234,
       ppid: 3456,
       pst: 1432076622256,
@@ -473,7 +473,7 @@ test('Test notifications', function(t) {
   t.test('Notify fork worker 1 (resumed)', function(tt) {
     var notification = {
       cmd: 'fork',
-      id: 1,
+      wid: 1,
       pid: 1235,
       ppid: 1234,
       pst: 1432076622256,

@@ -68,20 +68,38 @@ module.exports = function extendServiceInstance(ServiceInstance) {
   });
 
   function recordInstanceInfo(instanceId, instInfo, callback) {
-    // XXX(sam) closely tied to strong-pm's mangling of the strong-supervisor
-    // started notification... :-(
     ServiceInstance.findById(instanceId, function(err, instance) {
       if (err) return callback(err);
-      instance.currentDeploymentId = instInfo.commitHash;
-      instance.startTime = new Date();
-      instance.started = true;
-      instance.applicationName = instInfo.appName;
-      instance.PMPort = instInfo.PMPort;
-      instance.containerVersionInfo = instInfo.containerVersionInfo;
-      instance.setSize = instInfo.setSize;
-      instance.agentVersion = instInfo.agentVersion;
-      instance.restartCount = instInfo.restartCount;
-      instance.save(callback);
+      instance.updateAttributes({
+        // Information from supervisor
+        startTime: new Date(),
+        started: true,
+        applicationName: instInfo.appName,
+        setSize: instInfo.setSize,
+        agentVersion: instInfo.agentVersion,
+
+        // Information from strong-pm's mangling of supervisor message
+        PMPort: instInfo.PMPort || 0,
+        restartCount: instInfo.restartCount || 0,
+        currentDeploymentId: instInfo.commitHash || '',
+      }, function(err, instance) {
+        if (err) return callback(err);
+
+        if (instInfo.containerVersionInfo) {
+          // Information from strong-pm's mangling of supervisor message
+          return instance.updateAttributes({
+            containerVersionInfo: instInfo.containerVersionInfo,
+          }, callback);
+        }
+
+        // Information from supervisor
+        var mdata = instance.containerVersionInfo || {};
+        if (instInfo.osVersion) mdata.os = instInfo.osVersion;
+        if (instInfo.nodeVersion) mdata.node = instInfo.nodeVersion;
+        return instance.updateAttributes({
+          containerVersionInfo: mdata,
+        }, callback);
+      });
     });
   }
   ServiceInstance.recordInstanceInfo = recordInstanceInfo;
