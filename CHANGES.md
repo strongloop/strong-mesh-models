@@ -1,3 +1,21 @@
+2015-06-10, Version 7.1.0
+=========================
+
+ * meshctl: make set-size persistent (Sam Roberts)
+
+ * meshctl: print a success response for set-size (Sam Roberts)
+
+ * service-manager: document getApiVersionInfo (Sam Roberts)
+
+ * test: fix debug module name in exec-meshctl (Sam Roberts)
+
+ * Add mesh-admin CLI (Krishna Raman)
+
+ * Model updates for sl-central (Krishna Raman)
+
+ * Add common auth code and pmctl socket for central (Krishna Raman)
+
+
 2015-06-03, Version 7.0.0
 =========================
 
