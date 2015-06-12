@@ -72,14 +72,6 @@ module.exports = function(Service) {
       description: 'Unset environment variables'
     });
 
-    this.remoteMethod('getPack', {
-      isStatic: false,
-      http: [
-        {path: '/pack', verb: 'get'}
-      ],
-      accepts: {arg: 'ctx', http: {source: 'context'}}
-    });
-
     this.remoteMethod('downloadProfile', {
       isStatic: false,
       http: {path: '/profileDatas/:profileId/download', verb: 'get'},

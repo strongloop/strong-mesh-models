@@ -28,12 +28,6 @@ test('Create and destroy a service', function(t) {
   }
   TestServiceManager.prototype.onDeployment = onDeployment;
 
-  function getDeployment(service, req, res) {
-    t.ok(req, 'Pack download request received');
-    res.end('Data. ServiceID: ' + service.id);
-  }
-  TestServiceManager.prototype.getDeployment = getDeployment;
-
   var server = meshServer(new TestServiceManager());
   var client = null;
   var service = null;
@@ -68,27 +62,11 @@ test('Create and destroy a service', function(t) {
         tt.equal(responseBody,
           expResponseBody,
           'deploy: Response should match');
-        tt.end();
-      }));
-    });
-    req.write('some data');
-  });
-
-  t.test('retrieve pack file', function(tt) {
-    service.getPack(function(err, res) {
-      tt.ifError(err);
-      res.setEncoding('utf8');
-      res.on('error', t.ifError.bind(t));
-
-      var expDownload = 'Data. ServiceID: ' + service.id;
-      res.pipe(concat(function(download) {
-        tt.equal(download,
-          expDownload,
-          'download: Download body should match');
         server.stop();
         tt.end();
       }));
     });
+    req.write('some data');
   });
 
   server.on('stopped', function() {
