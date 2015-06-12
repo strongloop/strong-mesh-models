@@ -24,14 +24,19 @@ module.exports = function extendServiceInstance(ServiceInstance) {
   // DB so that queries on the DB will return correct information. Similarly
   // for delete, the manager is notified before the model has been deleted from
   // the DB, so that queries will return information.
+
+  // Refer to server-service.js for description of instance vs currentInstance
+  // vs data.
+
   ServiceInstance.observe('after save', function(ctx, next) {
     var serviceManager = ServiceInstance.app.serviceManager;
-    if (ctx.instance) {
-      // Full save of Instance (create)
+    var instance = ctx.instance || ctx.currentInstance;
+
+    if (instance) {
       if (serviceManager.onInstanceUpdate.length === 2) {
-        serviceManager.onInstanceUpdate(ctx.instance, next);
+        serviceManager.onInstanceUpdate(instance, next);
       } else {
-        serviceManager.onInstanceUpdate(ctx.instance, ctx.isNewInstance, next);
+        serviceManager.onInstanceUpdate(instance, ctx.isNewInstance, next);
       }
     } else {
       // Save of multiple Services
