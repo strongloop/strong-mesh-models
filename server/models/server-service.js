@@ -7,33 +7,42 @@ module.exports = function extendServerService(ServerService) {
   ServerService.disableRemoteMethod('upsert', true);
   ServerService.disableRemoteMethod('updateAll', true);
 
+  // A note about LB model hooks:
+  // ctx.instance: Set when doing a newInstance.create() or newInstance.save()
+  // Contains the new data to be saved.
+  // ctx.currentInstance: Set when updating an existing model instance using
+  // instance.save() or instance.updateAttributes()
+  // ctx.data: Set when partial data is being updated for one or more existing
+  // model instances. Used mostly for bulk updates.
+
   ServerService.observe('before save', function(ctx, next) {
     var Group = ServerService.app.models.Group;
 
-    if (ctx.instance) {
+    if (ctx.instance || ctx.currentInstance) {
       // This is only setting default groups for a new service that is created
       // without groups. The multi service case is only hit when updating
       // multiple models, not creating new ones so is not needed.
-      var service = ctx.instance;
+      var service = ctx.instance || ctx.currentInstance;
       if (service._groups.length === 0) {
         service._groups.push(new Group({id: 1, name: 'default', scale: 1}));
       }
       if (service._groups.length === 1 && service._groups[0].scale <= 0) {
         service._groups[0].scale = 1;
       }
-      process.nextTick(next);
     }
+    process.nextTick(next);
   });
 
   ServerService.observe('after save', function(ctx, next) {
     var serviceManager = ServerService.app.serviceManager;
+    var instance = ctx.instance || ctx.currentInstance;
 
-    if (ctx.instance) {
+    if (instance) {
       // Full save of Service
       if (serviceManager.onServiceUpdate.length === 2) {
-        serviceManager.onServiceUpdate(ctx.instance, next);
+        serviceManager.onServiceUpdate(instance, next);
       } else {
-        serviceManager.onServiceUpdate(ctx.instance, ctx.isNewInstance, next);
+        serviceManager.onServiceUpdate(instance, ctx.isNewInstance, next);
       }
     } else {
       // Save of multiple Services

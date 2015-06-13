@@ -1,4 +1,8 @@
+var makeAuthMiddleware = require('../auth');
+
 module.exports = function enableAuthentication(server) {
-  // enable authentication
+  server.use(server.get('restApiRoot'), makeAuthMiddleware(server.get('auth')));
+
+  // enable LB authentication
   server.enableAuth();
 };

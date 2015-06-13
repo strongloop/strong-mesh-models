@@ -40,12 +40,6 @@ function onDeployment(service, req, res) {
 }
 ServiceManager.prototype.onDeployment = onDeployment;
 
-function getDeployment(service, req, res) {
-  debug('getDeployment(%j)', service);
-  res.end('hi');
-}
-ServiceManager.prototype.getDeployment = getDeployment;
-
 function onCtlRequest(service, instance, req, callback) {
   debug('onCtlRequest(%j, %j, %j)', service, instance, req);
   callback(null, {error: 'Control request not implemented'});
