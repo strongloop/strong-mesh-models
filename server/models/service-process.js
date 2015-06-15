@@ -1,5 +1,6 @@
 var async = require('async');
 var debug = require('debug')('strong-mesh-models:server:service-process');
+var fmt = require('util').format;
 
 module.exports = function extendServiceProcess(ServiceProcess) {
   function recordFork(instanceId, pInfo, callback) {
@@ -101,6 +102,10 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
   function recordProfilingState(instanceId, pInfo, callback) {
     function updateProcessStatus(proc, asyncCb) {
+      if (!proc)
+        return asyncCb(
+          Error(fmt('Profiling state update for unknown process: %j', pInfo)));
+
       var changes = {};
       switch (pInfo.cmd) {
         case 'object-tracking':
@@ -143,8 +148,9 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
     function updateProcessStatus(proc, asyncCb) {
       if (!proc)
-        return asyncCb(Error('Unable to find process for msg: %j', pInfo));
-      proc.isTracing = !!pInfo.isTracing;
+        return asyncCb(Error(
+          fmt('Process state update for unknown process: %j', pInfo)));
+
       proc.updateAttributes({isTracing: !!pInfo.isTracing}, asyncCb);
     }
   }
