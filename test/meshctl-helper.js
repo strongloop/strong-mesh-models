@@ -119,7 +119,7 @@ function testCmdHelper(t, TestServiceManager, test, MockMinkelite) {
     t.test('Cleanup', function(tt) {
       server.stop(tt.end.bind(tt));
     });
-    t.end();
+
   });
 }
 
