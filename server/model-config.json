@@ -64,7 +64,7 @@
   },
   "ProfileData": {
     "dataSource": "db",
-    "public": false
+    "public": true
   },
   "InstanceAction": {
     "dataSource": "db",
