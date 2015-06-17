@@ -18,31 +18,31 @@ test('Test trace client api', function(t) {
 
   function getMetaTransactions(act, host, pid, callback) {
     assert.equal(act, 'test-app');
-    assert.equal(host, 'mockhost');
+    assert.equal(host, '1');
     assert.equal(pid, 1230);
 
     // Minkelite does use follow err first callback
-    callback({act: 'test-app', hosts: {'mockhost': {1230: {data: 1}}}});
+    callback({act: 'test-app', hosts: {'1': {1230: {data: 1}}}});
   }
   MockMinkelite.prototype.getMetaTransactions = getMetaTransactions;
 
   function getTransaction(act, trans, host, pid, callback) {
     assert.equal(act, 'test-app');
-    assert.equal(host, 'mockhost');
+    assert.equal(host, '1');
     assert.equal(pid, 1230);
     assert.equal(trans, 'trans 1');
 
-    callback({act: 'test-app', hosts: {'mockhost': {1230: {transData: 1}}}});
+    callback({act: 'test-app', hosts: {'1': {1230: {transData: 1}}}});
   }
   MockMinkelite.prototype.getTransaction = getTransaction;
 
   function getRawMemoryPieces(act, host, pid, callback) {
     assert.equal(act, 'test-app');
-    assert.equal(host, 'mockhost');
+    assert.equal(host, '1');
     assert.equal(pid, 1230);
 
     callback(
-      {act: 'test-app', hosts: {'mockhost': {1230: {timelineData: 1}}}}
+      {act: 'test-app', hosts: {'1': {1230: {timelineData: 1}}}}
     );
   }
   MockMinkelite.prototype.getRawMemoryPieces = getRawMemoryPieces;

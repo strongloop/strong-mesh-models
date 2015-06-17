@@ -242,13 +242,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     this.serviceInstance(function(err, instance) {
       if (err) return callback(err);
       var act = instance.applicationName;
-
-      instance.executor(function(err, executor) {
-        if (err) return callback(err);
-        var host = executor.hostname.split('.')[0];
-
-        callback(null, act, host);
-      });
+      callback(null, act, String(instance.id));
     });
   }
   ServiceProcess.prototype._getActAndHost = _getActAndHost;
