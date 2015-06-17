@@ -1,9 +1,51 @@
+'use strict';
+
+var async = require('async');
 var debug = require('debug')('strong-mesh-models:server:profile-data');
 var fmt = require('util').format;
 var fs = require('fs');
 var path = require('path');
 
 module.exports = function extendProfileData(ProfileData) {
+  // If a ProfileData has a fileName, ensure it is deleted from disk before the
+  // ProfileData is deleted.
+  ProfileData.observe('before delete', function(ctx, next) {
+    debug('delete where %j', ctx.where);
+
+    if (ctx.instance)
+      return unlink(ctx.instance, next);
+
+    ProfileData.find({where: ctx.where}, function(err, profiles) {
+      if (err) {
+        console.error('ProfileData find where %j failed: %s', ctx.where, err);
+        return next(); // Ignore error, leak the file(s).
+      }
+
+      if (!profiles) {
+        return next(); // Maybe impossible, but lets be safe.
+      }
+
+      async.each(profiles, unlink, next);
+
+    });
+
+    function unlink(profile, cb) {
+      if (!profile.fileName)
+        return cb();
+
+      fs.unlink(profile.fileName, function(err) {
+        if (err) {
+          console.error('ProfileData %d - unlink %j failed: %s',
+                        profile.id, profile.fileName, err);
+        } else {
+          debug('ProfileData %d - unlinked %j', profile.id, profile.fileName);
+        }
+
+        return cb(); // Ignore error, leak the file.
+      });
+    }
+  });
+
   function recordProfileData(instanceId, req, callback) {
     // req properties are:
     // - stalls

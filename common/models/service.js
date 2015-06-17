@@ -177,9 +177,7 @@ module.exports = function(Service) {
     this.disableRemoteMethod('__link__executors');
     this.disableRemoteMethod('__exists__executors');
 
-    this.disableRemoteMethod('__delete__profileDatas');
     this.disableRemoteMethod('__create__profileDatas');
-    this.disableRemoteMethod('__destroyById__profileDatas');
     this.disableRemoteMethod('__updateById__profileDatas');
 
     this.disableRemoteMethod('__delete__groups');

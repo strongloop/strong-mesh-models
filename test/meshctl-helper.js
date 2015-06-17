@@ -2,7 +2,7 @@ var async = require('async');
 var meshServer = require('../index').meshServer;
 var Client = require('../index').Client;
 
-function testCmdHelper(t, TestServiceManager, test, MockMinkelite) {
+function testCmdHelper(t, TestServiceManager, callback, MockMinkelite) {
   var server = null;
   if (MockMinkelite) {
     server = meshServer(new TestServiceManager(), new MockMinkelite(), {});
@@ -110,7 +110,7 @@ function testCmdHelper(t, TestServiceManager, test, MockMinkelite) {
         service.instances.findById('1', function(err, instance) {
           tt.ifError(err, 'Default instance should be found');
 
-          test(tt, service, instance, port, server);
+          callback(tt, service, instance, port, server);
           tt.end();
         });
       });
