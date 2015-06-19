@@ -33,4 +33,9 @@ module.exports = function(Executor) {
       });
     }
   });
+
+  Executor.prototype.shutdown = function(callback) {
+    Executor.app.serviceManager.onExecutorRequest(
+      this.id, {cmd: 'shutdown'}, callback);
+  };
 };

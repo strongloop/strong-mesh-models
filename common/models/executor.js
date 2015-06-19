@@ -16,4 +16,15 @@ module.exports = function(Executor) {
     return os.hostname();
   }
   Executor.definition.properties.hostname.default = getDefaultHostname;
+
+  Executor.remoteMethod(
+    'shutdown',
+    {
+      http: {path: '/shutdown', verb: 'post'},
+      isStatic: false,
+      accepts: [],
+      returns: {arg: 'response', type: 'object', root: true},
+      description: 'Shutdown this executor.'
+    }
+  );
 };

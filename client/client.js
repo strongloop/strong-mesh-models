@@ -422,3 +422,13 @@ function executorDestroy(id, callback) {
   this.models.Executor.deleteById(id, callback);
 }
 Client.prototype.executorDestroy = executorDestroy;
+
+function executorShutdown(id, callback) {
+  this.models.Executor.findById(id, function(err, executor) {
+    if (err) return callback(err);
+    if (!executor) return callback(new Error('Executor not found'));
+
+    executor.shutdown(callback);
+  });
+}
+Client.prototype.executorShutdown = executorShutdown;

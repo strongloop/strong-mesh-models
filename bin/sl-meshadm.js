@@ -93,6 +93,7 @@ function runCommand(client, command) {
     'executor-create': cmdCreateExecutor,
     'executor-list': cmdListExecutors,
     'executor-remove': cmdRemoveExecutor,
+    'executor-shutdown': cmdShutdownExecutor,
   }[command] || unknown)(client);
 }
 
@@ -143,6 +144,16 @@ function cmdRemoveExecutor(client) {
     debug('executor-destroy: %j', err || result);
     dieIf(err);
     console.log('Destroyed executor: %s', id);
+  });
+}
+
+function cmdShutdownExecutor(client) {
+  var id = mandatory('id');
+
+  client.executorShutdown(id, function(err, result) {
+    debug('executor-shutdown: %j', err || result);
+    dieIf(err);
+    console.log('Shutting down executor: %s', id);
   });
 }
 
