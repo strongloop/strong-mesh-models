@@ -90,10 +90,10 @@ maybeTunnel(apiUrl, sshOpts, function(err, apiUrl) {
 
 function runCommand(client, command) {
   ({
-    'executor-create': cmdCreateExecutor,
-    'executor-list': cmdListExecutors,
-    'executor-remove': cmdRemoveExecutor,
-    'executor-shutdown': cmdShutdownExecutor,
+    'exec-create': cmdCreateExecutor,
+    'exec-list': cmdListExecutors,
+    'exec-remove': cmdRemoveExecutor,
+    'exec-shutdown': cmdShutdownExecutor,
   }[command] || unknown)(client);
 }
 
@@ -106,7 +106,7 @@ function cmdCreateExecutor(client) {
   var driver = optional('executor');
 
   client.executorCreate(driver, function(err, result) {
-    debug('executor-create: %j', err || result);
+    debug('exec-create: %j', err || result);
     dieIf(err);
     console.log('Created Executor id: %s token: %j',
       result.id, result.token);
@@ -115,7 +115,7 @@ function cmdCreateExecutor(client) {
 
 function cmdListExecutors(client) {
   client.executorList(function(err, result) {
-    debug('executor-list: %j', err || result);
+    debug('exec-list: %j', err || result);
     dieIf(err);
 
     if (result.length) {
@@ -127,7 +127,8 @@ function cmdListExecutors(client) {
 
         data.push([
           s.id, s.hostname || 'n/a', s.address || 'n/a',
-          s.totalCapacity || 'n/a', s.token, JSON.stringify(s.metadata || {})
+          s.totalCapacity || 'n/a', s.token || 'n/a',
+          JSON.stringify(s.metadata || {})
         ]);
       }
       console.log(table(data, {align: ['c', 'c', 'c', 'c', 'c', 'c']}));
@@ -141,9 +142,9 @@ function cmdRemoveExecutor(client) {
   var id = mandatory('id');
 
   client.executorDestroy(id, function(err, result) {
-    debug('executor-destroy: %j', err || result);
+    debug('exec-remove: %j', err || result);
     dieIf(err);
-    console.log('Destroyed executor: %s', id);
+    console.log('Removed executor: %s', id);
   });
 }
 
@@ -151,7 +152,7 @@ function cmdShutdownExecutor(client) {
   var id = mandatory('id');
 
   client.executorShutdown(id, function(err, result) {
-    debug('executor-shutdown: %j', err || result);
+    debug('exec-shutdown: %j', err || result);
     dieIf(err);
     console.log('Shutting down executor: %s', id);
   });

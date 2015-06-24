@@ -92,10 +92,10 @@ function checkRemoteApiSemver(callback) {
     // Success means it supports the info command, we can check versions.
     // Anything else we shrug off so that the specific command can deal with
     // it (and the unit tests don't fully implement the info API, and since
-    // its is technically optional, forcing it to exist is harmful).
+    // it is technically optional, forcing it to exist is harmful).
 
     if (err) {
-      debug('apiInfo error:', err);
+      debug('apiInfo error: %d/%s', err.statusCode, err.message);
 
       if (err.statusCode === 404)
         return callback(new Error(

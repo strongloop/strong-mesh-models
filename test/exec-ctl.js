@@ -37,7 +37,7 @@ module.exports = function(ctl) {
   function resetHome() {
     var dir = (new Dir()).path;
 
-    debug('reset home director to: %s', dir);
+    debug('reset home directory to: %s', dir);
 
     process.env.HOME = dir; // Linux
     process.env.USERPROFILE = dir; // Windows
