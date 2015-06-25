@@ -5,8 +5,7 @@ var test = require('tap').test;
 var testCmdHelper = require('./meshctl-helper');
 var util = require('util');
 
-test('express usage record', {skip: 'do not care for now'},
-     function(t) {
+test('express usage record', function(t) {
   function TestServiceManager() {
   }
 
@@ -17,11 +16,11 @@ test('express usage record', {skip: 'do not care for now'},
 
       t.test('setup mock process', function(tt) {
         server.models.ServiceProcess.create({
-          id: 1,
           parentPid: 1234,
           pid: 1235,
           workerId: 1,
-          serviceInstanceId: 1
+          serviceInstanceId: instance.id,
+          stopReason: null
         }, function(err, proc) {
           tt.ifError(err, 'mock process creation should succeed');
           tt.ok(proc, 'process object should be returned');
@@ -34,7 +33,8 @@ test('express usage record', {skip: 'do not care for now'},
 
         var oneDay = 24 * 60 * 60 * 1000;
         server.set('ExpressUsageRecord.deleteWindow', String(oneDay));
-        var endpoints = [{
+        var endpoints = [
+          {
           url: '/api/ModelA/1',
           model: 'ModelA',
           id: 1,
@@ -77,7 +77,7 @@ test('express usage record', {skip: 'do not care for now'},
           remoteMethod: null,
           method: 'DELETE'
         }, {
-          url: '/api/endpoint1/some/url',
+          url: '/api/endpoint1/some/url?foo=bar',
           model: null,
           id: null,
           remoteMethod: null,
@@ -136,6 +136,10 @@ test('express usage record', {skip: 'do not care for now'},
           tt.ifError(err);
           debug(data);
           tt.assert(Object.keys(data).length > 0, 'Data should be returned');
+          for (var i in data) {
+            if (!data.hasOwnProperty(i)) continue;
+            tt.ok(!i.match('foo=bar'), 'query string should not be returned');
+          }
           tt.end();
         });
       });
@@ -163,7 +167,6 @@ test('express usage record', {skip: 'do not care for now'},
 
           console.assert(data);
           console.assert(data.length);
-          console.log(data);
 
           var dataEntry = null;
           // Search for an entry with some calls
