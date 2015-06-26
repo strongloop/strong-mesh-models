@@ -108,7 +108,7 @@ function cmdCreateExecutor(client) {
   client.executorCreate(driver, function(err, result) {
     debug('exec-create: %j', err || result);
     dieIf(err);
-    console.log('Created Executor id: %s token: %j',
+    console.log('Created Executor id: %s token: %s',
       result.id, result.token);
   });
 }
