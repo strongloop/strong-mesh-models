@@ -38,7 +38,7 @@ module.exports = function extendExpressUsageRecord(ExpressUsageRecord) {
         usageRecord.requestMethod = record.request.method || null;
         usageRecord.requestUrl = null;
         if (record.request.url)
-          usageRecord.requestUrl = url.parse(record.request.url).path;
+          usageRecord.requestUrl = url.parse(record.request.url).pathname;
       }
       if (record.client) {
         usageRecord.clientAddress = record.client.address || null;
