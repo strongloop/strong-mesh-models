@@ -49,6 +49,20 @@ test('Test env commands', function(t) {
       });
     });
 
+    t.test('env-set CLI with complex values', function(tt) {
+      exec.resetHome();
+      exec(port, 'env-set 1 URL=db://host?foo=bar', function(err, stdout) {
+        tt.ifError(err, 'command should not error');
+        tt.equal(stdout, 'Service "service 1" environment updated\n' +
+          '    Name  Value\n' +
+          '    A     1\n' +
+          '    B     2\n' +
+          '    URL   db://host?foo=bar\n',
+          'Rendered output should match');
+        tt.end();
+      });
+    });
+
     t.test('Setup service manager', function(tt) {
       function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req,
@@ -68,7 +82,7 @@ test('Test env commands', function(t) {
 
     t.test('env-unset CLI', function(tt) {
       exec.resetHome();
-      exec(port, 'env-unset 1 A B', function(err, stdout) {
+      exec(port, 'env-unset 1 A B URL', function(err, stdout) {
         tt.ifError(err, 'command should not error');
         tt.equal(stdout, 'Service "service 1" environment updated\n' +
           '  No environment variables defined\n',
