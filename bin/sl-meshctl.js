@@ -601,7 +601,7 @@ function cmdEnvSet(client) {
         pair, $0);
       process.exit(1);
     }
-    store[kv[0]] = kv[1];
+    store[kv[0]] = kv.slice(1).join('=');
     return store;
   }
 }
