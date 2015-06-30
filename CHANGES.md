@@ -1,3 +1,9 @@
+2015-06-30, Version 7.1.1
+=========================
+
+ * meshctl: preserve = in env var values (Ryan Graham)
+
+
 2015-06-10, Version 7.1.0
 =========================
 
