@@ -66,7 +66,7 @@ module.exports = function extendProfileData(ProfileData) {
         serviceInstanceId: instanceId,
         workerId: +req.wid,
         pid: +req.pid,
-        pst: +req.pst,
+        startTime: +req.pst,
       }
     };
 
