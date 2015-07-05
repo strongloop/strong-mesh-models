@@ -31,7 +31,7 @@ function server(serviceManager, minkelite, options) {
   if (options.db) {
     app.dataSources.db = options.db;
   } else {
-    app.dataSource('db', {'connector': 'memory'});
+    app.dataSource('db', {'connector': 'memory', file: options.dbFilePath});
   }
 
   // Bootstrap the application, configure models, datasources and middleware.
