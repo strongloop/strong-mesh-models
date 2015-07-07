@@ -76,7 +76,7 @@ module.exports = function extendServiceInstance(ServiceInstance) {
   function recordInstanceInfo(instanceId, instInfo, callback) {
     ServiceInstance.findById(instanceId, function(err, instance) {
       if (err) return callback(err);
-      instance.updateAttributes({
+      var instUpdateInfo = {
         // Information from supervisor
         startTime: new Date(),
         started: true,
@@ -87,25 +87,30 @@ module.exports = function extendServiceInstance(ServiceInstance) {
         // Information from strong-pm's mangling of supervisor message
         PMPort: instInfo.PMPort || 0,
         restartCount: instInfo.restartCount || 0,
-        currentDeploymentId: instInfo.commitHash || '',
-      }, function(err, instance) {
-        if (err) return callback(err);
+      };
+      if (instInfo.commitHash)
+        instUpdateInfo.currentDeploymentId = instInfo.commitHash;
+      instance.updateAttributes(
+        instUpdateInfo,
+        function(err, instance) {
+          if (err) return callback(err);
 
-        if (instInfo.containerVersionInfo) {
-          // Information from strong-pm's mangling of supervisor message
+          if (instInfo.containerVersionInfo) {
+            // Information from strong-pm's mangling of supervisor message
+            return instance.updateAttributes({
+              containerVersionInfo: instInfo.containerVersionInfo,
+            }, callback);
+          }
+
+          // Information from supervisor
+          var mdata = instance.containerVersionInfo || {};
+          if (instInfo.osVersion) mdata.os = instInfo.osVersion;
+          if (instInfo.nodeVersion) mdata.node = instInfo.nodeVersion;
           return instance.updateAttributes({
-            containerVersionInfo: instInfo.containerVersionInfo,
+            containerVersionInfo: mdata,
           }, callback);
         }
-
-        // Information from supervisor
-        var mdata = instance.containerVersionInfo || {};
-        if (instInfo.osVersion) mdata.os = instInfo.osVersion;
-        if (instInfo.nodeVersion) mdata.node = instInfo.nodeVersion;
-        return instance.updateAttributes({
-          containerVersionInfo: mdata,
-        }, callback);
-      });
+      );
     });
   }
   ServiceInstance.recordInstanceInfo = recordInstanceInfo;
