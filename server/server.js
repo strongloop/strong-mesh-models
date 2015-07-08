@@ -28,20 +28,28 @@ function server(serviceManager, minkelite, options) {
   }
 
   app.minkelite = minkelite;
+  if (options.db) {
+    app.dataSources.db = options.db;
+  } else {
+    app.dataSource('db', {'connector': 'memory', file: options.dbFilePath});
+  }
 
   // Bootstrap the application, configure models, datasources and middleware.
   // Sub-apps like REST API are mounted via boot scripts.
   boot(app, __dirname);
 
   app.start = function(callback) {
-    // start the web server
-    app._server = app.listen(function() {
-      var addr = this.address();
-      app.emit('started', addr.port);
-      console.log('Web server listening at port: %s', addr.port);
-      if (callback) return callback(null, addr.port);
+    app.dataSources.db.autoupdate(function(err) {
+      if (err) return callback(err);
+
+      // start the web server
+      app._server = app.listen(function() {
+        var addr = this.address();
+        app.emit('started', addr.port);
+        console.log('Web server listening at port: %s', addr.port);
+        if (callback) return callback(null, addr.port);
+      });
     });
-    return;
   };
 
   app.stop = function(callback) {

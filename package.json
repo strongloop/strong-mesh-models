@@ -54,6 +54,7 @@
     "eslint": "^0.20.0",
     "istanbul": "^0.3.0",
     "jscs": "^1.11.3",
+    "loopback-connector-sqlite3": "^1.0.0",
     "tap": "^1.0.4",
     "temporary": "0.0.8"
   }
