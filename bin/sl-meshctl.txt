@@ -98,13 +98,16 @@ command.
   cpu-start WRK [TO [ST]]  Start CPU profiling on worker WRK.
         When TO is 0, starts the CPU profiler.
 
-        Only supported on Linux: TO is the optional watchdog timeout, in
-        milliseconds (default is 0, no timeout). In watchdog mode, the profiler
-        is suspended until an event loop stall longer than TO is detected; i.e.
-        when a script is running for too long. The profiling will be suspended
-        after the script returns to the event loop. ST is number of stalls
-        after which the profiler will be stopped automatically (default is 0,
-        never auto-stop). An auto-stopped profile can be viewed using `slc arc`.
+        Only supported on Linux:
+          TO is the optional Smart Profiling timeout, in milliseconds (default
+          is 0, no timeout). With a timeout, the profiler is activated when
+          an event loop stalls longer than TO; i.e. when a script runs for too
+          long. The profiling is suspended after the script returns to the
+          event loop.
+
+          ST is the number of stalls after which the profiler is stopped
+          automatically (default is 0, never auto-stop). View an auto-stopped
+          profile with `slc arc`.
 
   cpu-stop WRK [NAME]      Stop CPU profiling on worker WRK.
         The profile is saved as `<NAME>.cpuprofile`. CPU profiles must be
