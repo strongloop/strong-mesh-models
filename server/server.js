@@ -4,6 +4,7 @@ var assert = require('assert');
 var boot = require('loopback-boot');
 var debug = require('debug')('strong-mesh-models:server');
 var loopback = require('loopback');
+var url = require('url');
 
 /**
  * Factory method that returns a loopback server object. This object can be used
@@ -27,11 +28,30 @@ function server(serviceManager, minkelite, options) {
     app.set(k, options[k]);
   }
 
+  var config;
   app.minkelite = minkelite;
   if (options.db) {
-    app.dataSources.db = options.db;
+    app.dataSource('db', options.db);
+  } else if (process.env.STRONGLOOP_MESH_DB) {
+    // For backward compatibility with old way of specifying connection info
+    // via environment variable.
+    var dbUrl = url.parse(process.env.STRONGLOOP_MESH_DB || 'memory://');
+    debug('Datasource URI: %j', dbUrl);
+
+    config = {
+      'name': 'db',
+      'host': dbUrl.hostname,
+      'port': dbUrl.port,
+      'connector': dbUrl.protocol.slice(0, -1)
+    };
+    if (dbUrl.path) config.file = dbUrl.path;
+
+    debug('Datasource config: %j', config);
+    app.dataSource('db', config);
   } else {
-    app.dataSource('db', {'connector': 'memory', file: options.dbFilePath});
+    config = {connector: 'memory'};
+    if (options.dbFilePath) config.file = options.dbFilePath;
+    app.dataSource('db', config);
   }
 
   // Bootstrap the application, configure models, datasources and middleware.
