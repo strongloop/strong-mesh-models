@@ -82,8 +82,7 @@ module.exports = function extendServerService(ServerService) {
       // With loopback, !err isn't the same as 'success'! :-(
       if (!service) callback(new Error(
         fmt('setServiceCommit: service %j not found', serviceId)));
-      service.deploymentInfo = commit;
-      service.save(callback);
+      service.updateAttributes({deploymentInfo: commit}, callback);
     });
   }
   ServerService.setServiceCommit = setServiceCommit;
@@ -156,7 +155,7 @@ module.exports = function extendServerService(ServerService) {
     this.env = this.env || {};
     debug('setEnv(%j, %j)', name, value);
     this.env[name] = value;
-    this.save(function(err, res) {
+    this.updateAttributes({env: this.env}, function(err, res) {
       callback(err, res && res.env);
     });
   }
@@ -166,7 +165,7 @@ module.exports = function extendServerService(ServerService) {
     this.env = this.env || {};
     debug('unsetEnv(%s) [%j]', name, this.env[name]);
     delete this.env[name];
-    this.save(function(err, res) {
+    this.updateAttributes({env: this.env}, function(err, res) {
       callback(err, res && res.env);
     });
   }
@@ -182,7 +181,7 @@ module.exports = function extendServerService(ServerService) {
       else
         this.env[k] = envUpd[k];
     }
-    this.save(function(err, res) {
+    this.updateAttributes({env: this.env}, function(err, res) {
       callback(err, res && res.env);
     });
   }
