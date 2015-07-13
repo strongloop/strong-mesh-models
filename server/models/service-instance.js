@@ -122,14 +122,15 @@ module.exports = function extendServiceInstance(ServiceInstance) {
         return callback(Error(
           fmt('Instance with ID %s not found', instanceId)));
 
+      var updates = {};
       if (instInfo.master && instInfo.master.setSize) {
-        instance.setSize = instInfo.master.setSize;
-        instance.started = true;
+        updates.setSize = instInfo.master.setSize;
+        updates.started = true;
       } else {
-        instance.setSize = 0;
-        instance.started = false;
+        updates.setSize = 0;
+        updates.started = false;
       }
-      instance.save(callback);
+      instance.updateAttributes(updates, callback);
     });
   }
   ServiceInstance.recordStatusUpdate = recordStatusUpdate;
@@ -140,9 +141,9 @@ module.exports = function extendServiceInstance(ServiceInstance) {
       if (!instance)
         return callback(Error(fmt('Instance with ID %s not found', instanceId
           )));
-
-      instance.applicationName = instInfo.appName;
-      return instance.save(callback);
+      return instance.updateAttributes(
+        {applicationName: instInfo.appName}, callback
+      );
     });
   }
   ServiceInstance.recordStatusWdUpdate = recordStatusWdUpdate;
