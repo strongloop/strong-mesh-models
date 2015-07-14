@@ -38,7 +38,7 @@ Service commands: apply to a specific service
 `SVC` is either a service ID or service Name. It can be obtained by listing
 services using `ls` or `status`.
 
-  create NAME [SCALE]     Create service named NAME, SCALE defaults to 1.
+  create NAME             Create service named NAME.
 
   cluster-restart SVC     Restart the service SVC cluster workers.
         This is a zero-downtime restart, the workers are soft restarted
