@@ -22,3 +22,13 @@ Executor commands:
   exec-remove EXEC        Remove executor EXEC.
   exec-list               List executors.
   exec-shutdown EXEC      Shutdown executor EXEC.
+
+Gateway controller commands:
+
+`GW` is the gateway controller ID. It can be obtained by listing gateway
+controllers using `gw-list`.
+
+  gw-create               Create a gateway controller.
+  gw-remove GW            Remove gateway controller GW.
+  gw-list                 List gateway controllers.
+  gw-shutdown GW          Shutdown gateway controller GW.

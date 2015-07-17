@@ -53,7 +53,7 @@ test('Test mesh admin executor commands', function(t) {
           var host = os.hostname();
           // Column spacing is dynamic based on field width, and hostname field
           // width depends on the system hostname, so compress all whitespace.
-          var want = 'Id Host IP Capacity Token Metadata\n' +
+          var want = 'Id Host Routable Addr Capacity Token Metadata\n' +
             fmt(' 1 %s n/a n/a n/a {}\n', host);
           var have = stdout.replace(/ +/g, ' ');
           tt.equal(have, want);

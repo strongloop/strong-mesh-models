@@ -1,7 +1,8 @@
-var Api = require('../models/api');
 var agentTrace = require('../models/agent-trace');
+var Api = require('../models/api');
 var executor = require('../models/executor');
 var expressUsageRecord = require('../models/express-usage-record');
+var gateway = require('../models/gateway');
 var profileData = require('../models/profile-data');
 var serviceInstance = require('../models/service-instance');
 var serviceMetric = require('../models/service-metric');
@@ -16,4 +17,5 @@ module.exports = function(server) {
   serviceInstance(server.models.ServiceInstance);
   serviceMetric(server.models.ServiceMetric);
   serviceProcess(server.models.ServiceProcess);
+  gateway(server.models.Gateway);
 };

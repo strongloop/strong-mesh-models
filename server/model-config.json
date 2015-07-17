@@ -42,6 +42,10 @@
     "dataSource": "db",
     "public": true
   },
+  "Gateway": {
+    "dataSource": "db",
+    "public": true
+  },
   "ServiceInstance": {
     "dataSource": "db",
     "public": true
