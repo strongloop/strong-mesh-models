@@ -34,7 +34,7 @@ var apiUrl = process.env.STRONGLOOP_MESH_API ||
   process.env.STRONGLOOP_PM ||
   'http://127.0.0.1:8701';
 
-var command = 'status';
+var command = 'exec-list';
 var option;
 while ((option = parser.getopt()) !== undefined) {
   switch (option.option) {
