@@ -22,6 +22,12 @@ function onExecutorUpdate(executor, isNew, callback) {
 }
 ServiceManager.prototype.onExecutorUpdate = onExecutorUpdate;
 
+function onExecutorDestroy(executor, callback) {
+  debug('onExecutorDestroy(%j)', executor);
+  setImmediate(callback);
+}
+ServiceManager.prototype.onExecutorDestroy = onExecutorDestroy;
+
 function onExecutorRequest(id, req, callback) {
   debug('onExecutorRequest(%j)', req);
   callback(Error('Executor request not implemented'));
