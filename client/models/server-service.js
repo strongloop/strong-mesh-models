@@ -73,15 +73,15 @@ module.exports = function extServerService(ServerService) {
         var instance = instances[i];
         if (!instance.containerVersionInfo)
           continue;
-        var container = instance.containerVersionInfo.container;
+        var container = instance.containerVersionInfo.container || {};
         serviceInfo.instances[instance.id] = {
-          version: container.version,
-          apiVersion: container.apiVersion,
-          port: instance.PMPort,
-          restartCount: instance.restartCount,
-          agentVersion: instance.agentVersion,
-          nodeVersion: instance.containerVersionInfo.node,
-          driverMeta: instance.containerVersionInfo.driverMeta,
+          version: container.version || 'N/A',
+          apiVersion: container.apiVersion || 'N/A',
+          port: instance.PMPort || 'N/A',
+          restartCount: instance.restartCount || 0,
+          agentVersion: instance.agentVersion || 'N/A',
+          nodeVersion: instance.containerVersionInfo.node || 'N/A',
+          driverMeta: instance.containerVersionInfo.driverMeta || {},
           clusterSize: instance.setSize
         };
       }
