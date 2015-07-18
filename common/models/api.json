@@ -9,6 +9,11 @@
       "required": true,
       "description": "Version of this server"
     },
+    "serverName": {
+      "type": "string",
+      "required": false,
+      "description": "Name of the server, such as strong-central"
+    },
     "serverPid": {
       "type": "number",
       "required": true,
