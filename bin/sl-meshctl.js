@@ -162,15 +162,32 @@ function cmdInfo(client) {
   client.apiInfo(function(err, info) {
     dieIf(err);
 
-    var infoTable = [
-      ['PM Version:', info.version],
-      ['Server PID:', info.serverPid],
-      ['API Version:', info.apiVersion],
-      ['API Port:', info.apiPort],
-      ['Driver Type:', info.driverType],
-      ['Driver Status:', info.driverStatus],
-    ];
+    debug('api info: %j', info);
+
+    var infoTable = [];
+
+    info.serverName = info.serverName || 'strong-pm';
+
+    I('Server Name:', 'serverName');
+    I('Server Version:', 'version');
+    I('Server PID:', 'serverPid');
+    I('API Version:', 'apiVersion');
+    I('API Port:', 'apiPort');
+    O('Driver Type:', 'driverType');
+    O('Driver Status:', 'driverStatus');
+
     console.log('%s', table(infoTable));
+
+    function I(title, f) {
+      var s = info[f];
+      assert(s != null, fmt('%s must exist', f));
+      infoTable.push([title, String(s)]);
+    }
+
+    function O(title, f) {
+      if (info[f] == null) return;
+      I(title, f);
+    }
   });
 }
 
