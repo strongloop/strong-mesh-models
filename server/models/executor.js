@@ -34,6 +34,19 @@ module.exports = function(Executor) {
     }
   });
 
+  Executor.observe('before delete', function(ctx, next) {
+    ctx.Model.find({where: ctx.where}, function(err, instances) {
+      if (err) next(err);
+      return async.each(
+        instances,
+        function(instance, callback) {
+          Executor.app.serviceManager.onExecutorDestroy(instance, callback);
+        },
+        next
+      );
+    });
+  });
+
   Executor.prototype.shutdown = function(callback) {
     Executor.app.serviceManager.onExecutorRequest(
       this.id, {cmd: 'shutdown'}, callback);
