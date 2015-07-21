@@ -1,3 +1,87 @@
+2015-07-21, Version 8.0.0
+=========================
+
+ * Api: add serverName to api info (Sam Roberts)
+
+ * Ensure that missing info doesnt cause crash (Krishna Raman)
+
+ * Add executor destroy hooks (Krishna Raman)
+
+ * meshctl: report server name in info output (Sam Roberts)
+
+ * meshadm: default command is exec-list (Sam Roberts)
+
+ * Undoc SCALE option for service create (Krishna Raman)
+
+ * Update sl-meshctl.txt (Rand McKinney)
+
+ * Use updateAttributes instead of saving whole model (Krishna Raman)
+
+ * Inject db configuration instead of datasource (Krishna Raman)
+
+ * Dont change commit-info if not in notification (Krishna Raman)
+
+ * Allow specification of memory db filepath (Krishna Raman)
+
+ * Add option to mesh-models to use external db (Krishna Raman)
+
+ * Fix process lookup for recording smart profile data (Krishna Raman)
+
+ * meshctl: preserve = in env var values (Ryan Graham)
+
+ * meshadm: don't quote token in exec-create output (Sam Roberts)
+
+ * meshadm: cleanup and test executor commands (Sam Roberts)
+
+ * Fix URL parsing in express-metrics and reenable test (Krishna Raman)
+
+ * test: refactor exec-meshctl to use with meshadm (Sam Roberts)
+
+ * meshadm: support executor-shutdown command (Sam Roberts)
+
+ * profile-data: support delete of ProfileData (Sam Roberts)
+
+ * server: expose ProfileData at top-level of API (Sam Roberts)
+
+ * test: meshctl-helper using better callback name (Sam Roberts)
+
+ * test: fix test-instance-profiling (Sam Roberts)
+
+ * test: remove meshctl-helper duplicate t.end() (Sam Roberts)
+
+ * Trace api updated to use instanceId as hostname (Krishna Raman)
+
+ * Catch missing model with LB find..() and relations (Krishna Raman)
+
+ * Fix model hooks: use correct instance data fields (Krishna Raman)
+
+ * Add auth option for MeshServer (Krishna Raman)
+
+ * Remove getPack endpoint (nothing is using it) (Krishna Raman)
+
+ * Add Capabilities API Support (Joseph Tary)
+
+ * Update process model to use wid for worker id (Krishna Raman)
+
+ * Update instance to use new notification fields (Krishna Raman)
+
+ * Use only HTTP for control, not local sockets (Sam Roberts)
+
+ * meshctl: make set-size persistent (Sam Roberts)
+
+ * meshctl: print a success response for set-size (Sam Roberts)
+
+ * service-manager: document getApiVersionInfo (Sam Roberts)
+
+ * test: fix debug module name in exec-meshctl (Sam Roberts)
+
+ * Add mesh-admin CLI (Krishna Raman)
+
+ * Model updates for sl-central (Krishna Raman)
+
+ * Add common auth code and pmctl socket for central (Krishna Raman)
+
+
 2015-06-03, Version 7.0.0
 =========================
 
