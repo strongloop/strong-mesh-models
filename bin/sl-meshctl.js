@@ -5,6 +5,7 @@ var Client = require('../client/client');
 var Parser = require('posix-getopt').BasicParser;
 var _ = require('lodash');
 var assert = require('assert');
+var async = require('async');
 var concat = require('concat-stream');
 var debug = require('debug')('strong-mesh-models:meshctl');
 var fmt = require('util').format;
@@ -149,11 +150,9 @@ function cmdStatus(client) {
         console.log('No services exist');
         return;
       }
-
-      for (var i in services) {
-        if (!services.hasOwnProperty(i)) continue;
-        printServiceStatus(services[i]);
-      }
+      async.eachSeries(services, function(svc, next) {
+        printServiceStatus(svc, next);
+      });
     });
   }
 }
@@ -204,7 +203,7 @@ function printServiceEnv(env) {
   }
 }
 
-function printServiceStatus(service) {
+function printServiceStatus(service, callback) {
   service.getStatusSummary(function(err, summary) {
     dieIf(err);
 
@@ -277,6 +276,8 @@ function printServiceStatus(service) {
     } else {
       console.log('Not started');
     }
+
+    if (callback) return callback();
   });
   function addr2str(address) {
     var str;
