@@ -68,5 +68,9 @@
   "InstanceAction": {
     "dataSource": "remote",
     "public": false
+  },
+  "Gateway": {
+    "dataSource": "remote",
+    "public": true
   }
 }

@@ -385,7 +385,6 @@ test('Test notifications', function(t) {
       wid: 0,
       reason: 'foo',
     };
-    tt.plan(1);
     app.handleModelUpdate(1, notification, function(err) {
       tt.ifError(err, 'exit handled without error');
       tt.end();
@@ -411,7 +410,6 @@ test('Test notifications', function(t) {
         // Stop time should be within the last minute or so.
         var timeWindow = (new Date()) - (1 * 60 * 1000);
         tt.ok(timeWindow <= proc.stopTime, 'stop time should be set');
-        tt.end();
       });
     });
   });

@@ -32,6 +32,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     debug('Process exited: worker id %d pid %d reason %s suicide? %s',
       pInfo.wid, pInfo.pid, pInfo.reason, pInfo.suicide);
 
+    var serviceManager = ServiceProcess.app.serviceManager;
     function updateProcess(proc, asyncCb) {
       if (!proc) {
         // Ignore process if it is not in the DB. Defensive coding against race
@@ -43,7 +44,10 @@ module.exports = function extendServiceProcess(ServiceProcess) {
         return proc.updateAttributes({
           stopTime: new Date(),
           stopReason: pInfo.reason,
-        }, asyncCb);
+        }, function(err, proc) {
+          if (err) return asyncCb(err);
+          serviceManager.onProcessExit(proc, asyncCb);
+        });
       }
       // Found proc, but it was stopped, so nothing to do.
       return asyncCb();
@@ -73,7 +77,8 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       updateChildren
     ], function ensureSave(err, proc) {
       debug('on exit of %j, save Process: %j', pInfo, err || proc);
-      callback(err);
+      if (err) return callback(err);
+      serviceManager.onProcessExit(proc, callback);
     });
   }
   ServiceProcess.recordExit = recordExit;
@@ -90,12 +95,14 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       asyncCb();
     }
 
+    var serviceManager = ServiceProcess.app.serviceManager;
     return async.waterfall([
       _findProcess(instanceId, +pInfo.wid, +pInfo.pid, +pInfo.pst),
       updateWorker
     ], function ensureSave(err, proc) {
       debug('Listening of %j, save Process: %j', pInfo, err || proc);
-      callback(err);
+      if (err) return callback(err);
+      serviceManager.onProcessListen(proc, callback);
     });
   }
   ServiceProcess.recordListeningEndpoint = recordListeningEndpoint;

@@ -432,3 +432,28 @@ function executorShutdown(id, callback) {
   });
 }
 Client.prototype.executorShutdown = executorShutdown;
+
+function gatewayCreate(callback) {
+  this.models.Gateway.create({}, callback);
+}
+Client.prototype.gatewayCreate = gatewayCreate;
+
+function gatewayList(callback) {
+  this.models.Gateway.find({}, callback);
+}
+Client.prototype.gatewayList = gatewayList;
+
+function gatewayDestroy(id, callback) {
+  this.models.Gateway.deleteById(id, callback);
+}
+Client.prototype.gatewayDestroy = gatewayDestroy;
+
+function gatewayShutdown(id, callback) {
+  this.models.Gateway.findById(id, function(err, gateway) {
+    if (err) return callback(err);
+    if (!gateway) return callback(new Error('Gateway controller not found'));
+
+    gateway.shutdown(callback);
+  });
+}
+Client.prototype.gatewayShutdown = gatewayShutdown;

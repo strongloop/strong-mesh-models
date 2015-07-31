@@ -46,6 +46,30 @@ function onInstanceDestroy(instance, callback) {
 }
 ServiceManager.prototype.onInstanceDestroy = onInstanceDestroy;
 
+function onGatewayUpdate(gateway, isNew, callback) {
+  debug('ongatewayUpdate(%j, %s)', gateway, isNew);
+  setImmediate(callback);
+}
+ServiceManager.prototype.onGatewayUpdate = onGatewayUpdate;
+
+function onGatewayDestroy(gateway, callback) {
+  debug('onGatewayDestroy(%j)', gateway);
+  setImmediate(callback);
+}
+ServiceManager.prototype.onGatewayDestroy = onGatewayDestroy;
+
+function onProcessListen(proc, callback) {
+  debug('onProcessListen(%j)', proc);
+  setImmediate(callback);
+}
+ServiceManager.prototype.onProcessListen = onProcessListen;
+
+function onProcessExit(proc, callback) {
+  debug('onProcessExit(%j)', proc);
+  setImmediate(callback);
+}
+ServiceManager.prototype.onProcessExit = onProcessExit;
+
 function onDeployment(service, req, res) {
   debug('onDeployment(%j)', service);
   res.end('hi');

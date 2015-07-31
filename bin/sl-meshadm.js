@@ -94,6 +94,10 @@ function runCommand(client, command) {
     'exec-list': cmdListExecutors,
     'exec-remove': cmdRemoveExecutor,
     'exec-shutdown': cmdShutdownExecutor,
+    'gw-create': cmdCreateGateway,
+    'gw-list': cmdListGateway,
+    'gw-remove': cmdRemoveGateway,
+    'gw-shutdown': cmdShutdownGateway,
   }[command] || unknown)(client);
 }
 
@@ -120,7 +124,9 @@ function cmdListExecutors(client) {
 
     if (result.length) {
       var data = [];
-      data.push(['Id', 'Host', 'IP', 'Capacity', 'Token', 'Metadata']);
+      data.push(
+        ['Id', 'Host', 'Routable Addr', 'Capacity', 'Token', 'Metadata']
+      );
       for (var i in result) {
         if (!result.hasOwnProperty(i)) continue;
         var s = result[i];
@@ -155,6 +161,56 @@ function cmdShutdownExecutor(client) {
     debug('exec-shutdown: %j', err || result);
     dieIf(err);
     console.log('Shutting down executor: %s', id);
+  });
+}
+
+
+function cmdCreateGateway(client) {
+  client.gatewayCreate(function(err, result) {
+    debug('gw-create: %j', err || result);
+    dieIf(err);
+    console.log('Created gateway controller id: %s token: %s',
+      result.id, result.token);
+  });
+}
+
+function cmdListGateway(client) {
+  client.gatewayList(function(err, result) {
+    debug('gw-list: %j', err || result);
+    dieIf(err);
+
+    if (result.length) {
+      var data = [];
+      data.push(['Id', 'Token']);
+      for (var i in result) {
+        if (!result.hasOwnProperty(i)) continue;
+        var s = result[i];
+        data.push([s.id, s.token || 'n/a']);
+      }
+      console.log(table(data, {align: ['c', 'c']}));
+    } else {
+      console.log('No gateway controllers defined');
+    }
+  });
+}
+
+function cmdRemoveGateway(client) {
+  var id = mandatory('id');
+
+  client.gatewayDestroy(id, function(err, result) {
+    debug('gw-remove: %j', err || result);
+    dieIf(err);
+    console.log('Removed gateway controller: %s', id);
+  });
+}
+
+function cmdShutdownGateway(client) {
+  var id = mandatory('id');
+
+  client.gatewayShutdown(id, function(err, result) {
+    debug('gw-shutdown: %j', err || result);
+    dieIf(err);
+    console.log('Shutting down gateway controller: %s', id);
   });
 }
 
