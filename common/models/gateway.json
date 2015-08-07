@@ -3,11 +3,6 @@
   "base": "PersistedModel",
   "description": "Represents a Gateway controller",
   "properties": {
-    "id": {
-      "type": "string",
-      "id": true,
-      "defaultFn": "uuid"
-    },
     "token": {
       "type": "string",
       "description": "Authentication token for gateway to connect to central"
