@@ -85,6 +85,18 @@
     "serviceInstance": {
       "type": "belongsTo",
       "model": "ServiceInstance"
+    },
+    "agentTraces": {
+      "type": "hasMany",
+      "model": "AgentTrace"
+    },
+    "expressUsageRecords": {
+      "type": "hasMany",
+      "model": "ExpressUsageRecord"
+    },
+    "serviceMetrics": {
+      "type": "hasMany",
+      "model": "ServiceMetric"
     }
   },
   "acls": [],

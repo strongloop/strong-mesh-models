@@ -12,7 +12,8 @@
     "public": true
   },
   "User": {
-    "dataSource": "db"
+    "dataSource": "db",
+    "public": false
   },
   "AccessToken": {
     "dataSource": "db",
@@ -52,23 +53,23 @@
   },
   "ServiceProcess": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "ServiceMetric": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "AgentTrace": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "ExpressUsageRecord": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "ProfileData": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "InstanceAction": {
     "dataSource": "db",

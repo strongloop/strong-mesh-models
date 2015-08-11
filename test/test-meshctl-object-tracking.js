@@ -25,7 +25,7 @@ test('Test object-tracking commands', function(t) {
       instance.processes({where: {pid: 1231}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
         proc = proc[0];
-        proc.startObjectTracking(function(err, response) {
+        instance.startObjectTracking(proc.id, function(err, response) {
           tt.ifError(err, 'call should not error');
           tt.equal(response.message,
             'object tracking started',
@@ -58,7 +58,7 @@ test('Test object-tracking commands', function(t) {
       instance.processes({where: {pid: 1232}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
         proc = proc[0];
-        proc.stopObjectTracking(2, function(err, response) {
+        instance.stopObjectTracking(proc.id, 2, function(err, response) {
           tt.ifError(err, 'call should not error');
           tt.equal(response.message,
             'object tracking started',
@@ -91,7 +91,7 @@ test('Test object-tracking commands', function(t) {
       instance.processes({where: {pid: 1233}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
         proc = proc[0];
-        proc.startObjectTracking(function(err /*, response*/) {
+        instance.startObjectTracking(proc.id, function(err /*, response*/) {
           tt.ok(err, 'call should error');
           tt.end();
         });

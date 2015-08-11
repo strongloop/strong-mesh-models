@@ -456,7 +456,7 @@ function cmdObjectTrackingStart(client) {
   client.resolveTarget(target,
     function(err, service, executor, instance, process) {
       dieIf(err);
-      process.startObjectTracking(dieIf);
+      instance.startObjectTracking(process.id, dieIf);
     }
   );
 }
@@ -467,7 +467,7 @@ function cmdObjectTrackingStop(client) {
   client.resolveTarget(target,
     function(err, service, executor, instance, process) {
       dieIf(err);
-      process.stopObjectTracking(dieIf);
+      instance.stopObjectTracking(process.id, dieIf);
     }
   );
 }
@@ -484,7 +484,7 @@ function cmdCpuProfilingStart(client) {
         watchdogTimeout: timeout,
         watchdogStallout: stallout,
       };
-      process.startCpuProfiling(cmd, function(err, response) {
+      instance.startCpuProfiling(process.id, cmd, function(err, response) {
           dieIf(err);
           debug('startCpuProfiling: %j', response);
           console.log('Profiler started, use cpu-stop to get profile');
@@ -502,7 +502,7 @@ function cmdCpuProfilingStop(client) {
   client.resolveTarget(target,
     function(err, service, executor, instance, process) {
       dieIf(err);
-      process.stopCpuProfiling(function(err, response) {
+      instance.stopCpuProfiling(process.id, function(err, response) {
         dieIf(err);
         var profileId = response.profileId;
         download(instance, profileId, fileName, function(err) {
@@ -549,7 +549,7 @@ function cmdHeapSnapshot(client) {
   client.resolveTarget(target,
     function(err, service, executor, instance, process) {
       dieIf(err);
-      process.heapSnapshot(function(err, response) {
+      instance.heapSnapshot(process.id, function(err, response) {
         dieIf(err);
         var profileId = response.profileId;
         download(instance, profileId, fileName, function(err) {
@@ -591,7 +591,7 @@ function cmdPatch(client) {
   client.resolveTarget(target,
     function(err, service, executor, instance, process) {
       dieIf(err);
-      process.applyPatch(patchData, function(err /*, response*/) {
+      instance.applyPatch(process.id, patchData, function(err /*, response*/) {
         dieIf(err);
       });
     }
@@ -768,7 +768,7 @@ function cmdDebuggerStart(client) {
   client.resolveTarget(target,
     function(err, service, executor, instance, process) {
       dieIf(err);
-      process.startDebugger(function(err, response) {
+      instance.startDebugger(process.id, function(err, response) {
           dieIf(err);
           debug('startDebugger: %j', response);
           console.log('Debugger listening on port %s.', response.port);
@@ -784,7 +784,7 @@ function cmdDebuggerStop(client) {
   client.resolveTarget(target,
     function(err, service, executor, instance, process) {
       dieIf(err);
-      process.stopDebugger(function(err, response) {
+      instance.stopDebugger(process.id, function(err, response) {
           dieIf(err);
           debug('stopDebugger: %j', response);
           console.log('Debugger was disabled.', response.port);

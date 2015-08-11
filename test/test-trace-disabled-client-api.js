@@ -40,7 +40,7 @@ test('Test trace client api (disabled trace)', function(t) {
     t.test('test getMetaTransactions', function(tt) {
       instance.processes.findById('1', function(err, proc) {
         tt.ifError(err, 'instance lookup should succeed');
-        proc.getMetaTransactions(function(err) {
+        instance.getMetaTransactions(proc.id, function(err) {
           tt.ok(err, 'trace command should error');
           tt.end();
         });
@@ -50,7 +50,7 @@ test('Test trace client api (disabled trace)', function(t) {
     t.test('test getTransaction', function(tt) {
       instance.processes.findById('1', function(err, proc) {
         tt.ifError(err, 'instance lookup should succeed');
-        proc.getTransaction('trans 1', function(err) {
+        instance.getTransaction(proc.id, 'trans 1', function(err) {
           tt.ok(err, 'trace command should error');
           tt.end();
         });
@@ -60,7 +60,7 @@ test('Test trace client api (disabled trace)', function(t) {
     t.test('test getTimeline', function(tt) {
       instance.processes.findById('1', function(err, proc) {
         tt.ifError(err, 'instance lookup should succeed');
-        proc.getTimeline(function(err) {
+        instance.getTimeline(proc.id, function(err) {
           tt.ok(err, 'trace command should error');
           tt.end();
         });
@@ -70,7 +70,7 @@ test('Test trace client api (disabled trace)', function(t) {
     t.test('test getTrace', function(tt) {
       instance.processes.findById('1', function(err, proc) {
         tt.ifError(err, 'instance lookup should succeed');
-        proc.getTrace('trace 1', function(err) {
+        instance.getTrace(proc.id, 'trace 1', function(err) {
           tt.ok(err, 'trace command should error');
           tt.end();
         });

@@ -91,7 +91,7 @@ test('Test trace client api', function(t) {
     t.test('test getMetaTransactions', function(tt) {
       instance.processes.findById('1', function(err, proc) {
         tt.ifError(err, 'instance lookup should succeed');
-        proc.getMetaTransactions(function(err, data) {
+        instance.getMetaTransactions(proc.id, function(err, data) {
           tt.ifError(err, 'getMetaTransactions should not error');
           tt.deepEqual(data, {data: 1}, 'return data should match');
           tt.end();
@@ -102,7 +102,7 @@ test('Test trace client api', function(t) {
     t.test('test getTransaction', function(tt) {
       instance.processes.findById('1', function(err, proc) {
         tt.ifError(err, 'instance lookup should succeed');
-        proc.getTransaction('trans 1', function(err, data) {
+        instance.getTransaction(proc.id, 'trans 1', function(err, data) {
           tt.ifError(err, 'getTransaction should not error');
           tt.deepEqual(data, {transData: 1}, 'return data should match');
           tt.end();
@@ -113,7 +113,7 @@ test('Test trace client api', function(t) {
     t.test('test getTimeline', function(tt) {
       instance.processes.findById('1', function(err, proc) {
         tt.ifError(err, 'instance lookup should succeed');
-        proc.getTimeline(function(err, data) {
+        instance.getTimeline(proc.id, function(err, data) {
           tt.ifError(err, 'getTimeline should not error');
           tt.deepEqual(data, {timelineData: 1},
             'return data should match');
@@ -125,7 +125,7 @@ test('Test trace client api', function(t) {
     t.test('test getTrace', function(tt) {
       instance.processes.findById('1', function(err, proc) {
         tt.ifError(err, 'instance lookup should succeed');
-        proc.getTrace('trace 1', function(err, data) {
+        instance.getTrace(proc.id, 'trace 1', function(err, data) {
           tt.ifError(err, 'getTrace should not error');
           tt.deepEqual(data, {traceData: 1}, 'return data should match');
           tt.end();

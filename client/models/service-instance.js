@@ -2,15 +2,6 @@ var request = require('request');
 var util = require('util');
 
 module.exports = function(ServiceInstance) {
-  function applyPatch(target, fileData, callback) {
-    return this._appCommand({
-      cmd: 'patch',
-      target: target,
-      patch: fileData
-    }, callback);
-  }
-  ServiceInstance.prototype.applyPatch = applyPatch;
-
   function downloadProfile(profileId, callback) {
     var Service = ServiceInstance.app.models.ServerService;
 

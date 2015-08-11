@@ -28,13 +28,15 @@ test('Test patch commands', function(t) {
       instance.processes({where: {pid: 1231}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
         proc = proc[0];
-        proc.applyPatch({file: 'some patch data'}, function(err, response) {
-          tt.ifError(err, 'call should not error');
-          tt.deepEqual(response, {
-            ok: true
-          }, 'Response should match');
-          tt.end();
-        });
+        instance.applyPatch(proc.id, {file: 'some patch data'},
+          function(err, response) {
+            tt.ifError(err, 'call should not error');
+            tt.deepEqual(response, {
+              ok: true
+            }, 'Response should match');
+            tt.end();
+          }
+        );
       });
     });
 
@@ -64,10 +66,12 @@ test('Test patch commands', function(t) {
       instance.processes({where: {pid: 1231}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
         proc = proc[0];
-        proc.applyPatch({file: 'some patch data'}, function(err) {
-          tt.ok(err, 'patch operation should error');
-          tt.end();
-        });
+        instance.applyPatch(proc.id, {file: 'some patch data'},
+          function(err) {
+            tt.ok(err, 'patch operation should error');
+            tt.end();
+          }
+        );
       });
     });
 
