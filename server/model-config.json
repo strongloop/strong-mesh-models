@@ -11,25 +11,6 @@
     "dataSource": null,
     "public": true
   },
-  "User": {
-    "dataSource": "db"
-  },
-  "AccessToken": {
-    "dataSource": "db",
-    "public": false
-  },
-  "ACL": {
-    "dataSource": "memory",
-    "public": false
-  },
-  "RoleMapping": {
-    "dataSource": "memory",
-    "public": false
-  },
-  "Role": {
-    "dataSource": "memory",
-    "public": false
-  },
   "ServerService": {
     "dataSource": "db",
     "public": true
@@ -52,23 +33,23 @@
   },
   "ServiceProcess": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "ServiceMetric": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "AgentTrace": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "ExpressUsageRecord": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "ProfileData": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "InstanceAction": {
     "dataSource": "db",

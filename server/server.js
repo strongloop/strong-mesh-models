@@ -15,7 +15,7 @@ var url = require('url');
  * @param {object} options Options object
  */
 function server(serviceManager, minkelite, options) {
-  var app = module.exports = loopback();
+  var app = loopback();
   app.serviceManager = serviceManager;
   options = options || {};
 
