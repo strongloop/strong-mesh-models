@@ -13,16 +13,21 @@ test('Check heap and cpu profiling populates Profile models', function(t) {
     }
     util.inherits(TestServiceManager, ServiceManager);
 
-    function onCtlRequest(service, instance, req, callback) {
-      t.equal(service.id, 1, 'request: Service id should match');
-      t.equal(instance.id, 1, 'request: Instance id should match');
+    function assertCtlRequests(t, serviceId, instanceId) {
+      return onCtlRequest;
+      function onCtlRequest(service, instance, req, callback) {
+        t.equal(service.id, serviceId, 'request: Service id should match');
+        t.equal(instance.id, instanceId, 'request: Instance id should match');
+        callback(null, {response: 'ok', profile: 'PROFILE'});
+      }
+    }
+    function noopCtlRequest(s, i, r, callback) {
       callback(null, {response: 'ok', profile: 'PROFILE'});
     }
-    TestServiceManager.prototype.onCtlRequest = onCtlRequest;
 
     testCmdHelper(t, TestServiceManager, function(t, service, instance) {
-
       t.test('heap snapshot download', function(tt) {
+        TestServiceManager.prototype.onCtlRequest = assertCtlRequests(tt, 1, 1);
         instance.processes({where: {id: 1}}, function(err, processes) {
           tt.ifError(err, 'process lookup should succeed');
           tt.equal(processes.length, 1, 'one process should be found');
@@ -49,6 +54,7 @@ test('Check heap and cpu profiling populates Profile models', function(t) {
       });
 
       t.test('heap snapshot delete', function(tt) {
+        TestServiceManager.prototype.onCtlRequest = assertCtlRequests(tt, 1, 1);
         instance.processes({where: {id: 1}}, function(err, processes) {
           tt.ifError(err);
 
@@ -77,6 +83,7 @@ test('Check heap and cpu profiling populates Profile models', function(t) {
       });
 
       t.test('cpu stop', function(tt) {
+        TestServiceManager.prototype.onCtlRequest = assertCtlRequests(tt, 1, 1);
         instance.processes({where: {id: 1}}, function(err, processes) {
           tt.ifError(err, 'process lookup should succeed');
           tt.equal(processes.length, 1, 'one process should be found');
@@ -97,6 +104,14 @@ test('Check heap and cpu profiling populates Profile models', function(t) {
           });
         });
       });
+
+      t.test('teardown', function(tt) {
+        TestServiceManager.prototype.onCtlRequest = noopCtlRequest;
+        tt.pass('disabling test req handler');
+        tt.end();
+      });
+
+      t.end();
     });
   }
 );

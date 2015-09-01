@@ -38,5 +38,7 @@ test('Service environment variable manipulation', function(t) {
       server.stop();
       tt.end();
     });
+
+    t.end();
   });
 });
