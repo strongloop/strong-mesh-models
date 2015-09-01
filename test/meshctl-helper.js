@@ -120,6 +120,8 @@ function testCmdHelper(t, TestServiceManager, callback, MockMinkelite) {
       server.stop(tt.end.bind(tt));
     });
 
+    t.end();
+
   });
 }
 

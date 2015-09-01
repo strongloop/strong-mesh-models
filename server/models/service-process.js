@@ -46,7 +46,9 @@ module.exports = function extendServiceProcess(ServiceProcess) {
           stopReason: pInfo.reason,
         }, function(err, proc) {
           if (err) return asyncCb(err);
-          serviceManager.onProcessExit(proc, asyncCb);
+          serviceManager.onProcessExit(proc, function(err) {
+            return asyncCb(err, proc);
+          });
         });
       }
       // Found proc, but it was stopped, so nothing to do.
@@ -78,7 +80,9 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     ], function ensureSave(err, proc) {
       debug('on exit of %j, save Process: %j', pInfo, err || proc);
       if (err) return callback(err);
-      serviceManager.onProcessExit(proc, callback);
+      serviceManager.onProcessExit(proc, function(err) {
+        return callback(err, proc);
+      });
     });
   }
   ServiceProcess.recordExit = recordExit;
@@ -102,7 +106,9 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     ], function ensureSave(err, proc) {
       debug('Listening of %j, save Process: %j', pInfo, err || proc);
       if (err) return callback(err);
-      serviceManager.onProcessListen(proc, callback);
+      serviceManager.onProcessListen(proc, function(err) {
+        return callback(err, proc);
+      });
     });
   }
   ServiceProcess.recordListeningEndpoint = recordListeningEndpoint;
