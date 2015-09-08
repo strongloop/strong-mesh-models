@@ -49,7 +49,7 @@ function Client(apiUrl, options) {
       'http://unix:%s:/%s',
       endpoint.pathname, apiBasePath
     );
-  } else if (endpoint.protocol === 'http:') {
+  } else if (endpoint.protocol === 'http:' || endpoint.protocol === 'https:') {
     this.apiUrl = urlDefaults(
       apiUrl,
       {host: '127.0.0.1', port: 8701},
