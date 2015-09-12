@@ -13,6 +13,15 @@ in this order:
 1. `STRONGLOOP_PM` in environment: may be a local domain path, or an HTTP URL.
 2. `http://localhost:8701`: a process manager running on localhost
 
+When using an HTTP URL, it can optionally be tunneled over ssh by changing the
+protocol to `http+ssh://`. The ssh username will default to your current user
+and authentication defaults to using your current ssh-agent. The username can be
+overridden by setting an `SSH_USER` environment variable. The authentication can
+be overridden to use an existing private key instead of an agent by setting the
+`SSH_KEY` environment variable to the path of the private key to be used. The
+port used for ssh defaults to the standard ssh port (22) but can be overridden
+by setting the `SSH_PORT` environment variable.
+
 Executor commands:
 
 `EXEC` is the executor ID. It can be obtained by listing executors using
