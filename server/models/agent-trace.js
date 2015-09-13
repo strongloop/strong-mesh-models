@@ -2,7 +2,14 @@ var async = require('async');
 var debug = require('debug')('strong-mesh-models:server:agent-trace');
 var deleteOld = require('./delete-old');
 
-module.exports = function extendAgentTrace(AgentTrace) {
+exports = module.exports = extendAgentTrace;
+exports.modelWatcher = modelWatcher;
+
+function modelWatcher(msg) {
+  console.log('------------------------ agenttrace:', msg);
+}
+
+function extendAgentTrace(AgentTrace) {
   function recordTrace(instanceId, req, callback) {
     debug('trace data: %j', req.trace);
     var ServiceProcess = AgentTrace.app.models.ServiceProcess;
@@ -40,4 +47,4 @@ module.exports = function extendAgentTrace(AgentTrace) {
     });
   }
   AgentTrace.recordTrace = recordTrace;
-};
+}

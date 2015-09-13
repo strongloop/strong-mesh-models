@@ -1,6 +1,13 @@
 var async = require('async');
 
-module.exports = function extendGateway(Gateway) {
+exports = module.exports = extendGateway;
+exports.modelWatcher = modelWatcher;
+
+function modelWatcher(msg) {
+  console.log('------------------------ gateway:', msg);
+}
+
+function extendGateway(Gateway) {
   // Refer to server-service.js for description of instance vs currentInstance
   // vs data.
 
@@ -37,4 +44,4 @@ module.exports = function extendGateway(Gateway) {
       );
     });
   });
-};
+}

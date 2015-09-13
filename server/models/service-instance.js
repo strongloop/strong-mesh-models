@@ -2,7 +2,14 @@ var async = require('async');
 var debug = require('debug')('strong-mesh-models:server:service-instance');
 var fmt = require('util').format;
 
-module.exports = function extendServiceInstance(ServiceInstance) {
+exports = module.exports = extendServiceInstance;
+exports.modelWatcher = modelWatcher;
+
+function modelWatcher(msg) {
+  console.log('------------------------ serviceinstance:', msg);
+}
+
+function extendServiceInstance(ServiceInstance) {
   ServiceInstance.beforeRemote(
     'prototype.updateAttributes',
     function(ctx, _, next) {
@@ -326,4 +333,4 @@ module.exports = function extendServiceInstance(ServiceInstance) {
   ServiceInstance.disableRemoteMethod('upsert', true);
   ServiceInstance.disableRemoteMethod('deleteById', true);
   ServiceInstance.disableRemoteMethod('deleteAll', true);
-};
+}

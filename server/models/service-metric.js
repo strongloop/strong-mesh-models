@@ -2,7 +2,14 @@ var async = require('async');
 var debug = require('debug')('strong-mesh-models:server:service-metric');
 var deleteOld = require('./delete-old');
 
-module.exports = function extendServiceMetric(ServiceMetric) {
+exports = module.exports = extendServiceMetric;
+exports.modelWatcher = modelWatcher;
+
+function modelWatcher(msg) {
+  console.log('------------------------ servicemetric:', msg);
+}
+
+function extendServiceMetric(ServiceMetric) {
   function recordMetrics(instanceId, req, callback) {
     debug('Process metrics: %j', req.metrics);
     var ServiceProcess = ServiceMetric.app.models.ServiceProcess;
@@ -38,4 +45,4 @@ module.exports = function extendServiceMetric(ServiceMetric) {
     );
   }
   ServiceMetric.recordMetrics = recordMetrics;
-};
+}

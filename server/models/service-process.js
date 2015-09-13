@@ -2,7 +2,14 @@ var async = require('async');
 var debug = require('debug')('strong-mesh-models:server:service-process');
 var fmt = require('util').format;
 
-module.exports = function extendServiceProcess(ServiceProcess) {
+exports = module.exports = extendServiceProcess;
+exports.modelWatcher = modelWatcher;
+
+function modelWatcher(msg) {
+  console.log('------------------------ serviceprocess:', msg);
+}
+
+function extendServiceProcess(ServiceProcess) {
   function recordFork(instanceId, pInfo, callback) {
     debug('Process forked: worker id %d pid %d ppid %d pst %d',
       pInfo.wid, pInfo.pid, pInfo.ppid, pInfo.pst || pInfo.startTime);
@@ -390,4 +397,4 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     );
   }
   ServiceProcess.prototype.applyPatch = applyPatch;
-};
+}

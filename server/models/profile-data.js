@@ -6,7 +6,14 @@ var fmt = require('util').format;
 var fs = require('fs');
 var path = require('path');
 
-module.exports = function extendProfileData(ProfileData) {
+exports = module.exports = extendProfileData;
+exports.modelWatcher = modelWatcher;
+
+function modelWatcher(msg) {
+  console.log('------------------------ profiledata:', msg);
+}
+
+function extendProfileData(ProfileData) {
   // If a ProfileData has a fileName, ensure it is deleted from disk before the
   // ProfileData is deleted.
   ProfileData.observe('before delete', function(ctx, next) {
@@ -123,4 +130,4 @@ module.exports = function extendProfileData(ProfileData) {
   }
 
   ProfileData.recordProfileData = recordProfileData;
-};
+}

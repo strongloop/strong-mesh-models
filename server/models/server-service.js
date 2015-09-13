@@ -3,7 +3,14 @@ var debug = require('debug')('strong-mesh-models:server:server-service');
 var fs = require('fs');
 var fmt = require('util').format;
 
-module.exports = function extendServerService(ServerService) {
+exports = module.exports = extendServerService;
+exports.modelWatcher = modelWatcher;
+
+function modelWatcher(msg) {
+  console.log('------------------------ serverservice:', msg);
+}
+
+function extendServerService(ServerService) {
   ServerService.disableRemoteMethod('upsert', true);
   ServerService.disableRemoteMethod('updateAll', true);
 
@@ -242,4 +249,4 @@ module.exports = function extendServerService(ServerService) {
     });
   }
   ServerService.prototype._callOnInstances = _callOnInstances;
-};
+}
