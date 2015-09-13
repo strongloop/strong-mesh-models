@@ -2,7 +2,14 @@ var debug = require('debug')('strong-mesh-models:server:express-usage');
 var deleteOld = require('./delete-old');
 var url = require('url');
 
-module.exports = function extendExpressUsageRecord(ExpressUsageRecord) {
+exports = module.exports = extendExpressUsageRecord;
+exports.modelWatcher = modelWatcher;
+
+function modelWatcher(msg) {
+  console.log('------------------------ expressusagerecord:', msg);
+}
+
+function extendExpressUsageRecord(ExpressUsageRecord) {
   function recordUsage(instanceId, req, callback) {
     debug('Express usage record: %j', req.record);
     var ServiceProcess = ExpressUsageRecord.app.models.ServiceProcess;
@@ -148,4 +155,4 @@ module.exports = function extendExpressUsageRecord(ExpressUsageRecord) {
     ExpressUsageRecord.find(q, callback);
   }
   ExpressUsageRecord.endpointDetail = endpointDetail;
-};
+}

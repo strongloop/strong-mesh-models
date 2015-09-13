@@ -1,6 +1,13 @@
 var async = require('async');
 
-module.exports = function(Executor) {
+exports = module.exports = extendExecutor;
+exports.modelWatcher = modelWatcher;
+
+function modelWatcher(msg) {
+  console.log('------------------------ executor:', msg);
+}
+
+function extendExecutor(Executor) {
 
   // Refer to server-service.js for description of instance vs currentInstance
   // vs data.
@@ -51,4 +58,4 @@ module.exports = function(Executor) {
     Executor.app.serviceManager.onExecutorRequest(
       this.id, {cmd: 'shutdown'}, callback);
   };
-};
+}
