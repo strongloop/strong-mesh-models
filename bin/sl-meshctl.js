@@ -241,7 +241,7 @@ function printServiceStatus(service, callback) {
 
     var processTable = [
       ['  ', 'ID', 'PID', 'WID', 'Listening Ports',
-          'Tracking objects?', 'CPU profiling?', 'Tracing?']
+          'Tracking objects?', 'CPU profiling?', 'Tracing?', 'Debugging?']
     ];
     if (verbose)
       processTable[0].push('Stop reason', 'Stop time');
@@ -260,6 +260,7 @@ function printServiceStatus(service, callback) {
         proc.isTrackingObjects ? 'yes' : '',
         profiling(proc),
         proc.isTracing ? 'yes' : '',
+        proc.debugger && proc.debugger.running ? 'yes' : '',
       ];
       if (verbose)
         procEntry.push(proc.stopReason, proc.stopTime || '');

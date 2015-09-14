@@ -162,6 +162,9 @@ function server(serviceManager, minkelite, options) {
           ServiceInstance.recordStatusWdUpdate(instanceId, uInfo, callback);
         });
         break;
+      case 'debugger-status':
+        ServiceProcess.recordDebuggerStatusUpdate(instanceId, uInfo, callback);
+        break;
       default:
         debug('Unknown request: %j', uInfo);
         callback();

@@ -485,6 +485,30 @@ test('Test notifications', function(t) {
   t.test('Check worker 1 resumed',
     checkWorker1.bind(this, {stopTime: true, stopReason: null}));
 
+  t.test('Notify debugger-status', function(tt) {
+    var notification = {
+      cmd: 'debugger-status',
+      pid: 1235,
+      wid: 1,
+      running: true,
+      port: 12345
+    };
+    app.handleModelUpdate(1, notification, function(err) {
+      tt.ifError(err);
+
+      var q = {where: {workerId: 1, serviceInstanceId: 1}};
+      app.models.ServiceProcess.find(q, function(err, list) {
+        tt.ifError(err);
+        tt.equal(list.length, 1, 'only one process should be found');
+        var proc = list[0] || {};
+        // NOTE(bajtos) the actual instance contains extra internal properties,
+        // e.g. __data, __persisted, etc.
+        tt.match(proc.debugger, {running: true, port: 12345});
+        tt.end();
+      });
+    });
+  });
+
   t.test('shutdown', function(tt) {
     app.stop();
     tt.end();

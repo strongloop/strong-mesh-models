@@ -418,4 +418,28 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     );
   }
   ServiceProcess.prototype.stopDebugger = stopDebugger;
+
+  function recordDebuggerStatusUpdate(instanceId, pInfo, callback) {
+    function updateDebuggerStatus(proc, next) {
+      if (!proc)
+        return next(Error(
+          fmt('Process state update for unknown process: %j', pInfo)));
+
+      proc.updateAttributes({
+        debugger: {
+          running: pInfo.running,
+          port: pInfo.port
+        }
+      }, next);
+    }
+
+    return async.waterfall([
+      _findProcess(instanceId, +pInfo.wid, pInfo.pid, +pInfo.pst),
+      updateDebuggerStatus
+    ], function(err, proc) {
+      debug('Process entry updated: %j', err || proc);
+      callback(err);
+    });
+  }
+  ServiceProcess.recordDebuggerStatusUpdate = recordDebuggerStatusUpdate;
 };
