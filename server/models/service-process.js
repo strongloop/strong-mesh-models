@@ -390,4 +390,32 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     );
   }
   ServiceProcess.prototype.applyPatch = applyPatch;
+
+  /**
+   * Start DevTools Debugger backend on a worker.
+   *
+   * @param {function} callback Callback function.
+   */
+  function startDebugger(callback) {
+    this._appCommand({
+        cmd: 'dbg-start',
+        target: this.pid,
+      }, callback
+    );
+  }
+  ServiceProcess.prototype.startDebugger = startDebugger;
+
+  /**
+   * Stop DevTools Debugger backend on a worker.
+   *
+   * @param {function} callback Callback function.
+   */
+  function stopDebugger(callback) {
+    this._appCommand({
+        cmd: 'dbg-stop',
+        target: this.pid,
+      }, callback
+    );
+  }
+  ServiceProcess.prototype.stopDebugger = stopDebugger;
 };

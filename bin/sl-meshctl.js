@@ -131,6 +131,8 @@ function runCommand(client, command) {
     'get-process-count': cmdGetProcessCount, // No docs, internal use only.
     'log-dump': cmdLogDump,
     'shutdown': cmdShutdown,
+    'dbg-start': cmdDebuggerStart,
+    'dbg-stop': cmdDebuggerStop,
   }[command] || unknown)(client);
 }
 
@@ -755,6 +757,38 @@ function download(instance, profileId, file, callback) {
       }
     }
   });
+}
+
+function cmdDebuggerStart(client) {
+  var target = mandatory('target');
+
+  client.resolveTarget(target,
+    function(err, service, executor, instance, process) {
+      dieIf(err);
+      process.startDebugger(function(err, response) {
+          dieIf(err);
+          debug('startDebugger: %j', response);
+          console.log('Debugger listening on port %s.', response.port);
+        }
+      );
+    }
+  );
+}
+
+function cmdDebuggerStop(client) {
+  var target = mandatory('target');
+
+  client.resolveTarget(target,
+    function(err, service, executor, instance, process) {
+      dieIf(err);
+      process.stopDebugger(function(err, response) {
+          dieIf(err);
+          debug('stopDebugger: %j', response);
+          console.log('Debugger was disabled.', response.port);
+        }
+      );
+    }
+  );
 }
 
 function mandatory(name) {
