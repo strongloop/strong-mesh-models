@@ -160,4 +160,26 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       description: 'Take a snapshot of the HEAP for a process.'
     }
   );
+
+  ServiceProcess.remoteMethod(
+    'startDebugger',
+    {
+      http: {path: '/debugger/start', verb: 'post'},
+      isStatic: false,
+      accepts: [],
+      returns: {arg: 'response', type: 'object', root: true},
+      description: 'Start DevTools Debugger backend on a worker.'
+    }
+  );
+
+  ServiceProcess.remoteMethod(
+    'stopDebugger',
+    {
+      http: {path: '/debugger/stop', verb: 'post'},
+      isStatic: false,
+      accepts: [],
+      returns: {arg: 'response', type: 'object', root: true},
+      description: 'Stop DevTools Debugger backend on a worker.'
+    }
+  );
 };

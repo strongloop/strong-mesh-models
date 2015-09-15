@@ -127,3 +127,7 @@ command.
         that the `--metrics=URL` option is passed to the runner.
 
   patch WRK FILE           Apply patch FILE to worker WRK.
+
+  dbg-start WRK            Enable DevTools Debugger backend in worker WRK.
+
+  dbg-stop WRK             Disable DevTools Debugger backend in worker WRK.

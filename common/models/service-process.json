@@ -45,6 +45,11 @@
       "default": false,
       "description": "Indicates if tracing is turned on for this process"
     },
+    "debugger": {
+      "type": { "running": "boolean", "port": "number" },
+      "default": { "running": false, "port": null },
+      "description": "Status of DevTools Debugger in this process"
+    },
     "watchdogTimeout": {
       "type": "number",
       "default": 0,

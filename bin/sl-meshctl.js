@@ -131,6 +131,8 @@ function runCommand(client, command) {
     'get-process-count': cmdGetProcessCount, // No docs, internal use only.
     'log-dump': cmdLogDump,
     'shutdown': cmdShutdown,
+    'dbg-start': cmdDebuggerStart,
+    'dbg-stop': cmdDebuggerStop,
   }[command] || unknown)(client);
 }
 
@@ -239,7 +241,7 @@ function printServiceStatus(service, callback) {
 
     var processTable = [
       ['  ', 'ID', 'PID', 'WID', 'Listening Ports',
-          'Tracking objects?', 'CPU profiling?', 'Tracing?']
+          'Tracking objects?', 'CPU profiling?', 'Tracing?', 'Debugging?']
     ];
     if (verbose)
       processTable[0].push('Stop reason', 'Stop time');
@@ -258,6 +260,7 @@ function printServiceStatus(service, callback) {
         proc.isTrackingObjects ? 'yes' : '',
         profiling(proc),
         proc.isTracing ? 'yes' : '',
+        proc.debugger && proc.debugger.running ? 'yes' : '',
       ];
       if (verbose)
         procEntry.push(proc.stopReason, proc.stopTime || '');
@@ -755,6 +758,38 @@ function download(instance, profileId, file, callback) {
       }
     }
   });
+}
+
+function cmdDebuggerStart(client) {
+  var target = mandatory('target');
+
+  client.resolveTarget(target,
+    function(err, service, executor, instance, process) {
+      dieIf(err);
+      process.startDebugger(function(err, response) {
+          dieIf(err);
+          debug('startDebugger: %j', response);
+          console.log('Debugger listening on port %s.', response.port);
+        }
+      );
+    }
+  );
+}
+
+function cmdDebuggerStop(client) {
+  var target = mandatory('target');
+
+  client.resolveTarget(target,
+    function(err, service, executor, instance, process) {
+      dieIf(err);
+      process.stopDebugger(function(err, response) {
+          dieIf(err);
+          debug('stopDebugger: %j', response);
+          console.log('Debugger was disabled.', response.port);
+        }
+      );
+    }
+  );
 }
 
 function mandatory(name) {
