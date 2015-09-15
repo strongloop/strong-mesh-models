@@ -1,3 +1,5 @@
+'use strict';
+
 var debug = require('debug')('strong-mesh-models:server:express-usage');
 var deleteOld = require('./delete-old');
 var url = require('url');

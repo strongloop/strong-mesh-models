@@ -1,7 +1,9 @@
+'use strict';
+
 var async = require('async');
 var debug = require('debug')('strong-mesh-models:server:server-service');
-var fs = require('fs');
 var fmt = require('util').format;
+var fs = require('fs');
 
 exports = module.exports = extendServerService;
 exports.modelWatcher = modelWatcher;

@@ -1,3 +1,5 @@
+'use strict';
+
 var async = require('async');
 var debug = require('debug')('strong-mesh-models:server:service-process');
 var fmt = require('util').format;
@@ -397,4 +399,56 @@ function extendServiceProcess(ServiceProcess) {
     );
   }
   ServiceProcess.prototype.applyPatch = applyPatch;
+
+  /**
+   * Start DevTools Debugger backend on a worker.
+   *
+   * @param {function} callback Callback function.
+   */
+  function startDebugger(callback) {
+    this._appCommand({
+        cmd: 'dbg-start',
+        target: this.pid,
+      }, callback
+    );
+  }
+  ServiceProcess.prototype.startDebugger = startDebugger;
+
+  /**
+   * Stop DevTools Debugger backend on a worker.
+   *
+   * @param {function} callback Callback function.
+   */
+  function stopDebugger(callback) {
+    this._appCommand({
+        cmd: 'dbg-stop',
+        target: this.pid,
+      }, callback
+    );
+  }
+  ServiceProcess.prototype.stopDebugger = stopDebugger;
+
+  function recordDebuggerStatusUpdate(instanceId, pInfo, callback) {
+    function updateDebuggerStatus(proc, next) {
+      if (!proc)
+        return next(Error(
+          fmt('Process state update for unknown process: %j', pInfo)));
+
+      proc.updateAttributes({
+        debugger: {
+          running: pInfo.running,
+          port: pInfo.port
+        }
+      }, next);
+    }
+
+    return async.waterfall([
+      _findProcess(instanceId, +pInfo.wid, pInfo.pid, +pInfo.pst),
+      updateDebuggerStatus
+    ], function(err, proc) {
+      debug('Process entry updated: %j', err || proc);
+      callback(err);
+    });
+  }
+  ServiceProcess.recordDebuggerStatusUpdate = recordDebuggerStatusUpdate;
 }

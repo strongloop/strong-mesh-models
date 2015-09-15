@@ -55,7 +55,7 @@ test('Create and destroy instances', function(t) {
   }
   TestServiceManager.prototype.onInstanceDestroy = onInstanceDestroy;
 
-  t.plan(13);
+  t.plan(20);
   var server = meshServer(new TestServiceManager());
   server.set('port', 0);
   server.start(function(err, port) {

@@ -1,3 +1,5 @@
+'use strict';
+
 var async = require('async');
 var debug = require('debug')('strong-mesh-models:server:service-metric');
 var deleteOld = require('./delete-old');
