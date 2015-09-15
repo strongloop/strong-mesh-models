@@ -75,6 +75,10 @@
     "agentVersion": {
       "type": "string",
       "description": "The version of strong-agent running on this instance"
+    },
+    "debuggerVersion": {
+      "type": "string",
+      "description": "The version of strong-debugger running on this instance"
     }
   },
   "validations": [],

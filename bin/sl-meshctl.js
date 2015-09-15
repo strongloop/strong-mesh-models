@@ -220,7 +220,8 @@ function printServiceStatus(service, callback) {
     printServiceEnv(summary.env);
 
     var instanceTable = [[
-      '  ', 'Version', 'Agent version', 'Cluster size', 'Driver metadata'
+      '  ', 'Version', 'Agent version', 'Debugger version',
+      'Cluster size', 'Driver metadata'
     ]];
     for (var i in summary.instances) {
       if (!summary.instances.hasOwnProperty(i)) continue;
@@ -232,7 +233,8 @@ function printServiceStatus(service, callback) {
                 ? JSON.stringify(inst.driverMeta.user)
                 : 'N/A';
       instanceTable.push(['',
-        inst.version, inst.agentVersion, inst.clusterSize, meta,
+        inst.version, inst.agentVersion, inst.debuggerVersion,
+        inst.clusterSize, meta,
       ]);
     }
     console.log('Instances:\n%s', table(instanceTable, {

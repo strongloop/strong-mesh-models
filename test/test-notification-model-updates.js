@@ -60,6 +60,7 @@ test('Test notifications', function(t) {
       },
       setSize: 1,
       agentVersion: '1.0.2',
+      debuggerVersion: '1.0.9',
       restartCount: 10,
 
       wid: 0,
@@ -98,6 +99,7 @@ test('Test notifications', function(t) {
       }, 'Container information should be set');
       tt.equal(inst.setSize, 1, 'set size should match');
       tt.equal(inst.agentVersion, '1.0.2', 'agent version should match');
+      tt.equal(inst.debuggerVersion, '1.0.9', 'debugger version should match');
       tt.equal(inst.restartCount, 10, 'restart count should match');
       tt.end();
     });
@@ -434,6 +436,7 @@ test('Test notifications', function(t) {
       },
       setSize: 1,
       agentVersion: '1.0.2',
+      debuggerVersion: '1.0.9',
       restartCount: 10,
 
       wid: 0,
