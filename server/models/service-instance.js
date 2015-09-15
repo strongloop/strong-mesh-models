@@ -83,6 +83,7 @@ module.exports = function extendServiceInstance(ServiceInstance) {
         applicationName: instInfo.appName,
         setSize: instInfo.setSize,
         agentVersion: instInfo.agentVersion,
+        debuggerVersion: instInfo.debuggerVersion,
 
         // Information from strong-pm's mangling of supervisor message
         PMPort: instInfo.PMPort || 0,

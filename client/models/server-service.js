@@ -80,6 +80,7 @@ module.exports = function extServerService(ServerService) {
           port: instance.PMPort || 'N/A',
           restartCount: instance.restartCount || 0,
           agentVersion: instance.agentVersion || 'N/A',
+          debuggerVersion: instance.debuggerVersion || 'N/A',
           nodeVersion: instance.containerVersionInfo.node || 'N/A',
           driverMeta: instance.containerVersionInfo.driverMeta || {},
           clusterSize: instance.setSize

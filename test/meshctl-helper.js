@@ -46,6 +46,7 @@ function testCmdHelper(t, TestServiceManager, callback, MockMinkelite) {
         PMPort: 8701,
         restartCount: 0,
         agentVersion: '7.8.9',
+        debuggerVersion: '5.6.7',
         setSize: 3,
       };
 
