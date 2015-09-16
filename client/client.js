@@ -150,7 +150,8 @@ Client.prototype.serviceList = serviceList;
 function serviceDestroy(nameOrId, callback) {
   var Service = this.models.ServerService;
 
-  var q = {where: {or: [{name: nameOrId}, {id: nameOrId}]}};
+  var q = (typeof nameOrId === 'string') ?
+      {wherer: {name: nameOrId}} : {where: {id: nameOrId}};
   Service.findOne(q, function(err, service) {
     if (err || !service) return callback(err, service);
 
