@@ -1,8 +1,13 @@
+var assert = require('assert');
 var async = require('async');
+var instModelWatcher = require('../../lib/helper').instModelWatcher;
+var shouldWatch = require('../../lib/helper').shouldWatch;
 
 module.exports = function extendGateway(Gateway) {
   // Refer to server-service.js for description of instance vs currentInstance
   // vs data.
+
+  var name = 'gateway';
 
   Gateway.observe('after save', function(ctx, next) {
     var serviceManager = Gateway.app.serviceManager;
@@ -23,9 +28,27 @@ module.exports = function extendGateway(Gateway) {
         );
       });
     }
+
+    if (shouldWatch(serviceManager, name)) {
+      var watcherCtx = {
+        'modelName': name,
+        'watcher': serviceManager._dbWatcher,
+        'onUpdate': serviceManager.onGatewayUpdate,
+        'onDestroy': serviceManager.onGatewayDestroy,
+        'modelInst': serviceManager._meshApp.models.Gateway,
+      };
+      instModelWatcher(watcherCtx);
+    }
+
   });
 
   Gateway.observe('before delete', function(ctx, next) {
+    var serviceManager = Gateway.app.serviceManager;
+    if (serviceManager._dbMatcher) {
+      assert(!shouldWatch(serviceManager, name));
+      setImmediate(next);
+      return;
+    }
     ctx.Model.find({where: ctx.where}, function(err, instances) {
       if (err) next(err);
       return async.each(

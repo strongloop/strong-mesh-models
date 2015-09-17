@@ -1,6 +1,9 @@
+var assert = require('assert');
 var async = require('async');
 var debug = require('debug')('strong-mesh-models:server:service-instance');
 var fmt = require('util').format;
+var instModelWatcher = require('../../lib/helper').instModelWatcher;
+var shouldWatch = require('../../lib/helper').shouldWatch;
 
 module.exports = function extendServiceInstance(ServiceInstance) {
   ServiceInstance.beforeRemote(
@@ -29,6 +32,8 @@ module.exports = function extendServiceInstance(ServiceInstance) {
   // Refer to server-service.js for description of instance vs currentInstance
   // vs data.
 
+  var name = 'serviceinstance';
+
   ServiceInstance.observe('after save', function(ctx, next) {
     var serviceManager = ServiceInstance.app.serviceManager;
     var instance = ctx.instance || ctx.currentInstance;
@@ -56,11 +61,28 @@ module.exports = function extendServiceInstance(ServiceInstance) {
         );
       });
     }
+
+    if (shouldWatch(serviceManager, name)) {
+      var watcherCtx = {
+        'modelName': name,
+        'watcher': serviceManager._dbWatcher,
+        'onUpdate': serviceManager.onInstanceUpdate,
+        'onDestroy': serviceManager.onInstanceDestroy,
+        'modelInst': serviceManager._meshApp.models.ServiceInstance,
+      };
+      instModelWatcher(watcherCtx);
+    }
+
   });
 
   ServiceInstance.observe('before delete', function(ctx, next) {
     var serviceManager = ServiceInstance.app.serviceManager;
 
+    if (serviceManager._dbMatcher) {
+      assert(!shouldWatch(serviceManager, name));
+      setImmediate(next);
+      return;
+    }
     ctx.Model.find({where: ctx.where}, function(err, instances) {
       if (err) next(err);
       return async.each(
