@@ -1,3 +1,5 @@
+Copyright (c) 2013-2015 StrongLoop, Inc.
+
 StrongLoop License
 
 STRONGLOOP SUBSCRIPTION AGREEMENT
@@ -319,4 +321,3 @@ venue.
 9.8 Notices.  All notices must be in writing and shall be effective three (3)
 days after the date sent to the other party's headquarters, Attention Chief
 Financial Officer.
-

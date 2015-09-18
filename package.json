@@ -12,10 +12,7 @@
     "url": "https://github.com/strongloop/strong-mesh-models.git"
   },
   "author": "engineering@strongloop.com",
-  "license": {
-    "name": "StrongLoop",
-    "url": "https://github.com/strongloop/strong-mesh-models/blob/master/LICENSE.md"
-  },
+  "license": "SEE LICENSE IN LICENSE.md",
   "main": "index.js",
   "bin": {
     "sl-meshctl": "./bin/sl-meshctl.js",
