@@ -14,11 +14,6 @@
   "maximumLineLength": {
      "value": 80
   },
-  "validateJSDoc": {
-    "checkParamNames": false,
-    "checkRedundantParams": false,
-    "requireParamTypes": true
-  },
   "maximumLineLength": {
    "value": 80,
    "allowComments": true,

@@ -27,7 +27,7 @@ test('Test cpu-profiling commands', function(t) {
       instance.processes({where: {pid: 1231}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
         proc = proc[0];
-        proc.startDebugger(function(err, status) {
+        instance.startDebugger(proc.id, function(err, status) {
           tt.ifError(err, 'call should not error');
           tt.deepEqual(status, {port: 12345});
           tt.end();
@@ -59,7 +59,7 @@ test('Test cpu-profiling commands', function(t) {
       instance.processes({where: {pid: 1231}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
         proc = proc[0];
-        proc.stopDebugger(function(err /*, status*/) {
+        instance.stopDebugger(proc.id, function(err /*, status*/) {
           tt.ifError(err, 'call should not error');
           tt.end();
         });

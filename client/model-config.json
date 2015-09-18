@@ -11,7 +11,8 @@
     "dataSource": "remote"
   },
   "User": {
-    "dataSource": "remote"
+    "dataSource": "remote",
+    "public": false
   },
   "AccessToken": {
     "dataSource": "memory",

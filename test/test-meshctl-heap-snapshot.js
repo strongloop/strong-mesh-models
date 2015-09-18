@@ -28,7 +28,7 @@ test('Test heap-snapshot commands', function(t) {
       instance.processes({where: {pid: 1231}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
         proc = proc[0];
-        proc.heapSnapshot(function(err, response) {
+        instance.heapSnapshot(proc.id, function(err, response) {
           tt.ifError(err, 'call should not error');
           tt.deepEqual(response, {
             url: '/api/Services/1/ProfileDatas/1/download', profileId: 1
@@ -64,7 +64,7 @@ test('Test heap-snapshot commands', function(t) {
       instance.processes({where: {pid: 1232}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
         proc = proc[0];
-        proc.heapSnapshot(function(err, response) {
+        instance.heapSnapshot(proc.id, function(err, response) {
           tt.ifError(err);
           service.profileDatas.findById(response.profileId,
             function(err, prof) {

@@ -322,6 +322,45 @@ module.exports = function extendServiceInstance(ServiceInstance) {
   }
   ServiceInstance.prototype.logDump = logDump;
 
+  function proxyToProcess0(fn) {
+    ServiceInstance.prototype[fn] = function(pk, callback) {
+      this.processes.findById(pk, function(err, proc) {
+        if (err) return callback(err);
+        proc[fn](callback);
+      });
+    };
+  }
+
+  function proxyToProcess1(fn) {
+    ServiceInstance.prototype[fn] = function(pk, arg1, callback) {
+      this.processes.findById(pk, function(err, proc) {
+        if (err) return callback(err);
+        proc[fn](arg1, callback);
+      });
+    };
+  }
+
+  // Related models
+  proxyToProcess0('agentTraces');
+  proxyToProcess0('expressUsageRecords');
+  proxyToProcess0('serviceMetrics');
+
+  // Methods
+  proxyToProcess0('getMetaTransactions');
+  proxyToProcess1('getTransaction');
+  proxyToProcess0('getTimeline');
+  proxyToProcess1('getTrace');
+  proxyToProcess0('stopObjectTracking');
+  proxyToProcess0('startObjectTracking');
+  proxyToProcess1('startCpuProfiling');
+  proxyToProcess0('stopCpuProfiling');
+  proxyToProcess0('heapSnapshot');
+  proxyToProcess1('queryCapabilities');
+  proxyToProcess0('queryCapabilitiesAll');
+  proxyToProcess1('applyPatch');
+  proxyToProcess0('startDebugger');
+  proxyToProcess0('stopDebugger');
+
   // Only allow updating ServiceInstance
   ServiceInstance.disableRemoteMethod('create', true);
   ServiceInstance.disableRemoteMethod('upsert', true);

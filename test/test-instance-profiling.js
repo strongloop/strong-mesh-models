@@ -33,8 +33,7 @@ test('Check heap and cpu profiling populates Profile models', function(t) {
           tt.equal(processes.length, 1, 'one process should be found');
 
           var process = processes[0];
-
-          process.heapSnapshot(function(err, res) {
+          instance.heapSnapshot(process.id, function(err, res) {
             tt.ifError(err, 'Command should not return error');
             tt.ok(res.profileId, 'Profile ID should be available');
             service.profileDatas.findById(res.profileId, function(err, p) {
@@ -55,12 +54,12 @@ test('Check heap and cpu profiling populates Profile models', function(t) {
 
       t.test('heap snapshot delete', function(tt) {
         TestServiceManager.prototype.onCtlRequest = assertCtlRequests(tt, 1, 1);
-        instance.processes({where: {id: 1}}, function(err, processes) {
+        instance.heapSnapshot(1, function(err, res) {
           tt.ifError(err);
 
-          processes[0].heapSnapshot(function(err, res) {
-            tt.ifError(err);
-
+          // After starting heap snapshot, need to wait a tick to ensure that
+          // agent has enough time to dump the snapshot to file.
+          setImmediate(function() {
             service.profileDatas.findById(res.profileId, function(err, p) {
               tt.ifError(err);
 
@@ -68,7 +67,7 @@ test('Check heap and cpu profiling populates Profile models', function(t) {
                 tt.ifError(err);
                 tt.equal(data, 'PROFILE');
 
-                p.constructor.deleteById(p.id, function(err) {
+                service.profileDatas.deleteById(p.id, function(err) {
                   tt.ifError(err);
                   fs.readFile(p.fileName, function(err) {
                     debug('%j should be deleted: %s', p.fileName, err);
@@ -93,7 +92,7 @@ test('Check heap and cpu profiling populates Profile models', function(t) {
           if (!process)
             return tt.end();
 
-          process.stopCpuProfiling(function(err, res) {
+          instance.stopCpuProfiling(process.id, function(err, res) {
             tt.ok(!err, 'Command should not return error');
             tt.ok(res.profileId, 'Profile ID should be available');
             service.profileDatas.findById(res.profileId, function(err, p) {

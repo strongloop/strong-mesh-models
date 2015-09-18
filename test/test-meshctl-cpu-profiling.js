@@ -28,7 +28,7 @@ test('Test cpu-profiling commands', function(t) {
       instance.processes({where: {pid: 1231}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
         proc = proc[0];
-        proc.startCpuProfiling({}, function(err, status) {
+        instance.startCpuProfiling(proc.id, {}, function(err, status) {
           tt.ifError(err, 'call should not error');
           tt.deepEqual(status, {
             url: '/api/Services/1/ProfileDatas/1/download', profileId: 1
@@ -65,13 +65,15 @@ test('Test cpu-profiling commands', function(t) {
       instance.processes({where: {pid: 1232}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
         proc = proc[0];
-        proc.startCpuProfiling({watchdogTimeout: 10}, function(err, status) {
-          tt.ifError(err, 'call should not error');
-          tt.deepEqual(status, {
-            url: '/api/Services/1/ProfileDatas/2/download', profileId: 2
-          }, 'Response should match');
-          tt.end();
-        });
+        instance.startCpuProfiling(proc.id, {watchdogTimeout: 10},
+          function(err, status) {
+            tt.ifError(err, 'call should not error');
+            tt.deepEqual(status, {
+              url: '/api/Services/1/ProfileDatas/2/download', profileId: 2
+            }, 'Response should match');
+            tt.end();
+          }
+        );
       });
     });
 
@@ -102,7 +104,7 @@ test('Test cpu-profiling commands', function(t) {
       instance.processes({where: {pid: 1233}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
         proc = proc[0];
-        proc.startCpuProfiling({}, function(err /*, status*/) {
+        instance.startCpuProfiling(proc.id, {}, function(err /*, status*/) {
           tt.ok(err, 'call should error');
           tt.end();
         });
@@ -134,7 +136,7 @@ test('Test cpu-profiling commands', function(t) {
       instance.processes({where: {pid: 1231}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
         proc = proc[0];
-        proc.stopCpuProfiling(function(err, status) {
+        instance.stopCpuProfiling(proc.id, function(err, status) {
           tt.ifError(err, 'call should not error');
           tt.deepEqual(status, {
             url: '/api/Services/1/ProfileDatas/1/download', profileId: 1
