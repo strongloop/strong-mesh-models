@@ -787,7 +787,7 @@ function cmdDebuggerStop(client) {
       instance.stopDebugger(process.id, function(err, response) {
           dieIf(err);
           debug('stopDebugger: %j', response);
-          console.log('Debugger was disabled.', response.port);
+          console.log('Debugger was disabled.');
         }
       );
     }
