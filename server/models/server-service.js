@@ -1,6 +1,6 @@
 var assert = require('assert');
 var async = require('async');
-var debug = require('debug')('strong-mesh-models:server:server-service');
+var debug = require('debug')('strong-mesh-models:service-manager');
 var fs = require('fs');
 var fmt = require('util').format;
 var instModelWatcher = require('../../lib/helper').instModelWatcher;
@@ -40,8 +40,40 @@ module.exports = function extendServerService(ServerService) {
 
   ServerService.observe('after save', function(ctx, next) {
     var serviceManager = ServerService.app.serviceManager;
-    var instance = ctx.instance || ctx.currentInstance;
+    debug('------------------ ServerService SAVE %j.', ctx.where);
 
+    if (serviceManager._dbWatcher) {
+      if (!shouldWatch(serviceManager, name)) {
+        setImmediate(next);
+        return;
+      }
+      var watcherCtx = {
+        'modelName': name,
+        'watcher': serviceManager._dbWatcher,
+        'save': saveObserver,
+        'delete': deleteObserver,
+        'modelInst': serviceManager._meshApp.models.ServerService,
+      };
+      instModelWatcher(watcherCtx);
+    }
+    saveObserver(ctx, next);
+  });
+
+  ServerService.observe('before delete', function(ctx, next) {
+    var serviceManager = ServerService.app.serviceManager;
+    debug('------------------ ServerService DELETE %j.', ctx.where);
+
+    if (serviceManager._dbWatcher) {
+      assert(!shouldWatch(serviceManager, name));
+      setImmediate(next);
+      return;
+    }
+    deleteObserver(ctx, next);
+  });
+
+  function saveObserver(ctx, next) {
+    var serviceManager = ServerService.app.serviceManager;
+    var instance = ctx.instance || ctx.currentInstance;
     if (instance) {
       // Full save of Service
       if (serviceManager.onServiceUpdate.length === 2) {
@@ -66,27 +98,9 @@ module.exports = function extendServerService(ServerService) {
         );
       });
     }
+  }
 
-    if (shouldWatch(serviceManager, name)) {
-      var watcherCtx = {
-        'modelName': name,
-        'watcher': serviceManager._dbWatcher,
-        'onUpdate': serviceManager.onServiceUpdate,
-        'onDestroy': serviceManager.onServiceDestroy,
-        'modelInst': serviceManager._meshApp.models.ServerService,
-      };
-      instModelWatcher(watcherCtx);
-    }
-
-  });
-
-  ServerService.observe('before delete', function(ctx, next) {
-    var serviceManager = ServerService.app.serviceManager;
-    if (serviceManager._dbMatcher) {
-      assert(!shouldWatch(serviceManager, name));
-      setImmediate(next);
-      return;
-    }
+  function deleteObserver(ctx, next) {
     ctx.Model.find({where: ctx.where}, function(err, instances) {
       if (err) next(err);
       return async.each(
@@ -97,7 +111,7 @@ module.exports = function extendServerService(ServerService) {
         next
       );
     });
-  });
+  }
 
   function setServiceCommit(serviceId, commit, callback) {
     ServerService.findById(serviceId, function(err, service) {

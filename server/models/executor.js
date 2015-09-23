@@ -1,5 +1,6 @@
 var assert = require('assert');
 var async = require('async');
+var debug = require('debug')('strong-mesh-models:service-manager');
 var instModelWatcher = require('../../lib/helper').instModelWatcher;
 var shouldWatch = require('../../lib/helper').shouldWatch;
 
@@ -12,8 +13,40 @@ module.exports = function(Executor) {
 
   Executor.observe('after save', function(ctx, next) {
     var serviceManager = Executor.app.serviceManager;
-    var instance = ctx.instance || ctx.currentInstance;
+    debug('------------------ Executor SAVE %j.', ctx.where);
 
+    if (serviceManager._dbWatcher) {
+      if (!shouldWatch(serviceManager, name)) {
+        setImmediate(next);
+        return;
+      }
+      var watcherCtx = {
+        'modelName': name,
+        'watcher': serviceManager._dbWatcher,
+        'save': saveObserver,
+        'delete': deleteObserver,
+        'modelInst': serviceManager._meshApp.models.Executor,
+      };
+      instModelWatcher(watcherCtx);
+    }
+    saveObserver(ctx, next);
+  });
+
+  Executor.observe('before delete', function(ctx, next) {
+    var serviceManager = Executor.app.serviceManager;
+    debug('------------------ Executor DELETE %j.', ctx.where);
+    if (serviceManager._dbWatcher) {
+      assert(!shouldWatch(serviceManager, name));
+      setImmediate(next);
+      return;
+    }
+    deleteObserver(ctx, next);
+  });
+
+  function saveObserver(ctx, next) {
+    var serviceManager = Executor.app.serviceManager;
+
+    var instance = ctx.instance || ctx.currentInstance;
     if (instance) {
       if (serviceManager.onExecutorUpdate.length === 2) {
         serviceManager.onExecutorUpdate(instance, next);
@@ -38,26 +71,9 @@ module.exports = function(Executor) {
       });
     }
 
-    if (shouldWatch(serviceManager, name)) {
-      var watcherCtx = {
-        'modelName': name,
-        'watcher': serviceManager._dbWatcher,
-        'onUpdate': serviceManager.onExecutorUpdate,
-        'onDestroy': serviceManager.onExecutorDestroy,
-        'modelInst': serviceManager._meshApp.models.Executor,
-      };
-      instModelWatcher(watcherCtx);
-    }
+  }
 
-  });
-
-  Executor.observe('before delete', function(ctx, next) {
-    var serviceManager = Executor.app.serviceManager;
-    if (serviceManager._dbMatcher) {
-      assert(!shouldWatch(serviceManager, name));
-      setImmediate(next);
-      return;
-    }
+  function deleteObserver(ctx, next) {
     ctx.Model.find({where: ctx.where}, function(err, instances) {
       if (err) next(err);
       return async.each(
@@ -68,7 +84,7 @@ module.exports = function(Executor) {
         next
       );
     });
-  });
+  }
 
   Executor.prototype.shutdown = function(callback) {
     Executor.app.serviceManager.onExecutorRequest(

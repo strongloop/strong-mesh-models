@@ -1,5 +1,6 @@
 var assert = require('assert');
 var async = require('async');
+var debug = require('debug')('strong-mesh-models:service-manager');
 var instModelWatcher = require('../../lib/helper').instModelWatcher;
 var shouldWatch = require('../../lib/helper').shouldWatch;
 
@@ -11,8 +12,40 @@ module.exports = function extendGateway(Gateway) {
 
   Gateway.observe('after save', function(ctx, next) {
     var serviceManager = Gateway.app.serviceManager;
-    var instance = ctx.instance || ctx.currentInstance;
 
+    debug('------------------ Gateway SAVE %j.', ctx.where);
+    if (serviceManager._dbWatcher) {
+      if (!shouldWatch(serviceManager, name)) {
+        setImmediate(next);
+        return;
+      }
+      var watcherCtx = {
+        'modelName': name,
+        'watcher': serviceManager._dbWatcher,
+        'save': saveObserver,
+        'delete': deleteObserver,
+        'modelInst': serviceManager._meshApp.models.Gateway,
+      };
+      instModelWatcher(watcherCtx);
+    }
+    saveObserver(ctx, next);
+  });
+
+  Gateway.observe('before delete', function(ctx, next) {
+    var serviceManager = Gateway.app.serviceManager;
+    debug('------------------ Gateway DELETE %j.', ctx.where);
+    if (serviceManager._dbWatcher) {
+      assert(!shouldWatch(serviceManager, name));
+      setImmediate(next);
+      return;
+    }
+    deleteObserver(ctx, next);
+  });
+
+  function saveObserver(ctx, next) {
+    var serviceManager = Gateway.app.serviceManager;
+
+    var instance = ctx.instance || ctx.currentInstance;
     if (instance) {
       serviceManager.onGatewayUpdate(instance, ctx.isNewInstance, next);
     } else {
@@ -29,26 +62,9 @@ module.exports = function extendGateway(Gateway) {
       });
     }
 
-    if (shouldWatch(serviceManager, name)) {
-      var watcherCtx = {
-        'modelName': name,
-        'watcher': serviceManager._dbWatcher,
-        'onUpdate': serviceManager.onGatewayUpdate,
-        'onDestroy': serviceManager.onGatewayDestroy,
-        'modelInst': serviceManager._meshApp.models.Gateway,
-      };
-      instModelWatcher(watcherCtx);
-    }
+  }
 
-  });
-
-  Gateway.observe('before delete', function(ctx, next) {
-    var serviceManager = Gateway.app.serviceManager;
-    if (serviceManager._dbMatcher) {
-      assert(!shouldWatch(serviceManager, name));
-      setImmediate(next);
-      return;
-    }
+  function deleteObserver(ctx, next) {
     ctx.Model.find({where: ctx.where}, function(err, instances) {
       if (err) next(err);
       return async.each(
@@ -59,5 +75,6 @@ module.exports = function extendGateway(Gateway) {
         next
       );
     });
-  });
+  }
+
 };
