@@ -46,8 +46,9 @@ module.exports = function extendServiceInstance(ServiceInstance) {
       var watcherCtx = {
         'modelName': name,
         'watcher': serviceManager._dbWatcher,
-        'save': saveObserver,
-        'delete': deleteObserver,
+        'saveFun': saveObserver,
+        'saveNext': next,
+        'deleteFun': deleteObserver,
         'modelInst': serviceManager._meshApp.models.ServiceInstance,
       };
       instModelWatcher(watcherCtx);
@@ -60,7 +61,7 @@ module.exports = function extendServiceInstance(ServiceInstance) {
     debug('------------------ ServiceInstance DELETE %j.', ctx.where);
 
     if (serviceManager._dbWatcher) {
-      assert(!shouldWatch(serviceManager, name));
+      assert(!shouldWatch(serviceManager, name, next));
       setImmediate(next);
       return;
     }

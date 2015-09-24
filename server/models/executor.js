@@ -23,8 +23,9 @@ module.exports = function(Executor) {
       var watcherCtx = {
         'modelName': name,
         'watcher': serviceManager._dbWatcher,
-        'save': saveObserver,
-        'delete': deleteObserver,
+        'saveFun': saveObserver,
+        'saveNext': next,
+        'deleteFun': deleteObserver,
         'modelInst': serviceManager._meshApp.models.Executor,
       };
       instModelWatcher(watcherCtx);
@@ -36,7 +37,7 @@ module.exports = function(Executor) {
     var serviceManager = Executor.app.serviceManager;
     debug('------------------ Executor DELETE %j.', ctx.where);
     if (serviceManager._dbWatcher) {
-      assert(!shouldWatch(serviceManager, name));
+      assert(!shouldWatch(serviceManager, name, next));
       setImmediate(next);
       return;
     }
