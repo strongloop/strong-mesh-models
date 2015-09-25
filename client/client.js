@@ -174,12 +174,9 @@ function serviceFind(serviceNameOrId, callback) {
 
   var filter = {order: ['id ASC']};
   if (serviceNameOrId) {
-    filter.where = {
-      or: [
-        {name: serviceNameOrId},
-        {id: serviceNameOrId}
-      ]
-    };
+    filter.where = (typeof serviceNameOrId === 'string') ?
+        {name: serviceNameOrId} :
+        {or: [{name: serviceNameOrId}, {id: serviceNameOrId}]};
   }
   Service.findOne(filter, callback);
 }
@@ -187,14 +184,9 @@ Client.prototype.serviceFind = serviceFind;
 
 function groupCreate(serviceNameOrId, groupName, scale, callback) {
   var Service = this.models.ServerService;
-  var filter = {
-    where: {
-      or: [
-        {name: serviceNameOrId},
-        {id: serviceNameOrId}
-      ]
-    }
-  };
+  var filter = (typeof serviceNameOrId === 'string') ?
+      {where: {name: serviceNameOrId}} :
+      {where: {or: [{name: serviceNameOrId}, {id: serviceNameOrId}]}};
   Service.findOne(filter, function(err, service) {
     if (!service) {
       // We could create it, but then it wouldn't have a default. Until further
@@ -227,14 +219,9 @@ Client.prototype.groupCreate = groupCreate;
 function instanceList(serviceNameOrId, callback) {
   var Service = this.models.ServerService;
   var ServiceInstance = this.models.ServiceInstance;
-  var filter = {
-    where: {
-      or: [
-        {name: serviceNameOrId},
-        {id: serviceNameOrId}
-      ]
-    }
-  };
+  var filter = (typeof serviceNameOrId === 'string') ?
+      {where: {name: serviceNameOrId}} :
+      {where: {or: [{name: serviceNameOrId}, {id: serviceNameOrId}]}};
   Service.findOne(filter, function(err, service) {
     if (err || !service) return callback(err, service);
 
@@ -280,12 +267,9 @@ function resolveTarget(targetId, callback) {
 
   var serviceFilter = {order: ['id ASC']};
   if (serviceId) {
-    serviceFilter.where = {
-      or: [
-        {name: serviceId},
-        {id: serviceId}
-      ]
-    };
+    serviceFilter.where = (typeof serviceId === 'string') ?
+      {name: serviceId} :
+      {or: [{name: serviceId}, {id: serviceId}]};
   }
   return ServerService.findOne(serviceFilter, resolveExecutor);
 
@@ -293,7 +277,12 @@ function resolveTarget(targetId, callback) {
     if (err) return callback(err);
     if (!service) return callback(Error('Service not found'));
     var executorFilter = {order: ['id ASC']};
-    if (executorId) executorFilter.where = {id: executorId};
+    // if (executorId) executorFilter.where = {id: executorId};
+    if (executorId) {
+      executorFilter.where = (typeof executorId === 'string') ?
+        {name: executorId} :
+        {or: [{name: executorId}, {id: executorId}]};
+    }
     Executor.findOne(executorFilter, resolveInstance.bind(null, service));
   }
 
@@ -349,12 +338,9 @@ function resolveInstance(targetId, callback) {
 
   var serviceFilter = {order: ['id ASC']};
   if (serviceId) {
-    serviceFilter.where = {
-      or: [
-        {name: serviceId},
-        {id: serviceId}
-      ]
-    };
+    serviceFilter.where = (typeof serviceId === 'string') ?
+      {name: serviceId} :
+      {or: [{name: serviceId}, {id: serviceId}]};
   }
   return ServerService.findOne(serviceFilter, resolveExecutor);
 
@@ -362,7 +348,12 @@ function resolveInstance(targetId, callback) {
     if (err) return callback(err);
     if (!service) return callback(Error('Service not found'));
     var executorFilter = {order: ['id ASC']};
-    if (executorId) executorFilter.where = {id: executorId};
+    // if (executorId) executorFilter.where = {id: executorId};
+    if (executorId) {
+      executorFilter.where = (typeof executorId === 'string') ?
+        {name: executorId} :
+        {or: [{name: executorId}, {id: executorId}]};
+    }
     Executor.findOne(executorFilter, resolveInstance.bind(null, service));
   }
 

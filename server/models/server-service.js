@@ -1,4 +1,3 @@
-var assert = require('assert');
 var async = require('async');
 var debug = require('debug')('strong-mesh-models:service-manager');
 var fs = require('fs');
@@ -36,24 +35,22 @@ module.exports = function extendServerService(ServerService) {
     process.nextTick(next);
   });
 
-  var name = 'serverservice';
+  var name = ServerService.modelName.toLowerCase();
 
   ServerService.observe('after save', function(ctx, next) {
     var serviceManager = ServerService.app.serviceManager;
-    debug('------------------ ServerService SAVE %j.', ctx.where);
-
     if (serviceManager._dbWatcher) {
-      if (!shouldWatch(serviceManager, name)) {
+      if (!shouldWatch(serviceManager, name, next, 'save')) {
         setImmediate(next);
         return;
       }
       var watcherCtx = {
         'modelName': name,
         'watcher': serviceManager._dbWatcher,
-        'saveFun': saveObserver,
+        'saveFn': saveObserver,
         'saveNext': next,
-        'deleteFun': deleteObserver,
-        'modelInst': serviceManager._meshApp.models.ServerService,
+        'deleteFn': deleteObserver,
+        'modelInst': ServerService,
       };
       instModelWatcher(watcherCtx);
     }
@@ -62,10 +59,9 @@ module.exports = function extendServerService(ServerService) {
 
   ServerService.observe('before delete', function(ctx, next) {
     var serviceManager = ServerService.app.serviceManager;
-    debug('------------------ ServerService DELETE %j.', ctx.where);
-
     if (serviceManager._dbWatcher) {
-      assert(!shouldWatch(serviceManager, name, next));
+      if (!shouldWatch(serviceManager, name, next, 'delete'))
+        debug('should be watching at %s', name);
       setImmediate(next);
       return;
     }

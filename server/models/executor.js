@@ -1,4 +1,3 @@
-var assert = require('assert');
 var async = require('async');
 var debug = require('debug')('strong-mesh-models:service-manager');
 var instModelWatcher = require('../../lib/helper').instModelWatcher;
@@ -9,24 +8,22 @@ module.exports = function(Executor) {
   // Refer to server-service.js for description of instance vs currentInstance
   // vs data.
 
-  var name = 'executor';
+  var name = Executor.modelName.toLowerCase();
 
   Executor.observe('after save', function(ctx, next) {
     var serviceManager = Executor.app.serviceManager;
-    debug('------------------ Executor SAVE %j.', ctx.where);
-
     if (serviceManager._dbWatcher) {
-      if (!shouldWatch(serviceManager, name)) {
+      if (!shouldWatch(serviceManager, name, next, 'save')) {
         setImmediate(next);
         return;
       }
       var watcherCtx = {
         'modelName': name,
         'watcher': serviceManager._dbWatcher,
-        'saveFun': saveObserver,
+        'saveFn': saveObserver,
         'saveNext': next,
-        'deleteFun': deleteObserver,
-        'modelInst': serviceManager._meshApp.models.Executor,
+        'deleteFn': deleteObserver,
+        'modelInst': Executor,
       };
       instModelWatcher(watcherCtx);
     }
@@ -35,9 +32,9 @@ module.exports = function(Executor) {
 
   Executor.observe('before delete', function(ctx, next) {
     var serviceManager = Executor.app.serviceManager;
-    debug('------------------ Executor DELETE %j.', ctx.where);
     if (serviceManager._dbWatcher) {
-      assert(!shouldWatch(serviceManager, name, next));
+      if (!shouldWatch(serviceManager, name, next, 'delete'))
+        debug('should be watching at %s', name);
       setImmediate(next);
       return;
     }

@@ -1,4 +1,3 @@
-var assert = require('assert');
 var async = require('async');
 var debug = require('debug')('strong-mesh-models:service-manager');
 var instModelWatcher = require('../../lib/helper').instModelWatcher;
@@ -8,24 +7,22 @@ module.exports = function extendGateway(Gateway) {
   // Refer to server-service.js for description of instance vs currentInstance
   // vs data.
 
-  var name = 'gateway';
+  var name = Gateway.modelName.toLowerCase();
 
   Gateway.observe('after save', function(ctx, next) {
     var serviceManager = Gateway.app.serviceManager;
-
-    debug('------------------ Gateway SAVE %j.', ctx.where);
     if (serviceManager._dbWatcher) {
-      if (!shouldWatch(serviceManager, name)) {
+      if (!shouldWatch(serviceManager, name, next, 'save')) {
         setImmediate(next);
         return;
       }
       var watcherCtx = {
         'modelName': name,
         'watcher': serviceManager._dbWatcher,
-        'saveFun': saveObserver,
+        'saveFn': saveObserver,
         'saveNext': next,
-        'deletFune': deleteObserver,
-        'modelInst': serviceManager._meshApp.models.Gateway,
+        'deletFn': deleteObserver,
+        'modelInst': Gateway,
       };
       instModelWatcher(watcherCtx);
     }
@@ -34,9 +31,9 @@ module.exports = function extendGateway(Gateway) {
 
   Gateway.observe('before delete', function(ctx, next) {
     var serviceManager = Gateway.app.serviceManager;
-    debug('------------------ Gateway DELETE %j.', ctx.where);
     if (serviceManager._dbWatcher) {
-      assert(!shouldWatch(serviceManager, name, next));
+      if (!shouldWatch(serviceManager, name, next, 'delete'))
+        debug('should be watching at %s', name);
       setImmediate(next);
       return;
     }
