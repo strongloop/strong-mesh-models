@@ -1,7 +1,9 @@
 var async = require('async');
-var debug = require('debug')('strong-mesh-models:server:server-service');
+var debug = require('debug')('strong-mesh-models:service-manager');
 var fs = require('fs');
 var fmt = require('util').format;
+var instModelWatcher = require('../../lib/helper').instModelWatcher;
+var shouldWatch = require('../../lib/helper').shouldWatch;
 
 module.exports = function extendServerService(ServerService) {
   ServerService.disableRemoteMethod('upsert', true);
@@ -33,10 +35,41 @@ module.exports = function extendServerService(ServerService) {
     process.nextTick(next);
   });
 
+  var name = ServerService.modelName.toLowerCase();
+
   ServerService.observe('after save', function(ctx, next) {
     var serviceManager = ServerService.app.serviceManager;
-    var instance = ctx.instance || ctx.currentInstance;
+    if (serviceManager._dbWatcher) {
+      if (!shouldWatch(serviceManager, name, next, 'save')) {
+        setImmediate(next);
+        return;
+      }
+      var watcherCtx = {
+        'modelName': name,
+        'watcher': serviceManager._dbWatcher,
+        'saveFn': saveObserver,
+        'deleteFn': deleteObserver,
+        'modelInst': ServerService,
+        'Model': serviceManager._meshApp.models.ServiceInstance,
+      };
+      instModelWatcher(watcherCtx);
+    }
+    saveObserver(ctx, next);
+  });
 
+  ServerService.observe('before delete', function(ctx, next) {
+    var serviceManager = ServerService.app.serviceManager;
+    if (serviceManager._dbWatcher) {
+      setImmediate(next);
+      return;
+    }
+    deleteObserver(ctx, next);
+  });
+
+  function saveObserver(ctx, next) {
+    console.trace('~~~~~~~~~~ ServerService saveObserver ~~~~~~~~ ');
+    var serviceManager = ServerService.app.serviceManager;
+    var instance = ctx.instance || ctx.currentInstance;
     if (instance) {
       // Full save of Service
       if (serviceManager.onServiceUpdate.length === 2) {
@@ -61,9 +94,10 @@ module.exports = function extendServerService(ServerService) {
         );
       });
     }
-  });
+  }
 
-  ServerService.observe('before delete', function(ctx, next) {
+  function deleteObserver(ctx, next) {
+    console.trace('~~~~~~~~~~ ServerService deleteObserver ~~~~~~~~ ');
     ctx.Model.find({where: ctx.where}, function(err, instances) {
       if (err) next(err);
       return async.each(
@@ -74,7 +108,7 @@ module.exports = function extendServerService(ServerService) {
         next
       );
     });
-  });
+  }
 
   function setServiceCommit(serviceId, commit, callback) {
     ServerService.findById(serviceId, function(err, service) {

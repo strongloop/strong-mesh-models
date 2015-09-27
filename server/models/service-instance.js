@@ -1,6 +1,8 @@
 var async = require('async');
-var debug = require('debug')('strong-mesh-models:server:service-instance');
+var debug = require('debug')('strong-mesh-models:service-manager');
 var fmt = require('util').format;
+var instModelWatcher = require('../../lib/helper').instModelWatcher;
+var shouldWatch = require('../../lib/helper').shouldWatch;
 
 module.exports = function extendServiceInstance(ServiceInstance) {
   ServiceInstance.beforeRemote(
@@ -29,10 +31,41 @@ module.exports = function extendServiceInstance(ServiceInstance) {
   // Refer to server-service.js for description of instance vs currentInstance
   // vs data.
 
+  var name = ServiceInstance.modelName.toLowerCase();
+
   ServiceInstance.observe('after save', function(ctx, next) {
     var serviceManager = ServiceInstance.app.serviceManager;
-    var instance = ctx.instance || ctx.currentInstance;
+    if (serviceManager._dbWatcher) {
+      if (!shouldWatch(serviceManager, name, next, 'save')) {
+        setImmediate(next);
+        return;
+      }
+      var watcherCtx = {
+        'modelName': name,
+        'watcher': serviceManager._dbWatcher,
+        'saveFn': saveObserver,
+        'deleteFn': deleteObserver,
+        'modelInst': ServiceInstance,
+        'Model': serviceManager._meshApp.models.ServiceInstance,
+      };
+      instModelWatcher(watcherCtx);
+    }
+    saveObserver(ctx, next);
+  });
 
+  ServiceInstance.observe('before delete', function(ctx, next) {
+    var serviceManager = ServiceInstance.app.serviceManager;
+    if (serviceManager._dbWatcher) {
+      setImmediate(next);
+      return;
+    }
+    deleteObserver(ctx, next);
+  });
+
+  function saveObserver(ctx, next) {
+    console.trace('~~~~~~~~~~ ServiceInstance saveObserver ~~~~~~~~ ');
+    var serviceManager = ServiceInstance.app.serviceManager;
+    var instance = ctx.instance || ctx.currentInstance;
     if (instance) {
       if (serviceManager.onInstanceUpdate.length === 2) {
         serviceManager.onInstanceUpdate(instance, next);
@@ -56,11 +89,12 @@ module.exports = function extendServiceInstance(ServiceInstance) {
         );
       });
     }
-  });
 
-  ServiceInstance.observe('before delete', function(ctx, next) {
+  }
+
+  function deleteObserver(ctx, next) {
+    console.trace('~~~~~~~~~~ ServiceInstance deleteObserver ~~~~~~~~ ');
     var serviceManager = ServiceInstance.app.serviceManager;
-
     ctx.Model.find({where: ctx.where}, function(err, instances) {
       if (err) next(err);
       return async.each(
@@ -71,7 +105,7 @@ module.exports = function extendServiceInstance(ServiceInstance) {
         next
       );
     });
-  });
+  }
 
   function recordInstanceInfo(instanceId, instInfo, callback) {
     ServiceInstance.findById(instanceId, function(err, instance) {

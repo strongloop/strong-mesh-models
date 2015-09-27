@@ -1,13 +1,48 @@
 var async = require('async');
+var debug = require('debug')('strong-mesh-models:service-manager');
+var instModelWatcher = require('../../lib/helper').instModelWatcher;
+var shouldWatch = require('../../lib/helper').shouldWatch;
 
 module.exports = function extendGateway(Gateway) {
   // Refer to server-service.js for description of instance vs currentInstance
   // vs data.
 
+  var name = Gateway.modelName.toLowerCase();
+
   Gateway.observe('after save', function(ctx, next) {
     var serviceManager = Gateway.app.serviceManager;
-    var instance = ctx.instance || ctx.currentInstance;
+    if (serviceManager._dbWatcher) {
+      if (!shouldWatch(serviceManager, name, next, 'save')) {
+        setImmediate(next);
+        return;
+      }
+      var watcherCtx = {
+        'modelName': name,
+        'watcher': serviceManager._dbWatcher,
+        'saveFn': saveObserver,
+        'deletFn': deleteObserver,
+        'modelInst': Gateway,
+        'Model': serviceManager._meshApp.models.ServiceInstance,
+      };
+      instModelWatcher(watcherCtx);
+    }
+    saveObserver(ctx, next);
+  });
 
+  Gateway.observe('before delete', function(ctx, next) {
+    var serviceManager = Gateway.app.serviceManager;
+    if (serviceManager._dbWatcher) {
+      setImmediate(next);
+      return;
+    }
+    deleteObserver(ctx, next);
+  });
+
+  function saveObserver(ctx, next) {
+    console.trace('~~~~~~~~~~ Gateway saveObserver ~~~~~~~~ ');
+    var serviceManager = Gateway.app.serviceManager;
+
+    var instance = ctx.instance || ctx.currentInstance;
     if (instance) {
       serviceManager.onGatewayUpdate(instance, ctx.isNewInstance, next);
     } else {
@@ -23,9 +58,11 @@ module.exports = function extendGateway(Gateway) {
         );
       });
     }
-  });
 
-  Gateway.observe('before delete', function(ctx, next) {
+  }
+
+  function deleteObserver(ctx, next) {
+    console.trace('~~~~~~~~~~ Gateway deleteObserver ~~~~~~~~ ');
     ctx.Model.find({where: ctx.where}, function(err, instances) {
       if (err) next(err);
       return async.each(
@@ -36,5 +73,6 @@ module.exports = function extendGateway(Gateway) {
         next
       );
     });
-  });
+  }
+
 };
