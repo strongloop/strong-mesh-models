@@ -44,9 +44,9 @@ module.exports = function extendServiceInstance(ServiceInstance) {
         'modelName': name,
         'watcher': serviceManager._dbWatcher,
         'saveFn': saveObserver,
-        'saveNext': next,
         'deleteFn': deleteObserver,
         'modelInst': ServiceInstance,
+        'Model': serviceManager._meshApp.models.ServiceInstance,
       };
       instModelWatcher(watcherCtx);
     }
@@ -56,8 +56,6 @@ module.exports = function extendServiceInstance(ServiceInstance) {
   ServiceInstance.observe('before delete', function(ctx, next) {
     var serviceManager = ServiceInstance.app.serviceManager;
     if (serviceManager._dbWatcher) {
-      if (!shouldWatch(serviceManager, name, next, 'delete'))
-        debug('should be watching at %s', name);
       setImmediate(next);
       return;
     }
@@ -65,6 +63,7 @@ module.exports = function extendServiceInstance(ServiceInstance) {
   });
 
   function saveObserver(ctx, next) {
+    console.trace('~~~~~~~~~~ ServiceInstance saveObserver ~~~~~~~~ ');
     var serviceManager = ServiceInstance.app.serviceManager;
     var instance = ctx.instance || ctx.currentInstance;
     if (instance) {
@@ -94,6 +93,7 @@ module.exports = function extendServiceInstance(ServiceInstance) {
   }
 
   function deleteObserver(ctx, next) {
+    console.trace('~~~~~~~~~~ ServiceInstance deleteObserver ~~~~~~~~ ');
     var serviceManager = ServiceInstance.app.serviceManager;
     ctx.Model.find({where: ctx.where}, function(err, instances) {
       if (err) next(err);

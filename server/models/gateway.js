@@ -20,9 +20,9 @@ module.exports = function extendGateway(Gateway) {
         'modelName': name,
         'watcher': serviceManager._dbWatcher,
         'saveFn': saveObserver,
-        'saveNext': next,
         'deletFn': deleteObserver,
         'modelInst': Gateway,
+        'Model': serviceManager._meshApp.models.ServiceInstance,
       };
       instModelWatcher(watcherCtx);
     }
@@ -32,8 +32,6 @@ module.exports = function extendGateway(Gateway) {
   Gateway.observe('before delete', function(ctx, next) {
     var serviceManager = Gateway.app.serviceManager;
     if (serviceManager._dbWatcher) {
-      if (!shouldWatch(serviceManager, name, next, 'delete'))
-        debug('should be watching at %s', name);
       setImmediate(next);
       return;
     }
@@ -41,6 +39,7 @@ module.exports = function extendGateway(Gateway) {
   });
 
   function saveObserver(ctx, next) {
+    console.trace('~~~~~~~~~~ Gateway saveObserver ~~~~~~~~ ');
     var serviceManager = Gateway.app.serviceManager;
 
     var instance = ctx.instance || ctx.currentInstance;
@@ -63,6 +62,7 @@ module.exports = function extendGateway(Gateway) {
   }
 
   function deleteObserver(ctx, next) {
+    console.trace('~~~~~~~~~~ Gateway deleteObserver ~~~~~~~~ ');
     ctx.Model.find({where: ctx.where}, function(err, instances) {
       if (err) next(err);
       return async.each(

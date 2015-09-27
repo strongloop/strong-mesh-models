@@ -10,6 +10,7 @@ module.exports = function(Executor) {
 
   var name = Executor.modelName.toLowerCase();
 
+  console.trace('~~~~~~~~~ Executor.observe ~~~~~~~~~~~');
   Executor.observe('after save', function(ctx, next) {
     var serviceManager = Executor.app.serviceManager;
     if (serviceManager._dbWatcher) {
@@ -21,9 +22,9 @@ module.exports = function(Executor) {
         'modelName': name,
         'watcher': serviceManager._dbWatcher,
         'saveFn': saveObserver,
-        'saveNext': next,
         'deleteFn': deleteObserver,
         'modelInst': Executor,
+        'Model': serviceManager._meshApp.models.ServiceInstance,
       };
       instModelWatcher(watcherCtx);
     }
@@ -33,15 +34,16 @@ module.exports = function(Executor) {
   Executor.observe('before delete', function(ctx, next) {
     var serviceManager = Executor.app.serviceManager;
     if (serviceManager._dbWatcher) {
-      if (!shouldWatch(serviceManager, name, next, 'delete'))
-        debug('should be watching at %s', name);
+      if (shouldWatch(serviceManager, name, next, 'delete'))
       setImmediate(next);
       return;
     }
+    console.log('*************** calling DELETE observer from loopback:', name);
     deleteObserver(ctx, next);
   });
 
   function saveObserver(ctx, next) {
+    console.trace('~~~~~~~~~~ Executor saveObserver ~~~~~~~~ ');
     var serviceManager = Executor.app.serviceManager;
 
     var instance = ctx.instance || ctx.currentInstance;
@@ -72,6 +74,7 @@ module.exports = function(Executor) {
   }
 
   function deleteObserver(ctx, next) {
+    console.trace('~~~~~~~~~~ Executor deleteObserver ~~~~~~~~ ');
     ctx.Model.find({where: ctx.where}, function(err, instances) {
       if (err) next(err);
       return async.each(
