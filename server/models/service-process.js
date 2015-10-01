@@ -8,23 +8,20 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       pInfo.wid, pInfo.pid, pInfo.ppid, pInfo.pst || pInfo.startTime);
     // XXX(sam) why .pst || .startTime?
 
-    var forkedProcess = {
-      pid: pInfo.pid,
-      parentPid: pInfo.ppid,
-      workerId: pInfo.wid,
-      serviceInstanceId: instanceId,
-      startTime: new Date(pInfo.pst || pInfo.startTime),
-    };
-    var filter = {where: forkedProcess};
+    _findOrCreateProcess(
+      instanceId, +pInfo.wid, +pInfo.pid, +pInfo.pst || +pInfo.startTime,
+      updateProcess
+    );
 
-    ServiceProcess.findOrCreate(filter, forkedProcess, function(err, proc) {
+    function updateProcess(err, proc) {
       debug('upsert Process: %j', err || proc, pInfo);
       if (err) return callback(err);
       proc.updateAttributes({
+        parentPid: pInfo.ppid,
         stopReason: '',
         stopTime: null,
       }, callback);
-    });
+    }
   }
   ServiceProcess.recordFork = recordFork;
 
@@ -69,12 +66,15 @@ module.exports = function extendServiceProcess(ServiceProcess) {
         }
       }, function(err, childProcs) {
         if (err) return asyncCb(err);
-        return async.each(childProcs, updateProcess, asyncCb);
+        return async.each(childProcs, updateProcess, function(err) {
+          asyncCb(err, proc);
+        });
       });
     }
 
     return async.waterfall([
-      _findProcess(instanceId, +pInfo.wid, +pInfo.pid, +pInfo.pst),
+      _findOrCreateProcess.bind(
+        null, instanceId, +pInfo.wid, +pInfo.pid, +pInfo.pst),
       updateProcess,
       updateChildren
     ], function ensureSave(err, proc) {
@@ -101,7 +101,8 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
     var serviceManager = ServiceProcess.app.serviceManager;
     return async.waterfall([
-      _findProcess(instanceId, +pInfo.wid, +pInfo.pid, +pInfo.pst),
+      _findOrCreateProcess.bind(
+        null, instanceId, +pInfo.wid, +pInfo.pid, +pInfo.pst),
       updateWorker
     ], function ensureSave(err, proc) {
       debug('Listening of %j, save Process: %j', pInfo, err || proc);
@@ -139,7 +140,8 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     }
 
     return async.waterfall([
-      _findProcess(instanceId, +pInfo.wid, pInfo.pid, +pInfo.pst),
+      _findOrCreateProcess.bind(
+        null, instanceId, +pInfo.wid, +pInfo.pid, +pInfo.pst),
 
       updateProcessStatus
     ], function(err, proc) {
@@ -151,7 +153,8 @@ module.exports = function extendServiceProcess(ServiceProcess) {
 
   function recordStatusWdUpdate(instanceId, pInfo, callback) {
     return async.waterfall([
-      _findProcess(instanceId, +pInfo.wid, pInfo.pid, +pInfo.pst),
+      _findOrCreateProcess.bind(
+        null, instanceId, +pInfo.wid, +pInfo.pid, +pInfo.pst),
 
       updateProcessStatus
     ], function(err, proc) {
@@ -169,18 +172,39 @@ module.exports = function extendServiceProcess(ServiceProcess) {
   }
   ServiceProcess.recordStatusWdUpdate = recordStatusWdUpdate;
 
-  function _findProcess(instanceId, workerId, pid, pst) {
-    var filter = {
-      where: {
-        serviceInstanceId: instanceId,
-        workerId: +workerId,
-        pid: pid,
-      }
+  function _findOrCreateProcess(instanceId, workerId, pid, pst, callback) {
+    var procData = {
+      pid: pid,
+      workerId: workerId,
+      serviceInstanceId: instanceId,
+      startTime: new Date(pst),
     };
-    if (pst) {
-      filter.where.startTime = new Date(pst);
-    }
-    return ServiceProcess.findOne.bind(ServiceProcess, filter);
+    var filter = {where: procData};
+    debug('_findOrCreateProcess: %j', procData);
+
+    // Try to find an existing process or create a new one. If an error occurs,
+    // it might be a duplicate key error, in which case, the process was already
+    // created by a parallel invocation, attempt to find that process.
+    // Uniqueness of the process instance is enforced by the `uniq_process`
+    // compound index.
+
+    // XXX(KR) The processes create does not include ppid, which may cause race
+    // conditions during cleanup due to supervisor exit.
+    ServiceProcess.findOrCreate(filter, procData, function(err, proc) {
+      if (err) {
+        debug('Error in find or create: %s', err.message);
+        return ServiceProcess.findOne(filter, function(findErr, proc) {
+          if (findErr) {
+            debug('Error finding process: %s', findErr.message);
+            return callback(err);
+          }
+          debug('process found after requery: %j', proc);
+          return callback(proc);
+        });
+      }
+      debug('process found: %j', proc);
+      callback(null, proc);
+    });
   }
 
   function getMetaTransactions(callback) {
@@ -434,7 +458,8 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     }
 
     return async.waterfall([
-      _findProcess(instanceId, +pInfo.wid, pInfo.pid, +pInfo.pst),
+      _findOrCreateProcess.bind(
+        null, instanceId, +pInfo.wid, +pInfo.pid, +pInfo.pst),
       updateDebuggerStatus
     ], function(err, proc) {
       debug('Process entry updated: %j', err || proc);
