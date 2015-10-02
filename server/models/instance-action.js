@@ -6,6 +6,14 @@ var path = require('path');
 var util = require('util');
 
 module.exports = function extendInstanceAction(InstanceAction) {
+  InstanceAction.observe('after save', function(ctx, next) {
+    // There is no reason to keep these instances around. Until we transition
+    // away from them entirely we'll just auto-expire them.
+    if (ctx.instance && ctx.isNewInstance) {
+      setTimeout(ctx.instance.destroy.bind(ctx.instance), 10 * 1000).unref();
+    }
+    next();
+  });
   InstanceAction.observe('before save', function(ctx, next) {
     if (!ctx.instance) return next();
     var now = Date.now();

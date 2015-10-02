@@ -71,7 +71,7 @@
     "public": true
   },
   "InstanceAction": {
-    "dataSource": "db",
+    "dataSource": "memory",
     "public": false
   }
 }
