@@ -5,7 +5,7 @@
   "properties": {
     "parentPid": {
       "type": "number",
-      "required": true,
+      "required": false,
       "index": true,
       "description": "The OS process ID of the parent of this process (eg: *NIX PPID)"
     },
@@ -97,6 +97,12 @@
     "serviceMetrics": {
       "type": "hasMany",
       "model": "ServiceMetric"
+    }
+  },
+  "indexes": {
+    "uniq_process": {
+      "_comment1": "See common/models/service-process.js:_findOrCreateProcess",
+      "keys": ["pid", "workerId", "startTime", "serviceInstanceId"]
     }
   },
   "acls": [],

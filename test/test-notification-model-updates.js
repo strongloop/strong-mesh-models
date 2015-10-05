@@ -145,6 +145,7 @@ test('Test notifications', function(t) {
       cmd: 'listening',
       wid: 1,
       pid: 1235,
+      pst: 1432076622256,
       address: {
         address: '0.0.0.0',
         port: 59176,
@@ -162,6 +163,7 @@ test('Test notifications', function(t) {
       cmd: 'status:wd',
       pwd: process.env.PWD,
       cwd: process.cwd(),
+      pst: 1432076622256,
       pid: 1235,
       wid: 1,
       isTracing: false,
@@ -216,6 +218,7 @@ test('Test notifications', function(t) {
       cmd: type,
       wid: 1,
       pid: 1235,
+      pst: 1432076622256,
       isRunning: value
     };
     app.handleModelUpdate(1, notification, function(err) {
@@ -268,6 +271,7 @@ test('Test notifications', function(t) {
       cmd: 'metrics',
       wid: 1,
       pid: 1235,
+      pst: 1432076622256,
       metrics: {
         processes: {
           '1': METRIC_ENTRY
@@ -318,6 +322,7 @@ test('Test notifications', function(t) {
     var notification = {
       cmd: 'agent:trace',
       processId: 1235,
+      pst: 1432076622256,
       trace: traceRecord
     };
     app.handleModelUpdate(1, notification, function(err) {
@@ -385,6 +390,7 @@ test('Test notifications', function(t) {
       cmd: 'exit',
       pid: 1234,
       wid: 0,
+      pst: 1432076622256,
       reason: 'foo',
     };
     app.handleModelUpdate(1, notification, function(err) {
@@ -492,6 +498,7 @@ test('Test notifications', function(t) {
     var notification = {
       cmd: 'debugger-status',
       pid: 1235,
+      pst: 1432076622256,
       wid: 1,
       running: true,
       port: 12345
