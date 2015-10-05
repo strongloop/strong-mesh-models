@@ -484,4 +484,22 @@ module.exports = function(ServiceInstance) {
       description: 'Stop DevTools Debugger backend on a worker.'
     }
   );
+
+  ServiceInstance.remoteMethod(
+    'createDebuggerSession',
+    {
+      http: {path: '/processes/:pk/debugger/session', verb: 'post'},
+      isStatic: false,
+      accepts: [
+        {
+          arg: 'pk',
+          required: true,
+          type: 'number',
+          http: {source: 'path'}
+        }
+      ],
+      returns: {arg: 'response', type: 'object', root: true},
+      description: 'Create a new DevTools Debugger session'
+    }
+  );
 };

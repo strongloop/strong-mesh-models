@@ -419,6 +419,21 @@ module.exports = function extendServiceProcess(ServiceProcess) {
   }
   ServiceProcess.prototype.stopDebugger = stopDebugger;
 
+  /**
+   * Create a new DevTools Debugger session
+   *
+   * @param {function} callback Callback function.
+   */
+  function createDebuggerSession(callback) {
+    var Session = ServiceProcess.app.models.DebuggerSession;
+    var self = this;
+    this.serviceInstance(function(err, instance) {
+      if (err) return callback(err);
+      Session.create(instance, self, callback);
+    });
+  }
+  ServiceProcess.prototype.createDebuggerSession = createDebuggerSession;
+
   function recordDebuggerStatusUpdate(instanceId, pInfo, callback) {
     function updateDebuggerStatus(proc, next) {
       if (!proc)

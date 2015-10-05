@@ -74,5 +74,9 @@
   "InstanceAction": {
     "dataSource": "db",
     "public": false
+  },
+  "DebuggerSession": {
+    "dataSource": null,
+    "public": false
   }
 }

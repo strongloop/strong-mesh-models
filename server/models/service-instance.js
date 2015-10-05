@@ -360,6 +360,7 @@ module.exports = function extendServiceInstance(ServiceInstance) {
   proxyToProcess1('applyPatch');
   proxyToProcess0('startDebugger');
   proxyToProcess0('stopDebugger');
+  proxyToProcess0('createDebuggerSession');
 
   // Only allow updating ServiceInstance
   ServiceInstance.disableRemoteMethod('create', true);

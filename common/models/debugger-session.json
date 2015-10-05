@@ -1,0 +1,23 @@
+{
+  "name": "DebuggerSession",
+  "base": "Model",
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "id": true,
+      "type": "string",
+      "defaultFn": "uuid"
+    },
+    "urlPath": "string",
+    "connected": "boolean",
+    "serviceInstance": "ServiceInstance",
+    "serviceProcess": "ServiceProcess"
+  },
+  "hidden": ["serviceInstance", "serviceProcess", "connected"],
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

@@ -5,6 +5,7 @@ var boot = require('loopback-boot');
 var debug = require('debug')('strong-mesh-models:server');
 var loopback = require('loopback');
 var url = require('url');
+var WebSocketServer = require('ws').Server;
 
 /**
  * Factory method that returns a loopback server object. This object can be used
@@ -175,6 +176,43 @@ function server(serviceManager, minkelite, options) {
   app.setServiceCommit = function(serviceId, commit, callback) {
     var ServerService = app.models.ServerService;
     ServerService.setServiceCommit(serviceId, commit, callback);
+  };
+
+  app.setupDebuggerServer = function(httpServer) {
+    var wss = new WebSocketServer({noServer: true});
+    httpServer.on('upgrade', function(req, socket, upgradeHead) {
+      var path = url.parse(req.url).pathname;
+      var m = path.match(/^\/debugger\/([^\/]+)$/);
+      if (!m) return;
+      var sid = m[1];
+
+      var Session = app.models.DebuggerSession;
+      Session.findById(sid, function(err, session) {
+        if (err) {
+          ws.send(JSON.stringify({error: error.message}));
+          return ws.close();
+        }
+
+        // copy upgradeHead to avoid retention of large slab buffers
+        // used in node core
+        // copied from websocket/ws@7debd827d3/lib/WebSocketServer.js
+        // TODO(bajtos) Fix "ws" module to make that copy insde handleUpgrade()
+        var head = new Buffer(upgradeHead.length);
+        upgradeHead.copy(head);
+
+        wss.handleUpgrade(req, socket, head, function(ws) {
+          console.log('DEBUGGER CONNECTION FOR SESSION', sid);
+          console.log('INSTANCE %s PROCESS %s',
+                      session.serviceInstance.id,
+                      session.serviceProcess.id);
+          ws.on('message', function(data, flags) {
+            session.sendCommand(data, function(err, res) {
+              // TODO - handle error
+            });
+          });
+        });
+      });
+    });
   };
 
   return app;
