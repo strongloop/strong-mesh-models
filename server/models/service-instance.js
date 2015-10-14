@@ -1,8 +1,12 @@
 var async = require('async');
-var debug = require('debug')('strong-mesh-models:server:service-instance');
+var debug = require('debug')('strong-mesh-models:service-manager');
 var fmt = require('util').format;
+var genToken = require('../util').genToken;
+var observerHelper = require('./observerHelper');
 
 module.exports = function extendServiceInstance(ServiceInstance) {
+  ServiceInstance.definition.properties.token.default = genToken;
+
   ServiceInstance.beforeRemote(
     'prototype.updateAttributes',
     function(ctx, _, next) {
@@ -21,18 +25,18 @@ module.exports = function extendServiceInstance(ServiceInstance) {
     }
   );
 
-  // For save, the manager is notified after the model has  been persisted in
+  // For save, the manager is notified after the model has been persisted in
   // DB so that queries on the DB will return correct information. Similarly
   // for delete, the manager is notified before the model has been deleted from
   // the DB, so that queries will return information.
+  observerHelper(ServiceInstance, saveObserver, deleteObserver);
 
-  // Refer to server-service.js for description of instance vs currentInstance
-  // vs data.
-
-  ServiceInstance.observe('after save', function(ctx, next) {
+  function saveObserver(ctx, next) {
     var serviceManager = ServiceInstance.app.serviceManager;
-    var instance = ctx.instance || ctx.currentInstance;
 
+    // Refer to server-service.js for description of instance vs currentInstance
+    // vs data.
+    var instance = ctx.instance || ctx.currentInstance;
     if (instance) {
       if (serviceManager.onInstanceUpdate.length === 2) {
         serviceManager.onInstanceUpdate(instance, next);
@@ -56,22 +60,26 @@ module.exports = function extendServiceInstance(ServiceInstance) {
         );
       });
     }
-  });
 
-  ServiceInstance.observe('before delete', function(ctx, next) {
+  }
+
+  function deleteObserver(ctx, next) {
     var serviceManager = ServiceInstance.app.serviceManager;
-
-    ctx.Model.find({where: ctx.where}, function(err, instances) {
-      if (err) next(err);
-      return async.each(
-        instances,
-        function(instance, callback) {
-          serviceManager.onInstanceDestroy(instance, callback);
-        },
-        next
-      );
-    });
-  });
+    if (ctx.instance) {
+      serviceManager.onInstanceDestroy(ctx.instance, next);
+    } else {
+      ServiceInstance.find({where: ctx.where}, function(err, instances) {
+        if (err) next(err);
+        return async.each(
+          instances,
+          function(instance, callback) {
+            serviceManager.onInstanceDestroy(instance, callback);
+          },
+          next
+        );
+      });
+    }
+  }
 
   function recordInstanceInfo(instanceId, instInfo, callback) {
     ServiceInstance.findById(instanceId, function(err, instance) {

@@ -147,11 +147,10 @@ function serviceList(callback) {
 }
 Client.prototype.serviceList = serviceList;
 
-function serviceDestroy(nameOrId, callback) {
+function serviceDestroy(serviceNameOrId, callback) {
   var Service = this.models.ServerService;
 
-  var q = {where: {or: [{name: nameOrId}, {id: nameOrId}]}};
-  Service.findOne(q, function(err, service) {
+  Service.findOne(_buildQuery(serviceNameOrId), function(err, service) {
     if (err || !service) return callback(err, service);
 
     Service.deleteById(service.id, callback);
@@ -170,31 +169,13 @@ Client.prototype.serviceDestroy = serviceDestroy;
  */
 function serviceFind(serviceNameOrId, callback) {
   var Service = this.models.ServerService;
-
-  var filter = {order: ['id ASC']};
-  if (serviceNameOrId) {
-    filter.where = {
-      or: [
-        {name: serviceNameOrId},
-        {id: serviceNameOrId}
-      ]
-    };
-  }
-  Service.findOne(filter, callback);
+  Service.findOne(_buildQuery(serviceNameOrId), callback);
 }
 Client.prototype.serviceFind = serviceFind;
 
 function groupCreate(serviceNameOrId, groupName, scale, callback) {
   var Service = this.models.ServerService;
-  var filter = {
-    where: {
-      or: [
-        {name: serviceNameOrId},
-        {id: serviceNameOrId}
-      ]
-    }
-  };
-  Service.findOne(filter, function(err, service) {
+  Service.findOne(_buildQuery(serviceNameOrId), function(err, service) {
     if (!service) {
       // We could create it, but then it wouldn't have a default. Until further
       // requirements, groups can only be set on existing services.
@@ -226,15 +207,7 @@ Client.prototype.groupCreate = groupCreate;
 function instanceList(serviceNameOrId, callback) {
   var Service = this.models.ServerService;
   var ServiceInstance = this.models.ServiceInstance;
-  var filter = {
-    where: {
-      or: [
-        {name: serviceNameOrId},
-        {id: serviceNameOrId}
-      ]
-    }
-  };
-  Service.findOne(filter, function(err, service) {
+  Service.findOne(_buildQuery(serviceNameOrId), function(err, service) {
     if (err || !service) return callback(err, service);
 
     var q = {where: {serverServiceId: service.id}, order: ['id ASC']};
@@ -277,22 +250,13 @@ function resolveTarget(targetId, callback) {
   var ServerService = this.models.ServerService;
   var Executor = this.models.Executor;
 
-  var serviceFilter = {order: ['id ASC']};
-  if (serviceId) {
-    serviceFilter.where = {
-      or: [
-        {name: serviceId},
-        {id: serviceId}
-      ]
-    };
-  }
+  var serviceFilter = _buildQuery(serviceId);
   return ServerService.findOne(serviceFilter, resolveExecutor);
 
   function resolveExecutor(err, service) {
     if (err) return callback(err);
     if (!service) return callback(Error('Service not found'));
-    var executorFilter = {order: ['id ASC']};
-    if (executorId) executorFilter.where = {id: executorId};
+    var executorFilter = {where: {id: executorId}, order: 'id ASC'};
     Executor.findOne(executorFilter, resolveInstance.bind(null, service));
   }
 
@@ -346,22 +310,13 @@ function resolveInstance(targetId, callback) {
   var ServerService = this.models.ServerService;
   var Executor = this.models.Executor;
 
-  var serviceFilter = {order: ['id ASC']};
-  if (serviceId) {
-    serviceFilter.where = {
-      or: [
-        {name: serviceId},
-        {id: serviceId}
-      ]
-    };
-  }
+  var serviceFilter = _buildQuery(serviceId);
   return ServerService.findOne(serviceFilter, resolveExecutor);
 
   function resolveExecutor(err, service) {
     if (err) return callback(err);
     if (!service) return callback(Error('Service not found'));
-    var executorFilter = {order: ['id ASC']};
-    if (executorId) executorFilter.where = {id: executorId};
+    var executorFilter = {where: {id: executorId}, order: 'id ASC'};
     Executor.findOne(executorFilter, resolveInstance.bind(null, service));
   }
 
@@ -457,3 +412,14 @@ function gatewayShutdown(id, callback) {
   });
 }
 Client.prototype.gatewayShutdown = gatewayShutdown;
+
+function _buildQuery(nameOrId) {
+  if (!nameOrId)
+    return {order: ['id ASC']};
+
+  // Some DBs (like Postgresql) will error if where clause has a string for
+  // a numeric field
+  if (isNaN(+nameOrId))
+    return {where: {name: nameOrId}, order: ['id ASC']};
+  return {where: {or: [{name: nameOrId}, {id: nameOrId}]}, order: ['id ASC']};
+}

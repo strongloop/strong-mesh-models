@@ -5,15 +5,18 @@
     "processId": {
       "type": "number",
       "description": "id of ServiceProcess, not the pid",
-      "required": true
+      "required": true,
+      "postgresql": {"column": "processId"}
     },
     "workerId": {
       "type": "number",
-      "required": true
+      "required": true,
+      "postgresql": {"column": "workerId"}
     },
     "timeStamp": {
       "type": "date",
-      "required": true
+      "required": true,
+      "postgresql": {"column": "timeStamp"}
     },
     "trace": {
       "type": "object"

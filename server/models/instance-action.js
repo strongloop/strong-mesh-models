@@ -209,9 +209,9 @@ module.exports = function extendInstanceAction(InstanceAction) {
         complete);
 
       function complete(err, res) {
-        if (err) {
+        if (err || !res) {
           res = res || {};
-          res.error = err.message;
+          res.error = err ? err.message : 'Target process not found';
         }
 
         if (res.error) {

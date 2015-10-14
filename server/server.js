@@ -1,6 +1,7 @@
 /* eslint no-console:0 */
 var ServiceManager = require('./service-manager');
 var assert = require('assert');
+var async = require('async');
 var boot = require('loopback-boot');
 var debug = require('debug')('strong-mesh-models:server');
 var loopback = require('loopback');
@@ -85,6 +86,20 @@ function server(serviceManager, minkelite, options) {
       app.emit('stopped');
       if (callback) callback();
     }
+  };
+
+  app.useDbWatcher = function(dbWatcher, callback) {
+    var ServerService = app.models.ServerService;
+    var ServiceInstance = app.models.ServiceInstance;
+    var Executor = app.models.Executor;
+    var Gateway = app.models.Gateway;
+
+    async.parallel([
+      ServerService.useDbWatcher.bind(null, dbWatcher),
+      ServiceInstance.useDbWatcher.bind(null, dbWatcher),
+      Executor.useDbWatcher.bind(null, dbWatcher),
+      Gateway.useDbWatcher.bind(null, dbWatcher),
+    ], callback);
   };
 
   app.handleModelUpdate = function(instanceId, uInfo, callback) {

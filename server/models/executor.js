@@ -1,14 +1,18 @@
 var async = require('async');
+var genToken = require('../util').genToken;
+var observerHelper = require('./observerHelper');
 
 module.exports = function(Executor) {
+  Executor.definition.properties.token.default = genToken;
 
-  // Refer to server-service.js for description of instance vs currentInstance
-  // vs data.
+  observerHelper(Executor, saveObserver, deleteObserver);
 
-  Executor.observe('after save', function(ctx, next) {
+  function saveObserver(ctx, next) {
     var serviceManager = Executor.app.serviceManager;
-    var instance = ctx.instance || ctx.currentInstance;
 
+    // Refer to server-service.js for description of instance vs currentInstance
+    // vs data.
+    var instance = ctx.instance || ctx.currentInstance;
     if (instance) {
       if (serviceManager.onExecutorUpdate.length === 2) {
         serviceManager.onExecutorUpdate(instance, next);
@@ -32,20 +36,25 @@ module.exports = function(Executor) {
         );
       });
     }
-  });
+  }
 
-  Executor.observe('before delete', function(ctx, next) {
-    ctx.Model.find({where: ctx.where}, function(err, instances) {
-      if (err) next(err);
-      return async.each(
-        instances,
-        function(instance, callback) {
-          Executor.app.serviceManager.onExecutorDestroy(instance, callback);
-        },
-        next
-      );
-    });
-  });
+  function deleteObserver(ctx, next) {
+    var serviceManager = Executor.app.serviceManager;
+    if (ctx.instance) {
+      serviceManager.onExecutorDestroy(ctx.instance, next);
+    } else {
+      Executor.find({where: ctx.where}, function(err, instances) {
+        if (err) next(err);
+        return async.each(
+          instances,
+          function(instance, callback) {
+            serviceManager.onExecutorDestroy(instance, callback);
+          },
+          next
+        );
+      });
+    }
+  }
 
   Executor.prototype.shutdown = function(callback) {
     Executor.app.serviceManager.onExecutorRequest(

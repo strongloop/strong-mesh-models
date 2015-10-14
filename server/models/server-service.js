@@ -1,7 +1,8 @@
 var async = require('async');
-var debug = require('debug')('strong-mesh-models:server:server-service');
+var debug = require('debug')('strong-mesh-models:service-manager');
 var fs = require('fs');
 var fmt = require('util').format;
+var observerHelper = require('./observerHelper');
 
 module.exports = function extendServerService(ServerService) {
   ServerService.disableRemoteMethod('upsert', true);
@@ -33,10 +34,11 @@ module.exports = function extendServerService(ServerService) {
     process.nextTick(next);
   });
 
-  ServerService.observe('after save', function(ctx, next) {
+  observerHelper(ServerService, saveObserver, deleteObserver);
+
+  function saveObserver(ctx, next) {
     var serviceManager = ServerService.app.serviceManager;
     var instance = ctx.instance || ctx.currentInstance;
-
     if (instance) {
       // Full save of Service
       if (serviceManager.onServiceUpdate.length === 2) {
@@ -61,20 +63,25 @@ module.exports = function extendServerService(ServerService) {
         );
       });
     }
-  });
+  }
 
-  ServerService.observe('before delete', function(ctx, next) {
-    ctx.Model.find({where: ctx.where}, function(err, instances) {
-      if (err) next(err);
-      return async.each(
-        instances,
-        function(instance, callback) {
-          ServerService.app.serviceManager.onServiceDestroy(instance, callback);
-        },
-        next
-      );
-    });
-  });
+  function deleteObserver(ctx, next) {
+    var serviceManager = ServerService.app.serviceManager;
+    if (ctx.instance) {
+      serviceManager.onServiceDestroy(ctx.instance, next);
+    } else {
+      ServerService.find({where: ctx.where}, function(err, instances) {
+        if (err) next(err);
+        return async.each(
+          instances,
+          function(instance, callback) {
+            serviceManager.onServiceDestroy(instance, callback);
+          },
+          next
+        );
+      });
+    }
+  }
 
   function setServiceCommit(serviceId, commit, callback) {
     ServerService.findById(serviceId, function(err, service) {

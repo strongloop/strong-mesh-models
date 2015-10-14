@@ -5,15 +5,18 @@
     "processId": {
       "type": "number",
       "required": true,
-      "description": "id of ServiceProcess, not the pid"
+      "description": "id of ServiceProcess, not the pid",
+      "postgresql": {"column": "processId"}
     },
     "workerId": {
       "type": "number",
-      "required": true
+      "required": true,
+      "postgresql": {"column": "workerId"}
     },
     "timeStamp": {
       "type": "date",
-      "required": true
+      "required": true,
+      "postgresql": {"column": "timeStamp"}
     },
     "counters": {
       "type": "object"

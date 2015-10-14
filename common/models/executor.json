@@ -13,7 +13,8 @@
     },
     "APIPort": {
       "type": "string",
-      "description": "The port this executor is listening on for API commands. (deprecated)"
+      "description": "The port this executor is listening on for API commands. (deprecated)",
+      "postgresql": {"column": "APIPort"}
     },
     "metadata": {
       "type": "object",
@@ -30,12 +31,14 @@
     },
     "totalCapacity": {
       "type": "number",
-      "description": "The number of containers/service instances that this executor can support"
+      "description": "The number of containers/service instances that this executor can support",
+      "postgresql": {"column": "totalCapacity"}
     },
     "remainingCapacity": {
       "type": "number",
       "default": -1,
-      "description": "Currently allocated number of instances"
+      "description": "Currently allocated number of instances",
+      "postgresql": {"column": "remainingCapacity"}
     }
   },
   "validations": [],
