@@ -1,3 +1,33 @@
+2015-10-15, Version 8.1.0
+=========================
+
+ * make InstanceActions ephemeral (Ryan Graham)
+
+ * Use strongloop conventions for licensing (Sam Roberts)
+
+ * Report debugger version in status output (Miroslav Bajtoš)
+
+ * Add debugger status (Miroslav Bajtoš)
+
+ * Add debugger control commands (Miroslav Bajtoš)
+
+ * finish support for overriding the ssh port (Ryan Graham)
+
+ * add missing contribution guidelines (Ryan Graham)
+
+ * set ssh port when use http+ssh deploy via env (SemonCat)
+
+ * test: update to tap@1.3.4 (Ryan Graham)
+
+ * fix regression in process hooks (Ryan Graham)
+
+ * meshctl: order status list by service ID (Sam Roberts)
+
+ * Use numeric IDs for gateway (Krishna Raman)
+
+ * Add gateway support (Krishna Raman)
+
+
 2015-07-21, Version 8.0.0
 =========================
 
