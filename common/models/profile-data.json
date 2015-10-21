@@ -12,23 +12,27 @@
     "executorId": {
       "type": "number",
       "index": 1,
-      "description": "The ID of the Executor instance the process was running on"
+      "description": "The ID of the Executor instance the process was running on",
+      "postgresql": {"column": "executorId"}
     },
     "serverServiceId": {
       "type": "number",
       "index": 1,
-      "description": "The ID of the Service the process was running"
+      "description": "The ID of the Service the process was running",
+      "postgresql": {"column": "serverServiceId"}
     },
     "instanceId": {
       "type": "number",
       "index": 1,
-      "description": "The ID of the Service instance the process was part of"
+      "description": "The ID of the Service instance the process was part of",
+      "postgresql": {"column": "instanceId"}
     },
     "serviceProcessId": {
       "type": "number",
       "do we need? required": true,
       "index": 1,
-      "description": "The ID of the ServiceProcess"
+      "description": "The ID of the ServiceProcess",
+      "postgresql": {"column": "serviceProcessId"}
     },
     "type": {
       "type": "string",
@@ -40,12 +44,14 @@
       "required": true,
       "description": "The OS Process ID or cluster worker ID of the process.",
       "_comment1": "UNUSED? you can start on a pid, and stop on a wid",
-      "_comment2": "so field is unreliable, and appears without possible use"
+      "_comment2": "so field is unreliable, and appears without possible use",
+      "postgresql": {"column": "targetId"}
     },
     "startTime": {
       "type": "date",
       "required": true,
-      "description": "Timestamp the cpu profile or heap dump was started"
+      "description": "Timestamp the cpu profile or heap dump was started",
+      "postgresql": {"column": "startTime"}
     },
     "completed": {
       "type": "boolean",
@@ -54,11 +60,15 @@
     },
     "fileName": {
       "type": "string",
-      "description": "The name of the file on the Executor"
+      "description": "The name of the file on the Executor",
+      "postgresql": {"column": "fileName"}
     },
     "errored": {
       "type": "string",
       "description": "If an error occurred, this contains the error message"
+    },
+    "serverServiceId": {
+      "postgresql": {"column": "serverServiceId"}
     }
   },
   "validations": [],
@@ -69,7 +79,8 @@
     },
     "serverService": {
       "type": "belongsTo",
-      "model": "ServerService"
+      "model": "ServerService",
+      "foreignKey": "serverServiceId"
     }
   },
   "acls": [],

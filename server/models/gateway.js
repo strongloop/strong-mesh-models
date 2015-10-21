@@ -1,13 +1,18 @@
 var async = require('async');
+var genToken = require('../util').genToken;
+var observerHelper = require('./observerHelper');
 
 module.exports = function extendGateway(Gateway) {
-  // Refer to server-service.js for description of instance vs currentInstance
-  // vs data.
+  Gateway.definition.properties.token.default = genToken;
 
-  Gateway.observe('after save', function(ctx, next) {
+  observerHelper(Gateway, saveObserver, deleteObserver);
+
+  function saveObserver(ctx, next) {
     var serviceManager = Gateway.app.serviceManager;
-    var instance = ctx.instance || ctx.currentInstance;
 
+    // Refer to server-service.js for description of instance vs currentInstance
+    // vs data.
+    var instance = ctx.instance || ctx.currentInstance;
     if (instance) {
       serviceManager.onGatewayUpdate(instance, ctx.isNewInstance, next);
     } else {
@@ -23,18 +28,25 @@ module.exports = function extendGateway(Gateway) {
         );
       });
     }
-  });
 
-  Gateway.observe('before delete', function(ctx, next) {
-    ctx.Model.find({where: ctx.where}, function(err, instances) {
-      if (err) next(err);
-      return async.each(
-        instances,
-        function(instance, callback) {
-          Gateway.app.serviceManager.onGatewayDestroy(instance, callback);
-        },
-        next
-      );
-    });
-  });
+  }
+
+  function deleteObserver(ctx, next) {
+    var serviceManager = Gateway.app.serviceManager;
+    if (ctx.instance) {
+      serviceManager.onGatewayDestroy(ctx.instance, next);
+    } else {
+      Gateway.find({where: ctx.where}, function(err, instances) {
+        if (err) next(err);
+        return async.each(
+          instances,
+          function(instance, callback) {
+            serviceManager.onGatewayDestroy(instance, callback);
+          },
+          next
+        );
+      });
+    }
+  }
+
 };

@@ -12,32 +12,38 @@
     "serverName": {
       "type": "string",
       "required": false,
-      "description": "Name of the server, such as strong-central"
+      "description": "Name of the server, such as strong-central",
+      "postgresql": {"column": "serverName"}
     },
     "serverPid": {
       "type": "number",
       "required": true,
-      "description": "Operating system PID of the server process"
+      "description": "Operating system PID of the server process",
+      "postgresql": {"column": "serverPid"}
     },
     "apiPort": {
       "type": "number",
       "required": true,
-      "description": "Port that this server is listening on"
+      "description": "Port that this server is listening on",
+      "postgresql": {"column": "apiPort"}
     },
     "apiVersion": {
       "type": "string",
       "required": true,
-      "description": "Version of the REST API"
+      "description": "Version of the REST API",
+      "postgresql": {"column": "apiVersion"}
     },
     "driverType": {
       "type": "string",
       "required": true,
-      "description": "The driver type run by this server"
+      "description": "The driver type run by this server",
+      "postgresql": {"column": "driverType"}
     },
     "driverStatus": {
       "type": "string",
       "required": true,
-      "description": "The hostname of this executor"
+      "description": "The hostname of this executor",
+      "postgresql": {"column": "driverStatus"}
     }
   },
   "validations": [],

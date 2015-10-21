@@ -5,54 +5,69 @@
     "processId": {
       "type": "number",
       "description": "id of ServiceProcess, not the pid",
-      "required": true
+      "required": true,
+      "postgresql": {"column": "processId"}
     },
     "workerId": {
       "type": "number",
-      "required": true
+      "required": true,
+      "postgresql": {"column": "workerId"}
     },
     "timeStamp": {
       "type": "date",
-      "required": true
+      "required": true,
+      "postgresql": {"column": "timeStamp"}
     },
     "requestMethod": {
-      "type": "string"
+      "type": "string",
+      "postgresql": {"column": "requestMethod"}
     },
     "requestUrl": {
-      "type": "string"
+      "type": "string",
+      "postgresql": {"column": "requestUrl"}
     },
     "clientAddress": {
-      "type": "string"
+      "type": "string",
+      "postgresql": {"column": "clientAddress"}
     },
     "clientUsername": {
-      "type": "string"
+      "type": "string",
+      "postgresql": {"column": "clientUsername"}
     },
     "clientId": {
-      "type": "string"
+      "type": "string",
+      "postgresql": {"column": "clientId"}
     },
     "clientDetail": {
-      "type": "object"
+      "type": "object",
+      "postgresql": {"column": "clientDetail"}
     },
     "lbModelName": {
-      "type": "string"
+      "type": "string",
+      "postgresql": {"column": "lbModelName"}
     },
     "lbInstanceId": {
-      "type": "string"
+      "type": "string",
+      "postgresql": {"column": "lbInstanceId"}
     },
     "lbRemoteMethod": {
-      "type": "string"
+      "type": "string",
+      "postgresql": {"column": "lbRemoteMethod"}
     },
     "detail": {
       "type": "object"
     },
     "responseDuration": {
-      "type": "number"
+      "type": "number",
+      "postgresql": {"column": "responseDuration"}
     },
     "responseSize": {
-      "type": "number"
+      "type": "number",
+      "postgresql": {"column": "responseSize"}
     },
     "statusCode": {
-      "type": "number"
+      "type": "number",
+      "postgresql": {"column": "statusCode"}
     }
   },
   "validations": [],

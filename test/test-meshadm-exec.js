@@ -31,7 +31,7 @@ test('Test mesh admin executor commands', function(t) {
     t.test('create', function(tt) {
       exec(port, 'exec-create', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, 'Created Executor id: 1 token: undefined\n');
+        tt.match(stdout, /Created Executor id: 1 token: [a-z0-9]*\n/);
         client.models.Executor.findById(1, function(err, e) {
           setImmediate(function() {
             debug('created: %j', err || e);
@@ -54,9 +54,9 @@ test('Test mesh admin executor commands', function(t) {
           // Column spacing is dynamic based on field width, and hostname field
           // width depends on the system hostname, so compress all whitespace.
           var want = 'Id Host Routable Addr Capacity Token Metadata\n' +
-            fmt(' 1 %s n/a n/a n/a {}\n', host);
+            fmt(' 1 %s n/a n/a [a-z0-9]* {}\n', host);
           var have = stdout.replace(/ +/g, ' ');
-          tt.equal(have, want);
+          tt.match(have, RegExp(want));
           tt.end();
         });
       });

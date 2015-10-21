@@ -28,7 +28,8 @@
     },
     "startTime": {
       "type": "date",
-      "description": "The timestamp for the last time this service was started"
+      "description": "The timestamp for the last time this service was started",
+      "postgresql": {"column": "startTime"}
     },
     "started": {
       "type": "boolean",
@@ -36,7 +37,8 @@
     },
     "deploymentInfo": {
       "type": "object",
-      "description": "Information about the node application deployed for this service"
+      "description": "Information about the node application deployed for this service",
+      "postgresql": {"column": "deploymentInfo"}
     },
     "env": {
       "type": "object",

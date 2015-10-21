@@ -6,45 +6,54 @@
     "executorId": {
       "type": "number",
       "index": 1,
-      "description": "The ID of the executor on which this instance is running"
+      "description": "The ID of the executor on which this instance is running",
+      "postgresql": {"column": "executorId"}
     },
     "serverServiceId": {
       "type": "number",
       "index": 1,
-      "description": "The ID of the service this executor belongs to"
+      "description": "The ID of the service this executor belongs to",
+      "postgresql": {"column": "serverServiceId"}
     },
     "groupId": {
       "type": "number",
       "index": 1,
-      "description": "The ID of the service group this executor belongs to"
+      "description": "The ID of the service group this executor belongs to",
+      "postgresql": {"column": "groupId"}
     },
     "currentDeploymentId": {
       "type": "string",
-      "description": "The SHA1 hash of the package deployed to this instance. This ties back to the value of Service.deploymentInfo.hash"
+      "description": "The SHA1 hash of the package deployed to this instance. This ties back to the value of Service.deploymentInfo.hash",
+      "postgresql": {"column": "currentDeploymentId"}
     },
     "startTime": {
       "type": "date",
-      "description": "Timestamp when instance was started"
+      "description": "Timestamp when instance was started",
+      "postgresql": {"column": "startTime"}
     },
     "stopTime": {
       "type": "date",
       "description": "Timestamp when instance was stopped (cloud usecases)",
-      "default": "1970-01-01T00:00:00.000Z"
+      "default": "1970-01-01T00:00:00.000Z",
+      "postgresql": {"column": "stopTime"}
     },
     "restartCount": {
       "type": "number",
-      "description": "The number of time the supervisor process for this instance was killed or has crashed and had to be restarted"
+      "description": "The number of time the supervisor process for this instance was killed or has crashed and had to be restarted",
+      "postgresql": {"column": "restartCount"}
     },
     "stats": {
       "type": "object"
     },
     "PMPort": {
       "type": "number",
-      "description": "The API port the process manager is available on"
+      "description": "The API port the process manager is available on",
+      "postgresql": {"column": "PMPort"}
     },
     "containerVersionInfo": {
       "type": "object",
-      "description": "Information about the host, operating system, node version and container technology hosting this instance"
+      "description": "Information about the host, operating system, node version and container technology hosting this instance",
+      "postgresql": {"column": "containerVersionInfo"}
     },
     "token": {
       "type": "string",
@@ -58,7 +67,8 @@
     "setSize": {
       "type": "number",
       "default": 0,
-      "description": "The currently configured number of node processes that the instance should be running"
+      "description": "The currently configured number of node processes that the instance should be running",
+      "postgresql": {"column": "setSize"}
     },
     "cpus": {
       "type": "string",
@@ -67,23 +77,31 @@
     "tracingEnabled": {
       "type": "boolean",
       "default": false,
-      "description": "Indicates if tracing is enabled on this instance"
+      "description": "Indicates if tracing is enabled on this instance",
+      "postgresql": {"column": "tracingEnabled"}
     },
     "applicationName": {
       "type": "string",
-      "description": "The application name that strong-agent uses to report its metrics"
+      "description": "The application name that strong-agent uses to report its metrics",
+      "postgresql": {"column": "applicationName"}
     },
     "npmModules": {
       "type": "object",
-      "description": "NPM package and sub-module information"
+      "description": "NPM package and sub-module information",
+      "postgresql": {"column": "npmModules"}
     },
     "agentVersion": {
       "type": "string",
-      "description": "The version of strong-agent running on this instance"
+      "description": "The version of strong-agent running on this instance",
+      "postgresql": {"column": "agentVersion"}
     },
     "debuggerVersion": {
       "type": "string",
-      "description": "The version of strong-debugger running on this instance"
+      "description": "The version of strong-debugger running on this instance",
+      "postgresql": {"column": "debuggerVersion"}
+    },
+    "serverServiceId": {
+      "postgresql": {"column": "serverServiceId"}
     }
   },
   "validations": [],
@@ -102,7 +120,8 @@
     },
     "serverService": {
       "type": "belongsTo",
-      "model": "ServerService"
+      "model": "ServerService",
+      "foreignKey": "serverServiceId"
     }
   },
   "acls": [],
