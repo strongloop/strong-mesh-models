@@ -32,7 +32,7 @@ var parser = new Parser([
   ':v(version)',
   'h(help)',
   'C:(control)',
-  'V(verbose)'
+  'V(verbose)',
 ].join(''), argv);
 
 var apiUrl = process.env.STRONGLOOP_MESH_API ||
@@ -103,15 +103,15 @@ maybeTunnel(apiUrl, sshOpts, function(err, apiUrl) {
 
 function runCommand(client, command) {
   ({
-    'create': cmdCreateService,
-    'remove': cmdRemoveService,
-    'ls': cmdListServices,
-    'status': cmdStatus,
-    'info': cmdInfo,
-    'start': cmdStart,
-    'stop': cmdStop,
+    create: cmdCreateService,
+    remove: cmdRemoveService,
+    ls: cmdListServices,
+    status: cmdStatus,
+    info: cmdInfo,
+    start: cmdStart,
+    stop: cmdStop,
     'soft-stop': cmdSoftStop,
-    'restart': cmdRestart,
+    restart: cmdRestart,
     'soft-restart': cmdSoftRestart,
     'cluster-restart': cmdRollingRestart,
     'set-size': cmdSetClusterSize,
@@ -122,15 +122,15 @@ function runCommand(client, command) {
     'heap-snapshot': cmdHeapSnapshot,
     'tracing-start': cmdTracingStart,
     'tracing-stop': cmdTracingStop,
-    'npmls': cmdLs,
-    'patch': cmdPatch,
+    npmls: cmdLs,
+    patch: cmdPatch,
     'env-set': cmdEnvSet,
     'env-unset': cmdEnvUnset,
     'env-get': cmdEnvGet,
-    'env': cmdEnvGet,
+    env: cmdEnvGet,
     'get-process-count': cmdGetProcessCount, // No docs, internal use only.
     'log-dump': cmdLogDump,
-    'shutdown': cmdShutdown,
+    shutdown: cmdShutdown,
     'dbg-start': cmdDebuggerStart,
     'dbg-stop': cmdDebuggerStop,
   }[command] || unknown)(client);
@@ -221,7 +221,7 @@ function printServiceStatus(service, callback) {
 
     var instanceTable = [[
       '  ', 'Version', 'Agent version', 'Debugger version',
-      'Cluster size', 'Driver metadata'
+      'Cluster size', 'Driver metadata',
     ]];
     for (var i in summary.instances) {
       if (!summary.instances.hasOwnProperty(i)) continue;
@@ -238,12 +238,12 @@ function printServiceStatus(service, callback) {
       ]);
     }
     console.log('Instances:\n%s', table(instanceTable, {
-      align: ['c', 'c', 'c', 'c', 'c', 'c']
+      align: ['c', 'c', 'c', 'c', 'c', 'c'],
     }));
 
     var processTable = [
       ['  ', 'ID', 'PID', 'WID', 'Listening Ports',
-          'Tracking objects?', 'CPU profiling?', 'Tracing?', 'Debugging?']
+          'Tracking objects?', 'CPU profiling?', 'Tracing?', 'Debugging?'],
     ];
     if (verbose)
       processTable[0].push('Stop reason', 'Stop time');
@@ -279,8 +279,8 @@ function printServiceStatus(service, callback) {
     if (processTable.length > 1) {
       console.log('Processes:\n%s\n', table(processTable, {
         align: [
-          'c', 'c', 'c', 'c', 'c', 'c', 'l', 'c'
-        ]
+          'c', 'c', 'c', 'c', 'c', 'c', 'l', 'c',
+        ],
       }));
     } else {
       console.log('Not started');
@@ -485,11 +485,10 @@ function cmdCpuProfilingStart(client) {
         watchdogStallout: stallout,
       };
       instance.startCpuProfiling(process.id, cmd, function(err, response) {
-          dieIf(err);
-          debug('startCpuProfiling: %j', response);
-          console.log('Profiler started, use cpu-stop to get profile');
-        }
-      );
+        dieIf(err);
+        debug('startCpuProfiling: %j', response);
+        console.log('Profiler started, use cpu-stop to get profile');
+      });
     }
   );
 }
@@ -591,7 +590,7 @@ function cmdPatch(client) {
   client.resolveTarget(target,
     function(err, service, executor, instance, process) {
       dieIf(err);
-      instance.applyPatch(process.id, patchData, function(err /*, response*/) {
+      instance.applyPatch(process.id, patchData, function(err/* , response*/) {
         dieIf(err);
       });
     }
@@ -608,7 +607,7 @@ function cmdEnvSet(client) {
     service.setEnvs(env, function(err, responses) {
       dieIf(err);
 
-      ///XXX: Update when server supports rollback if instance update fails.
+      // XXX: Update when server supports rollback if instance update fails.
       printResponse(service, 'environment updated', err, responses);
       service.refresh(function(err, service) {
         dieIf(err);
@@ -640,7 +639,7 @@ function cmdEnvUnset(client) {
     service.setEnvs(nulledKeys, function(err, responses) {
       dieIf(err);
 
-      ///XXX: Update when server supports rollback if instance update fails.
+      // XXX: Update when server supports rollback if instance update fails.
       printResponse(service, 'environment updated', err, responses);
       service.refresh(function(err, service) {
         dieIf(err);
@@ -769,11 +768,10 @@ function cmdDebuggerStart(client) {
     function(err, service, executor, instance, process) {
       dieIf(err);
       instance.startDebugger(process.id, function(err, response) {
-          dieIf(err);
-          debug('startDebugger: %j', response);
-          console.log('Debugger listening on port %s.', response.port);
-        }
-      );
+        dieIf(err);
+        debug('startDebugger: %j', response);
+        console.log('Debugger listening on port %s.', response.port);
+      });
     }
   );
 }
@@ -785,11 +783,10 @@ function cmdDebuggerStop(client) {
     function(err, service, executor, instance, process) {
       dieIf(err);
       instance.stopDebugger(process.id, function(err, response) {
-          dieIf(err);
-          debug('stopDebugger: %j', response);
-          console.log('Debugger was disabled.');
-        }
-      );
+        dieIf(err);
+        debug('stopDebugger: %j', response);
+        console.log('Debugger was disabled.');
+      });
     }
   );
 }

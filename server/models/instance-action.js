@@ -62,7 +62,7 @@ module.exports = function extendInstanceAction(InstanceAction) {
           var target = action.request.target;
           var processFilter = {
             limit: 1,
-            where: {or: [{pid: target}, {workerId: target}], stopReason: ''}
+            where: {or: [{pid: target}, {workerId: target}], stopReason: ''},
           };
           debug('find process: %j', processFilter);
           instance.processes(processFilter, function(err, processes) {
@@ -142,7 +142,7 @@ module.exports = function extendInstanceAction(InstanceAction) {
       where: {
         completed: false,
         serviceProcessId: serviceProcessId,
-      }
+      },
     };
 
     debug('findOrCreate profile: %j', profile);
@@ -178,7 +178,7 @@ module.exports = function extendInstanceAction(InstanceAction) {
       service.id,
       ProfileData.sharedClass.http.path,
       String(profile.id),
-      'download'
+      'download',
     ].join('/').replace(/\/+/g, '/'); // Compress `//` to `/`
 
     return pathname;

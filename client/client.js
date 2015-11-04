@@ -61,11 +61,11 @@ function Client(apiUrl, options) {
   debug('connecting to %s', this.apiUrl);
 
   var client = loopback();
-  client.dataSource('remote', {'connector': 'remote', 'url': this.apiUrl});
+  client.dataSource('remote', {connector: 'remote', url: this.apiUrl});
   boot(client, {
     // ID used by browserified loopback-boot to load correct set of models
     appId: options.appBrowserifyId || 'meshClient',
-    appRootDir: __dirname
+    appRootDir: __dirname,
   });
   client.set('apiUrl', this.apiUrl);
 
@@ -265,7 +265,7 @@ function resolveTarget(targetId, callback) {
     if (!executor) return callback(Error('Service not found'));
     var instanceFilter = {where: {
       serverServiceId: service.id,
-      executorId: executor.id
+      executorId: executor.id,
     }};
     ServiceInstance.findOne(instanceFilter,
       resolveProcess.bind(null, service, executor));
@@ -276,7 +276,7 @@ function resolveTarget(targetId, callback) {
     if (!instance) return callback(Error('Service not deployed'));
     var processFilter = {
       limit: 1,
-      where: {or: [{pid: processId}, {workerId: processId}], stopReason: ''}
+      where: {or: [{pid: processId}, {workerId: processId}], stopReason: ''},
     };
     instance.processes(processFilter, function(err, processes) {
       if (err) return callback(err);
@@ -284,7 +284,7 @@ function resolveTarget(targetId, callback) {
       var process = processes[0];
       debug('Target resolved to: %j', {
         proc: process.pid, serv: service.id,
-        exec: executor.id, inst: instance.id
+        exec: executor.id, inst: instance.id,
       });
       callback(err, service, executor, instance, process);
     });
@@ -325,12 +325,12 @@ function resolveInstance(targetId, callback) {
     if (!executor) return callback(Error('Service not found'));
     var instanceFilter = {where: {
       serverServiceId: service.id,
-      executorId: executor.id
+      executorId: executor.id,
     }};
     ServiceInstance.findOne(instanceFilter, function(err, instance) {
       if (err) return callback(err);
       debug('Instance resolved to: %j', {
-        serv: service.id, exec: executor.id, inst: instance.id
+        serv: service.id, exec: executor.id, inst: instance.id,
       });
       callback(err, service, executor, instance);
     });
@@ -363,7 +363,7 @@ Client.prototype.expressMetricsEndpointDetail = expressMetricsEndpointDetail;
 
 function executorCreate(driver, callback) {
   this.models.Executor.create({
-    driver: driver || 'executor'
+    driver: driver || 'executor',
   }, callback);
 }
 Client.prototype.executorCreate = executorCreate;

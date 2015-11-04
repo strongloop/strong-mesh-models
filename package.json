@@ -48,7 +48,8 @@
   },
   "optionalDependencies": {},
   "devDependencies": {
-    "eslint": "^0.20.0",
+    "eslint": "^1.x",
+    "eslint-config-strongloop": "^1.x",
     "istanbul": "^0.3.0",
     "jscs": "^1.11.3",
     "loopback-connector-sqlite3": "^1.0.0",

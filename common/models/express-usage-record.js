@@ -4,7 +4,7 @@ module.exports = function expressUsageRecord(ExpressUsageRecord) {
     http: {path: '/dailySummary', verb: 'get'},
     accepts: [],
     returns: {arg: 'summary', type: 'object', root: true},
-    description: 'Daily summary by endpoint'
+    description: 'Daily summary by endpoint',
   });
 
   ExpressUsageRecord.remoteMethod('hourlySummary', {
@@ -15,7 +15,7 @@ module.exports = function expressUsageRecord(ExpressUsageRecord) {
         arg: 'modelOrUri',
         required: true,
         type: 'string',
-      }
+      },
     ],
     returns: {arg: 'summary', type: 'object', root: true},
     description: 'Number of calls to endpoint/method summarized ' +
@@ -36,6 +36,6 @@ module.exports = function expressUsageRecord(ExpressUsageRecord) {
         type: 'date',
       }],
     returns: {arg: 'summary', type: 'object', root: true},
-    description: 'Endpoint details for one hour'
+    description: 'Endpoint details for one hour',
   });
 };

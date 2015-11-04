@@ -20,7 +20,7 @@ test('express usage record', function(t) {
           pid: 1235,
           workerId: 1,
           serviceInstanceId: instance.id,
-          stopReason: null
+          stopReason: null,
         }, function(err, proc) {
           tt.ifError(err, 'mock process creation should succeed');
           tt.ok(proc, 'process object should be returned');
@@ -35,54 +35,54 @@ test('express usage record', function(t) {
         server.set('ExpressUsageRecord.deleteWindow', String(oneDay));
         var endpoints = [
           {
-          url: '/api/ModelA/1',
-          model: 'ModelA',
-          id: 1,
-          remoteMethod: null,
-          method: 'GET'
-        }, {
-          url: '/api/ModelB/2',
-          model: 'ModelB',
-          id: 1,
-          remoteMethod: null,
-          method: 'GET'
-        }, {
-          url: '/api/ModelA/1',
-          model: 'ModelA',
-          id: 1,
-          remoteMethod: null,
-          method: 'PUT'
-        }, {
-          url: '/api/ModelA/1',
-          model: 'ModelA',
-          id: 1,
-          remoteMethod: null,
-          method: 'POST'
-        }, {
-          url: '/api/ModelC/methodF',
-          model: 'ModelC',
-          id: 1,
-          remoteMethod: 'methodF',
-          method: 'POST'
-        }, {
-          url: '/api/ModelD/1',
-          model: 'ModelA',
-          id: 1,
-          remoteMethod: null,
-          method: 'POST'
-        }, {
-          url: '/api/ModelA/1',
-          model: 'ModelA',
-          id: 1,
-          remoteMethod: null,
-          method: 'DELETE'
-        }, {
-          url: '/api/endpoint1/some/url?foo=bar',
-          model: null,
-          id: null,
-          remoteMethod: null,
-          method: 'POST'
-        }];
+            url: '/api/ModelA/1',
+            model: 'ModelA',
+            id: 1,
+            remoteMethod: null,
+            method: 'GET',
+          }, {
+            url: '/api/ModelB/2',
+            model: 'ModelB',
+            id: 1,
+            remoteMethod: null,
+            method: 'GET',
+          }, {
+            url: '/api/ModelA/1',
+            model: 'ModelA',
+            id: 1,
+            remoteMethod: null,
+            method: 'PUT',
+          }, {
+            url: '/api/ModelA/1',
+            model: 'ModelA',
+            id: 1,
+            remoteMethod: null,
+            method: 'POST',
+          }, {
+            url: '/api/ModelC/methodF',
+            model: 'ModelC',
+            id: 1,
+            remoteMethod: 'methodF',
+            method: 'POST',
+          }, {
+            url: '/api/ModelD/1',
+            model: 'ModelA',
+            id: 1,
+            remoteMethod: null,
+            method: 'POST',
+          }, {
+            url: '/api/ModelA/1',
+            model: 'ModelA',
+            id: 1,
+            remoteMethod: null,
+            method: 'DELETE',
+          }, {
+            url: '/api/endpoint1/some/url?foo=bar',
+            model: null,
+            id: null,
+            remoteMethod: null,
+            method: 'POST',
+          }];
 
         for (var i = 0; i < 500; i++) {
           var status = Math.random() >= 0.5 ? 200 : 404;
@@ -91,33 +91,33 @@ test('express usage record', function(t) {
           var m = endpoints[Math.floor(Math.random() * endpoints.length)];
 
           updates.push({
-            'timestamp': Number(d),
-            'client': {
-              'address': '127.0.0.' + Math.round(Math.random() * 7),
-              'id': Math.round((Math.random() * 100)),
-              'username': 'a@bcom'
+            timestamp: Number(d),
+            client: {
+              address: '127.0.0.' + Math.round(Math.random() * 7),
+              id: Math.round((Math.random() * 100)),
+              username: 'a@bcom',
             },
-            'request': {
-              'method': m.method,
-              'url': m.url
+            request: {
+              method: m.method,
+              url: m.url,
             },
-            'response': {
-              'status': status,
-              'duration': Math.round((Math.random() * 100)),
-              'bytes': null
+            response: {
+              status: status,
+              duration: Math.round((Math.random() * 100)),
+              bytes: null,
             },
-            'process': {
-              'pid': 1235
+            process: {
+              pid: 1235,
             },
-            'data': {
-              'status': status,
-              'url': m.url
+            data: {
+              status: status,
+              url: m.url,
             },
-            'loopback': {
+            loopback: {
               modelName: m.model,
               instanceId: m.id,
-              remoteMethod: m.remoteMethod
-            }
+              remoteMethod: m.remoteMethod,
+            },
           });
         }
 

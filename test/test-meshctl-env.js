@@ -16,7 +16,7 @@ test('Test env commands', function(t) {
         assert.deepEqual(req,
           {
             cmd: 'env-set',
-            env: {A: 1, B: 2}
+            env: {A: 1, B: 2},
           });
         s.env = req.env;
         s.save(function(err) {
@@ -68,7 +68,7 @@ test('Test env commands', function(t) {
         assert.deepEqual(req,
           {
             cmd: 'env-set',
-            env: {A: null, B: null}
+            env: {A: null, B: null},
           });
         s.env = {};
         s.save(function(err) {
@@ -101,7 +101,7 @@ test('Test env commands', function(t) {
     });
 
     t.test('env-set API (failure case)', function(tt) {
-      service.setEnvs({A: 1, B: 2}, function(err /*, response*/) {
+      service.setEnvs({A: 1, B: 2}, function(err/* , response*/) {
         tt.ok(err, 'call should error');
         tt.end();
       });

@@ -12,7 +12,7 @@ module.exports = function extendExpressUsageRecord(ExpressUsageRecord) {
     var q = {where: {
       serviceInstanceId: instanceId,
       pid: pid,
-      stopTime: null
+      stopTime: null,
     }};
 
     ServiceProcess.findOne(q, function(err, proc) {
@@ -100,14 +100,14 @@ module.exports = function extendExpressUsageRecord(ExpressUsageRecord) {
           GET: 0,
           POST: 0,
           PUT: 0,
-          DELETE: 0
+          DELETE: 0,
         };
       }
 
       q = {
         where: {
-          or: [{lbModelName: modelOrUri}, {requestUrl: modelOrUri}]
-        }
+          or: [{lbModelName: modelOrUri}, {requestUrl: modelOrUri}],
+        },
       };
       ExpressUsageRecord.find(q, function(err, records) {
         if (err) return callback(err);
@@ -142,8 +142,8 @@ module.exports = function extendExpressUsageRecord(ExpressUsageRecord) {
           {or: [{lbModelName: modelOrUri}, {requestUrl: modelOrUri}]},
           {timeStamp: {gt: +windowStart}},
           {timeStamp: {lt: +windowEnd}},
-        ]
-      }
+        ],
+      },
     };
     ExpressUsageRecord.find(q, callback);
   }

@@ -32,7 +32,7 @@ test('Test DB watcher', function(t) {
     ServerService.create({
       id: 1,
       name: 's1',
-      _groups: [{id: 1, name: 'g1', scale: 1}]
+      _groups: [{id: 1, name: 'g1', scale: 1}],
     }, function(err) {
       tt.ifError(err);
     });
@@ -50,7 +50,7 @@ test('Test DB watcher', function(t) {
     ServerService.create({
       id: 2,
       name: 's2',
-      _groups: [{id: 1, name: 'g1', scale: 1}]
+      _groups: [{id: 1, name: 'g1', scale: 1}],
     }, function(err) {
       tt.ifError(err);
     });
@@ -70,8 +70,8 @@ test('Test DB watcher', function(t) {
       payload: ServerService({
         id: 3,
         name: 's3',
-        _groups: [{id: 1, name: 'g1', scale: 1}]
-      })
+        _groups: [{id: 1, name: 'g1', scale: 1}],
+      }),
     });
   });
 

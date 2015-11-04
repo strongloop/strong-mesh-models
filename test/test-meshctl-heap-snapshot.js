@@ -31,7 +31,7 @@ test('Test heap-snapshot commands', function(t) {
         instance.heapSnapshot(proc.id, function(err, response) {
           tt.ifError(err, 'call should not error');
           tt.deepEqual(response, {
-            url: '/api/Services/1/ProfileDatas/1/download', profileId: 1
+            url: '/api/Services/1/ProfileDatas/1/download', profileId: 1,
           }, 'Response should match');
           tt.end();
         });

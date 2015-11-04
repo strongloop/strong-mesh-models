@@ -24,10 +24,10 @@ test('Test trace client api (disabled trace)', function(t) {
           version: '1.2.3',
           packet: {
             metadata: {
-              account_key: 'key key key'
-            }
-          }
-        })
+              account_key: 'key key key',
+            },
+          },
+        }),
       };
       /* eslint-enable camelcase */
 

@@ -166,7 +166,7 @@ module.exports = function extendServiceInstance(ServiceInstance) {
 
   function runCommand(req, callback) {
     this.actions.create({
-      request: req
+      request: req,
     }, function(err, action) {
       if (err) return callback(err);
       if (action.result && action.result.error)

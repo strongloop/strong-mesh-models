@@ -6,7 +6,7 @@ module.exports = function api(Api) {
       isStatic: true,
       accepts: [],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Shutdown this server.'
+      description: 'Shutdown this server.',
     }
   );
   Api.remoteMethod(
@@ -16,7 +16,7 @@ module.exports = function api(Api) {
       isStatic: true,
       accepts: [],
       returns: {arg: 'response', type: 'Api', root: true},
-      description: 'Get API information'
+      description: 'Get API information',
     }
   );
 };

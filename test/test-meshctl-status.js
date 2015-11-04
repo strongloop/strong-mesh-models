@@ -24,12 +24,12 @@ test('Test status command', function(t) {
         id: '1',
         pid: 90424,
         uptime: 4915,
-      }]
-    }
+      }],
+    },
   };
 
-  /*eslint-disable max-len */
-  //jscs:disable maximumLineLength
+  /* eslint-disable max-len */
+  // jscs:disable maximumLineLength
   var RENDERED_STATUS = [
     'Service ID: 1',
     'Service Name: service 1',
@@ -45,10 +45,10 @@ test('Test status command', function(t) {
     '    1.1.1232  1232   2            0.0.0.0:4321',
     '    1.1.1233  1233   3            0.0.0.0:4321',
     '',
-    ''
+    '',
   ].join('\n');
-  //jscs:enable maximumLineLength
-  /*eslint-enable max-len */
+  // jscs:enable maximumLineLength
+  /* eslint-enable max-len */
 
   testCmdHelper(t, TestServiceManager, function(t, service, instance, port) {
     t.test('Setup service manager', function(tt) {

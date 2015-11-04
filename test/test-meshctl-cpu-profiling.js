@@ -16,7 +16,7 @@ test('Test cpu-profiling commands', function(t) {
         assert.deepEqual(req, {
           cmd: 'current', sub: 'start-cpu-profiling',
           stallout: 0,
-          timeout: 0, target: 1231
+          timeout: 0, target: 1231,
         });
         callback(null, {});
       }
@@ -31,7 +31,7 @@ test('Test cpu-profiling commands', function(t) {
         instance.startCpuProfiling(proc.id, {}, function(err, status) {
           tt.ifError(err, 'call should not error');
           tt.deepEqual(status, {
-            url: '/api/Services/1/ProfileDatas/1/download', profileId: 1
+            url: '/api/Services/1/ProfileDatas/1/download', profileId: 1,
           }, 'Response should match');
           tt.end();
         });
@@ -53,7 +53,7 @@ test('Test cpu-profiling commands', function(t) {
         assert.deepEqual(req, {
           cmd: 'current', sub: 'start-cpu-profiling',
           stallout: 0,
-          timeout: 10, target: 1232
+          timeout: 10, target: 1232,
         });
         callback(null, {});
       }
@@ -69,7 +69,7 @@ test('Test cpu-profiling commands', function(t) {
           function(err, status) {
             tt.ifError(err, 'call should not error');
             tt.deepEqual(status, {
-              url: '/api/Services/1/ProfileDatas/2/download', profileId: 2
+              url: '/api/Services/1/ProfileDatas/2/download', profileId: 2,
             }, 'Response should match');
             tt.end();
           }
@@ -92,7 +92,7 @@ test('Test cpu-profiling commands', function(t) {
         assert.deepEqual(req, {
           cmd: 'current', sub: 'start-cpu-profiling',
           stallout: 0,
-          timeout: 0, target: 1233
+          timeout: 0, target: 1233,
         });
         callback(Error('something bad happened'));
       }
@@ -104,7 +104,7 @@ test('Test cpu-profiling commands', function(t) {
       instance.processes({where: {pid: 1233}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
         proc = proc[0];
-        instance.startCpuProfiling(proc.id, {}, function(err /*, status*/) {
+        instance.startCpuProfiling(proc.id, {}, function(err/* , status*/) {
           tt.ok(err, 'call should error');
           tt.end();
         });
@@ -139,7 +139,7 @@ test('Test cpu-profiling commands', function(t) {
         instance.stopCpuProfiling(proc.id, function(err, status) {
           tt.ifError(err, 'call should not error');
           tt.deepEqual(status, {
-            url: '/api/Services/1/ProfileDatas/1/download', profileId: 1
+            url: '/api/Services/1/ProfileDatas/1/download', profileId: 1,
           }, 'Response should match');
           tt.end();
         });

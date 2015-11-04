@@ -27,7 +27,7 @@ var parser = new Parser([
   ':v(version)',
   'h(help)',
   'C:(control)',
-  'V(verbose)'
+  'V(verbose)',
 ].join(''), argv);
 
 var apiUrl = process.env.STRONGLOOP_MESH_API ||
@@ -138,7 +138,7 @@ function cmdListExecutors(client) {
         data.push([
           s.id, s.hostname || 'n/a', s.address || 'n/a',
           s.totalCapacity || 'n/a', s.token || 'n/a',
-          JSON.stringify(s.metadata || {})
+          JSON.stringify(s.metadata || {}),
         ]);
       }
       console.log(table(data, {align: ['c', 'c', 'c', 'c', 'c', 'c']}));

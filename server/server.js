@@ -40,10 +40,10 @@ function server(serviceManager, minkelite, options) {
     debug('Datasource URI: %j', dbUrl);
 
     config = {
-      'name': 'db',
-      'host': dbUrl.hostname,
-      'port': dbUrl.port,
-      'connector': dbUrl.protocol.slice(0, -1)
+      name: 'db',
+      host: dbUrl.hostname,
+      port: dbUrl.port,
+      connector: dbUrl.protocol.slice(0, -1),
     };
     if (dbUrl.path) config.file = dbUrl.path;
 

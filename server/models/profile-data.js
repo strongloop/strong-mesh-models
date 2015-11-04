@@ -67,7 +67,7 @@ module.exports = function extendProfileData(ProfileData) {
         workerId: +req.wid,
         pid: +req.pid,
         startTime: +req.pst,
-      }
+      },
     };
 
     ServiceProcess.findOne(qProcess, withProcess);
@@ -89,7 +89,7 @@ module.exports = function extendProfileData(ProfileData) {
           completed: false,
           serviceProcessId: proc.id,
           type: 'cpuprofile',
-        }
+        },
       };
 
       ProfileData.findOne(qProfileData, withProfileData);

@@ -16,49 +16,49 @@ function genExpressMetrics(cb) {
     model: 'ModelA',
     id: 1,
     remoteMethod: null,
-    method: 'GET'
+    method: 'GET',
   }, {
     url: '/api/ModelB/2',
     model: 'ModelB',
     id: 1,
     remoteMethod: null,
-    method: 'GET'
+    method: 'GET',
   }, {
     url: '/api/ModelA/1',
     model: 'ModelA',
     id: 1,
     remoteMethod: null,
-    method: 'PUT'
+    method: 'PUT',
   }, {
     url: '/api/ModelA/1',
     model: 'ModelA',
     id: 1,
     remoteMethod: null,
-    method: 'POST'
+    method: 'POST',
   }, {
     url: '/api/ModelC/methodF',
     model: 'ModelC',
     id: 1,
     remoteMethod: 'methodF',
-    method: 'POST'
+    method: 'POST',
   }, {
     url: '/api/ModelD/1',
     model: 'ModelA',
     id: 1,
     remoteMethod: null,
-    method: 'POST'
+    method: 'POST',
   }, {
     url: '/api/ModelA/1',
     model: 'ModelA',
     id: 1,
     remoteMethod: null,
-    method: 'DELETE'
+    method: 'DELETE',
   }, {
     url: '/api/endpoint1/some/url',
     model: null,
     id: null,
     remoteMethod: null,
-    method: 'POST'
+    method: 'POST',
   }];
 
   var dataStartTime = new Date(new Date() - 23 * 60 * 60 * 1000);
@@ -71,33 +71,33 @@ function genExpressMetrics(cb) {
     var m = endpoints[Math.floor(Math.random() * endpoints.length)];
 
     updates.push({
-      'timestamp': Number(d),
-      'client': {
-        'address': '127.0.0.' + Math.round(Math.random() * 7),
-        'id': Math.round((Math.random() * 100)),
-        'username': 'a@bcom'
+      timestamp: Number(d),
+      client: {
+        address: '127.0.0.' + Math.round(Math.random() * 7),
+        id: Math.round((Math.random() * 100)),
+        username: 'a@bcom',
       },
-      'request': {
-        'method': m.method,
-        'url': m.url
+      request: {
+        method: m.method,
+        url: m.url,
       },
-      'response': {
-        'status': status,
-        'duration': Math.round((Math.random() * 100)),
-        'bytes': null
+      response: {
+        status: status,
+        duration: Math.round((Math.random() * 100)),
+        bytes: null,
       },
-      'process': {
-        'pid': 1002
+      process: {
+        pid: 1002,
       },
-      'data': {
-        'status': status,
-        'url': m.url
+      data: {
+        status: status,
+        url: m.url,
       },
-      'loopback': {
+      loopback: {
         modelName: m.model,
         instanceId: m.id,
-        remoteMethod: m.remoteMethod
-      }
+        remoteMethod: m.remoteMethod,
+      },
     });
   }
 
@@ -122,7 +122,7 @@ server.start(function(err) {
   tasks.push(ServerService.create.bind(ServerService, {
     id: 1,
     name: 'service 1',
-    _groups: [{id: 1, name: 'group 1:1', scale: 1}]
+    _groups: [{id: 1, name: 'group 1:1', scale: 1}],
   }));
 
   tasks.push(Executor.create.bind(Executor, {
@@ -130,7 +130,7 @@ server.start(function(err) {
     address: '127.0.0.1',
     hostname: 'host-1.domain',
     APIPort: 5001,
-    totalCapacity: 2
+    totalCapacity: 2,
   }));
 
   tasks.push(ServiceInstance.create.bind(ServiceInstance, {
@@ -157,7 +157,7 @@ server.start(function(err) {
       workerId: p,
       pid: 1001 + p,
       parentPid: 1001,
-      serviceInstanceId: 2
+      serviceInstanceId: 2,
     }));
   }
 
