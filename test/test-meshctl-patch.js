@@ -32,7 +32,7 @@ test('Test patch commands', function(t) {
           function(err, response) {
             tt.ifError(err, 'call should not error');
             tt.deepEqual(response, {
-              ok: true
+              ok: true,
             }, 'Response should match');
             tt.end();
           }

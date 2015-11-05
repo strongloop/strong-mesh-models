@@ -5,7 +5,14 @@ var genToken = require('../util').genToken;
 var observerHelper = require('./observerHelper');
 
 module.exports = function extendServiceInstance(ServiceInstance) {
-  ServiceInstance.definition.properties.token.default = genToken;
+  ServiceInstance.observe('before save', function(ctx, callback) {
+    if (ctx.instance) {
+      if (!ctx.instance.token) ctx.instance.token = genToken();
+    } else {
+      if (!ctx.data.token) ctx.data.token = genToken();
+    }
+    callback();
+  });
 
   ServiceInstance.beforeRemote(
     'prototype.updateAttributes',
@@ -159,7 +166,7 @@ module.exports = function extendServiceInstance(ServiceInstance) {
 
   function runCommand(req, callback) {
     this.actions.create({
-      request: req
+      request: req,
     }, function(err, action) {
       if (err) return callback(err);
       if (action.result && action.result.error)

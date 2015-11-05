@@ -15,7 +15,7 @@ test('Test cpu-profiling commands', function(t) {
       function onCtlRequest(s, i, req, callback) {
         assert.deepEqual(req, {
           cmd: 'current', sub: 'dbg-start',
-          target: 1231
+          target: 1231,
         });
         callback(null, {port: 12345});
       }
@@ -59,7 +59,7 @@ test('Test cpu-profiling commands', function(t) {
       instance.processes({where: {pid: 1231}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
         proc = proc[0];
-        instance.stopDebugger(proc.id, function(err /*, status*/) {
+        instance.stopDebugger(proc.id, function(err/* , status*/) {
           tt.ifError(err, 'call should not error');
           tt.end();
         });

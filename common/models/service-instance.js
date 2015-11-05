@@ -6,7 +6,7 @@ module.exports = function(ServiceInstance) {
       isStatic: false,
       accepts: [],
       returns: {arg: 'status', type: 'object', root: true},
-      description: 'Retrieve a summary status of the instance'
+      description: 'Retrieve a summary status of the instance',
     }
   );
 
@@ -17,7 +17,7 @@ module.exports = function(ServiceInstance) {
       isStatic: false,
       accepts: [],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Start the application on the instance.'
+      description: 'Start the application on the instance.',
     }
   );
 
@@ -31,11 +31,11 @@ module.exports = function(ServiceInstance) {
           arg: 'options',
           required: true,
           type: 'object',
-          http: {source: 'body'}
-        }
+          http: {source: 'body'},
+        },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Stop the application on the instance.'
+      description: 'Stop the application on the instance.',
     }
   );
 
@@ -49,11 +49,11 @@ module.exports = function(ServiceInstance) {
           arg: 'options',
           required: true,
           type: 'object',
-          http: {source: 'body'}
-        }
+          http: {source: 'body'},
+        },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Restart the application on the instance.'
+      description: 'Restart the application on the instance.',
     }
   );
 
@@ -67,11 +67,11 @@ module.exports = function(ServiceInstance) {
           arg: 'options',
           required: true,
           type: 'object',
-          http: {source: 'body'}
-        }
+          http: {source: 'body'},
+        },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Set cluster size to N workers.'
+      description: 'Set cluster size to N workers.',
     }
   );
 
@@ -85,11 +85,11 @@ module.exports = function(ServiceInstance) {
           arg: 'target',
           required: true,
           type: 'string',
-          http: {source: 'body'}
-        }
+          http: {source: 'body'},
+        },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Start tracking objects on a worker.'
+      description: 'Start tracking objects on a worker.',
     }
   );
 
@@ -103,11 +103,11 @@ module.exports = function(ServiceInstance) {
           arg: 'target',
           required: true,
           type: 'string',
-          http: {source: 'body'}
-        }
+          http: {source: 'body'},
+        },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Stop tracking objects on a worker.'
+      description: 'Stop tracking objects on a worker.',
     }
   );
 
@@ -117,7 +117,7 @@ module.exports = function(ServiceInstance) {
       http: {path: '/tracingStart', verb: 'post'},
       isStatic: false,
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Restart all workers with tracing on.'
+      description: 'Restart all workers with tracing on.',
     }
   );
 
@@ -127,7 +127,7 @@ module.exports = function(ServiceInstance) {
       http: {path: '/tracingStop', verb: 'post'},
       isStatic: false,
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Restart all workers with tracing off.'
+      description: 'Restart all workers with tracing off.',
     }
   );
 
@@ -138,7 +138,7 @@ module.exports = function(ServiceInstance) {
       isStatic: false,
       accepts: [],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'List npm modules'
+      description: 'List npm modules',
     }
   );
 
@@ -152,11 +152,11 @@ module.exports = function(ServiceInstance) {
           arg: 'pk',
           required: true,
           type: 'number',
-          http: {source: 'path'}
-        }
+          http: {source: 'path'},
+        },
       ],
       returns: {arg: 'agentTraces', type: '[AgentTrace]', root: true},
-      description: 'Get all agent traces for a process under this instance'
+      description: 'Get all agent traces for a process under this instance',
     }
   );
 
@@ -170,16 +170,16 @@ module.exports = function(ServiceInstance) {
           arg: 'pk',
           required: true,
           type: 'number',
-          http: {source: 'path'}
-        }
+          http: {source: 'path'},
+        },
       ],
       returns: {
         arg: 'expressUsageRecords',
         type: '[ExpressUsageRecord]',
-        root: true
+        root: true,
       },
       description:
-        'Get all ExpressUsageRecords for a process under this instance'
+        'Get all ExpressUsageRecords for a process under this instance',
     }
   );
 
@@ -193,11 +193,11 @@ module.exports = function(ServiceInstance) {
           arg: 'pk',
           required: true,
           type: 'number',
-          http: {source: 'path'}
-        }
+          http: {source: 'path'},
+        },
       ],
       returns: {arg: 'serviceMetrics', type: '[ServiceMetric]', root: true},
-      description: 'Get all ServiceMetrics for a process under this instance'
+      description: 'Get all ServiceMetrics for a process under this instance',
     }
   );
 
@@ -211,11 +211,11 @@ module.exports = function(ServiceInstance) {
           arg: 'pk',
           required: true,
           type: 'number',
-          http: {source: 'path'}
-        }
+          http: {source: 'path'},
+        },
       ],
       returns: {arg: 'metaTransactions', type: ['string'], root: true},
-      description: 'Retrieve a list of transaction endpoints'
+      description: 'Retrieve a list of transaction endpoints',
     }
   );
 
@@ -224,7 +224,7 @@ module.exports = function(ServiceInstance) {
     {
       http: {
         path: '/processes/:pk/getTransaction/:metaTransactionId',
-        verb: 'get'
+        verb: 'get',
       },
       isStatic: false,
       accepts: [
@@ -232,17 +232,17 @@ module.exports = function(ServiceInstance) {
           arg: 'pk',
           required: true,
           type: 'number',
-          http: {source: 'path'}
+          http: {source: 'path'},
         },
         {
           arg: 'metaTransactionId',
           required: true,
           type: 'string',
-          http: {source: 'path'}
-        }
+          http: {source: 'path'},
+        },
       ],
       returns: {arg: 'transaction', type: 'object', root: true},
-      description: 'Retrieve transaction data'
+      description: 'Retrieve transaction data',
     }
   );
 
@@ -256,11 +256,11 @@ module.exports = function(ServiceInstance) {
           arg: 'pk',
           required: true,
           type: 'number',
-          http: {source: 'path'}
-        }
+          http: {source: 'path'},
+        },
       ],
       returns: {arg: 'timeline', type: 'object', root: true},
-      description: 'Retrieve time line data'
+      description: 'Retrieve time line data',
     }
   );
 
@@ -274,17 +274,17 @@ module.exports = function(ServiceInstance) {
           arg: 'pk',
           required: true,
           type: 'number',
-          http: {source: 'path'}
+          http: {source: 'path'},
         },
         {
           arg: 'pfKey',
           required: true,
           type: 'string',
-          http: {source: 'path'}
-        }
+          http: {source: 'path'},
+        },
       ],
       returns: {arg: 'trace', type: 'object', root: true},
-      description: 'Retrieve trace data for a profile key (pfKey)'
+      description: 'Retrieve trace data for a profile key (pfKey)',
     }
   );
 
@@ -298,11 +298,11 @@ module.exports = function(ServiceInstance) {
           arg: 'pk',
           required: true,
           type: 'number',
-          http: {source: 'path'}
-        }
+          http: {source: 'path'},
+        },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Stop tracking objects on a process.'
+      description: 'Stop tracking objects on a process.',
     }
   );
 
@@ -316,11 +316,11 @@ module.exports = function(ServiceInstance) {
           arg: 'pk',
           required: true,
           type: 'number',
-          http: {source: 'path'}
-        }
+          http: {source: 'path'},
+        },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Start tracking objects on a process.'
+      description: 'Start tracking objects on a process.',
     }
   );
 
@@ -334,17 +334,17 @@ module.exports = function(ServiceInstance) {
           arg: 'pk',
           required: true,
           type: 'number',
-          http: {source: 'path'}
+          http: {source: 'path'},
         }, {
           arg: 'options',
           required: false,
           type: 'object',
           http: {source: 'body'},
           root: true,
-        }
+        },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Start CPU profiling on a process.'
+      description: 'Start CPU profiling on a process.',
     }
   );
 
@@ -358,11 +358,11 @@ module.exports = function(ServiceInstance) {
           arg: 'pk',
           required: true,
           type: 'number',
-          http: {source: 'path'}
-        }
+          http: {source: 'path'},
+        },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Stop CPU profiling on a process.'
+      description: 'Stop CPU profiling on a process.',
     }
   );
 
@@ -376,11 +376,11 @@ module.exports = function(ServiceInstance) {
           arg: 'pk',
           required: true,
           type: 'number',
-          http: {source: 'path'}
-        }
+          http: {source: 'path'},
+        },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Take a snapshot of the HEAP for a process.'
+      description: 'Take a snapshot of the HEAP for a process.',
     }
   );
 
@@ -394,16 +394,16 @@ module.exports = function(ServiceInstance) {
           arg: 'pk',
           required: true,
           type: 'number',
-          http: {source: 'path'}
+          http: {source: 'path'},
         }, {
           arg: 'feature',
           required: true,
           type: 'string',
-          http: {source: 'path'}
-        }
+          http: {source: 'path'},
+        },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Check support for the specified feature (feature).'
+      description: 'Check support for the specified feature (feature).',
     }
   );
 
@@ -417,11 +417,11 @@ module.exports = function(ServiceInstance) {
           arg: 'pk',
           required: true,
           type: 'number',
-          http: {source: 'path'}
-        }
+          http: {source: 'path'},
+        },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Returns all capabilities which are supported.'
+      description: 'Returns all capabilities which are supported.',
     }
   );
 
@@ -435,17 +435,17 @@ module.exports = function(ServiceInstance) {
           arg: 'pk',
           required: true,
           type: 'number',
-          http: {source: 'path'}
+          http: {source: 'path'},
         }, {
           arg: 'patchData',
           required: true,
           type: 'object',
           http: {source: 'body'},
           root: true,
-        }
+        },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Take a snapshot of the HEAP for a process.'
+      description: 'Take a snapshot of the HEAP for a process.',
     }
   );
 
@@ -459,11 +459,11 @@ module.exports = function(ServiceInstance) {
           arg: 'pk',
           required: true,
           type: 'number',
-          http: {source: 'path'}
-        }
+          http: {source: 'path'},
+        },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Start DevTools Debugger backend on a worker.'
+      description: 'Start DevTools Debugger backend on a worker.',
     }
   );
 
@@ -477,11 +477,11 @@ module.exports = function(ServiceInstance) {
           arg: 'pk',
           required: true,
           type: 'number',
-          http: {source: 'path'}
-        }
+          http: {source: 'path'},
+        },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Stop DevTools Debugger backend on a worker.'
+      description: 'Stop DevTools Debugger backend on a worker.',
     }
   );
 };

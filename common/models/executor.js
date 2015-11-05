@@ -24,7 +24,7 @@ module.exports = function(Executor) {
       isStatic: false,
       accepts: [],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Shutdown this executor.'
+      description: 'Shutdown this executor.',
     }
   );
 };

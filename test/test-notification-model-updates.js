@@ -12,19 +12,19 @@ test('Test notifications', function(t) {
     var s = {
       id: 1,
       name: 's1',
-      _groups: [{id: 1, name: 'g1', scale: 1}]
+      _groups: [{id: 1, name: 'g1', scale: 1}],
     };
     var e = {
       id: 1,
       address: '127.0.0.1',
       APIPort: 5000,
       totalCapacity: 1,
-      remainingCapacity: 0
+      remainingCapacity: 0,
     };
     var i = {
       executorId: 1,
       serverServiceId: 1,
-      groupId: 1
+      groupId: 1,
     };
 
     var ServerService = app.models.ServerService;
@@ -33,7 +33,7 @@ test('Test notifications', function(t) {
     async.series([
       ServerService.create.bind(ServerService, s),
       Executor.create.bind(Executor, e),
-      ServiceInstance.create.bind(ServiceInstance, i)
+      ServiceInstance.create.bind(ServiceInstance, i),
     ], function(err) {
       tt.ifError(err);
       tt.end();
@@ -50,12 +50,12 @@ test('Test notifications', function(t) {
         os: {
           platform: os.platform(),
           arch: os.arch(),
-          release: os.release()
+          release: os.release(),
         },
         node: process.version,
         container: {
           name: 'test-container',
-          version: 10.0
+          version: 10.0,
         },
       },
       setSize: 1,
@@ -89,12 +89,12 @@ test('Test notifications', function(t) {
         os: {
           platform: os.platform(),
           arch: os.arch(),
-          release: os.release()
+          release: os.release(),
         },
         node: process.version,
         container: {
           name: 'test-container',
-          version: 10.0
+          version: 10.0,
         },
       }, 'Container information should be set');
       tt.equal(inst.setSize, 1, 'set size should match');
@@ -108,7 +108,7 @@ test('Test notifications', function(t) {
   t.test('Check worker 0', function(tt) {
     var q = {where: {
       workerId: 0,
-      serviceInstanceId: 1
+      serviceInstanceId: 1,
     }};
     app.models.ServiceProcess.find(q, function(err, procs) {
       tt.ok(!err, 'process should be found');
@@ -149,8 +149,8 @@ test('Test notifications', function(t) {
       address: {
         address: '0.0.0.0',
         port: 59176,
-        addressType: 4
-      }
+        addressType: 4,
+      },
     };
     app.handleModelUpdate(1, notification, function(err) {
       tt.ifError(err);
@@ -185,7 +185,7 @@ test('Test notifications', function(t) {
   function checkWorker1(prof, tt) {
     var q = {where: {
       workerId: 1,
-      serviceInstanceId: 1
+      serviceInstanceId: 1,
     }};
     app.models.ServiceProcess.find(q, function(err, procs) {
       tt.ok(!err, 'process should be found');
@@ -206,8 +206,8 @@ test('Test notifications', function(t) {
         {
           address: '0.0.0.0',
           port: 59176,
-          addressType: 4
-        }
+          addressType: 4,
+        },
       ]);
       tt.end();
     });
@@ -219,7 +219,7 @@ test('Test notifications', function(t) {
       wid: 1,
       pid: 1235,
       pst: 1432076622256,
-      isRunning: value
+      isRunning: value,
     };
     app.handleModelUpdate(1, notification, function(err) {
       tt.ifError(err);
@@ -250,7 +250,7 @@ test('Test notifications', function(t) {
 
   var METRIC_ENTRY = {
     counters: {
-      'loop.count': 100
+      'loop.count': 100,
     },
     timers: {},
     gauges: {
@@ -262,8 +262,8 @@ test('Test notifications', function(t) {
       'heap.total': 33088428,
       'cpu.total': 0.79031,
       'cpu.system': 0.63311,
-      'cpu.user': 0.1572
-    }
+      'cpu.user': 0.1572,
+    },
   };
 
   function notifyMetrics(dateBy, tt) {
@@ -274,10 +274,10 @@ test('Test notifications', function(t) {
       pst: 1432076622256,
       metrics: {
         processes: {
-          '1': METRIC_ENTRY
+          1: METRIC_ENTRY,
         },
-        'timestamp': (new Date()) - dateBy
-      }
+        timestamp: (new Date()) - dateBy,
+      },
     };
     app.handleModelUpdate(1, notification, function(err) {
       tt.ifError(err);
@@ -315,15 +315,15 @@ test('Test notifications', function(t) {
         ], [
           time, '/xyzzy', 13.092878, 0,
           {closed: true, mysql: 2.351871, mongodb: 1.623075},
-        ]
-      ]
+        ],
+      ],
     };
 
     var notification = {
       cmd: 'agent:trace',
       processId: 1235,
       pst: 1432076622256,
-      trace: traceRecord
+      trace: traceRecord,
     };
     app.handleModelUpdate(1, notification, function(err) {
       tt.ifError(err);
@@ -355,12 +355,12 @@ test('Test notifications', function(t) {
       request: {method: 'GET', url: '/'},
       response: {status: 404, duration: 6},
       process: {pid: 1235},
-      data: {custom: 'value'}
+      data: {custom: 'value'},
     };
 
     var notification = {
       cmd: 'express:usage-record',
-      record: rec
+      record: rec,
     };
     app.handleModelUpdate(1, notification, function(err) {
       tt.ifError(err);
@@ -432,12 +432,12 @@ test('Test notifications', function(t) {
         os: {
           platform: os.platform(),
           arch: os.arch(),
-          release: os.release()
+          release: os.release(),
         },
         node: process.version,
         container: {
           name: 'test-container',
-          version: 10.0
+          version: 10.0,
         },
       },
       setSize: 1,
@@ -459,7 +459,7 @@ test('Test notifications', function(t) {
   t.test('Check worker 0 resumed', function(tt) {
     var q = {where: {
       workerId: 0,
-      serviceInstanceId: 1
+      serviceInstanceId: 1,
     }};
     app.models.ServiceProcess.find(q, function(err, procs) {
       tt.ok(!err, 'process should be found');
@@ -501,7 +501,7 @@ test('Test notifications', function(t) {
       pst: 1432076622256,
       wid: 1,
       running: true,
-      port: 12345
+      port: 12345,
     };
     app.handleModelUpdate(1, notification, function(err) {
       tt.ifError(err);

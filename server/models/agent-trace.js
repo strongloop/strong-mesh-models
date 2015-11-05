@@ -10,7 +10,7 @@ module.exports = function extendAgentTrace(AgentTrace) {
     var q = {where: {
       serviceInstanceId: instanceId,
       pid: +req.processId,
-      stopTime: null
+      stopTime: null,
     }};
 
     function saveTrace(proc, traceData, asyncCb) {
@@ -18,7 +18,7 @@ module.exports = function extendAgentTrace(AgentTrace) {
         processId: proc.id,
         workerId: proc.workerId,
         timeStamp: traceData[0],
-        trace: traceData
+        trace: traceData,
       };
       AgentTrace.upsert(tData, asyncCb);
     }

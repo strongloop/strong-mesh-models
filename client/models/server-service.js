@@ -83,7 +83,7 @@ module.exports = function extServerService(ServerService) {
           debuggerVersion: instance.debuggerVersion || 'N/A',
           nodeVersion: instance.containerVersionInfo.node || 'N/A',
           driverMeta: instance.containerVersionInfo.driverMeta || {},
-          clusterSize: instance.setSize
+          clusterSize: instance.setSize,
         };
       }
 
@@ -105,7 +105,7 @@ module.exports = function extServerService(ServerService) {
 
     function collectProcesses(instance, callback) {
       var filter = {
-        order: ['stopTime DESC', 'serviceInstanceId ASC', 'workerId ASC']
+        order: ['stopTime DESC', 'serviceInstanceId ASC', 'workerId ASC'],
       };
       instance.processes(filter, function(err, processes) {
         if (err) return callback(err);

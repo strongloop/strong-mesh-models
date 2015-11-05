@@ -62,8 +62,8 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       ServiceProcess.find({
         where: {
           serviceInstanceId: instanceId,
-          parentPid: proc.pid
-        }
+          parentPid: proc.pid,
+        },
       }, function(err, childProcs) {
         if (err) return asyncCb(err);
         return async.each(childProcs, updateProcess, function(err) {
@@ -76,7 +76,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       _findOrCreateProcess.bind(
         null, instanceId, +pInfo.wid, +pInfo.pid, +pInfo.pst),
       updateProcess,
-      updateChildren
+      updateChildren,
     ], function ensureSave(err, proc) {
       debug('on exit of %j, save Process: %j', pInfo, err || proc);
       if (err) return callback(err);
@@ -103,7 +103,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     return async.waterfall([
       _findOrCreateProcess.bind(
         null, instanceId, +pInfo.wid, +pInfo.pid, +pInfo.pst),
-      updateWorker
+      updateWorker,
     ], function ensureSave(err, proc) {
       debug('Listening of %j, save Process: %j', pInfo, err || proc);
       if (err) return callback(err);
@@ -143,7 +143,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       _findOrCreateProcess.bind(
         null, instanceId, +pInfo.wid, +pInfo.pid, +pInfo.pst),
 
-      updateProcessStatus
+      updateProcessStatus,
     ], function(err, proc) {
       debug('Process entry updated: %j', proc);
       callback(err);
@@ -156,7 +156,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       _findOrCreateProcess.bind(
         null, instanceId, +pInfo.wid, +pInfo.pid, +pInfo.pst),
 
-      updateProcessStatus
+      updateProcessStatus,
     ], function(err, proc) {
       debug('Process entry updated: %j', err || proc);
       callback(err);
@@ -301,10 +301,9 @@ module.exports = function extendServiceProcess(ServiceProcess) {
    */
   function startObjectTracking(callback) {
     this._appCommand({
-        cmd: 'start-tracking-objects',
-        target: this.pid,
-      }, callback
-    );
+      cmd: 'start-tracking-objects',
+      target: this.pid,
+    }, callback);
   }
   ServiceProcess.prototype.startObjectTracking = startObjectTracking;
 
@@ -315,10 +314,9 @@ module.exports = function extendServiceProcess(ServiceProcess) {
    */
   function stopObjectTracking(callback) {
     this._appCommand({
-        cmd: 'stop-tracking-objects',
-        target: this.pid,
-      }, callback
-    );
+      cmd: 'stop-tracking-objects',
+      target: this.pid,
+    }, callback);
   }
   ServiceProcess.prototype.stopObjectTracking = stopObjectTracking;
 
@@ -334,12 +332,11 @@ module.exports = function extendServiceProcess(ServiceProcess) {
     var timeout = options.watchdogTimeout || 0;
     var stallout = options.watchdogStallout || 0;
     this._appCommand({
-        cmd: 'start-cpu-profiling',
-        target: this.pid,
-        timeout: timeout,
-        stallout: stallout,
-      }, callback
-    );
+      cmd: 'start-cpu-profiling',
+      target: this.pid,
+      timeout: timeout,
+      stallout: stallout,
+    }, callback);
   }
   ServiceProcess.prototype.startCpuProfiling = startCpuProfiling;
 
@@ -350,10 +347,9 @@ module.exports = function extendServiceProcess(ServiceProcess) {
    */
   function stopCpuProfiling(callback) {
     this._appCommand({
-        cmd: 'stop-cpu-profiling',
-        target: this.pid,
-      }, callback
-    );
+      cmd: 'stop-cpu-profiling',
+      target: this.pid,
+    }, callback);
   }
   ServiceProcess.prototype.stopCpuProfiling = stopCpuProfiling;
 
@@ -364,10 +360,9 @@ module.exports = function extendServiceProcess(ServiceProcess) {
    */
   function heapSnapshot(callback) {
     this._appCommand({
-        cmd: 'heap-snapshot',
-        target: this.pid
-      }, callback
-    );
+      cmd: 'heap-snapshot',
+      target: this.pid,
+    }, callback);
   }
   ServiceProcess.prototype.heapSnapshot = heapSnapshot;
 
@@ -379,10 +374,10 @@ module.exports = function extendServiceProcess(ServiceProcess) {
    */
   function queryCapabilities(feature, callback) {
     this._appCommand({
-        cmd: 'query-capabilities',
-        target: this.pid,
-        feature: feature,
-      }, callback);
+      cmd: 'query-capabilities',
+      target: this.pid,
+      feature: feature,
+    }, callback);
   }
   ServiceProcess.prototype.queryCapabilities = queryCapabilities;
 
@@ -393,9 +388,9 @@ module.exports = function extendServiceProcess(ServiceProcess) {
    */
   function queryCapabilitiesAll(callback) {
     this._appCommand({
-        cmd: 'query-capabilities',
-        target: this.pid
-      }, callback);
+      cmd: 'query-capabilities',
+      target: this.pid,
+    }, callback);
   }
   ServiceProcess.prototype.queryCapabilitiesAll = queryCapabilitiesAll;
 
@@ -407,11 +402,10 @@ module.exports = function extendServiceProcess(ServiceProcess) {
    */
   function applyPatch(patchData, callback) {
     this._appCommand({
-        cmd: 'patch',
-        target: this.pid,
-        patch: patchData,
-      }, callback
-    );
+      cmd: 'patch',
+      target: this.pid,
+      patch: patchData,
+    }, callback);
   }
   ServiceProcess.prototype.applyPatch = applyPatch;
 
@@ -422,10 +416,9 @@ module.exports = function extendServiceProcess(ServiceProcess) {
    */
   function startDebugger(callback) {
     this._appCommand({
-        cmd: 'dbg-start',
-        target: this.pid,
-      }, callback
-    );
+      cmd: 'dbg-start',
+      target: this.pid,
+    }, callback);
   }
   ServiceProcess.prototype.startDebugger = startDebugger;
 
@@ -436,10 +429,9 @@ module.exports = function extendServiceProcess(ServiceProcess) {
    */
   function stopDebugger(callback) {
     this._appCommand({
-        cmd: 'dbg-stop',
-        target: this.pid,
-      }, callback
-    );
+      cmd: 'dbg-stop',
+      target: this.pid,
+    }, callback);
   }
   ServiceProcess.prototype.stopDebugger = stopDebugger;
 
@@ -452,15 +444,15 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       proc.updateAttributes({
         debugger: {
           running: pInfo.running,
-          port: pInfo.port
-        }
+          port: pInfo.port,
+        },
       }, next);
     }
 
     return async.waterfall([
       _findOrCreateProcess.bind(
         null, instanceId, +pInfo.wid, +pInfo.pid, +pInfo.pst),
-      updateDebuggerStatus
+      updateDebuggerStatus,
     ], function(err, proc) {
       debug('Process entry updated: %j', err || proc);
       callback(err);

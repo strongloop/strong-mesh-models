@@ -3,7 +3,14 @@ var genToken = require('../util').genToken;
 var observerHelper = require('./observerHelper');
 
 module.exports = function(Executor) {
-  Executor.definition.properties.token.default = genToken;
+  Executor.observe('before save', function(ctx, callback) {
+    if (ctx.instance) {
+      if (!ctx.instance.token) ctx.instance.token = genToken();
+    } else {
+      if (!ctx.data.token) ctx.data.token = genToken();
+    }
+    callback();
+  });
 
   observerHelper(Executor, saveObserver, deleteObserver);
 

@@ -28,9 +28,9 @@ module.exports = function(Service) {
       ],
       accepts: [
         {arg: 'req', http: {source: 'req'}},
-        {arg: 'res', http: {source: 'res'}}
+        {arg: 'res', http: {source: 'res'}},
       ],
-      description: 'Deploy service'
+      description: 'Deploy service',
     });
 
     this.remoteMethod('setEnv', {
@@ -38,10 +38,10 @@ module.exports = function(Service) {
       http: {path: '/env/:name', verb: 'put'},
       accepts: [
         {arg: 'name', type: 'string', http: {source: 'path'}},
-        {arg: 'value', required: true, type: 'string', http: {source: 'body'}}
+        {arg: 'value', required: true, type: 'string', http: {source: 'body'}},
       ],
       returns: {arg: 'env', type: 'object'},
-      description: 'Set environment variables'
+      description: 'Set environment variables',
     });
 
     this.remoteMethod('setEnvs', {
@@ -56,10 +56,10 @@ module.exports = function(Service) {
           root: true,
           description: 'Key-value describing environment variables to add. ' +
             'A null value causes the variable to be removed',
-        }
+        },
       ],
       returns: {arg: 'env', type: 'object'},
-      description: 'Set multiple environment variables.'
+      description: 'Set multiple environment variables.',
     });
 
     this.remoteMethod('unsetEnv', {
@@ -69,16 +69,16 @@ module.exports = function(Service) {
         {arg: 'name', required: true, type: 'string', http: {source: 'path'}},
       ],
       returns: {arg: 'env', type: 'object'},
-      description: 'Unset environment variables'
+      description: 'Unset environment variables',
     });
 
     this.remoteMethod('downloadProfile', {
       isStatic: false,
       http: {path: '/profileDatas/:profileId/download', verb: 'get'},
       accepts: [
-        {arg: 'ctx', http: {source: 'context'}}
+        {arg: 'ctx', http: {source: 'context'}},
       ],
-      description: 'Download service profiling information'
+      description: 'Download service profiling information',
     });
 
     this.remoteMethod(
@@ -88,7 +88,7 @@ module.exports = function(Service) {
         isStatic: false,
         accepts: [],
         returns: {arg: 'response', type: 'object', root: true},
-        description: 'Start the application on the instance.'
+        description: 'Start the application on the instance.',
       }
     );
 
@@ -102,11 +102,11 @@ module.exports = function(Service) {
             arg: 'options',
             required: true,
             type: 'object',
-            http: {source: 'body'}
-          }
+            http: {source: 'body'},
+          },
         ],
         returns: {arg: 'response', type: 'object', root: true},
-        description: 'Stop the application on the instance.'
+        description: 'Stop the application on the instance.',
       }
     );
 
@@ -120,11 +120,11 @@ module.exports = function(Service) {
             arg: 'options',
             required: true,
             type: 'object',
-            http: {source: 'body'}
-          }
+            http: {source: 'body'},
+          },
         ],
         returns: {arg: 'response', type: 'object', root: true},
-        description: 'Restart the application on the instance.'
+        description: 'Restart the application on the instance.',
       }
     );
 
@@ -135,7 +135,7 @@ module.exports = function(Service) {
         isStatic: false,
         accepts: [],
         returns: {arg: 'response', type: 'object', root: true},
-        description: 'Retrieve logs for the application.'
+        description: 'Retrieve logs for the application.',
       }
     );
 
@@ -153,10 +153,10 @@ module.exports = function(Service) {
             arg: 'persist',
             required: true,
             type: 'boolean',
-          }
+          },
         ],
         returns: {arg: 'response', type: 'object', root: true},
-        description: 'Set cluster size'
+        description: 'Set cluster size',
       }
     );
 

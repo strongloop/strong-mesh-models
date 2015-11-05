@@ -19,7 +19,7 @@ function observerHelper(Model, saveObserver, deleteObserver) {
         return deleteObserver({instance: new Model(msg.payload)}, noOpCallback);
       saveObserver({
         instance: new Model(msg.payload),
-        isNewInstance: msg.op === 'INSERT'
+        isNewInstance: msg.op === 'INSERT',
       }, noOpCallback);
     });
     dbWatcher.watchTable(modelName, callback);

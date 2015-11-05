@@ -91,7 +91,7 @@ test('Test object-tracking commands', function(t) {
       instance.processes({where: {pid: 1233}}, function(err, proc) {
         tt.ifError(err, 'call should not error');
         proc = proc[0];
-        instance.startObjectTracking(proc.id, function(err /*, response*/) {
+        instance.startObjectTracking(proc.id, function(err/* , response*/) {
           tt.ok(err, 'call should error');
           tt.end();
         });

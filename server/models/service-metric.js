@@ -12,7 +12,7 @@ module.exports = function extendServiceMetric(ServiceMetric) {
       var q = {where: {
         serviceInstanceId: instanceId,
         workerId: +wid,
-        stopTime: null
+        stopTime: null,
       }};
       ServiceProcess.findOne(q, function(err, proc) {
         if (err) return callback(err);

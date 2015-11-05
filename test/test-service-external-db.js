@@ -16,7 +16,7 @@ test('Service environment variable manipulation', function(t) {
       db: {
         connector: SQLite3,
         file: path.join(dir, 'test.db'),
-      }
+      },
     });
     server.set('port', 0);
 
