@@ -90,9 +90,9 @@ services using `ls` or `status`.
 
 Worker commands: apply to a specific worker
 
-A `WRK` specification is either `<SVC>.1.<PID>` or `<SVC>.1.<WID>`, where SVC
-is the service ID, `1` is the executor ID (limited to 1 in this release), and
-the final part is either the process ID, or the cluster worker ID.
+A `WRK` specification is either `<SVC>.<INST>.<PID>` or `<SVC>.<INST>.<WID>`,
+where SVC is the service ID, INST is the instance ID, and the final part is
+either the process ID, or the cluster worker ID.
 
 The WRK specification can be copied directly from the output of the status
 command.

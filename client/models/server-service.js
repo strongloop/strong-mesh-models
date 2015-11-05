@@ -119,7 +119,7 @@ module.exports = function extServerService(ServerService) {
 
         function setDisplayId(process, callback) {
           process.displayId = util.format('%s.%s.%s',
-            instance.serverServiceId, instance.executorId, process.pid);
+            instance.serverServiceId, instance.id, process.pid);
           callback(null, process);
         }
       });

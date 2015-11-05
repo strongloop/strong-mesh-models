@@ -49,11 +49,13 @@ module.exports = function extendServiceProcess(ServiceProcess) {
         });
       }
       // Found proc, but it was stopped, so nothing to do.
-      return asyncCb();
+      return asyncCb(null, null);
     }
 
     function updateChildren(proc, asyncCb) {
       if (!proc) return asyncCb();
+      if (typeof asyncCb !== 'function')
+        debug(proc, asyncCb);
 
       // Its possible for the supervisor to die by signal or error before its
       // workers. In this case, the workers will exit, but we won't get any exit
