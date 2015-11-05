@@ -242,38 +242,34 @@ function resolveTarget(targetId, callback) {
   targetId = targetId.split('.').slice(0, 3);
   var processId = targetId.pop();
   var serviceId = targetId.shift();
-  var executorId = targetId.pop();
+  var instanceId = targetId.pop();
   debug('Target input to: %j',
-    {proc: processId, serv: serviceId || '?', exec: executorId || '?'});
+    {proc: processId, serv: serviceId || '?', inst: instanceId || '?'});
 
   var ServiceInstance = this.models.ServiceInstance;
   var ServerService = this.models.ServerService;
-  var Executor = this.models.Executor;
 
   var serviceFilter = _buildQuery(serviceId);
-  return ServerService.findOne(serviceFilter, resolveExecutor);
+  return ServerService.findOne(serviceFilter, resolveInstance);
 
-  function resolveExecutor(err, service) {
+  function resolveInstance(err, service) {
     if (err) return callback(err);
-    if (!service) return callback(Error('Service not found'));
-    var executorFilter = {where: {id: executorId}, order: 'id ASC'};
-    Executor.findOne(executorFilter, resolveInstance.bind(null, service));
-  }
-
-  function resolveInstance(service, err, executor) {
-    if (err) return callback(err);
-    if (!executor) return callback(Error('Service not found'));
     var instanceFilter = {where: {
       serverServiceId: service.id,
-      executorId: executor.id,
+      id: instanceId,
     }};
     ServiceInstance.findOne(instanceFilter,
-      resolveProcess.bind(null, service, executor));
+      resolveExecutor.bind(null, service));
   }
 
-  function resolveProcess(service, executor, err, instance) {
+  function resolveExecutor(service, err, instance) {
+    if (err || !instance) return callback(err);
+    instance.executor(resolveProcess.bind(null, service, instance));
+  }
+
+  function resolveProcess(service, instance, err, executor) {
     if (err) return callback(err);
-    if (!instance) return callback(Error('Service not deployed'));
+    if (!executor) return callback(Error('Service not deployed'));
     var processFilter = {
       limit: 1,
       where: {or: [{pid: processId}, {workerId: processId}], stopReason: ''},
@@ -302,37 +298,31 @@ Client.prototype.resolveTarget = resolveTarget;
 function resolveInstance(targetId, callback) {
   targetId = targetId.split('.').slice(0, 3);
   var serviceId = targetId.shift();
-  var executorId = targetId.pop();
+  var instanceId = targetId.pop();
   debug('Instance input to: %j',
-    {serv: serviceId || '?', exec: executorId || '?'});
+    {serv: serviceId || '?', inst: instanceId || '?'});
 
   var ServiceInstance = this.models.ServiceInstance;
   var ServerService = this.models.ServerService;
-  var Executor = this.models.Executor;
 
   var serviceFilter = _buildQuery(serviceId);
-  return ServerService.findOne(serviceFilter, resolveExecutor);
+  return ServerService.findOne(serviceFilter, resolveInstance);
 
-  function resolveExecutor(err, service) {
+  function resolveInstance(err, service) {
     if (err) return callback(err);
-    if (!service) return callback(Error('Service not found'));
-    var executorFilter = {where: {id: executorId}, order: 'id ASC'};
-    Executor.findOne(executorFilter, resolveInstance.bind(null, service));
-  }
-
-  function resolveInstance(service, err, executor) {
-    if (err) return callback(err);
-    if (!executor) return callback(Error('Service not found'));
     var instanceFilter = {where: {
       serverServiceId: service.id,
-      executorId: executor.id,
+      id: instanceId,
     }};
     ServiceInstance.findOne(instanceFilter, function(err, instance) {
       if (err) return callback(err);
-      debug('Instance resolved to: %j', {
-        serv: service.id, exec: executor.id, inst: instance.id,
+      instance.executor(function(err, executor) {
+        if (err) return callback(err);
+        debug('Instance resolved to: %j', {
+          serv: service.id, exec: executor.id, inst: instance.id,
+        });
+        callback(err, service, executor, instance);
       });
-      callback(err, service, executor, instance);
     });
   }
 }
