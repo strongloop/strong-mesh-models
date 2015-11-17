@@ -5,6 +5,7 @@ var fmt = require('util').format;
 var observerHelper = require('./observerHelper');
 
 module.exports = function extendServerService(ServerService) {
+  observerHelper(ServerService);
   ServerService.disableRemoteMethod('upsert', true);
   ServerService.disableRemoteMethod('updateAll', true);
 
@@ -34,7 +35,8 @@ module.exports = function extendServerService(ServerService) {
     process.nextTick(next);
   });
 
-  observerHelper(ServerService, saveObserver, deleteObserver);
+  ServerService.observe('after save', saveObserver);
+  ServerService.observe('before delete', deleteObserver);
 
   function saveObserver(ctx, next) {
     var serviceManager = ServerService.app.serviceManager;
