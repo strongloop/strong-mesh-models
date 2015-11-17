@@ -57,12 +57,12 @@ test('Check heap and cpu profiling populates Profile models', function(t) {
       instance.heapSnapshot(1, function(err, res) {
         tt.ifError(err);
 
-        // After starting heap snapshot, need to wait a tick to ensure that
-        // agent has enough time to dump the snapshot to file.
-        setImmediate(function() {
+        function testProfile() {
           service.profileDatas.findById(res.profileId, function(err, p) {
+            // After starting heap snapshot, need to wait a few ticks to ensure
+            // that agent has enough time to dump the snapshot to file.
+            if (!err && !p.completed) return setImmediate(testProfile);
             tt.ifError(err);
-
             fs.readFile(p.fileName, 'utf-8', function(err, data) {
               tt.ifError(err);
               tt.equal(data, 'PROFILE');
@@ -77,7 +77,9 @@ test('Check heap and cpu profiling populates Profile models', function(t) {
               });
             });
           });
-        });
+        }
+
+        testProfile();
       });
     });
 

@@ -1,7 +1,9 @@
+var EventEmitter = require('events').EventEmitter;
+var PassThrough = require('stream').PassThrough;
 var async = require('async');
 var debug = require('debug')('strong-mesh-models:service-manager');
-var fs = require('fs');
 var fmt = require('util').format;
+var fs = require('fs');
 var observerHelper = require('./observerHelper');
 
 module.exports = function extendServerService(ServerService) {
@@ -251,4 +253,54 @@ module.exports = function extendServerService(ServerService) {
     });
   }
   ServerService.prototype._callOnInstances = _callOnInstances;
+
+  ServerService.__changeEmitter = new EventEmitter();
+  function createChangeStream(res, cb) {
+    if (typeof res === 'function') {
+      cb = res;
+      res = undefined;
+    }
+
+    var changes = new PassThrough({objectMode: true});
+    changes._serviceId = this.id;
+    debug('change stream %s created', changes._serviceId);
+    ServerService.__changeEmitter.on(
+      'svc-' + changes._serviceId,
+      publishChange
+    );
+
+    changes.destroy = function() {
+      debug('change stream %s destroyed', changes._serviceId);
+      changes.removeAllListeners();
+      ServerService.__changeEmitter.removeListener(
+        'svc-' + changes._serviceId,
+        publishChange
+      );
+      changes = null;
+    };
+
+    // Close stream when TCP connection is terminated
+    if (res) {
+      res.on('close', function() {
+        changes.destroy();
+      });
+    }
+
+    changes.on('error', function() {
+      changes.destroy();
+    });
+
+    changes.on('end', function() {
+      changes.destroy();
+    });
+
+    setImmediate(function() {
+      cb(null, changes);
+    });
+
+    function publishChange(data) {
+      changes.write(data);
+    };
+  }
+  ServerService.prototype.createChangeStream = createChangeStream;
 };

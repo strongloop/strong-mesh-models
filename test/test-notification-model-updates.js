@@ -1,4 +1,5 @@
 var ServiceManager = require('../index').ServiceManager;
+var EventEmitter = require('events').EventEmitter;
 var async = require('async');
 var meshServer = require('../index').meshServer;
 var os = require('os');
@@ -7,6 +8,8 @@ var test = require('tap').test;
 test('Test notifications', function(t) {
   var app = meshServer(new ServiceManager());
   app.set('port', 0);
+  var changeStream = null;
+  var changeStreamRes = new EventEmitter();
 
   t.test('Initialize models', function(tt) {
     var s = {
@@ -32,12 +35,24 @@ test('Test notifications', function(t) {
     var Executor = app.models.Executor;
     async.series([
       ServerService.create.bind(ServerService, s),
+      createChangeStream,
       Executor.create.bind(Executor, e),
       ServiceInstance.create.bind(ServiceInstance, i),
     ], function(err) {
       tt.ifError(err);
       tt.end();
     });
+
+    function createChangeStream(callback) {
+      ServerService.findById(1, function(err, service) {
+        tt.ifError(err);
+        service.createChangeStream(changeStreamRes, function(err, stream) {
+          tt.ifError(err);
+          changeStream = stream;
+          callback(err);
+        });
+      });
+    }
   });
 
   t.test('Notify started', function(tt) {
@@ -517,6 +532,25 @@ test('Test notifications', function(t) {
         tt.end();
       });
     });
+  });
+
+  t.test('check change stream', function(tt) {
+    var change = changeStream.read();
+    tt.equal(change.target, 'ServiceInstance-1');
+    tt.equal(change.type, 'create');
+    change = changeStream.read();
+    tt.equal(change.target, 'ServiceInstance-1');
+    tt.equal(change.type, 'update');
+    var eventCnt = 0;
+    while (changeStream.read() !== null) {
+      eventCnt++;
+    }
+    // The tests above will result in a total of 23 instance and process
+    // create/update notifications. We already tested 2 above so there will be
+    // 21 left.
+    tt.equal(eventCnt, 21);
+    changeStreamRes.emit('close');
+    tt.end();
   });
 
   t.test('shutdown', function(tt) {

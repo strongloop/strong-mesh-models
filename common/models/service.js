@@ -160,6 +160,28 @@ module.exports = function(Service) {
       }
     );
 
+    this.remoteMethod(
+      'createChangeStream',
+      {
+        description: 'Create a change stream.',
+        isStatic: false,
+        http: [
+          {verb: 'post', path: '/change-stream'},
+        ],
+        accepts: [
+          {
+            arg: 'res',
+            http: {source: 'res'},
+          },
+        ],
+        returns: {
+          arg: 'changes',
+          type: 'ReadableStream',
+          json: true,
+        },
+      }
+    );
+
     this.disableRemoteMethod('__delete__actions');
     this.disableRemoteMethod('__destroyById__actions');
     this.disableRemoteMethod('__updateById__actions');
