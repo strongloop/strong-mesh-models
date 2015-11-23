@@ -3,6 +3,8 @@ var genToken = require('../util').genToken;
 var observerHelper = require('./observerHelper');
 
 module.exports = function(Executor) {
+  observerHelper(Executor);
+
   Executor.observe('before save', function(ctx, callback) {
     if (ctx.instance) {
       if (!ctx.instance.token) ctx.instance.token = genToken();
@@ -12,7 +14,8 @@ module.exports = function(Executor) {
     callback();
   });
 
-  observerHelper(Executor, saveObserver, deleteObserver);
+  Executor.observe('after save', saveObserver);
+  Executor.observe('before delete', deleteObserver);
 
   function saveObserver(ctx, next) {
     var serviceManager = Executor.app.serviceManager;

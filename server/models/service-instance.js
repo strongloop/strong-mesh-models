@@ -5,6 +5,8 @@ var genToken = require('../util').genToken;
 var observerHelper = require('./observerHelper');
 
 module.exports = function extendServiceInstance(ServiceInstance) {
+  observerHelper(ServiceInstance);
+
   ServiceInstance.observe('before save', function(ctx, callback) {
     if (ctx.instance) {
       if (!ctx.instance.token) ctx.instance.token = genToken();
@@ -36,7 +38,8 @@ module.exports = function extendServiceInstance(ServiceInstance) {
   // DB so that queries on the DB will return correct information. Similarly
   // for delete, the manager is notified before the model has been deleted from
   // the DB, so that queries will return information.
-  observerHelper(ServiceInstance, saveObserver, deleteObserver);
+  ServiceInstance.observe('after save', saveObserver);
+  ServiceInstance.observe('before delete', deleteObserver);
 
   function saveObserver(ctx, next) {
     var serviceManager = ServiceInstance.app.serviceManager;

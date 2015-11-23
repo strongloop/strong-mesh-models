@@ -4,8 +4,10 @@ var observerHelper = require('./observerHelper');
 
 module.exports = function extendGateway(Gateway) {
   Gateway.definition.properties.token.default = genToken;
+  observerHelper(Gateway);
 
-  observerHelper(Gateway, saveObserver, deleteObserver);
+  Gateway.observe('after save', saveObserver);
+  Gateway.observe('before delete', deleteObserver);
 
   function saveObserver(ctx, next) {
     var serviceManager = Gateway.app.serviceManager;
