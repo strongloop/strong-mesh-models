@@ -58,7 +58,7 @@ test('Test log-dump command', function(t) {
           'line 4 line 4 line 4 line 4\n',
           'log should match');
         var patt = /Command "log-dump" on "\S+" failed with done/;
-        tt.assert(patt.test(stderr), 'Rendered error should match');
+        tt.match(stderr.toString(), patt, 'Rendered error should match');
         tt.end();
       });
     });

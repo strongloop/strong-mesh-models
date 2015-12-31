@@ -25,7 +25,7 @@ test('check non-matching version', function(tt) {
     var client = new Client('http://127.0.0.1:' + port + '/api');
     client.checkRemoteApiSemver(function(err) {
       tt.assert(err, 'should mismatch');
-      tt.assert(/incompatible.*5.1.1/.test(err.message), err.message);
+      tt.match(err.message, /incompatible.*5.1.1/);
       server.stop(function() {
         tt.end();
       });

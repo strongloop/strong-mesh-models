@@ -31,7 +31,7 @@ test('Test env commands', function(t) {
     t.test('env-set API', function(tt) {
       service.setEnvs({A: 1, B: 2}, function(err, response) {
         tt.ifError(err, 'call should not error');
-        assert.deepEqual(response, {A: 1, B: 2});
+        tt.deepEqual(response, {A: 1, B: 2});
         tt.end();
       });
     });
@@ -112,7 +112,7 @@ test('Test env commands', function(t) {
       exec(port, 'env-set 1 A=1 B=2', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
         var patt = /Command "env-set" on "\S+" failed with Error: bad stuff/;
-        tt.assert(patt.test(stderr), 'Rendered error should match');
+        tt.match(stderr.toString(), patt, 'Rendered error should match');
         tt.end();
       });
     });
@@ -122,7 +122,7 @@ test('Test env commands', function(t) {
       exec(port, 'env-unset 1 C', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
         var patt = /Command "env-unset" on "\S+" failed with Error: bad stuff/;
-        tt.assert(patt.test(stderr), 'Rendered error should match');
+        tt.match(stderr.toString(), patt, 'Rendered error should match');
         tt.end();
       });
     });

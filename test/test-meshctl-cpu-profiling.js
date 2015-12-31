@@ -116,7 +116,7 @@ test('Test cpu-profiling commands', function(t) {
       exec(port, 'cpu-start 3', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
         var patt = /Command "cpu-start" on "\S+" failed with Error: something/;
-        tt.assert(patt.test(stderr), 'Rendered error should match');
+        tt.match(stderr.toString(), patt, 'Rendered error should match');
         tt.end();
       });
     });

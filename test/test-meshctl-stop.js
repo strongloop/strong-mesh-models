@@ -91,7 +91,7 @@ test('Test stop command', function(t) {
       exec(port, 'stop 1', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
         var patt = /Command "stop" on "\S+" failed with error/;
-        tt.assert(patt.test(stderr), 'Rendered error should match');
+        tt.match(stderr.toString(), patt, 'Rendered error should match');
         tt.end();
       });
     });

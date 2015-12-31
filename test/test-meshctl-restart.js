@@ -120,7 +120,7 @@ test('Test restart command', function(t) {
       exec(port, 'restart 1', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
         var patt = /Command "restart" on "\S+" failed with error/;
-        tt.assert(patt.test(stderr), 'Rendered error should match');
+        tt.match(stderr.toString(), patt, 'Rendered error should match');
         tt.end();
       });
     });

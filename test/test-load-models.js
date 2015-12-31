@@ -10,12 +10,12 @@ test('load models', function(t) {
   }
 
   app.once('error', function(err) {
-    t.assert(!err, 'App should start succesfully');
+    t.ifErr(err, 'App should start succesfully');
     end();
   });
 
   app.once('started', function() {
-    t.assert(true, 'Models should be loaded without errors');
+    t.pass('Models should be loaded without errors');
 
     var Service = app.models.ServerService;
     var s = new Service({
@@ -23,7 +23,7 @@ test('load models', function(t) {
     });
     s.save(function(err, savedService) {
       console.log(savedService);
-      t.assert(!err, 'service save should not error');
+      t.ifErr(err, 'service save should not error');
       end();
     });
   });

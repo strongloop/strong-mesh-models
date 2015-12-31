@@ -103,7 +103,7 @@ test('Test object-tracking commands', function(t) {
       exec(port, 'objects-start 3', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
         var patt = /Command "objects-start" on "\S+" failed with Error: Unable/;
-        tt.assert(patt.test(stderr), 'Rendered error should match');
+        tt.match(stderr.toString(), patt, 'Rendered error should match');
         tt.end();
       });
     });
