@@ -81,7 +81,7 @@ test('Test patch commands', function(t) {
       exec(port, 'patch 1 patch.file', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
         var patt = /Command "patch" on "\S+" failed with Error: some error/;
-        tt.assert(patt.test(stderr), 'Rendered error should match');
+        tt.match(stderr.toString(), patt, 'Rendered error should match');
         tt.end();
       });
     });

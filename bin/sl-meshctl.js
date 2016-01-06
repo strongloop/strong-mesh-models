@@ -46,12 +46,10 @@ while ((option = parser.getopt()) !== undefined) {
   switch (option.option) {
     case 'v':
       console.log(require('../package.json').version);
-      process.exit(0);
-      break;
+      return;
     case 'h':
       printHelp($0, console.log);
-      process.exit(0);
-      break;
+      return;
     case 'C':
       apiUrl = option.optarg;
       break;
@@ -89,14 +87,14 @@ if (process.env.SSH_PORT) {
   sshOpts.port = process.env.SSH_PORT;
 }
 
-dieIf.url = apiUrl;
+die.url = apiUrl;
 maybeTunnel(apiUrl, sshOpts, function(err, apiUrl) {
-  dieIf.url = apiUrl || dieIf.url;
-  dieIf(err);
+  die.url = apiUrl || die.url;
+  if (err) return die(err);
   var client = new Client(apiUrl);
 
   client.checkRemoteApiSemver(function(err) {
-    dieIf(err);
+    if (err) return die(err);
     runCommand(client, command);
   });
 });
@@ -146,12 +144,12 @@ function cmdStatus(client) {
 
   if (targetService) {
     client.serviceFind(targetService, function(err, service) {
-      dieIf(err);
+      if (err) return die(err);
       printServiceStatus(service);
     });
   } else {
     client.serviceList(function(err, services) {
-      dieIf(err);
+      if (err) return die(err);
       if (!services.length) {
         console.log('No services exist');
         return;
@@ -165,7 +163,7 @@ function cmdStatus(client) {
 
 function cmdInfo(client) {
   client.apiInfo(function(err, info) {
-    dieIf(err);
+    if (err) return die(err);
 
     debug('api info: %j', info);
 
@@ -211,7 +209,7 @@ function printServiceEnv(env) {
 
 function printServiceStatus(service, callback) {
   service.getStatusSummary(function(err, summary) {
-    dieIf(err);
+    if (err) return die(err);
 
     console.log('Service ID: %s', summary.id);
     console.log('Service Name: %s', summary.name);
@@ -300,7 +298,7 @@ function printServiceStatus(service, callback) {
 }
 
 function printResponse(service, summmaryMsg, err, responses) {
-  dieIf(err);
+  if (err) return die(err);
 
   debug('response service %j', service);
   debug('response summary %j', summmaryMsg);
@@ -329,7 +327,7 @@ function printResponse(service, summmaryMsg, err, responses) {
     console.log('Service %j %s', service.name, summmaryMsg);
   }
 
-  if (hasError) dieIf('error');
+  if (hasError) die('error');
 }
 
 function cmdCreateService(client) {
@@ -338,7 +336,7 @@ function cmdCreateService(client) {
 
   client.serviceCreate(name, scale, function(err, result) {
     debug('service-create: %j', err || result);
-    dieIf(err);
+    if (err) return die(err);
     var g = result._groups[0];
     console.log('Created Service id: %s name: %j group: %j scale: %d',
       result.id, result.name, g.name, g.scale);
@@ -348,7 +346,7 @@ function cmdCreateService(client) {
 function cmdListServices(client) {
   client.serviceList(function(err, result) {
     debug('service-list: %j', err || result);
-    dieIf(err);
+    if (err) return die(err);
 
     if (result.length) {
       var data = [];
@@ -376,7 +374,7 @@ function cmdRemoveService(client) {
 
   client.serviceDestroy(name, function(err, result) {
     debug('service-destroy: %j', err || result);
-    dieIf(err);
+    if (err) return die(err);
     console.log('Destroyed service: %s', name);
   });
 }
@@ -384,7 +382,7 @@ function cmdRemoveService(client) {
 function cmdStart(client) {
   var targetService = mandatory('service');
   client.serviceFind(targetService, function(err, service) {
-    dieIf(err);
+    if (err) return die(err);
     service.start(printResponse.bind(null, service, 'starting...'));
   });
 }
@@ -392,7 +390,7 @@ function cmdStart(client) {
 function cmdStop(client) {
   var targetService = mandatory('service');
   client.serviceFind(targetService, function(err, service) {
-    dieIf(err);
+    if (err) return die(err);
     service.stop({}, printResponse.bind(null, service, 'hard stopped'));
   });
 }
@@ -400,7 +398,7 @@ function cmdStop(client) {
 function cmdSoftStop(client) {
   var targetService = mandatory('service');
   client.serviceFind(targetService, function(err, service) {
-    dieIf(err);
+    if (err) return die(err);
     service.stop(
       {soft: true},
       printResponse.bind(null, service, 'soft stopped')
@@ -411,7 +409,7 @@ function cmdSoftStop(client) {
 function cmdRestart(client) {
   var targetService = mandatory('service');
   client.serviceFind(targetService, function(err, service) {
-    dieIf(err);
+    if (err) return die(err);
     service.restart({}, printResponse.bind(null, service, 'restarting'));
   });
 }
@@ -419,7 +417,7 @@ function cmdRestart(client) {
 function cmdSoftRestart(client) {
   var targetService = mandatory('service');
   client.serviceFind(targetService, function(err, service) {
-    dieIf(err);
+    if (err) return die(err);
     service.restart(
       {soft: true},
       printResponse.bind(null, service, 'soft restarting')
@@ -430,7 +428,7 @@ function cmdSoftRestart(client) {
 function cmdRollingRestart(client) {
   var targetService = mandatory('service');
   client.serviceFind(targetService, function(err, service) {
-    dieIf(err);
+    if (err) return die(err);
     service.restart({rolling: true}, printResponse.bind(null, service, null));
   });
 }
@@ -441,7 +439,7 @@ function cmdSetClusterSize(client) {
   var persist = true;
 
   client.serviceFind(targetService, function(err, service) {
-    dieIf(err);
+    if (err) return die(err);
     service.setClusterSize(
       size,
       persist,
@@ -455,7 +453,7 @@ function cmdObjectTrackingStart(client) {
 
   client.resolveTarget(target,
     function(err, service, executor, instance, process) {
-      dieIf(err);
+      if (err) return die(err);
       instance.startObjectTracking(process.id, dieIf);
     }
   );
@@ -466,7 +464,7 @@ function cmdObjectTrackingStop(client) {
 
   client.resolveTarget(target,
     function(err, service, executor, instance, process) {
-      dieIf(err);
+      if (err) return die(err);
       instance.stopObjectTracking(process.id, dieIf);
     }
   );
@@ -479,13 +477,13 @@ function cmdCpuProfilingStart(client) {
 
   client.resolveTarget(target,
     function(err, service, executor, instance, process) {
-      dieIf(err);
+      if (err) return die(err);
       var cmd = {
         watchdogTimeout: timeout,
         watchdogStallout: stallout,
       };
       instance.startCpuProfiling(process.id, cmd, function(err, response) {
-        dieIf(err);
+        if (err) return die(err);
         debug('startCpuProfiling: %j', response);
         console.log('Profiler started, use cpu-stop to get profile');
       });
@@ -500,12 +498,12 @@ function cmdCpuProfilingStop(client) {
 
   client.resolveTarget(target,
     function(err, service, executor, instance, process) {
-      dieIf(err);
+      if (err) return die(err);
       instance.stopCpuProfiling(process.id, function(err, response) {
-        dieIf(err);
+        if (err) return die(err);
         var profileId = response.profileId;
         download(instance, profileId, fileName, function(err) {
-          dieIf(err);
+          if (err) return die(err);
           console.log('CPU profile written to `%s`, load into Chrome Dev Tools',
             fileName);
         });
@@ -518,9 +516,9 @@ function cmdTracingStart(client) {
   var target = mandatory('target');
   client.resolveInstance(target,
     function(err, service, executor, instance) {
-      dieIf(err);
+      if (err) return die(err);
       instance.tracingStart(function(err) {
-        dieIf(err);
+        if (err) return die(err);
         console.log('Tracing started');
       });
     }
@@ -531,9 +529,9 @@ function cmdTracingStop(client) {
   var target = mandatory('target');
   client.resolveInstance(target,
     function(err, service, executor, instance) {
-      dieIf(err);
+      if (err) return die(err);
       instance.tracingStop(function(err) {
-        dieIf(err);
+        if (err) return die(err);
         console.log('Tracing stopped');
       });
     }
@@ -547,12 +545,12 @@ function cmdHeapSnapshot(client) {
 
   client.resolveTarget(target,
     function(err, service, executor, instance, process) {
-      dieIf(err);
+      if (err) return die(err);
       instance.heapSnapshot(process.id, function(err, response) {
-        dieIf(err);
+        if (err) return die(err);
         var profileId = response.profileId;
         download(instance, profileId, fileName, function(err) {
-          dieIf(err);
+          if (err) return die(err);
           console.log(
             'Heap snapshot written to `%s`, load into Chrome Dev Tools',
             fileName
@@ -569,13 +567,13 @@ function cmdLs(client) {
 
   client.serviceFind(targetService,
     function(err, service) {
-      dieIf(err);
+      if (err) return die(err);
       service.instances({limit: 1}, function(err, instances) {
-        dieIf(err);
-        if (instances.length !== 1) dieIf(Error('Invalid service'));
+        if (err) return die(err);
+        if (instances.length !== 1) return die(Error('Invalid service'));
         var instance = instances[0];
         instance.npmModuleList(function(err, response) {
-          dieIf(err);
+          if (err) return die(err);
           console.log(npmls.printable(response, depth));
         });
       });
@@ -589,9 +587,9 @@ function cmdPatch(client) {
   var patchData = JSON.parse(fs.readFileSync(patchFile));
   client.resolveTarget(target,
     function(err, service, executor, instance, process) {
-      dieIf(err);
+      if (err) return die(err);
       instance.applyPatch(process.id, patchData, function(err/* , response*/) {
-        dieIf(err);
+        if (err) return die(err);
       });
     }
   );
@@ -603,14 +601,14 @@ function cmdEnvSet(client) {
   var env = _.reduce(vars, extractKeyValue, {});
 
   client.serviceFind(targetService, function(err, service) {
-    dieIf(err);
+    if (err) return die(err);
     service.setEnvs(env, function(err, responses) {
-      dieIf(err);
+      if (err) return die(err);
 
       // XXX: Update when server supports rollback if instance update fails.
       printResponse(service, 'environment updated', err, responses);
       service.refresh(function(err, service) {
-        dieIf(err);
+        if (err) return die(err);
         printServiceEnv(service.env);
       });
     });
@@ -635,14 +633,14 @@ function cmdEnvUnset(client) {
   var nulledKeys = _.zipObject(keys, nulls);
 
   client.serviceFind(targetService, function(err, service) {
-    dieIf(err);
+    if (err) return die(err);
     service.setEnvs(nulledKeys, function(err, responses) {
-      dieIf(err);
+      if (err) return die(err);
 
       // XXX: Update when server supports rollback if instance update fails.
       printResponse(service, 'environment updated', err, responses);
       service.refresh(function(err, service) {
-        dieIf(err);
+        if (err) return die(err);
         printServiceEnv(service.env);
       });
     });
@@ -654,7 +652,7 @@ function cmdEnvGet(client) {
   var keys = optionalSome();
 
   client.serviceFind(targetService, function(err, service) {
-    dieIf(err);
+    if (err) return die(err);
     console.log('Service ID: %s', service.id);
     console.log('Service Name: %s\n', service.name);
     var filtered = keys.length > 0 ? _.pick(service.env, keys) : service.env;
@@ -670,9 +668,9 @@ function cmdEnvGet(client) {
 function cmdGetProcessCount(client) {
   var targetService = mandatory();
   client.serviceFind(targetService, function(err, service) {
-    dieIf(err);
+    if (err) return die(err);
     service.getStatusSummary(function(err, summary) {
-      dieIf(err);
+      if (err) return die(err);
       var processes = 0;
       for (var i in summary.processes) {
         if (!summary.processes.hasOwnProperty(i)) continue;
@@ -689,16 +687,16 @@ function cmdLogDump(client) {
   var repeat = (optional('NOFOLLOW') === '--follow');
 
   client.serviceFind(targetService, function(err, service) {
-    dieIf(err);
+    if (err) return die(err);
     return logDump();
 
     function logDump() {
       service.logDump(function(err, responses) {
-        dieIf(err);
+        if (err) return die(err);
 
         for (var i in responses) {
           if (!responses.hasOwnProperty(i)) continue;
-          dieIf(responses[i].error);
+          if (responses[i].error) return die(responses[i].error);
 
           var rsp = responses[i].response;
           if (rsp.message) {
@@ -719,7 +717,7 @@ function cmdLogDump(client) {
 
 function cmdShutdown(client) {
   client.getApi().shutdown(function(err, res) {
-    dieIf(err);
+    if (err) return die(err);
     console.log('%s', res.message);
   });
 }
@@ -766,9 +764,9 @@ function cmdDebuggerStart(client) {
 
   client.resolveTarget(target,
     function(err, service, executor, instance, process) {
-      dieIf(err);
+      if (err) return die(err);
       instance.startDebugger(process.id, function(err, response) {
-        dieIf(err);
+        if (err) return die(err);
         debug('startDebugger: %j', response);
         console.log('Debugger listening on port %s.', response.port);
       });
@@ -781,9 +779,9 @@ function cmdDebuggerStop(client) {
 
   client.resolveTarget(target,
     function(err, service, executor, instance, process) {
-      dieIf(err);
+      if (err) return die(err);
       instance.stopDebugger(process.id, function(err, response) {
-        dieIf(err);
+        if (err) return die(err);
         debug('stopDebugger: %j', response);
         console.log('Debugger was disabled.');
       });
@@ -826,9 +824,12 @@ function optionalSome() {
 }
 
 function dieIf(err) {
-  if (!err)
-    return;
+  if (err) {
+    die(err);
+  }
+}
 
+function die(err) {
   var msg = String(err);
 
   // loopback error messages are very long and verbose... like:
@@ -839,9 +840,11 @@ function dieIf(err) {
   var msgs = msg.split('. ');
 
   console.error('Command %j on %j failed with %s',
-                command, dieIf.url, msgs.shift());
+                command, die.url, msgs.shift());
   if (msgs.length) {
     console.error('%s', msgs.join('. ').trim());
   }
-  process.exit(1);
+  process.on('exit', function(code) {
+    process.exit(code || 1);
+  });
 }

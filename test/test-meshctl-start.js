@@ -61,7 +61,7 @@ test('Test start command', function(t) {
       exec(port, 'start 1', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
         var patt = /Command "start" on "\S+" failed with error/;
-        tt.assert(patt.test(stderr), 'Rendered error should match');
+        tt.match(stderr.toString(), patt, 'Rendered error should match');
         tt.end();
       });
     });
