@@ -1,4 +1,5 @@
 var debug = require('debug')('strong-mesh-models:server:service-manager');
+var g = require('strong-globalize');
 
 function ServiceManager() {
   debug('ServiceManager created');
@@ -30,7 +31,7 @@ ServiceManager.prototype.onExecutorDestroy = onExecutorDestroy;
 
 function onExecutorRequest(id, req, callback) {
   debug('onExecutorRequest(%j)', req);
-  callback(Error('Executor request not implemented'));
+  callback(g.Error('Executor request not implemented'));
 }
 ServiceManager.prototype.onExecutorRequest = onExecutorRequest;
 
@@ -78,19 +79,19 @@ ServiceManager.prototype.onDeployment = onDeployment;
 
 function onCtlRequest(service, instance, req, callback) {
   debug('onCtlRequest(%j, %j, %j)', service, instance, req);
-  callback(null, {error: 'Control request not implemented'});
+  callback(null, {error: g.t('Control request not implemented')});
 }
 ServiceManager.prototype.onCtlRequest = onCtlRequest;
 
 function onApiRequest(req, callback) {
   debug('onApiRequest(%j)', req);
-  callback(Error('API request not implemented'));
+  callback(g.Error('API request not implemented'));
 }
 ServiceManager.prototype.onApiRequest = onApiRequest;
 
 // Expected to callback with err, or null and a new models.Api
 function getApiVersionInfo(callback) {
-  callback(Error('API version info request not implemented'));
+  callback(g.Error('API version info request not implemented'));
 }
 ServiceManager.prototype.getApiVersionInfo = getApiVersionInfo;
 

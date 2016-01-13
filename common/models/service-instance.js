@@ -1,3 +1,5 @@
+var g = require('strong-globalize');
+
 module.exports = function(ServiceInstance) {
   ServiceInstance.remoteMethod(
     'statusSummary',
@@ -6,7 +8,7 @@ module.exports = function(ServiceInstance) {
       isStatic: false,
       accepts: [],
       returns: {arg: 'status', type: 'object', root: true},
-      description: 'Retrieve a summary status of the instance',
+      description: g.t('Retrieve a summary status of the instance'),
     }
   );
 
@@ -17,7 +19,7 @@ module.exports = function(ServiceInstance) {
       isStatic: false,
       accepts: [],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Start the application on the instance.',
+      description: g.t('Start the application on the instance.'),
     }
   );
 
@@ -35,7 +37,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Stop the application on the instance.',
+      description: g.t('Stop the application on the instance.'),
     }
   );
 
@@ -53,7 +55,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Restart the application on the instance.',
+      description: g.t('Restart the application on the instance.'),
     }
   );
 
@@ -71,7 +73,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Set cluster size to N workers.',
+      description: g.t('Set cluster size to N workers.'),
     }
   );
 
@@ -89,7 +91,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Start tracking objects on a worker.',
+      description: g.t('Start tracking objects on a worker.'),
     }
   );
 
@@ -107,7 +109,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Stop tracking objects on a worker.',
+      description: g.t('Stop tracking objects on a worker.'),
     }
   );
 
@@ -127,7 +129,7 @@ module.exports = function(ServiceInstance) {
       http: {path: '/tracingStop', verb: 'post'},
       isStatic: false,
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Restart all workers with tracing off.',
+      description: g.t('Restart all workers with tracing off.'),
     }
   );
 
@@ -138,7 +140,7 @@ module.exports = function(ServiceInstance) {
       isStatic: false,
       accepts: [],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'List npm modules',
+      description: g.t('List npm modules'),
     }
   );
 
@@ -156,7 +158,8 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'agentTraces', type: '[AgentTrace]', root: true},
-      description: 'Get all agent traces for a process under this instance',
+      description: g.t(
+        'Get all agent traces for a process under this instance'),
     }
   );
 
@@ -179,7 +182,7 @@ module.exports = function(ServiceInstance) {
         root: true,
       },
       description:
-        'Get all ExpressUsageRecords for a process under this instance',
+        g.t('Get all ExpressUsageRecords for a process under this instance'),
     }
   );
 
@@ -197,7 +200,8 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'serviceMetrics', type: '[ServiceMetric]', root: true},
-      description: 'Get all ServiceMetrics for a process under this instance',
+      description: g.t(
+        'Get all ServiceMetrics for a process under this instance'),
     }
   );
 
@@ -215,7 +219,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'metaTransactions', type: ['string'], root: true},
-      description: 'Retrieve a list of transaction endpoints',
+      description: g.t('Retrieve a list of transaction endpoints'),
     }
   );
 
@@ -242,7 +246,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'transaction', type: 'object', root: true},
-      description: 'Retrieve transaction data',
+      description: g.t('Retrieve transaction data'),
     }
   );
 
@@ -260,7 +264,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'timeline', type: 'object', root: true},
-      description: 'Retrieve time line data',
+      description: g.t('Retrieve time line data'),
     }
   );
 
@@ -284,7 +288,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'trace', type: 'object', root: true},
-      description: 'Retrieve trace data for a profile key (pfKey)',
+      description: g.t('Retrieve trace data for a profile key (pfKey)'),
     }
   );
 
@@ -302,7 +306,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Stop tracking objects on a process.',
+      description: g.t('Stop tracking objects on a process.'),
     }
   );
 
@@ -320,7 +324,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Start tracking objects on a process.',
+      description: g.t('Start tracking objects on a process.'),
     }
   );
 
@@ -344,7 +348,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Start CPU profiling on a process.',
+      description: g.t('Start CPU profiling on a process.'),
     }
   );
 
@@ -362,7 +366,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Stop CPU profiling on a process.',
+      description: g.t('Stop CPU profiling on a process.'),
     }
   );
 
@@ -380,7 +384,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Take a snapshot of the HEAP for a process.',
+      description: g.t('Take a snapshot of the HEAP for a process.'),
     }
   );
 
@@ -403,7 +407,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Check support for the specified feature (feature).',
+      description: g.t('Check support for the specified feature (feature).'),
     }
   );
 
@@ -421,7 +425,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Returns all capabilities which are supported.',
+      description: g.t('Returns all capabilities which are supported.'),
     }
   );
 
@@ -445,7 +449,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Take a snapshot of the HEAP for a process.',
+      description: g.t('Take a snapshot of the HEAP for a process.'),
     }
   );
 
@@ -463,7 +467,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Start DevTools Debugger backend on a worker.',
+      description: g.t('Start DevTools Debugger backend on a worker.'),
     }
   );
 
@@ -481,7 +485,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Stop DevTools Debugger backend on a worker.',
+      description: g.t('Stop DevTools Debugger backend on a worker.'),
     }
   );
 };

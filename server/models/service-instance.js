@@ -1,6 +1,6 @@
 var async = require('async');
 var debug = require('debug')('strong-mesh-models:service-manager');
-var fmt = require('util').format;
+var g = require('strong-globalize');
 var genToken = require('../util').genToken;
 var observerHelper = require('./observerHelper');
 
@@ -138,8 +138,8 @@ module.exports = function extendServiceInstance(ServiceInstance) {
     ServiceInstance.findById(instanceId, function(err, instance) {
       if (err) return callback(err);
       if (!instance)
-        return callback(Error(
-          fmt('Instance with ID %s not found', instanceId)));
+        return callback(g.Error(
+          'Instance with ID %s not found', instanceId));
 
       var updates = {};
       if (instInfo.master && instInfo.master.setSize) {
@@ -158,8 +158,8 @@ module.exports = function extendServiceInstance(ServiceInstance) {
     ServiceInstance.findById(instanceId, function(err, instance) {
       if (err) return callback(err);
       if (!instance)
-        return callback(Error(fmt('Instance with ID %s not found', instanceId
-          )));
+        return callback(g.Error('Instance with ID %s not found', instanceId
+          ));
       return instance.updateAttributes(
         {applicationName: instInfo.appName}, callback
       );

@@ -6,6 +6,7 @@ var Parser = require('posix-getopt').BasicParser;
 var assert = require('assert');
 var debug = require('debug')('strong-mesh-models:meshadm');
 var fs = require('fs');
+var g = require('strong-globalize');
 var path = require('path');
 var table = require('text-table');
 var userHome = require('user-home');
@@ -14,12 +15,14 @@ var maybeTunnel = require('strong-tunnel');
 assert(userHome, 'User home directory cannot be determined!');
 
 function printHelp($0, prn) {
-  var USAGE = fs.readFileSync(require.resolve('./sl-meshadm.txt'), 'utf-8')
+  var USAGE = g.t('sl-meshadm.txt')
     .replace(/%MAIN%/g, $0)
     .trim();
 
   prn(USAGE);
 }
+
+g.setRootDir(path.resolve(__dirname, '..'));
 
 var argv = process.argv;
 var $0 = process.env.CMD || path.basename(argv[1]);
@@ -50,7 +53,7 @@ while ((option = parser.getopt()) !== undefined) {
       apiUrl = option.optarg;
       break;
     default:
-      console.error('Invalid usage (near option \'%s\'), try `%s --help`.',
+      g.error('Invalid usage (near option \'%s\'), try `%s --help`.',
         option.optopt,
         $0);
       process.exit(1);
@@ -106,7 +109,7 @@ function runCommand(client, command) {
 }
 
 function unknown() {
-  console.error('Unknown command: %s, try `%s --help`.', command, $0);
+  g.error('Unknown command: %s, try `%s --help`.', command, $0);
   process.exit(1);
 }
 
@@ -116,7 +119,7 @@ function cmdCreateExecutor(client) {
   client.executorCreate(driver, function(err, result) {
     debug('exec-create: %j', err || result);
     dieIf(err);
-    console.log('Created Executor id: %s token: %s',
+    g.log('Created Executor id: %s token: %s',
       result.id, result.token);
   });
 }
@@ -143,7 +146,7 @@ function cmdListExecutors(client) {
       }
       console.log(table(data, {align: ['c', 'c', 'c', 'c', 'c', 'c']}));
     } else {
-      console.log('No executors defined');
+      g.log('No executors defined');
     }
   });
 }
@@ -154,7 +157,7 @@ function cmdRemoveExecutor(client) {
   client.executorDestroy(id, function(err, result) {
     debug('exec-remove: %j', err || result);
     dieIf(err);
-    console.log('Removed executor: %s', id);
+    g.log('Removed executor: %s', id);
   });
 }
 
@@ -164,7 +167,7 @@ function cmdShutdownExecutor(client) {
   client.executorShutdown(id, function(err, result) {
     debug('exec-shutdown: %j', err || result);
     dieIf(err);
-    console.log('Shutting down executor: %s', id);
+    g.log('Shutting down executor: %s', id);
   });
 }
 
@@ -173,7 +176,7 @@ function cmdCreateGateway(client) {
   client.gatewayCreate(function(err, result) {
     debug('gw-create: %j', err || result);
     dieIf(err);
-    console.log('Created gateway controller id: %s token: %s',
+    g.log('Created gateway controller id: %s token: %s',
       result.id, result.token);
   });
 }
@@ -193,7 +196,7 @@ function cmdListGateway(client) {
       }
       console.log(table(data, {align: ['c', 'c']}));
     } else {
-      console.log('No gateway controllers defined');
+      g.log('No gateway controllers defined');
     }
   });
 }
@@ -204,7 +207,7 @@ function cmdRemoveGateway(client) {
   client.gatewayDestroy(id, function(err, result) {
     debug('gw-remove: %j', err || result);
     dieIf(err);
-    console.log('Removed gateway controller: %s', id);
+    g.log('Removed gateway controller: %s', id);
   });
 }
 
@@ -214,13 +217,13 @@ function cmdShutdownGateway(client) {
   client.gatewayShutdown(id, function(err, result) {
     debug('gw-shutdown: %j', err || result);
     dieIf(err);
-    console.log('Shutting down gateway controller: %s', id);
+    g.log('Shutting down gateway controller: %s', id);
   });
 }
 
 function mandatory(name) {
   if (optind >= argv.length) {
-    console.error('Missing %s argument for %s, try `%s --help`.',
+    g.error('Missing %s argument for %s, try `%s --help`.',
       name, command, $0);
     process.exit(1);
   }
@@ -249,10 +252,10 @@ function dieIf(err) {
   // Split into first line, and the rest.
   var msgs = msg.split('. ');
 
-  console.error('Command %j on %j failed with %s',
+  g.error('Command %j on %j failed with %s',
                 command, dieIf.url, msgs.shift());
   if (msgs.length) {
-    console.error('%s', msgs.join('. ').trim());
+    g.error('%s', msgs.join('. ').trim());
   }
   process.exit(1);
 }

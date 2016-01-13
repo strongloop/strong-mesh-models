@@ -2,6 +2,7 @@ var assert = require('assert');
 var debug = require('debug')('strong-mesh-models:server:instance-action');
 var fs = require('fs');
 var fmt = require('util').format;
+var g = require('strong-globalize');
 var path = require('path');
 var util = require('util');
 
@@ -32,23 +33,23 @@ module.exports = function extendInstanceAction(InstanceAction) {
     action.serviceInstance(function(err, instance) {
       if (err) return next(err);
       if (!instance)
-        return next(Error('Invalid action, no associated instance found'));
+        return next(g.Error('Invalid action, no associated instance found'));
 
       instance.serverService(function(err, service) {
         if (err) return next(err);
         if (!service)
-          return next(Error(fmt(
+          return next(g.Error(
             'Invalid instance (ID: %s), no associated service found',
             instance.id
-          )));
+          ));
 
         instance.executor(function(err, executor) {
           if (err) return next(err);
           if (!executor)
-            return next(Error(fmt(
+            return next(g.Error(
               'Invalid instance (ID: %s), no associated executor found',
               instance.id
-            )));
+            ));
 
           // If we know the target ServiceProcess, or the command has no
           // target, we can process the action.
@@ -68,10 +69,10 @@ module.exports = function extendInstanceAction(InstanceAction) {
           instance.processes(processFilter, function(err, processes) {
             if (err) return next(err);
             if (processes.length !== 1)
-              return next(new Error('Unable to find target ' + target));
+              return next(new Error(g.t('Unable to find target %s', target)));
             var proc = processes[0];
             action.serviceProcessId = proc.id;
-            console.log('ACTION %j', action);
+            g.log('ACTION %j', action);
             return processAction(service, executor, instance, action, next);
           });
         });
@@ -211,7 +212,7 @@ module.exports = function extendInstanceAction(InstanceAction) {
       function complete(err, res) {
         if (err || !res) {
           res = res || {};
-          res.error = err ? err.message : 'Target process not found';
+          res.error = err ? err.message : g.t('Target process not found');
         }
 
         if (res.error) {
@@ -227,7 +228,7 @@ module.exports = function extendInstanceAction(InstanceAction) {
         assert(profileData);
         fs.writeFile(fileName, profileData, function(err) {
           if (err) {
-            console.error('Failed to write profile %d, file %j: %s',
+            g.error('Failed to write profile %d, file %j: %s',
                           profile.id, fileName, err);
             profile.errored = err.message;
           } else {

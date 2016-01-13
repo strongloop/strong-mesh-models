@@ -48,3 +48,4 @@ node_modules
 .strong-pm
 test/minkelite.db
 test/patch.file
+intl/MSG.json

@@ -1,6 +1,7 @@
 var async = require('async');
 var debug = require('debug')('strong-mesh-models:server:service-process');
 var fmt = require('util').format;
+var g = require('strong-globalize');
 
 module.exports = function extendServiceProcess(ServiceProcess) {
   function recordFork(instanceId, pInfo, callback) {
@@ -440,8 +441,8 @@ module.exports = function extendServiceProcess(ServiceProcess) {
   function recordDebuggerStatusUpdate(instanceId, pInfo, callback) {
     function updateDebuggerStatus(proc, next) {
       if (!proc)
-        return next(Error(
-          fmt('Process state update for unknown process: %j', pInfo)));
+        return next(g.Error(
+          'Process state update for unknown process: %j', pInfo));
 
       proc.updateAttributes({
         debugger: {

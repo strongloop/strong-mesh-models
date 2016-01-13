@@ -1,3 +1,5 @@
+var g = require('strong-globalize');
+
 module.exports = function api(Api) {
   Api.remoteMethod(
     'shutdown',
@@ -6,7 +8,7 @@ module.exports = function api(Api) {
       isStatic: true,
       accepts: [],
       returns: {arg: 'response', type: 'object', root: true},
-      description: 'Shutdown this server.',
+      description: g.t('Shutdown this server.'),
     }
   );
   Api.remoteMethod(
@@ -16,7 +18,7 @@ module.exports = function api(Api) {
       isStatic: true,
       accepts: [],
       returns: {arg: 'response', type: 'Api', root: true},
-      description: 'Get API information',
+      description: g.t('Get API information'),
     }
   );
 };

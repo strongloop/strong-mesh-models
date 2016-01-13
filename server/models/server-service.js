@@ -4,6 +4,7 @@ var async = require('async');
 var debug = require('debug')('strong-mesh-models:service-manager');
 var fmt = require('util').format;
 var fs = require('fs');
+var g = require('strong-globalize');
 var observerHelper = require('./observerHelper');
 
 module.exports = function extendServerService(ServerService) {
@@ -92,7 +93,7 @@ module.exports = function extendServerService(ServerService) {
       if (err) return callback(err);
       // With loopback, !err isn't the same as 'success'! :-(
       if (!service) callback(new Error(
-        fmt('setServiceCommit: service %j not found', serviceId)));
+        g.t('setServiceCommit: service %j not found', serviceId)));
       service.updateAttributes({deploymentInfo: commit}, callback);
     });
   }
@@ -115,7 +116,7 @@ module.exports = function extendServerService(ServerService) {
     function sendProfile(err, profile) {
       if (err) {
         res.statusCode = 404;
-        return res.end(fmt('Profile data not found: %s', err.message));
+        return res.end(g.t('Profile data not found: %s', err.message));
       }
 
       if (!profile) {
@@ -138,13 +139,13 @@ module.exports = function extendServerService(ServerService) {
       // Else, not complete
       res.statusCode = 204;
       debug('profile %d not yet complete', profileId);
-      return res.end('not yet completed');
+      return res.end(g.t('not yet completed'));
     }
 
     function checkandSendFile(err, stat) {
       if (err) {
         res.statusCode = 404;
-        return res.end('Profile data not found.');
+        return res.end(g.t('Profile data not found.'));
       }
 
       debug('profile %d complete. sending', profileId);

@@ -1,3 +1,4 @@
+var g = require('strong-globalize');
 var debug = require('debug')('strong-mesh-models:common:service');
 
 module.exports = function(Service) {
@@ -30,7 +31,7 @@ module.exports = function(Service) {
         {arg: 'req', http: {source: 'req'}},
         {arg: 'res', http: {source: 'res'}},
       ],
-      description: 'Deploy service',
+      description: g.t('Deploy service'),
     });
 
     this.remoteMethod('setEnv', {
@@ -41,7 +42,7 @@ module.exports = function(Service) {
         {arg: 'value', required: true, type: 'string', http: {source: 'body'}},
       ],
       returns: {arg: 'env', type: 'object'},
-      description: 'Set environment variables',
+      description: g.t('Set environment variables'),
     });
 
     this.remoteMethod('setEnvs', {
@@ -54,12 +55,13 @@ module.exports = function(Service) {
           type: 'object',
           http: {source: 'body'},
           root: true,
-          description: 'Key-value describing environment variables to add. ' +
-            'A null value causes the variable to be removed',
+          description: g.t(
+            'Key-value describing environment variables to add. ' +
+            'A null value causes the variable to be removed'),
         },
       ],
       returns: {arg: 'env', type: 'object'},
-      description: 'Set multiple environment variables.',
+      description: g.t('Set multiple environment variables.'),
     });
 
     this.remoteMethod('unsetEnv', {
@@ -69,7 +71,7 @@ module.exports = function(Service) {
         {arg: 'name', required: true, type: 'string', http: {source: 'path'}},
       ],
       returns: {arg: 'env', type: 'object'},
-      description: 'Unset environment variables',
+      description: g.t('Unset environment variables'),
     });
 
     this.remoteMethod('downloadProfile', {
@@ -78,7 +80,7 @@ module.exports = function(Service) {
       accepts: [
         {arg: 'ctx', http: {source: 'context'}},
       ],
-      description: 'Download service profiling information',
+      description: g.t('Download service profiling information'),
     });
 
     this.remoteMethod(
@@ -88,7 +90,7 @@ module.exports = function(Service) {
         isStatic: false,
         accepts: [],
         returns: {arg: 'response', type: 'object', root: true},
-        description: 'Start the application on the instance.',
+        description: g.t('Start the application on the instance.'),
       }
     );
 
@@ -106,7 +108,7 @@ module.exports = function(Service) {
           },
         ],
         returns: {arg: 'response', type: 'object', root: true},
-        description: 'Stop the application on the instance.',
+        description: g.t('Stop the application on the instance.'),
       }
     );
 
@@ -124,7 +126,7 @@ module.exports = function(Service) {
           },
         ],
         returns: {arg: 'response', type: 'object', root: true},
-        description: 'Restart the application on the instance.',
+        description: g.t('Restart the application on the instance.'),
       }
     );
 
@@ -135,7 +137,7 @@ module.exports = function(Service) {
         isStatic: false,
         accepts: [],
         returns: {arg: 'response', type: 'object', root: true},
-        description: 'Retrieve logs for the application.',
+        description: g.t('Retrieve logs for the application.'),
       }
     );
 
@@ -156,7 +158,7 @@ module.exports = function(Service) {
           },
         ],
         returns: {arg: 'response', type: 'object', root: true},
-        description: 'Set cluster size',
+        description: g.t('Set cluster size'),
       }
     );
 

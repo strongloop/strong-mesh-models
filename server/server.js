@@ -4,6 +4,7 @@ var assert = require('assert');
 var async = require('async');
 var boot = require('loopback-boot');
 var debug = require('debug')('strong-mesh-models:server');
+var g = require('strong-globalize');
 var loopback = require('loopback');
 var url = require('url');
 
@@ -67,7 +68,7 @@ function server(serviceManager, minkelite, options) {
       app._server = app.listen(function() {
         var addr = this.address();
         app.emit('started', addr.port);
-        console.log('Web server listening at port: %s', addr.port);
+        g.log('Web server listening at port: %s', addr.port);
         if (callback) return callback(null, addr.port);
       });
     });

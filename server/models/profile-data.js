@@ -4,6 +4,7 @@ var async = require('async');
 var debug = require('debug')('strong-mesh-models:server:profile-data');
 var fmt = require('util').format;
 var fs = require('fs');
+var g = require('strong-globalize');
 var path = require('path');
 
 module.exports = function extendProfileData(ProfileData) {
@@ -17,7 +18,7 @@ module.exports = function extendProfileData(ProfileData) {
 
     ProfileData.find({where: ctx.where}, function(err, profiles) {
       if (err) {
-        console.error('ProfileData find where %j failed: %s', ctx.where, err);
+        g.error('ProfileData find where %j failed: %s', ctx.where, err);
         return next(); // Ignore error, leak the file(s).
       }
 
@@ -35,7 +36,7 @@ module.exports = function extendProfileData(ProfileData) {
 
       fs.unlink(profile.fileName, function(err) {
         if (err) {
-          console.error('ProfileData %d - unlink %j failed: %s',
+          g.error('ProfileData %d - unlink %j failed: %s',
                         profile.id, profile.fileName, err);
         } else {
           debug('ProfileData %d - unlinked %j', profile.id, profile.fileName);
@@ -80,7 +81,7 @@ module.exports = function extendProfileData(ProfileData) {
       if (err) return callback(err);
 
       if (!proc) {
-        console.error('Profile for %j, but no such process!', qProcess.where);
+        g.error('Profile for %j, but no such process!', qProcess.where);
         return callback();
       }
 
@@ -101,7 +102,7 @@ module.exports = function extendProfileData(ProfileData) {
       if (err) return callback(err);
 
       if (!profileData) {
-        console.error('Process for %j, but no active profile!', qProcess.where);
+        g.error('Process for %j, but no active profile!', qProcess.where);
         return callback();
       }
 
@@ -109,7 +110,7 @@ module.exports = function extendProfileData(ProfileData) {
 
       fs.writeFile(fileName, profile, function(err) {
         if (err) {
-          console.error('Profile %d failed to write %s: %s',
+          g.error('Profile %d failed to write %s: %s',
             profileData.id, fileName, err);
           profileData.errored = String(err);
         } else {
