@@ -53,7 +53,7 @@ while ((option = parser.getopt()) !== undefined) {
       apiUrl = option.optarg;
       break;
     default:
-      g.error('Invalid usage (near option \'%s\'), try `%s --help`.',
+      g.error('Invalid usage (near option \'%s\'), try `{{%s --help}}`.',
         option.optopt,
         $0);
       process.exit(1);
@@ -109,7 +109,7 @@ function runCommand(client, command) {
 }
 
 function unknown() {
-  g.error('Unknown command: %s, try `%s --help`.', command, $0);
+  g.error('Unknown command: %s, try `{{%s --help}}`.', command, $0);
   process.exit(1);
 }
 
@@ -223,7 +223,7 @@ function cmdShutdownGateway(client) {
 
 function mandatory(name) {
   if (optind >= argv.length) {
-    g.error('Missing %s argument for %s, try `%s --help`.',
+    g.error('Missing %s argument for %s, try `{{%s --help}}`.',
       name, command, $0);
     process.exit(1);
   }
