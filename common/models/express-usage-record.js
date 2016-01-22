@@ -1,12 +1,10 @@
-var g = require('strong-globalize');
-
 module.exports = function expressUsageRecord(ExpressUsageRecord) {
   ExpressUsageRecord.remoteMethod('dailySummary', {
     isStatic: true,
     http: {path: '/dailySummary', verb: 'get'},
     accepts: [],
     returns: {arg: 'summary', type: 'object', root: true},
-    description: g.t('Daily summary by endpoint'),
+    description: 'Daily summary by endpoint',
   });
 
   ExpressUsageRecord.remoteMethod('hourlySummary', {
@@ -20,8 +18,8 @@ module.exports = function expressUsageRecord(ExpressUsageRecord) {
       },
     ],
     returns: {arg: 'summary', type: 'object', root: true},
-    description: g.t('Number of calls to endpoint/method summarized ' +
-      'by hour for one day'),
+    description: 'Number of calls to endpoint/method summarized ' +
+      'by hour for one day',
   });
 
   ExpressUsageRecord.remoteMethod('endpointDetail', {
@@ -38,6 +36,6 @@ module.exports = function expressUsageRecord(ExpressUsageRecord) {
         type: 'date',
       }],
     returns: {arg: 'summary', type: 'object', root: true},
-    description: g.t('Endpoint details for one hour'),
+    description: 'Endpoint details for one hour',
   });
 };

@@ -1,4 +1,3 @@
-var g = require('strong-globalize');
 var os = require('os');
 
 module.exports = function(Executor) {
@@ -25,7 +24,7 @@ module.exports = function(Executor) {
       isStatic: false,
       accepts: [],
       returns: {arg: 'response', type: 'object', root: true},
-      description: g.t('Shutdown this executor.'),
+      description: 'Shutdown this executor.',
     }
   );
 };

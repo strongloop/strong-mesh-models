@@ -1,4 +1,3 @@
-var g = require('strong-globalize');
 var debug = require('debug')('strong-mesh-models:common:service');
 
 module.exports = function(Service) {
@@ -31,7 +30,7 @@ module.exports = function(Service) {
         {arg: 'req', http: {source: 'req'}},
         {arg: 'res', http: {source: 'res'}},
       ],
-      description: g.t('Deploy service'),
+      description: 'Deploy service',
     });
 
     this.remoteMethod('setEnv', {
@@ -42,7 +41,7 @@ module.exports = function(Service) {
         {arg: 'value', required: true, type: 'string', http: {source: 'body'}},
       ],
       returns: {arg: 'env', type: 'object'},
-      description: g.t('Set environment variables'),
+      description: 'Set environment variables',
     });
 
     this.remoteMethod('setEnvs', {
@@ -55,13 +54,13 @@ module.exports = function(Service) {
           type: 'object',
           http: {source: 'body'},
           root: true,
-          description: g.t(
+          description:
             'Key-value describing environment variables to add. ' +
-            'A null value causes the variable to be removed'),
+            'A null value causes the variable to be removed',
         },
       ],
       returns: {arg: 'env', type: 'object'},
-      description: g.t('Set multiple environment variables.'),
+      description: 'Set multiple environment variables.',
     });
 
     this.remoteMethod('unsetEnv', {
@@ -71,7 +70,7 @@ module.exports = function(Service) {
         {arg: 'name', required: true, type: 'string', http: {source: 'path'}},
       ],
       returns: {arg: 'env', type: 'object'},
-      description: g.t('Unset environment variables'),
+      description: 'Unset environment variables',
     });
 
     this.remoteMethod('downloadProfile', {
@@ -80,7 +79,7 @@ module.exports = function(Service) {
       accepts: [
         {arg: 'ctx', http: {source: 'context'}},
       ],
-      description: g.t('Download service profiling information'),
+      description: 'Download service profiling information',
     });
 
     this.remoteMethod(
@@ -90,7 +89,7 @@ module.exports = function(Service) {
         isStatic: false,
         accepts: [],
         returns: {arg: 'response', type: 'object', root: true},
-        description: g.t('Start the application on the instance.'),
+        description: 'Start the application on the instance.',
       }
     );
 
@@ -108,7 +107,7 @@ module.exports = function(Service) {
           },
         ],
         returns: {arg: 'response', type: 'object', root: true},
-        description: g.t('Stop the application on the instance.'),
+        description: 'Stop the application on the instance.',
       }
     );
 
@@ -126,7 +125,7 @@ module.exports = function(Service) {
           },
         ],
         returns: {arg: 'response', type: 'object', root: true},
-        description: g.t('Restart the application on the instance.'),
+        description: 'Restart the application on the instance.',
       }
     );
 
@@ -137,7 +136,7 @@ module.exports = function(Service) {
         isStatic: false,
         accepts: [],
         returns: {arg: 'response', type: 'object', root: true},
-        description: g.t('Retrieve logs for the application.'),
+        description: 'Retrieve logs for the application.',
       }
     );
 
@@ -158,7 +157,7 @@ module.exports = function(Service) {
           },
         ],
         returns: {arg: 'response', type: 'object', root: true},
-        description: g.t('Set cluster size'),
+        description: 'Set cluster size',
       }
     );
 

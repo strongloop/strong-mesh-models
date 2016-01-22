@@ -1,5 +1,3 @@
-var g = require('strong-globalize');
-
 module.exports = function extendServiceProcess(ServiceProcess) {
   ServiceProcess.remoteMethod(
     'getMetaTransactions',
@@ -7,7 +5,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       http: {path: '/getMetaTransactions', verb: 'get'},
       isStatic: false,
       returns: {arg: 'metaTransactions', type: ['string'], root: true},
-      description: g.t('Retrieve a list of transaction endpoints'),
+      description: 'Retrieve a list of transaction endpoints',
     }
   );
 
@@ -25,7 +23,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
         },
       ],
       returns: {arg: 'transaction', type: 'object', root: true},
-      description: g.t('Retrieve transaction data'),
+      description: 'Retrieve transaction data',
     }
   );
 
@@ -36,7 +34,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       isStatic: false,
       accepts: [],
       returns: {arg: 'timeline', type: 'object', root: true},
-      description: g.t('Retrieve time line data'),
+      description: 'Retrieve time line data',
     }
   );
 
@@ -54,7 +52,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
         },
       ],
       returns: {arg: 'trace', type: 'object', root: true},
-      description: g.t('Retrieve trace data for a profile key (pfKey)'),
+      description: 'Retrieve trace data for a profile key (pfKey)',
     }
   );
 
@@ -65,7 +63,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       isStatic: false,
       accepts: [],
       returns: {arg: 'response', type: 'object', root: true},
-      description: g.t('Stop tracking objects on a process.'),
+      description: 'Stop tracking objects on a process.',
     }
   );
 
@@ -76,7 +74,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       isStatic: false,
       accepts: [],
       returns: {arg: 'response', type: 'object', root: true},
-      description: g.t('Start tracking objects on a process.'),
+      description: 'Start tracking objects on a process.',
     }
   );
 
@@ -93,7 +91,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
         root: true,
       }],
       returns: {arg: 'response', type: 'object', root: true},
-      description: g.t('Start CPU profiling on a process.'),
+      description: 'Start CPU profiling on a process.',
     }
   );
 
@@ -104,7 +102,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       isStatic: false,
       accepts: [],
       returns: {arg: 'response', type: 'object', root: true},
-      description: g.t('Stop CPU profiling on a process.'),
+      description: 'Stop CPU profiling on a process.',
     }
   );
 
@@ -115,7 +113,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       isStatic: false,
       accepts: [],
       returns: {arg: 'response', type: 'object', root: true},
-      description: g.t('Take a snapshot of the HEAP for a process.'),
+      description: 'Take a snapshot of the HEAP for a process.',
     }
   );
 
@@ -131,7 +129,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
         http: {source: 'path'},
       }],
       returns: {arg: 'response', type: 'object', root: true},
-      description: g.t('Check support for the specified feature (feature).'),
+      description: 'Check support for the specified feature (feature).',
     }
   );
 
@@ -142,7 +140,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       isStatic: false,
       accepts: [],
       returns: {arg: 'response', type: 'object', root: true},
-      description: g.t('Returns all capabilities which are supported.'),
+      description: 'Returns all capabilities which are supported.',
     }
   );
 
@@ -159,7 +157,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
         root: true,
       }],
       returns: {arg: 'response', type: 'object', root: true},
-      description: g.t('Take a snapshot of the HEAP for a process.'),
+      description: 'Take a snapshot of the HEAP for a process.',
     }
   );
 
@@ -170,7 +168,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       isStatic: false,
       accepts: [],
       returns: {arg: 'response', type: 'object', root: true},
-      description: g.t('Start DevTools Debugger backend on a worker.'),
+      description: 'Start DevTools Debugger backend on a worker.',
     }
   );
 
@@ -181,7 +179,7 @@ module.exports = function extendServiceProcess(ServiceProcess) {
       isStatic: false,
       accepts: [],
       returns: {arg: 'response', type: 'object', root: true},
-      description: g.t('Stop DevTools Debugger backend on a worker.'),
+      description: 'Stop DevTools Debugger backend on a worker.',
     }
   );
 };
