@@ -40,10 +40,11 @@ test('Test env commands', function(t) {
       exec.resetHome();
       exec(port, 'env-set 1 A=1 B=2', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, 'Service "service 1" environment updated\n' +
-          '    Name  Value\n' +
-          '    A     1\n' +
-          '    B     2\n',
+        tt.match(stdout,
+          new RegExp(['Service.+service 1.+environment updated\\n',
+          '    Name  Value\\n',
+          '    A     1\\n',
+          '    B     2\\n'].join('')),
           'Rendered output should match');
         tt.end();
       });
@@ -53,11 +54,12 @@ test('Test env commands', function(t) {
       exec.resetHome();
       exec(port, 'env-set 1 URL=db://host?foo=bar', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, 'Service "service 1" environment updated\n' +
-          '    Name  Value\n' +
-          '    A     1\n' +
-          '    B     2\n' +
-          '    URL   db://host?foo=bar\n',
+        tt.match(stdout,
+          new RegExp(['Service.+service 1.+environment updated\\n',
+          '    Name  Value\\n',
+          '    A     1\\n',
+          '    B     2\\n',
+          '    URL   db:.+host\\?foo=bar\\n'].join('')),
           'Rendered output should match');
         tt.end();
       });
@@ -84,8 +86,9 @@ test('Test env commands', function(t) {
       exec.resetHome();
       exec(port, 'env-unset 1 A B URL', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, 'Service "service 1" environment updated\n' +
-          '  No environment variables defined\n',
+        tt.match(stdout,
+          new RegExp('Service.+service 1.+environment updated\n' +
+          '  No environment variables defined\n'),
           'Rendered output should match');
         tt.end();
       });
@@ -111,7 +114,7 @@ test('Test env commands', function(t) {
       exec.resetHome();
       exec(port, 'env-set 1 A=1 B=2', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        var patt = /Command "env-set" on "\S+" failed with Error: bad stuff/;
+        var patt = /Command.+env-set.+on.+failed with Error: bad stuff/;
         tt.match(stderr.toString(), patt, 'Rendered error should match');
         tt.end();
       });
@@ -121,7 +124,7 @@ test('Test env commands', function(t) {
       exec.resetHome();
       exec(port, 'env-unset 1 C', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        var patt = /Command "env-unset" on "\S+" failed with Error: bad stuff/;
+        var patt = /Command.+env-unset.+on.+failed with Error: bad stuff/;
         tt.match(stderr.toString(), patt, 'Rendered error should match');
         tt.end();
       });

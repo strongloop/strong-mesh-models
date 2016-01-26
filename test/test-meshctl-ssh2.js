@@ -29,7 +29,8 @@ test('Test SSH tunnel', skipOnWindows, function(t) {
       exec.withSSH(port, 'start 1', function(err, stdout, stderr) {
         tt.ifError(err, 'command should not error');
         tt.comment(stderr);
-        tt.equal(stdout, 'Service "service 1" starting...\n',
+        var patt = /Service.+service 1.+starting/;
+        tt.match(stdout, patt,
           'Rendered output should match');
         tt.end();
       });

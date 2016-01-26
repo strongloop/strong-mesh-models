@@ -79,7 +79,7 @@ test('Test ls command', function(t) {
       exec.resetHome();
       exec(port, 'npmls 1', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        var patt = /Command "npmls" on "\S+" failed with Error: no app /;
+        var patt = /Command.+npmls.+on.+failed with Error: no app /;
         tt.match(stderr.toString(), patt, 'Rendered error should match');
         tt.end();
       });

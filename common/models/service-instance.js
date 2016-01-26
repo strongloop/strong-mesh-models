@@ -156,8 +156,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'agentTraces', type: '[AgentTrace]', root: true},
-      description:
-        'Get all agent traces for a process under this instance',
+      description: 'Get all agent traces for a process under this instance',
     }
   );
 
@@ -198,8 +197,7 @@ module.exports = function(ServiceInstance) {
         },
       ],
       returns: {arg: 'serviceMetrics', type: '[ServiceMetric]', root: true},
-      description:
-        'Get all ServiceMetrics for a process under this instance',
+      description: 'Get all ServiceMetrics for a process under this instance',
     }
   );
 

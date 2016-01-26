@@ -52,8 +52,8 @@ test('Test set-size command', function(t) {
       exec.resetHome();
       exec(port, 'set-size 1 2', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.match(stdout, /Service.*size was set to 2/,
-          'Rendered output should match');
+        var patt = /Service.+size was set to 2/;
+        tt.match(stdout, patt, 'Rendered output should match');
         tt.end();
       });
     });

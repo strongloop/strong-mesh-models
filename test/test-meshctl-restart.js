@@ -35,7 +35,7 @@ test('Test restart command', function(t) {
       exec.resetHome();
       exec(port, 'restart 1', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, 'Service "service 1" restarting\n',
+        tt.match(stdout, /Service.+service 1.+restarting\n/,
           'Rendered output should match');
         tt.end();
       });
@@ -64,8 +64,8 @@ test('Test restart command', function(t) {
       exec.resetHome();
       exec(port, 'soft-restart 1', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout, 'Service "service 1" soft restarting\n',
-          'Rendered output should match');
+        var patt = /Service.+service 1.+soft restarting\n/;
+        tt.match(stdout, patt, 'Rendered output should match');
         tt.end();
       });
     });
@@ -119,7 +119,7 @@ test('Test restart command', function(t) {
       exec.resetHome();
       exec(port, 'restart 1', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        var patt = /Command "restart" on "\S+" failed with error/;
+        var patt = /Command.+restart.+on.+failed with error/;
         tt.match(stderr.toString(), patt, 'Rendered error should match');
         tt.end();
       });

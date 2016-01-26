@@ -81,7 +81,7 @@ test('Test heap-snapshot commands', function(t) {
       exec.resetHome();
       exec(port, 'heap-snapshot 2', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        var patt = /Command "heap-snapshot" on "\S+" failed with Error:.+500/;
+        var patt = /Command.+heap-snapshot.+on.+failed with Error:.+500/;
         tt.match(stderr.toString(), patt, 'Rendered error should match');
         tt.end();
       });

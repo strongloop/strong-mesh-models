@@ -7,25 +7,14 @@ Options:
   {{-v,--version}}            Print version and exit.
   {{-C,--control CTL}}        Control endpoint for process manager.
 
-The control endpoint for the process manager is searched for if not specified,
-in this order:
+The control endpoint for the process manager is searched for if not specified, in this order:
 
 1. `{{STRONGLOOP_PM}}` in environment: an {{HTTP URL}}.
 2. `{{http://localhost:8701}}`: a process manager running on {{localhost}}
 
-An {{HTTP URL}} is mandatory for remote process managers, but can also be used on
-{{localhost}}. If the process manager is using {{HTTP}} authentication
-then valid credentials must be set in the {{URL}} directly, such as
-`{{http://user-here:pass-here@example.com:7654}}`.
+An {{HTTP URL}} is mandatory for remote process managers, but can also be used on {{localhost}}. If the process manager is using {{HTTP}} authentication then valid credentials must be set in the {{URL}} directly, such as `{{http://user-here:pass-here@example.com:7654}}`.
 
-When using an {{HTTP URL}}, it can optionally be tunneled over ssh by changing the
-protocol to `{{http+ssh://}}`. The {{ssh username}} will default to your current user
-and authentication defaults to using your current ssh-agent. The {{username}} can be
-overridden by setting an `{{SSH_USER}}` environment variable. The authentication can
-be overridden to use an existing private key instead of an agent by setting the
-`{{SSH_KEY}}` environment variable to the path of the private key to be used. The
-port used for ssh defaults to the standard ssh port (22) but can be overridden
-by setting the `{{SSH_PORT}}` environment variable.
+When using an {{HTTP URL}}, it can optionally be tunneled over {{ssh}} by changing the protocol to `{{http+ssh://}}`. The {{ssh username}} will default to your current user and authentication defaults to using your current ssh-agent. The {{username}} can be overridden by setting an `{{SSH_USER}}` environment variable. The authentication can be overridden to use an existing private key instead of an agent by setting the `{{SSH_KEY}}` environment variable to the path of the private key to be used. The port used for {{ssh}} defaults to the standard {{ssh}} port (22) but can be overridden by setting the `{{SSH_PORT}}` environment variable.
 
 
 Global commands: apply to the process manager itself
@@ -37,51 +26,38 @@ Global commands: apply to the process manager itself
 
 Service commands: apply to a specific service
 
-`SVC` is either a service ID or service Name. It can be obtained by listing
-services using `ls` or `status`.
+`SVC` is either a service ID or service Name. It can be obtained by listing services using `ls` or `status`.
 
   {{create NAME}}             Create service named {{NAME}}.
 
   {{cluster-restart SVC}}     Restart the service SVC cluster workers.
-        This is a zero-downtime restart, the workers are soft restarted
-        one-by-one, so that some workers will always be available to service
-        requests.
+        This is a zero-downtime restart, the workers are soft restarted one-by-one, so that some workers will always be available to service requests.
 
   {{env[-get] SVC [KEYS...]}}
-        List specified environment variables for service SVC. If none are
-        specified, list all variables.
-  {{env-set SVC K=V...}}      Set one or more environment variables for service SVC.
+        List specified environment variables for service {{SVC}}. If none are specified, list all variables.
+  {{env-set SVC K=V...}}      Set one or more environment variables for service {{SVC}}.
   {{env-unset SVC KEYS...}}
-        Unset one or more environment variables for service SVC. The
-        environment variables are applied to the current application, and the
-        application is hard restarted with the new environment after change
-        (either set or unset).
+        Unset one or more environment variables for service {{SVC}}. The environment variables are applied to the current application, and the application is hard restarted with the new environment after change (either set or unset).
 
   {{log-dump SVC [--follow]}}
-        Empty the log buffer, dumping the contents to {{stdout}} for service SVC.
-        If --follow is given the log buffer is continuously dumped to {{stdout}}.
+        Empty the log buffer, dumping the contents to {{stdout}} for service {{SVC}}. If --follow is given the log buffer is continuously dumped to {{stdout}}.
 
   {{npmls SVC [DEPTH]}}       List dependencies of the service.
 
-  {{remove SVC}}              Remove a service SVC.
+  {{remove SVC}}              Remove a service {{SVC}}.
 
-  {{restart SVC}}             Hard stop and restart service SVC with new config.
+  {{restart SVC}}             Hard stop and restart service {{SVC}} with new config.
 
-  {{set-size SVC N}}          Set cluster size for service SVC to N workers.
-        The default cluster size is the number of CPU cores.
+  {{set-size SVC N}}          Set cluster size for service {{SVC}} to N workers. The default cluster size is the number of CPU cores.
 
-  {{start SVC}}               Start service SVC.
+  {{start SVC}}               Start service {{SVC}}.
 
-  {{status [SVC]}}            Report status for service SVC, or all services if
-        no SVC is provided. This is the default command.
+  {{status [SVC]}}            Report status for service {{SVC}}, or all services if no SVC is provided. This is the default command.
 
-  {{stop SVC}}                Hard stop service SVC.
+  {{stop SVC}}                Hard stop service {{SVC}}.
 
-  {{soft-stop SVC}}           Soft stop service SVC.
-  {{soft-restart SVC}}        Soft stop and restart service SVC with new config.
-        "{{Soft}}" stops notify workers they are being disconnected, and give them
-        a grace period for any existing connections to finish. "{{Hard}}" stops
-        kill the supervisor and its workers with `SIGTERM`.
+  {{soft-stop SVC}}           Soft stop service {{SVC}}.
+  {{soft-restart SVC}}        Soft stop and restart service {{SVC}} with new config."{{Soft}}" stops notify workers they are being disconnected, and give them a grace period for any existing connections to finish. "{{Hard}}" stops kill the supervisor and its workers with `{{SIGTERM}}`.
 
   {{tracing-start SVC}}       Restart all workers with tracing on.
 
@@ -90,44 +66,30 @@ services using `ls` or `status`.
 
 Worker commands: apply to a specific worker
 
-A `WRK` specification is either `{{<SVC>.<INST>.<PID>}}` or `{{<SVC>.<INST>.<WID>}}`,
-where SVC is the service ID, INST is the instance ID, and the final part is
-either the process ID, or the cluster worker ID.
+A `{{WRK}}` specification is either `{{<SVC>.<INST>.<PID>}}` or `{{<SVC>.<INST>.<WID>}}`, where {{SVC}} is the service ID, {{INST}} is the instance ID, and the final part is either the process ID, or the cluster worker ID.
 
-The WRK specification can be copied directly from the output of the status
-command.
+The {{WRK}} specification can be copied directly from the output of the status command.
 
-  {{cpu-start WRK [TO [ST]]}}  Start CPU profiling on worker WRK.
+  {{cpu-start WRK [TO [ST]]}}  Start CPU profiling on worker {{WRK}}.
         When TO is 0, starts the CPU profiler.
 
         Only supported on Linux:
-          TO is the optional Smart Profiling timeout, in milliseconds (default
-          is 0, no timeout). With a timeout, the profiler is activated when
-          an event loop stalls longer than TO; i.e. when a script runs for too
-          long. The profiling is suspended after the script returns to the
-          event loop.
+          TO is the optional Smart Profiling timeout, in milliseconds (default is 0, no timeout). With a timeout, the profiler is activated when an event loop stalls longer than TO; i.e. when a script runs for too long. The profiling is suspended after the script returns to the event loop.
 
-          ST is the number of stalls after which the profiler is stopped
-          automatically (default is 0, never auto-stop). View an auto-stopped
-          profile with `{{slc arc}}`.
+          ST is the number of stalls after which the profiler is stopped automatically (default is 0, never auto-stop). View an auto-stopped profile with `{{slc arc}}`.
 
-  {{cpu-stop WRK [NAME]}}      Stop CPU profiling on worker WRK.
-        The profile is saved as `{{<NAME>.cpuprofile}}`. CPU profiles must be
-        loaded into Chrome Dev Tools. The NAME is optional, and defaults to
-        `{{node.<WRK>}}`.
+  {{cpu-stop WRK [NAME]}}      Stop CPU profiling on worker {{WRK}}.
+        The profile is saved as `{{<NAME>.cpuprofile}}`. CPU profiles must be loaded into Chrome Dev Tools. The NAME is optional, and defaults to `{{node.<WRK>}}`.
 
-  {{heap-snapshot WRK [NAME]}} Save heap snapshot for worker WRK.
-        The snapshot is saved as `{{<NAME>.heapsnapshot}}`.  Heap snapshots must be
-        loaded into {{Chrome Dev Tools}}. The {{NAME}} is optional, and defaults to
-        `node.<WRK>`.
+  {{heap-snapshot WRK [NAME]}} Save heap snapshot for worker {{WRK}}.
+        The snapshot is saved as `{{<NAME>.heapsnapshot}}`.  Heap snapshots must be loaded into {{Chrome Dev Tools}}. The {{NAME}} is optional, and defaults to `node.<{{WRK}}>`.
 
-  {{objects-start WRK}}        Start tracking objects on worker WRK.
-  {{objects-stop WRK}}         Stop tracking objects on worker WRK.
-        Object tracking is published as metrics, and requires configuration so
-        that the `{{--metrics=URL}}` option is passed to the runner.
+  {{objects-start WRK}}        Start tracking objects on worker {{WRK}}.
+  {{objects-stop WRK}}         Stop tracking objects on worker {{WRK}}.
+        Object tracking is published as metrics, and requires configuration so that the `{{--metrics=URL}}` option is passed to the runner.
 
-  {{patch WRK FILE}}           Apply patch {{FILE}} to worker WRK.
+  {{patch WRK FILE}}           Apply patch {{FILE}} to worker {{WRK}}.
 
-  {{dbg-start WRK}}            Enable {{DevTools Debugger}} backend in worker WRK.
+  {{dbg-start WRK}}            Enable {{DevTools Debugger}} backend in worker {{WRK}}.
 
-  {{dbg-stop WRK}}             Disable {{DevTools Debugger backend}} in worker WRK.
+  {{dbg-stop WRK}}             Disable {{DevTools Debugger backend}} in worker {{WRK}}.

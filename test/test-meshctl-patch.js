@@ -80,7 +80,7 @@ test('Test patch commands', function(t) {
       fs.writeFileSync('patch.file', '{"file": "some patch data"}');
       exec(port, 'patch 1 patch.file', function(err, stdout, stderr) {
         tt.ok(err, 'command should error');
-        var patt = /Command "patch" on "\S+" failed with Error: some error/;
+        var patt = /Command.+patch.+on.+failed with Error: some error/;
         tt.match(stderr.toString(), patt, 'Rendered error should match');
         tt.end();
       });

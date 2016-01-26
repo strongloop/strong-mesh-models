@@ -10,7 +10,7 @@ var concat = require('concat-stream');
 var debug = require('debug')('strong-mesh-models:meshctl');
 var fmt = require('util').format;
 var fs = require('fs');
-var glb = require('strong-globalize');
+var g = require('strong-globalize');
 var npmls = require('strong-npm-ls');
 var path = require('path');
 var table = require('text-table');
@@ -20,14 +20,14 @@ var maybeTunnel = require('strong-tunnel');
 assert(userHome, 'User home directory cannot be determined!');
 
 function printHelp($0, prn) {
-  var USAGE = glb.t('sl-meshctl.txt')
+  var USAGE = g.t('sl-meshctl.txt')
     .replace(/%MAIN%/g, $0)
     .trim();
 
   prn(USAGE);
 }
 
-glb.setRootDir(path.resolve(__dirname, '..'));
+g.setRootDir(path.resolve(__dirname, '..'));
 
 var argv = process.argv;
 var $0 = process.env.CMD || path.basename(argv[1]);
@@ -48,7 +48,7 @@ var option;
 while ((option = parser.getopt()) !== undefined) {
   switch (option.option) {
     case 'v':
-      glb.log(require('../package.json').version);
+      g.log(require('../package.json').version);
       process.exit(0);
       break;
     case 'h':
@@ -62,7 +62,7 @@ while ((option = parser.getopt()) !== undefined) {
       verbose = true;
       break;
     default:
-      glb.error('Invalid usage (near option \'%s\'), try `%s --help`.',
+      g.error('Invalid usage (near option \'%s\'), try `%s --help`.',
         option.optopt,
         $0);
       process.exit(1);
@@ -139,7 +139,7 @@ function runCommand(client, command) {
 }
 
 function unknown() {
-  glb.error('Unknown command: %s, try `%s --help`.', command, $0);
+  g.error('Unknown command: %s, try `%s --help`.', command, $0);
   process.exit(1);
 }
 
@@ -183,7 +183,7 @@ function cmdInfo(client) {
     O('Driver Type:', 'driverType');
     O('Driver Status:', 'driverStatus');
 
-    glb.log('%s', table(infoTable));
+    g.log('%s', table(infoTable));
 
     function I(title, f) {
       var s = info[f];
@@ -205,9 +205,9 @@ function printServiceEnv(env) {
       if (!env.hasOwnProperty(k)) continue;
       envTable.push(['', k, env[k]]);
     }
-    glb.log('%s', table(envTable));
+    g.log('%s', table(envTable));
   } else {
-    glb.log('  No environment variables defined');
+    g.log('  No environment variables defined');
   }
 }
 
@@ -215,10 +215,10 @@ function printServiceStatus(service, callback) {
   service.getStatusSummary(function(err, summary) {
     if (err) return die(err);
 
-    glb.log('Service ID: %s', summary.id);
-    glb.log('Service Name: %s', summary.name);
+    g.log('Service ID: %s', summary.id);
+    g.log('Service Name: %s', summary.name);
 
-    glb.log('Environment variables:');
+    g.log('Environment variables:');
     printServiceEnv(summary.env);
 
     var instanceTable = [[
@@ -239,7 +239,7 @@ function printServiceStatus(service, callback) {
         inst.clusterSize, meta,
       ]);
     }
-    glb.log('Instances:\n%s', table(instanceTable, {
+    g.log('Instances:\n%s', table(instanceTable, {
       align: ['c', 'c', 'c', 'c', 'c', 'c'],
     }));
 
@@ -279,13 +279,13 @@ function printServiceStatus(service, callback) {
     }
 
     if (processTable.length > 1) {
-      glb.log('Processes:\n%s\n', table(processTable, {
+      g.log('Processes:\n%s\n', table(processTable, {
         align: [
           'c', 'c', 'c', 'c', 'c', 'c', 'l', 'c',
         ],
       }));
     } else {
-      glb.log('Not started');
+      g.log('Not started');
     }
 
     if (callback) return callback();
@@ -325,10 +325,10 @@ function printResponse(service, summmaryMsg, err, responses) {
   }
 
   if (verbose || hasError) {
-    glb.log('Service: %j', service.name);
-    glb.log(table(responseTable, {align: ['c', 'c']}));
+    g.log('Service: %j', service.name);
+    g.log(table(responseTable, {align: ['c', 'c']}));
   } else if (summmaryMsg) {
-    glb.log('Service %j %s', service.name, summmaryMsg);
+    g.log('Service %j %s', service.name, summmaryMsg);
   }
 
   if (hasError) die('error');
@@ -341,9 +341,9 @@ function cmdCreateService(client) {
   client.serviceCreate(name, scale, function(err, result) {
     debug('service-create: %j', err || result);
     if (err) return die(err);
-    var g = result._groups[0];
-    glb.log('Created Service id: %s name: %j group: %j scale: %d',
-      result.id, result.name, g.name, g.scale);
+    var rg = result._groups[0];
+    g.log('Created Service id: %s name: %j group: %j scale: %d',
+      result.id, result.name, rg.name, rg.scale);
   });
 }
 
@@ -359,16 +359,16 @@ function cmdListServices(client) {
         if (!result.hasOwnProperty(i)) continue;
         var s = result[i];
         var scale = 0;
-        for (var g in s._groups) {
-          if (!s._groups.hasOwnProperty(g)) continue;
-          scale += s._groups[g].scale;
+        for (var sg in s._groups) {
+          if (!s._groups.hasOwnProperty(sg)) continue;
+          scale += s._groups[sg].scale;
         }
 
         data.push([s.id, s.name, scale]);
       }
-      glb.log(table(data, {align: ['c', 'c', 'c']}));
+      g.log(table(data, {align: ['c', 'c', 'c']}));
     } else {
-      glb.log('No services defined');
+      g.log('No services defined');
     }
   });
 }
@@ -379,7 +379,7 @@ function cmdRemoveService(client) {
   client.serviceDestroy(name, function(err, result) {
     debug('service-destroy: %j', err || result);
     if (err) return die(err);
-    glb.log('Destroyed service: %s', name);
+    g.log('Destroyed service: %s', name);
   });
 }
 
@@ -387,7 +387,7 @@ function cmdStart(client) {
   var targetService = mandatory('service');
   client.serviceFind(targetService, function(err, service) {
     if (err) return die(err);
-    service.start(printResponse.bind(null, service, glb.t('starting...')));
+    service.start(printResponse.bind(null, service, g.t('starting...')));
   });
 }
 
@@ -395,7 +395,7 @@ function cmdStop(client) {
   var targetService = mandatory('service');
   client.serviceFind(targetService, function(err, service) {
     if (err) return die(err);
-    service.stop({}, printResponse.bind(null, service, glb.t('hard stopped')));
+    service.stop({}, printResponse.bind(null, service, g.t('hard stopped')));
   });
 }
 
@@ -405,7 +405,7 @@ function cmdSoftStop(client) {
     if (err) return die(err);
     service.stop(
       {soft: true},
-      printResponse.bind(null, service, glb.t('soft stopped'))
+      printResponse.bind(null, service, g.t('soft stopped'))
     );
   });
 }
@@ -414,7 +414,7 @@ function cmdRestart(client) {
   var targetService = mandatory('service');
   client.serviceFind(targetService, function(err, service) {
     if (err) return die(err);
-    service.restart({}, printResponse.bind(null, service, glb.t('restarting')));
+    service.restart({}, printResponse.bind(null, service, g.t('restarting')));
   });
 }
 
@@ -424,7 +424,7 @@ function cmdSoftRestart(client) {
     if (err) return die(err);
     service.restart(
       {soft: true},
-      printResponse.bind(null, service, glb.t('soft restarting'))
+      printResponse.bind(null, service, g.t('soft restarting'))
     );
   });
 }
@@ -447,7 +447,7 @@ function cmdSetClusterSize(client) {
     service.setClusterSize(
       size,
       persist,
-      printResponse.bind(null, service, glb.t('size was set to %d', size))
+      printResponse.bind(null, service, g.t('size was set to %d', size))
     );
   });
 }
@@ -489,7 +489,7 @@ function cmdCpuProfilingStart(client) {
       instance.startCpuProfiling(process.id, cmd, function(err, response) {
         if (err) return die(err);
         debug('startCpuProfiling: %j', response);
-        glb.log('Profiler started, use cpu-stop to get profile');
+        g.log('Profiler started, use cpu-stop to get profile');
       });
     }
   );
@@ -508,7 +508,7 @@ function cmdCpuProfilingStop(client) {
         var profileId = response.profileId;
         download(instance, profileId, fileName, function(err) {
           if (err) return die(err);
-          glb.log('CPU profile written to `%s`, load into Chrome Dev Tools',
+          g.log('CPU profile written to `%s`, load into Chrome Dev Tools',
             fileName);
         });
       });
@@ -523,7 +523,7 @@ function cmdTracingStart(client) {
       if (err) return die(err);
       instance.tracingStart(function(err) {
         if (err) return die(err);
-        glb.log('Tracing started');
+        g.log('Tracing started');
       });
     }
   );
@@ -536,7 +536,7 @@ function cmdTracingStop(client) {
       if (err) return die(err);
       instance.tracingStop(function(err) {
         if (err) return die(err);
-        glb.log('Tracing stopped');
+        g.log('Tracing stopped');
       });
     }
   );
@@ -555,7 +555,7 @@ function cmdHeapSnapshot(client) {
         var profileId = response.profileId;
         download(instance, profileId, fileName, function(err) {
           if (err) return die(err);
-          glb.log(
+          g.log(
             'Heap snapshot written to `%s`, load into Chrome Dev Tools',
             fileName
           );
@@ -578,7 +578,7 @@ function cmdLs(client) {
         var instance = instances[0];
         instance.npmModuleList(function(err, response) {
           if (err) return die(err);
-          glb.log(npmls.printable(response, depth));
+          g.log(npmls.printable(response, depth));
         });
       });
     });
@@ -610,7 +610,7 @@ function cmdEnvSet(client) {
       if (err) return die(err);
 
       // XXX: Update when server supports rollback if instance update fails.
-      printResponse(service, glb.t('environment updated'), err, responses);
+      printResponse(service, g.t('environment updated'), err, responses);
       service.refresh(function(err, service) {
         if (err) return die(err);
         printServiceEnv(service.env);
@@ -621,7 +621,7 @@ function cmdEnvSet(client) {
   function extractKeyValue(store, pair) {
     var kv = pair.split('=');
     if (!kv[0] || !kv[1]) {
-      glb.error('Invalid usage (not K=V format: `%s`), try `%s --help`.',
+      g.error('Invalid usage (not {{K=V}} format: `%s`), try `{{%s --help}}`.',
         pair, $0);
       process.exit(1);
     }
@@ -642,7 +642,7 @@ function cmdEnvUnset(client) {
       if (err) return die(err);
 
       // XXX: Update when server supports rollback if instance update fails.
-      printResponse(service, glb.t('environment updated'), err, responses);
+      printResponse(service, g.t('environment updated'), err, responses);
       service.refresh(function(err, service) {
         if (err) return die(err);
         printServiceEnv(service.env);
@@ -657,12 +657,12 @@ function cmdEnvGet(client) {
 
   client.serviceFind(targetService, function(err, service) {
     if (err) return die(err);
-    glb.log('Service ID: %s', service.id);
-    glb.log('Service Name: %s\n', service.name);
+    g.log('Service ID: %s', service.id);
+    g.log('Service Name: %s\n', service.name);
     var filtered = keys.length > 0 ? _.pick(service.env, keys) : service.env;
-    glb.log('Environment variables:');
+    g.log('Environment variables:');
     if (_.keys(filtered).length === 0) {
-      glb.log('  No matching environment variables defined');
+      g.log('  No matching environment variables defined');
     } else {
       printServiceEnv(filtered);
     }
@@ -681,7 +681,7 @@ function cmdGetProcessCount(client) {
         if (summary.processes[i].stopReason) continue;
         processes++;
       }
-      glb.log('Service ID %j processes: %d', service.id, processes);
+      g.log('Service ID %j processes: %d', service.id, processes);
     });
   });
 }
@@ -752,7 +752,7 @@ function download(instance, profileId, file, callback) {
       default: {
         // Collect response stream to use as error message.
         out = concat(function(data) {
-          callback(glb.Error('code %d/%s',
+          callback(g.Error('code %d/%s',
             res.statusCode, data));
         });
         res.once('error', callback);
@@ -772,7 +772,7 @@ function cmdDebuggerStart(client) {
       instance.startDebugger(process.id, function(err, response) {
         if (err) return die(err);
         debug('startDebugger: %j', response);
-        glb.log('Debugger listening on port %s.', response.port);
+        g.log('Debugger listening on port %s.', response.port);
       });
     }
   );
@@ -787,7 +787,7 @@ function cmdDebuggerStop(client) {
       instance.stopDebugger(process.id, function(err, response) {
         if (err) return die(err);
         debug('stopDebugger: %j', response);
-        glb.log('Debugger was disabled.');
+        g.log('Debugger was disabled.');
       });
     }
   );
@@ -795,7 +795,7 @@ function cmdDebuggerStop(client) {
 
 function mandatory(name) {
   if (optind >= argv.length) {
-    glb.error('Missing %s argument for %s, try `%s --help`.',
+    g.error('Missing %s argument for %s, try `%s --help`.',
       name, command, $0);
     process.exit(1);
   }
@@ -805,7 +805,7 @@ function mandatory(name) {
 
 function mandatorySome(name) {
   if (optind >= argv.length) {
-    glb.error('Missing %s argument for %s, try `%s --help`.',
+    g.error('Missing %s argument for %s, try `%s --help`.',
       name, command, $0);
     process.exit(1);
   }
@@ -843,10 +843,10 @@ function die(err) {
   // Split into first line, and the rest.
   var msgs = msg.split('. ');
 
-  glb.error('Command %j on %j failed with %s',
+  g.error('Command %j on %j failed with %s',
                 command, die.url, msgs.shift());
   if (msgs.length) {
-    glb.error('%s', msgs.join('. ').trim());
+    g.error('%s', msgs.join('. ').trim());
   }
   process.on('exit', function(code) {
     process.exit(code || 1);

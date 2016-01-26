@@ -19,8 +19,8 @@ test('Test service commands', function(t) {
       exec.resetHome();
       exec(port, 'create aservice 3', function(err, stdout) {
         tt.ifError(err, 'command should not error');
-        tt.equal(stdout,
-          'Created Service id: 1 name: "aservice" group: "default" scale: 3\n');
+        tt.match(stdout.toString(),
+          /Created Service id: 1 name:.+aservice.+group:.+default.+scale: 3/);
         client.serviceFind('aservice', function(err, s) {
           tt.ifError(err, 'command should not error');
           tt.assert(s, 'service should be found');

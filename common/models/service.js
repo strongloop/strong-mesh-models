@@ -54,8 +54,7 @@ module.exports = function(Service) {
           type: 'object',
           http: {source: 'body'},
           root: true,
-          description:
-            'Key-value describing environment variables to add. ' +
+          description: 'Key-value describing environment variables to add. ' +
             'A null value causes the variable to be removed',
         },
       ],
