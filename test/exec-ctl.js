@@ -1,3 +1,8 @@
+// Copyright IBM Corp. 2015. All Rights Reserved.
+// Node module: strong-mesh-models
+// US Government Users Restricted Rights - Use, duplication or disclosure
+// restricted by GSA ADP Schedule Contract with IBM Corp.
+
 var Dir = require('temporary').Dir;
 var assert = require('assert');
 var execFile = require('child_process').execFile;

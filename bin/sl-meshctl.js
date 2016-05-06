@@ -1,4 +1,9 @@
 #!/usr/bin/env node
+// Copyright IBM Corp. 2015,2016. All Rights Reserved.
+// Node module: strong-mesh-models
+// US Government Users Restricted Rights - Use, duplication or disclosure
+// restricted by GSA ADP Schedule Contract with IBM Corp.
+
 /* eslint no-console:0 no-process-exit:0 */
 
 var Client = require('../client/client');

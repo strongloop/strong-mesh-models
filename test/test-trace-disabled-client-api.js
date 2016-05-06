@@ -1,3 +1,8 @@
+// Copyright IBM Corp. 2015. All Rights Reserved.
+// Node module: strong-mesh-models
+// US Government Users Restricted Rights - Use, duplication or disclosure
+// restricted by GSA ADP Schedule Contract with IBM Corp.
+
 var ServiceManager = require('../index').ServiceManager;
 var test = require('tap').test;
 var testCmdHelper = require('./meshctl-helper');
