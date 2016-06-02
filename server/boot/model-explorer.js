@@ -6,12 +6,11 @@
 module.exports = function mountLoopBackExplorer(server) {
   var explorer;
   try {
-    explorer = require('loopback-explorer');
+    explorer = require('loopback-component-explorer');
     var restApiRoot = server.get('restApiRoot');
 
     server.once('started', function() {
-      var explorerApp = explorer(server, {basePath: restApiRoot});
-      server.use('/explorer', explorerApp);
+      server.use('/explorer', explorer.routes(server, {basePath: restApiRoot}));
     });
   } catch (err) {
     // Print the message only when the app was started via `server.listen()`.
