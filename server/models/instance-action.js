@@ -3,6 +3,8 @@
 // US Government Users Restricted Rights - Use, duplication or disclosure
 // restricted by GSA ADP Schedule Contract with IBM Corp.
 
+'use strict';
+
 var assert = require('assert');
 var debug = require('debug')('strong-mesh-models:server:instance-action');
 var fs = require('fs');

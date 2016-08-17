@@ -3,6 +3,8 @@
 // US Government Users Restricted Rights - Use, duplication or disclosure
 // restricted by GSA ADP Schedule Contract with IBM Corp.
 
+'use strict';
+
 var ServiceManager = require('../index').ServiceManager;
 var meshServer = require('../index').meshServer;
 var test = require('tap').test;
