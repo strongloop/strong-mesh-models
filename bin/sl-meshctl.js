@@ -3,6 +3,8 @@
 // Node module: strong-mesh-models
 // US Government Users Restricted Rights - Use, duplication or disclosure
 // restricted by GSA ADP Schedule Contract with IBM Corp.
+'use strict';
+
 
 /* eslint no-console:0 no-process-exit:0 */
 

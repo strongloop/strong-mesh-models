@@ -3,6 +3,8 @@
 // US Government Users Restricted Rights - Use, duplication or disclosure
 // restricted by GSA ADP Schedule Contract with IBM Corp.
 
+'use strict';
+
 var debug = require('debug')('strong-mesh-models:server:delete-old');
 
 module.exports = function deleteOld(ModelClass, callback) {

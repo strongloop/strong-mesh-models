@@ -3,6 +3,8 @@
 // US Government Users Restricted Rights - Use, duplication or disclosure
 // restricted by GSA ADP Schedule Contract with IBM Corp.
 
+'use strict';
+
 /* eslint max-nested-callbacks:0 */
 
 var debug = require('debug')('strong-mesh-models:test');

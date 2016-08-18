@@ -3,6 +3,8 @@
 // US Government Users Restricted Rights - Use, duplication or disclosure
 // restricted by GSA ADP Schedule Contract with IBM Corp.
 
+'use strict';
+
 var assert = require('assert');
 var exec = require('./exec-meshctl');
 var fs = require('fs');
