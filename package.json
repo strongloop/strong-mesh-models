@@ -34,7 +34,7 @@
     "lodash": "^3.3.1",
     "loopback": "^2.x",
     "loopback-boot": "^2.x",
-    "loopback-component-explorer": "^2.5.0",
+    "loopback-component-explorer": "^4.1.0",
     "loopback-datasource-juggler": "^2.x",
     "posix-getopt": "^1.1.0",
     "request": "^2.53.0",
