@@ -60,24 +60,33 @@ test('Check heap and cpu profiling populates Profile models', function(t) {
 
           processes[0].heapSnapshot(function(err, res) {
             tt.ifError(err);
-
-            service.profileDatas.findById(res.profileId, function(err, p) {
-              tt.ifError(err);
-
-              fs.readFile(p.fileName, 'utf-8', function(err, data) {
+            function waitForProfileDatasComplete(count) {
+              service.profileDatas.findById(res.profileId, function(err, p) {
                 tt.ifError(err);
-                tt.equal(data, 'PROFILE');
-
-                p.constructor.deleteById(p.id, function(err) {
+                if (count === 0) {
+                  return t.fail('profile did not complete in timeout.');
+                }
+                if (!p.completed) {
+                  t.comment('Sleeping 1 second for snapshot creation');
+                  return setTimeout(
+                    waitForProfileDatasComplete.bind(null, count--), 1000);
+                }
+                fs.readFile(p.fileName, 'utf-8', function(err, data) {
                   tt.ifError(err);
-                  fs.readFile(p.fileName, function(err) {
-                    debug('%j should be deleted: %s', p.fileName, err);
-                    tt.ok(err);
-                    tt.end();
+                  tt.equal(data, 'PROFILE');
+
+                  p.constructor.deleteById(p.id, function(err) {
+                    tt.ifError(err);
+                    fs.readFile(p.fileName, function(err) {
+                      debug('%j should be deleted: %s', p.fileName, err);
+                      tt.ok(err);
+                      tt.end();
+                    });
                   });
                 });
               });
-            });
+            }
+            waitForProfileDatasComplete(10);
           });
         });
       });
