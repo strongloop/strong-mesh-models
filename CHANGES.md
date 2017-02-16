@@ -1,3 +1,13 @@
+2017-02-16, Version 8.1.1
+=========================
+
+ * Add wait to heap snapshot delete test. (Rick Curtis)
+
+ * Skip SSH based tests on Windows (Ryan Graham)
+
+ * Enable logoutSessionsOnSensitiveChanges. (Rick Curtis)
+
+
 2015-10-15, Version 8.1.0
 =========================
 
